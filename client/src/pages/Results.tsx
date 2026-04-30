@@ -10,7 +10,7 @@ import {
   Send,
   Camera,
 } from "lucide-react";
-import { getResults, getWalletCardUrl, sendChatMessage, checkLinkImage } from "../lib/api";
+import { getResults, getPDFUrl, sendChatMessage, checkLinkImage } from "../lib/api";
 import {
   getSeasonMakeupSwatches,
   getJewelrySwatches,
@@ -736,11 +736,11 @@ export default function Results() {
               </button>
             </section>
 
-            {/* ── Wallet Card + Share ── */}
+            {/* ── Save Report + Share ── */}
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 56 }}>
               {[
-                { label: "Save Wallet Card", href: getWalletCardUrl(sessionId!) },
-                { label: "Share on WhatsApp", href: `https://wa.me/?text=${encodeURIComponent(`Check out my ${seasonName} color profile on Your Aura!`)}`, external: true },
+                { label: "Save Report", href: getPDFUrl(sessionId!), external: true },
+                { label: "Share on WhatsApp", href: `https://wa.me/?text=${encodeURIComponent(`I'm a ${seasonName}! Discover your color season on Your Aura: ${typeof window !== "undefined" ? window.location.origin : ""}`)}`, external: true },
               ].map((btn) => (
                 <a
                   key={btn.label}
