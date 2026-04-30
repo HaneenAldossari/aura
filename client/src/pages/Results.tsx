@@ -37,20 +37,35 @@ interface ColorSwatch {
 
 
 
-function shortenFeature(key: string, value: string): string {
-  if (!value || !value.trim()) return "";
-  // Strip "Your skin is...", "Your hair is...", "Your eyes are..." prefixes
-  const cleaned = value
-    .replace(/^your\s+(skin|hair|eyes?)\s+(is|are)\s+/i, '')
-    .replace(/^you\s+have\s+/i, '')
-    .trim();
-  const k = key.toLowerCase();
-  if (k.includes('skin')) return cleaned.split(',')[0].replace(/undertones?/i, '').trim();
-  if (k.includes('eye')) return cleaned.split(',')[0].split('with')[0].trim();
-  if (k.includes('hair')) return cleaned.split(',')[0].split('with')[0].trim() || cleaned.split(' ').slice(0, 4).join(' ');
-  if (k.includes('vein')) return cleaned.includes('green') ? 'Green veins (warm)' : cleaned.includes('blue') ? 'Blue veins (cool)' : cleaned.split(' ').slice(0, 3).join(' ');
-  if (k.includes('contrast')) return cleaned.split(' ').slice(0, 2).join(' ');
-  return cleaned.split('.')[0].substring(0, 40);
+// Canonical per-season tone descriptors — used in the Color Analysis card.
+// Keeps results clean and consistent across runs.
+type Descriptors = { undertone: string; hair: string; eyes: string; contrast: string };
+const SEASON_DESCRIPTORS: Record<string, Descriptors> = {
+  "deep autumn":   { undertone: "Warm, golden",         hair: "Deep brown to black",         eyes: "Deep warm brown",            contrast: "High" },
+  "true autumn":   { undertone: "Warm, golden",         hair: "Warm brown to auburn",        eyes: "Warm brown to hazel",        contrast: "Medium" },
+  "warm autumn":   { undertone: "Warm, golden",         hair: "Warm brown to auburn",        eyes: "Warm brown to hazel",        contrast: "Medium" },
+  "soft autumn":   { undertone: "Warm-neutral, soft",   hair: "Soft warm brown",             eyes: "Soft brown to hazel",        contrast: "Medium-low" },
+  "muted autumn":  { undertone: "Warm-neutral, soft",   hair: "Soft warm brown",             eyes: "Soft brown to hazel",        contrast: "Medium-low" },
+  "deep winter":   { undertone: "Cool-neutral, deep",   hair: "Black to deep cool brown",    eyes: "Dark cool brown to black",   contrast: "High" },
+  "dark winter":   { undertone: "Cool-neutral, deep",   hair: "Black to deep cool brown",    eyes: "Dark cool brown to black",   contrast: "High" },
+  "cool winter":   { undertone: "Cool, clear",          hair: "Cool dark brown to black",    eyes: "Cool brown, grey, or blue",  contrast: "High" },
+  "true winter":   { undertone: "Cool, clear",          hair: "Cool dark brown to black",    eyes: "Cool brown, grey, or blue",  contrast: "High" },
+  "bright winter": { undertone: "Cool, vivid",          hair: "Dark brown to black",         eyes: "Bright clear blue or green", contrast: "Very high" },
+  "clear winter":  { undertone: "Cool, vivid",          hair: "Dark brown to black",         eyes: "Bright clear blue or green", contrast: "Very high" },
+  "light summer":  { undertone: "Cool, soft",           hair: "Ash blonde to light brown",   eyes: "Soft blue, grey, or green",  contrast: "Low" },
+  "true summer":   { undertone: "Cool, muted",          hair: "Cool ash brown",              eyes: "Cool blue, grey, or green",  contrast: "Medium" },
+  "cool summer":   { undertone: "Cool, muted",          hair: "Cool ash brown",              eyes: "Cool blue, grey, or green",  contrast: "Medium" },
+  "soft summer":   { undertone: "Cool-neutral, muted",  hair: "Soft ash brown",              eyes: "Soft blue, grey, or hazel",  contrast: "Low" },
+  "muted summer":  { undertone: "Cool-neutral, muted",  hair: "Soft ash brown",              eyes: "Soft blue, grey, or hazel",  contrast: "Low" },
+  "light spring":  { undertone: "Warm, soft",           hair: "Light blonde to light brown", eyes: "Soft warm blue or green",    contrast: "Low" },
+  "true spring":   { undertone: "Warm, clear",          hair: "Warm blonde to red-brown",    eyes: "Warm blue, green, or brown", contrast: "Medium" },
+  "warm spring":   { undertone: "Warm, clear",          hair: "Warm blonde to red-brown",    eyes: "Warm blue, green, or brown", contrast: "Medium" },
+  "bright spring": { undertone: "Warm, vivid",          hair: "Warm brown",                  eyes: "Bright clear warm",          contrast: "High" },
+  "clear spring":  { undertone: "Warm, vivid",          hair: "Warm brown",                  eyes: "Bright clear warm",          contrast: "High" },
+};
+function getDescriptors(season: string): Descriptors {
+  const key = (season || "").toLowerCase().trim();
+  return SEASON_DESCRIPTORS[key] || { undertone: "Neutral", hair: "Medium", eyes: "Medium", contrast: "Medium" };
 }
 
 export default function Results() {
@@ -72,6 +87,9 @@ export default function Results() {
 
   useEffect(() => {
     if (!sessionId) return;
+    // Reset to avoid flashing the previous sample's data while the new one loads
+    setData(null);
+    setLoading(true);
     getResults(sessionId)
       .then((r) => { setData(r); setLoading(false); })
       .catch(() => { setLoading(false); });
@@ -512,21 +530,25 @@ export default function Results() {
                   Our AI analysis has mapped your physical traits to the frequency of {seasonName}. Your features possess a {colorDNA.depth > 60 ? "grounded, majestic depth" : "soft, luminous quality"}.
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-                  {[
-                    { label: "Skin Undertone", value: shortenFeature("skin", keyFeatures?.skinTone || "") },
-                    { label: "Hair", value: shortenFeature("hair", keyFeatures?.hairColor || "") },
-                    { label: "Eyes", value: shortenFeature("eye", keyFeatures?.eyeColor || "") },
-                    { label: "Contrast", value: (data.contrastLevel as string) || (colorDNA.contrast >= 70 ? "High" : colorDNA.contrast >= 45 ? "Medium" : "Low") },
-                  ].filter(r => r.value).map((row, i, arr) => (
+                  {(() => {
+                    const desc = getDescriptors(seasonName);
+                    return [
+                      { label: "Skin Undertone", value: desc.undertone },
+                      { label: "Hair", value: desc.hair },
+                      { label: "Eyes", value: desc.eyes },
+                      { label: "Contrast", value: desc.contrast },
+                    ];
+                  })().filter(r => r.value).map((row, i, arr) => (
                     <div key={row.label} style={{
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
                       padding: "16px 0",
                       borderBottom: i < arr.length - 1 ? "1px solid rgba(78,70,57,0.15)" : "none",
+                      gap: 16,
                     }}>
-                      <span style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.18em", color: "#D4AF7A", fontWeight: 500 }}>{row.label}</span>
-                      <span style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 17, color: "#F2EEE8" }}>{row.value}</span>
+                      <span style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.18em", color: "#D4AF7A", fontWeight: 500, flexShrink: 0 }}>{row.label}</span>
+                      <span style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 17, color: "#F2EEE8", textAlign: "right", lineHeight: 1.3 }}>{row.value}</span>
                     </div>
                   ))}
                 </div>
