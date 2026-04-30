@@ -10,7 +10,7 @@ import {
   Send,
   Camera,
 } from "lucide-react";
-import { getResults, getWalletCardUrl, sendChatMessage, checkLinkImage, checkLinkManual } from "../lib/api";
+import { getResults, getWalletCardUrl, sendChatMessage, checkLinkImage } from "../lib/api";
 import {
   getSeasonMakeupSwatches,
   getJewelrySwatches,
@@ -175,10 +175,6 @@ export default function Results() {
   const [linkError, setLinkError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [showManualForm, setShowManualForm] = useState(false);
-  const [manualColor, setManualColor] = useState("");
-  const [manualCategory, setManualCategory] = useState("clothing");
-  const [manualBrand, setManualBrand] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageSelect = async (file: File) => {
@@ -192,20 +188,6 @@ export default function Results() {
       setLinkResult(res);
     } catch (err: any) {
       setLinkError(err.message || 'Image check failed');
-    } finally {
-      setLinkLoading(false);
-    }
-  };
-
-  const handleManualCheck = async () => {
-    if (!manualColor.trim()) return;
-    setLinkLoading(true);
-    setLinkError(null);
-    try {
-      const res = await checkLinkManual(manualColor.trim(), manualCategory, manualBrand.trim(), sessionId!);
-      setLinkResult(res);
-    } catch (err: any) {
-      setLinkError(err.message || 'Manual check failed');
     } finally {
       setLinkLoading(false);
     }
@@ -1208,55 +1190,6 @@ export default function Results() {
                   <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Tap to browse or drag & drop — JPG, PNG, or WebP</p>
                 </div>
 
-                {/* Manual entry toggle */}
-                <div className="mb-6">
-                  <button
-                    onClick={() => setShowManualForm(!showManualForm)}
-                    className="text-xs underline cursor-pointer transition hover:opacity-70"
-                    style={{ color: 'var(--text-muted)' }}
-                  >
-                    {showManualForm ? 'Hide manual entry' : 'Or describe it manually'}
-                  </button>
-                </div>
-
-                {showManualForm && (
-                  <div className="rounded-2xl p-6 mb-6 space-y-3" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                    <input
-                      value={manualColor}
-                      onChange={e => setManualColor(e.target.value)}
-                      placeholder="Color name or description (e.g. burgundy, olive green)"
-                      className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                      style={{ background: 'var(--bg-card-subtle)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
-                    />
-                    <select
-                      value={manualCategory}
-                      onChange={e => setManualCategory(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                      style={{ background: 'var(--bg-card-subtle)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
-                    >
-                      <option value="clothing">Clothing</option>
-                      <option value="bag">Bag</option>
-                      <option value="shoes">Shoes</option>
-                      <option value="accessory">Accessory</option>
-                      <option value="makeup">Makeup</option>
-                    </select>
-                    <input
-                      value={manualBrand}
-                      onChange={e => setManualBrand(e.target.value)}
-                      placeholder="Brand (optional)"
-                      className="w-full px-4 py-3 rounded-xl text-sm outline-none"
-                      style={{ background: 'var(--bg-card-subtle)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
-                    />
-                    <button
-                      onClick={handleManualCheck}
-                      disabled={!manualColor.trim()}
-                      className="w-full px-6 py-3 rounded-xl text-sm font-semibold transition disabled:opacity-50"
-                      style={{ background: 'var(--accent-gold)', color: 'var(--text-on-accent)' }}
-                    >
-                      Check Color
-                    </button>
-                  </div>
-                )}
               </>
             )}
 
@@ -1273,7 +1206,7 @@ export default function Results() {
             {linkResult && !linkLoading && (
               <LinkCheckResult
                 result={linkResult as any}
-                onReset={() => { setLinkResult(null); setSelectedImage(null); setImagePreview(null); setShowManualForm(false); }}
+                onReset={() => { setLinkResult(null); setSelectedImage(null); setImagePreview(null); }}
               />
             )}
 
