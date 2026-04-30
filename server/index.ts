@@ -12,7 +12,7 @@ import toolRoutes from "./routes/tools";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// CORS — allow local dev + any domains listed in CORS_ORIGINS (comma-separated)
+// CORS — allow local dev, any domains in CORS_ORIGINS, plus all Vercel URLs.
 const corsOrigins = (process.env.CORS_ORIGINS || "")
   .split(",")
   .map((s) => s.trim())
@@ -25,7 +25,14 @@ const localOrigins = [
 ];
 app.use(
   cors({
-    origin: corsOrigins.length ? [...localOrigins, ...corsOrigins] : true,
+    origin: (origin, cb) => {
+      if (!origin) return cb(null, true); // server-to-server / curl
+      if (localOrigins.includes(origin)) return cb(null, true);
+      if (corsOrigins.includes(origin)) return cb(null, true);
+      // Allow any Vercel preview/production URL
+      if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) return cb(null, true);
+      cb(new Error(`Origin not allowed: ${origin}`));
+    },
   })
 );
 app.use(express.json({ limit: "10mb" }));
