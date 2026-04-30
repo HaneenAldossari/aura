@@ -16,7 +16,6 @@ import {
   getJewelrySwatches,
 } from "../data/seasonColors";
 import { formatSeasonName } from "../utils/formatSeason";
-import { sanitizeToSecondPerson } from "../utils/sanitizeDescription";
 import { MetalCircle, ALL_METALS, METAL_FILE_MAP } from "../components/MetalCircle";
 import { MakeupSwatch } from "../components/MakeupSwatch";
 import { filterValidSwatches } from "../utils/filterValidSwatches";
@@ -842,7 +841,7 @@ export default function Results() {
                   <MakeupSwatch key={s.name} category="blush" name={s.name} hex={s.hex} size={52} />
                 ))}
               </div>
-              {makeup.blush && <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{makeup.blush as string}</p>}
+              {!!makeup.blush && <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{makeup.blush as string}</p>}
             </div>
 
             <div className="h-px my-8" style={{ background: 'linear-gradient(90deg, transparent, var(--border-color), transparent)' }} />
@@ -866,7 +865,7 @@ export default function Results() {
                 </div>
               </div>
               )}
-              {makeup.bronzer && <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{makeup.bronzer as string}</p>}
+              {!!makeup.bronzer && <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{makeup.bronzer as string}</p>}
             </div>
 
             <div className="h-px my-8" style={{ background: 'linear-gradient(90deg, transparent, var(--border-color), transparent)' }} />
@@ -899,7 +898,7 @@ export default function Results() {
                   ))}
                 </div>
               </div>
-              {makeup.lips && <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{makeup.lips as string}</p>}
+              {!!makeup.lips && <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{makeup.lips as string}</p>}
             </div>
 
             <div className="h-px my-8" style={{ background: 'linear-gradient(90deg, transparent, var(--border-color), transparent)' }} />
@@ -915,7 +914,7 @@ export default function Results() {
                   <MakeupSwatch key={s.name} category="eyeshadow" name={s.name} hex={s.hex} size={52} />
                 ))}
               </div>
-              {makeup.eyes && <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{makeup.eyes as string}</p>}
+              {!!makeup.eyes && <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{makeup.eyes as string}</p>}
             </div>
 
           </div>

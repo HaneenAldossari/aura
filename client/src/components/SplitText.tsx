@@ -18,9 +18,11 @@ export default function SplitText({
   tag: Tag = "h1",
 }: SplitTextProps) {
   const chars = text.split("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Component: any = Tag;
 
   return (
-    <Tag className={className} style={{ display: "inline-flex", flexWrap: "wrap", fontFamily: "Cormorant Garamond, serif", color: "var(--text-primary)", ...style }}>
+    <Component className={className} style={{ display: "inline-flex", flexWrap: "wrap", fontFamily: "Cormorant Garamond, serif", color: "var(--text-primary)", ...style }}>
       {chars.map((char, i) =>
         char === " " ? (
           <span key={i} style={{ width: "0.3em" }} />
@@ -35,6 +37,6 @@ export default function SplitText({
           </motion.span>
         )
       )}
-    </Tag>
+    </Component>
   );
 }

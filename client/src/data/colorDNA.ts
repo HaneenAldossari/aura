@@ -60,7 +60,7 @@ export function calculateColorDNA(season: string, keyFeatures?: Record<string, s
 }
 
 // Axis descriptions per value range
-export function getDNADescriptions(dna: ColorDNA, season: string): Array<{
+export function getDNADescriptions(dna: ColorDNA, _season: string): Array<{
   axis: string;
   emoji: string;
   value: number;

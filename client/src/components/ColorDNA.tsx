@@ -70,7 +70,7 @@ export function ColorDNA({ warmth, depth, clarity, contrast }: ColorDNARadarProp
       ))}
       {axes.map(a => {
         const pos = getLabelPos(a.angle);
-        let anchor = "middle";
+        let anchor: "start" | "middle" | "end" = "middle";
         if (a.angle === 0) anchor = "start";
         if (a.angle === 180) anchor = "end";
         let dy = "0.35em";
