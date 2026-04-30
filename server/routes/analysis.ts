@@ -9,7 +9,6 @@ import path from "path";
 import fs from "fs";
 import { v4 as uuid } from "uuid";
 import { analyzePhotos } from "../services/claudeVision";
-import { generatePDF, generateWalletCard } from "../services/pdfGenerator";
 import { DEMO_RESULT } from "../services/demoData";
 import { validatePhoto } from "../utils/validatePhoto";
 import { getCanonicalPalette } from "../utils/seasonPalettes";
@@ -334,56 +333,6 @@ router.get(
       return;
     }
     res.json(result);
-  }
-);
-
-// GET /api/pdf/:sessionId — download full PDF report
-router.get(
-  "/pdf/:sessionId",
-  (req: Request, res: Response): void => {
-    const result = analysisStore[req.params.sessionId as string];
-    if (!result) {
-      res.status(404).json({ error: "Analysis not found" });
-      return;
-    }
-
-    try {
-      const pdfBuffer = generatePDF(result as unknown as Parameters<typeof generatePDF>[0]);
-      res.setHeader("Content-Type", "application/pdf");
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename="color-analysis-${result.season || "report"}.pdf"`
-      );
-      res.send(pdfBuffer);
-    } catch (err) {
-      console.error("PDF generation error:", err);
-      res.status(500).json({ error: "Failed to generate PDF" });
-    }
-  }
-);
-
-// GET /api/wallet-card/:sessionId — download wallet card PDF
-router.get(
-  "/wallet-card/:sessionId",
-  (req: Request, res: Response): void => {
-    const result = analysisStore[req.params.sessionId as string];
-    if (!result) {
-      res.status(404).json({ error: "Analysis not found" });
-      return;
-    }
-
-    try {
-      const pdfBuffer = generateWalletCard(result as unknown as Parameters<typeof generateWalletCard>[0]);
-      res.setHeader("Content-Type", "application/pdf");
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename="color-passport-${result.season || "card"}.pdf"`
-      );
-      res.send(pdfBuffer);
-    } catch (err) {
-      console.error("Wallet card error:", err);
-      res.status(500).json({ error: "Failed to generate wallet card" });
-    }
   }
 );
 

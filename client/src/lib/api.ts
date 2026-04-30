@@ -78,14 +78,6 @@ export async function sendChatMessage(
   return data.response;
 }
 
-export function getPDFUrl(sessionId: string): string {
-  return `${BASE}/pdf/${sessionId}`;
-}
-
-export function getWalletCardUrl(sessionId: string): string {
-  return `${BASE}/wallet-card/${sessionId}`;
-}
-
 export async function checkLinkImage(file: File, sessionId: string) {
   const formData = new FormData();
   formData.append("photo", file);
