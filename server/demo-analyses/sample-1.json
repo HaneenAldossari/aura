@@ -1,0 +1,212 @@
+{
+  "season": "Deep Winter",
+  "seasonTagline": "You emanate a grounded warmth, glowing in rich, deep, and earthy jewel tones that reflect your intense and vibrant natural coloring.",
+  "koreanTone": "\ub525\ud1a4 (Deep Tone)",
+  "undertone": "warm",
+  "skinDescription": "Your skin is a deep, rich brown with a noticeable golden and warm undertone, appearing radiant and luminous.",
+  "hairDescription": "Your hair is a deep black, providing a strong frame for your face and enhancing your overall deep coloring.",
+  "eyeDescription": "Your eyes are a deep, warm brown, almost black, and perfectly complement the richness of your skin and hair.",
+  "contrastLevel": "high",
+  "chromaLevel": "clear",
+  "confidence": "high",
+  "colorDNA": {
+    "warmth": 88,
+    "depth": 92,
+    "clarity": 85,
+    "contrast": 88
+  },
+  "seasonStory": "Your coloring is characterized by its undeniable depth and warmth, reminiscent of the most vibrant elements of autumn. You possess a luxurious blend of deep, rich tones that create a naturally striking and harmonious appearance. This powerful combination allows you to beautifully wear intense, grounded colors.",
+  "palette": {
+    "bestColors": [
+      {
+        "name": "Forest Green",
+        "hex": "#228B22",
+        "reason": "Enhances your deep features with a rich, natural warmth."
+      },
+      {
+        "name": "Burgundy",
+        "hex": "#800020",
+        "reason": "A sophisticated deep red that harmonizes with your warm, rich undertone."
+      },
+      {
+        "name": "Deep Rust",
+        "hex": "#8B3A1A",
+        "reason": "Reflects the warm, earthy depth in your skin and eyes."
+      },
+      {
+        "name": "Espresso",
+        "hex": "#3D1C02",
+        "reason": "A profound neutral that mirrors your deep hair and eye color beautifully."
+      },
+      {
+        "name": "Ochre",
+        "hex": "#CC7722",
+        "reason": "A grounding, warm yellow-brown that brings out your skin's golden quality."
+      },
+      {
+        "name": "Deep Mustard",
+        "hex": "#9B7B00",
+        "reason": "Adds a vibrant, earthy accent that complements your warm depth."
+      },
+      {
+        "name": "Warm Plum",
+        "hex": "#6B3A5D",
+        "reason": "A deep, rich purple with warm undertones that suits your powerful palette."
+      },
+      {
+        "name": "Camel",
+        "hex": "#C19A6B",
+        "reason": "A warm, sophisticated neutral that highlights your golden undertones."
+      },
+      {
+        "name": "Olive",
+        "hex": "#6B7A3A",
+        "reason": "An earthy green that beautifully complements your warm and deep features."
+      },
+      {
+        "name": "Dark Chocolate Brown",
+        "hex": "#4F2F2F",
+        "reason": "A rich, deep neutral that connects to your hair and eye depth."
+      },
+      {
+        "name": "Deep Teal",
+        "hex": "#005F60",
+        "reason": "A rich, warm blue-green that provides a luxurious accent."
+      },
+      {
+        "name": "Pumpkin",
+        "hex": "#FF7518",
+        "reason": "A vibrant, deep orange that matches your natural warmth and clarity."
+      }
+    ],
+    "avoidColors": [
+      {
+        "name": "Baby Pink",
+        "hex": "#F4C2C2",
+        "reason": "Too light and cool, it would wash out your deep warmth."
+      },
+      {
+        "name": "Icy Blue",
+        "hex": "#B0E0E6",
+        "reason": "Too cool and pale, it would clash with your warm, deep coloring."
+      },
+      {
+        "name": "Bright Magenta",
+        "hex": "#FF00FF",
+        "reason": "Too cool and vibrant, it would overpower your rich natural tones."
+      }
+    ],
+    "neutrals": [
+      {
+        "name": "Espresso",
+        "hex": "#3D1C02"
+      },
+      {
+        "name": "Camel",
+        "hex": "#C19A6B"
+      },
+      {
+        "name": "Warm Brown",
+        "hex": "#8B6347"
+      },
+      {
+        "name": "Deep Olive Green",
+        "hex": "#4A5D23"
+      }
+    ]
+  },
+  "makeup": {
+    "foundation": {
+      "recommended": [
+        {
+          "name": "Warm Brown",
+          "hex": "#6C4B3C"
+        },
+        {
+          "name": "Deep Tan",
+          "hex": "#7A5747"
+        }
+      ],
+      "avoid": [
+        {
+          "name": "Cool Ivory",
+          "hex": "#F0EAD6"
+        }
+      ],
+      "tip": "Look for foundations with rich, warm, or golden undertones to match your skin's depth and warmth."
+    },
+    "blush": [
+      "Terracotta",
+      "Brick Red",
+      "Bronze Rose"
+    ],
+    "lipColors": [
+      "Deep Red",
+      "Burgundy",
+      "Deep Berry",
+      "Raisin"
+    ],
+    "eyeshadow": [
+      "Gold",
+      "Bronze",
+      "Copper",
+      "Warm Brown",
+      "Forest Green",
+      "Burgundy",
+      "Deep Brown"
+    ],
+    "eyeliner": [
+      "Deep Brown",
+      "Charcoal"
+    ]
+  },
+  "nails": {
+    "bestColors": [
+      "Cajun Shrimp",
+      "Strawberry Margarita",
+      "Malaga Wine",
+      "Berry Naughty",
+      "Passion",
+      "Perennial Chic"
+    ],
+    "avoidColors": [
+      "Midnight Cami",
+      "Charged Up Cherry"
+    ]
+  },
+  "wardrobe": {
+    "metals": [
+      "Gold",
+      "Rose Gold"
+    ]
+  },
+  "gemstones": [
+    {
+      "name": "garnet"
+    },
+    {
+      "name": "smoky quartz"
+    },
+    {
+      "name": "tigers eye"
+    }
+  ],
+  "celebrities": [
+    {
+      "name": "Halle Berry",
+      "reason": "Deep skin with golden undertones, dark hair, and rich brown eyes."
+    },
+    {
+      "name": "Eva Mendes",
+      "reason": "Warm, deep coloring with dark hair and eyes, thriving in earthy jewel tones."
+    },
+    {
+      "name": "Kerry Washington",
+      "reason": "Rich, deep skin with warmth, dark hair, and eyes, creating a strong contrast."
+    },
+    {
+      "name": "Naomi Campbell",
+      "reason": "Very deep skin with warm undertones, dark hair, and clear, deep features."
+    }
+  ]
+}

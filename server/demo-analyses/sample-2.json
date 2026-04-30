@@ -1,0 +1,201 @@
+{
+  "season": "Deep Autumn",
+  "seasonTagline": "You radiate warmth and depth, thriving in rich, earthy tones that echo the abundance of the autumn landscape.",
+  "koreanTone": "딥톤 (Deep Tone)",
+  "undertone": "warm",
+  "skinDescription": "Your skin has a warm, golden-olive undertone and is of medium to deep depth.",
+  "hairDescription": "Your hair is a deep, rich dark brown with warm undertones.",
+  "eyeDescription": "Your eyes are a deep, warm brown with subtle golden flecks that add depth.",
+  "contrastLevel": "medium",
+  "chromaLevel": "muted",
+  "confidence": "high",
+  "colorDNA": {
+    "warmth": 85,
+    "depth": 70,
+    "clarity": 40,
+    "contrast": 55
+  },
+  "seasonStory": "Your natural coloring is characterized by warmth and depth, with a medium to deep skin tone and rich, dark hair and eyes. You possess a beautiful blend of warmth and intensity that allows you to wear colors with significant depth and richness.",
+  "palette": {
+    "bestColors": [
+      {
+        "name": "Deep Olive Green",
+        "hex": "#556B2F",
+        "reason": "This deep, muted green harmonizes beautifully with your warm undertones and adds depth."
+      },
+      {
+        "name": "Terracotta",
+        "hex": "#C4622D",
+        "reason": "A rich, earthy red with warm undertones that brings out the warmth in your skin."
+      },
+      {
+        "name": "Warm Mustard Yellow",
+        "hex": "#DAA520",
+        "reason": "This deep, muted yellow is vibrant yet earthy, complementing your warm coloring."
+      },
+      {
+        "name": "Deep Teal",
+        "hex": "#008080",
+        "reason": "A sophisticated blend of blue and green with a warm depth that enhances your features."
+      },
+      {
+        "name": "Rich Brown",
+        "hex": "#8B4513",
+        "reason": "This classic, warm brown shade echoes your natural hair color and skin undertones."
+      },
+      {
+        "name": "Warm Plum",
+        "hex": "#6B3A5D",
+        "reason": "A deep, warm purple that adds richness and sophistication without cooling your complexion."
+      },
+      {
+        "name": "Burnt Orange",
+        "hex": "#CC5500",
+        "reason": "A fiery, earthy orange that complements your warm skin tone perfectly."
+      },
+      {
+        "name": "Espresso",
+        "hex": "#3D1C02",
+        "reason": "A deep, dark neutral that provides a strong foundation and works as a sophisticated alternative to black."
+      },
+      {
+        "name": "Muted Coral",
+        "hex": "#C47A6B",
+        "reason": "A softer, earthier version of coral that brings warmth and life to your complexion."
+      },
+      {
+        "name": "Golden Khaki",
+        "hex": "#8B7E5B",
+        "reason": "A sophisticated neutral with warm undertones that is both grounding and elegant."
+      },
+      {
+        "name": "Deep Burgundy",
+        "hex": "#800020",
+        "reason": "A luxurious, deep red with warm undertones that adds intensity and richness."
+      },
+      {
+        "name": "Warm Sage Green",
+        "hex": "#8FBC8F",
+        "reason": "A softer, muted green that is subtle yet complements your natural warmth."
+      }
+    ],
+    "avoidColors": [
+      {
+        "name": "Bright White",
+        "hex": "#FFFFFF",
+        "reason": "This stark, cool color washes out your warm skin tone and creates too harsh a contrast."
+      },
+      {
+        "name": "Electric Blue",
+        "hex": "#00FFFF",
+        "reason": "This overly bright and cool color clashes with your warm, earthy coloring."
+      },
+      {
+        "name": "Pastel Pink",
+        "hex": "#FFB6C1",
+        "reason": "Too light and cool for your deep, warm coloring; it appears washed out."
+      }
+    ],
+    "neutrals": [
+      {
+        "name": "Espresso",
+        "hex": "#3D1C02"
+      },
+      {
+        "name": "Deep Olive Green",
+        "hex": "#556B2F"
+      },
+      {
+        "name": "Warm Taupe",
+        "hex": "#A08070"
+      },
+      {
+        "name": "Cream",
+        "hex": "#FFFDD0"
+      }
+    ]
+  },
+  "makeup": {
+    "foundation": {
+      "recommended": [
+        "Golden Beige",
+        "Warm Medium"
+      ],
+      "avoid": [
+        "Fair Porcelain",
+        "Cool Ivory"
+      ],
+      "tip": "Look for foundations with warm or olive undertones that match your skin depth."
+    },
+    "blush": [
+      "Terracotta",
+      "Warm Coral",
+      "Deep Rose"
+    ],
+    "lipColors": [
+      "Burnt Orange",
+      "Terracotta",
+      "Warm Plum",
+      "Deep Burgundy"
+    ],
+    "eyeshadow": [
+      "Warm Brown",
+      "Bronze",
+      "Deep Olive Green",
+      "Golden Khaki"
+    ],
+    "eyeliner": [
+      "Deep Brown",
+      "Espresso"
+    ]
+  },
+  "nails": {
+    "bestColors": [
+      "Cajun Shrimp",
+      "Malaga Wine",
+      "Warm Brown",
+      "Terracotta",
+      "Burnt Orange",
+      "Deep Olive Green"
+    ],
+    "avoidColors": [
+      "Ballet Slippers",
+      "Princesses Rule"
+    ]
+  },
+  "wardrobe": {
+    "metals": [
+      "Gold",
+      "Rose Gold"
+    ]
+  },
+  "gemstones": [
+    {
+      "name": "amber"
+    },
+    {
+      "name": "garnet"
+    },
+    {
+      "name": "tigers eye"
+    }
+  ],
+  "celebrities": [
+    {
+      "name": "Shakira",
+      "reason": "She shares your deep autumn coloring with warm, golden-olive skin, dark hair, and deep brown eyes."
+    },
+    {
+      "name": "Selena Gomez",
+      "reason": "Her natural coloring, particularly her skin undertone and hair depth, aligns well with the deep autumn palette."
+    },
+    {
+      "name": "Jessica Alba",
+      "reason": "She exhibits similar warm, deep undertones in her skin, hair, and eyes, benefiting from rich, earthy colors."
+    },
+    {
+      "name": "Priyanka Chopra",
+      "reason": "Her striking deep autumn features, including warm skin and dark hair, are beautifully complemented by the season's color palette."
+    }
+  ]
+}

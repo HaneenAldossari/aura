@@ -1,0 +1,225 @@
+{
+  "season": "Deep Autumn",
+  "seasonTagline": "You resonate with the richness of a harvest moon — deep, glowing, and intensely warm.",
+  "koreanTone": "Deep Tone",
+  "undertone": "warm",
+  "skinDescription": "Your skin is a luminous medium-deep tan with prominent golden and honey-bronze undertones.",
+  "hairDescription": "Your hair is a rich soft black with a velvet-like depth that creates a powerful frame for your face.",
+  "eyeDescription": "Your eyes are a deep espresso brown, sparkling with warmth and intense clarity.",
+  "contrastLevel": "high",
+  "chromaLevel": "muted",
+  "confidence": "high",
+  "colorDNA": {
+    "warmth": 85,
+    "depth": 82,
+    "clarity": 60,
+    "contrast": 88
+  },
+  "seasonStory": "As a Deep Autumn, your coloring is defined by its remarkable depth and golden warmth. You possess the intensity of Winter but the earthy soul of Autumn, allowing you to carry the heaviest and most saturated shades in the warm spectrum with effortless grace.",
+  "palette": {
+    "bestColors": [
+      {
+        "name": "Burgundy",
+        "hex": "#800020",
+        "reason": "This deep red mirrors the natural richness in your undertones."
+      },
+      {
+        "name": "Forest Green",
+        "hex": "#228B22",
+        "reason": "A classic deep earthy green that makes your golden skin glow."
+      },
+      {
+        "name": "Deep Rust",
+        "hex": "#8B3A1A",
+        "reason": "This warm, burnt shade harmonizes perfectly with your honeyed skin."
+      },
+      {
+        "name": "Dark Mustard",
+        "hex": "#9B7B00",
+        "reason": "You have the depth to handle this heavy, golden-yellow without it washing you out."
+      },
+      {
+        "name": "Espresso",
+        "hex": "#3D1C02",
+        "reason": "A sophisticated dark brown that complements your hair and eye depth."
+      },
+      {
+        "name": "Warm Plum",
+        "hex": "#6B3A5D",
+        "reason": "A rich, grounded purple that highlights the clarity in your eyes."
+      },
+      {
+        "name": "Ochre",
+        "hex": "#CC7722",
+        "reason": "This earthy gold-orange brings out the bronze highlights in your complexion."
+      },
+      {
+        "name": "Deep Navy",
+        "hex": "#000080",
+        "reason": "While navy is often cool, this deep version provides a stunning dark neutral for you."
+      },
+      {
+        "name": "Deep Teal",
+        "hex": "#00688B",
+        "reason": "The perfect bridge between warm and cool, this saturated shade looks vibrant on you."
+      },
+      {
+        "name": "Chocolate Brown",
+        "hex": "#4D332D",
+        "reason": "A fundamental neutral that feels much more organic on you than black."
+      },
+      {
+        "name": "Terracotta",
+        "hex": "#C4622D",
+        "reason": "This clay-red shade enhances the natural warmth of your cheeks."
+      },
+      {
+        "name": "Olive Green",
+        "hex": "#556B2F",
+        "reason": "A quintessential Autumn shade that looks incredibly chic against your skin tone."
+      }
+    ],
+    "avoidColors": [
+      {
+        "name": "Icy Pink",
+        "hex": "#F0D4D4",
+        "reason": "This cool, pale shade clashes with your depth and warmth, making you look tired."
+      },
+      {
+        "name": "Neon Orange",
+        "hex": "#FF6600",
+        "reason": "While you are warm, this is too bright and lacks the depth your features require."
+      },
+      {
+        "name": "Pure White",
+        "hex": "#FFFFFF",
+        "reason": "Too stark and cool; it drains the golden vitality from your complexion."
+      }
+    ],
+    "neutrals": [
+      {
+        "name": "Golden Beige",
+        "hex": "#D4BE8D"
+      },
+      {
+        "name": "Warm Charcoal",
+        "hex": "#333333"
+      },
+      {
+        "name": "Dark Camel",
+        "hex": "#C19A6B"
+      },
+      {
+        "name": "Rich Cream",
+        "hex": "#F5F5DC"
+      }
+    ]
+  },
+  "makeup": {
+    "foundation": {
+      "recommended": [
+        {
+          "name": "Warm Tan",
+          "hex": "#A67B5B"
+        },
+        {
+          "name": "Caramel",
+          "hex": "#C68E65"
+        }
+      ],
+      "avoid": [
+        {
+          "name": "Cool Ivory",
+          "hex": "#F2D7C5"
+        }
+      ],
+      "tip": "Look for foundations with explicitly golden or yellow bases to match your skin's natural honey glow."
+    },
+    "blush": [
+      "Terracotta",
+      "Brick Red",
+      "Deep Rose"
+    ],
+    "bronzer": {
+      "recommended": [
+        {
+          "name": "Terracotta Bronze",
+          "hex": "#9C522B"
+        },
+        {
+          "name": "Deep Bronze",
+          "hex": "#704214"
+        },
+        {
+          "name": "Rich Bronze",
+          "hex": "#5C3317"
+        }
+      ]
+    },
+    "lipColors": [
+      "Brick Red",
+      "Burgundy",
+      "Deep Berry",
+      "Tomato Red"
+    ],
+    "eyeshadow": [
+      "Gold",
+      "Bronze",
+      "Copper",
+      "Deep Brown"
+    ],
+    "eyeliner": [
+      "Deep Brown",
+      "Charcoal"
+    ]
+  },
+  "nails": {
+    "bestColors": [
+      "Malaga Wine",
+      "Berry Naughty",
+      "Big Apple Red",
+      "Cajun Shrimp",
+      "Bare With Me",
+      "Sugar Daddy"
+    ],
+    "avoidColors": [
+      "Midnight Cami",
+      "Limo-Scene"
+    ]
+  },
+  "wardrobe": {
+    "metals": [
+      "Gold",
+      "Rose Gold"
+    ]
+  },
+  "gemstones": [
+    {
+      "name": "garnet"
+    },
+    {
+      "name": "tigers eye"
+    },
+    {
+      "name": "jade"
+    }
+  ],
+  "celebrities": [
+    {
+      "name": "Viola Davis",
+      "reason": "She shares your rich depth and incredible golden undertone."
+    },
+    {
+      "name": "Angela Bassett",
+      "reason": "Her high-contrast features and warm skin match your seasonal profile."
+    },
+    {
+      "name": "Issa Rae",
+      "reason": "She glows in the same earthy, saturated Autumn palette that suits you."
+    },
+    {
+      "name": "Mindy Kaling",
+      "reason": "Her dark hair and eyes paired with warm skin are a classic Deep Autumn mix."
+    }
+  ]
+}

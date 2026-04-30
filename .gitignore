@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build output
+client/dist/
+dist/
+build/
+
+# Runtime
+uploads/
+*.log
+
+# Test/screenshot artefacts
+screenshots/
+remotion-bg/out/
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Optional caches
+.cache/
+.parcel-cache/
+.next/
+.turbo/

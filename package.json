@@ -1,0 +1,38 @@
+{
+  "name": "color-analysis-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "tsx server/index.ts",
+    "client": "cd client && npm run dev",
+    "dev": "npm run server & npm run client",
+    "test:accuracy": "tsx tests/runAccuracyTest.ts",
+    "generate:gemstones": "tsx scripts/generateGemstones.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "jspdf": "^4.2.0",
+    "multer": "^2.1.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^25.3.5",
+    "@types/uuid": "^10.0.0",
+    "puppeteer": "^24.39.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
