@@ -16,8 +16,8 @@ build/
 uploads/
 *.log
 
-# Test/screenshot artefacts
-screenshots/
+# Test/screenshot artefacts (top-level only — keep docs/screenshots/)
+/screenshots/
 remotion-bg/out/
 
 # Editor / OS

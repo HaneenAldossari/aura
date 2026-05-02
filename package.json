@@ -1,18 +1,36 @@
 {
-  "name": "color-analysis-app",
+  "name": "aura",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "AI personal color analysis web app — classifies a face photo into one of 12 seasonal color types and generates personalized palette, makeup, and shopping recommendations using Google Gemini vision.",
+  "main": "server/index.ts",
+  "homepage": "https://aura-azure-six.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HaneenAldossari/aura.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HaneenAldossari/aura/issues"
+  },
   "scripts": {
     "server": "tsx server/index.ts",
     "client": "cd client && npm run dev",
     "dev": "npm run server & npm run client",
     "test:accuracy": "tsx tests/runAccuracyTest.ts",
-    "generate:gemstones": "tsx scripts/generateGemstones.ts"
+    "generate:gemstones": "tsx scripts/generateGemstones.ts",
+    "precompute:demos": "tsx scripts/precomputeDemoAnalyses.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "color-analysis",
+    "seasonal-color",
+    "gemini",
+    "ai",
+    "computer-vision",
+    "react",
+    "typescript",
+    "express"
+  ],
+  "author": "Haneen Aldossari",
+  "license": "MIT",
   "type": "commonjs",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
