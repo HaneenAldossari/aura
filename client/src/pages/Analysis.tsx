@@ -23,10 +23,16 @@ export default function Analysis() {
   const [error, setError] = useState<string | null>(null);
   const [errorKind, setErrorKind] = useState<"photo" | "sample">("photo");
   const [photoTips, setPhotoTips] = useState<string[]>([]);
-  const [availableSamples, setAvailableSamples] = useState<string[]>([]);
+  // Show the 9 thumbnails instantly — they're static assets in client/public/demo-faces/.
+  // Then in the background confirm with the API which actually have analyses ready
+  // (fall back to the static list if the API fails — keeps the gallery visible).
+  const STATIC_SAMPLES = Array.from({ length: 9 }, (_, i) => `sample-${i + 1}`);
+  const [availableSamples, setAvailableSamples] = useState<string[]>(STATIC_SAMPLES);
 
   useEffect(() => {
-    listDemoSamples().then(setAvailableSamples).catch(() => setAvailableSamples([]));
+    listDemoSamples()
+      .then((s) => { if (s.length > 0) setAvailableSamples(s); })
+      .catch(() => { /* keep static fallback */ });
   }, []);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
