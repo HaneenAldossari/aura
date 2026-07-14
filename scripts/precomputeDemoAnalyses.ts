@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
-import { analyzePhotos } from "../server/services/claudeVision";
+import { analyzePhotos } from "../server/services/vision";
 
 const FACES_DIR = path.join(__dirname, "../client/public/demo-faces");
 const OUT_DIR = path.join(__dirname, "../server/demo-analyses");

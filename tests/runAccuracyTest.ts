@@ -1,4 +1,3 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { TEST_CASES } from "./colorTestData";
 import { fetchCelebrityPhoto, downloadPhotoAsBase64 } from "./photoFetcher";
 import { COLOR_ANALYSIS_SYSTEM_PROMPT } from "../server/prompts/colorAnalysis";
@@ -9,7 +8,8 @@ import * as path from "path";
 // Load env from project root
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+// Import after dotenv so the provider sees the key at call time
+import { callOpenRouter, parseJSON, getModel, imageBlock } from "../server/services/openrouter";
 
 interface TestResult {
   name: string;
@@ -39,22 +39,12 @@ async function analyzePhoto(
   base64Image: string,
   mimeType: string = "image/jpeg"
 ): Promise<Record<string, unknown>> {
-  const response = await client.messages.create({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 8192,
-    system: COLOR_ANALYSIS_SYSTEM_PROMPT,
-    messages: [
+  const text = await callOpenRouter(
+    [
       {
         role: "user",
         content: [
-          {
-            type: "image",
-            source: {
-              type: "base64",
-              media_type: mimeType as "image/jpeg",
-              data: base64Image,
-            },
-          },
+          imageBlock(base64Image, mimeType),
           {
             type: "text",
             text: "Analyze this person's personal color season. This is 1 photo: face in natural light. Return the full color analysis JSON.",
@@ -62,33 +52,14 @@ async function analyzePhoto(
         ],
       },
     ],
-  });
+    { maxTokens: 8192, system: COLOR_ANALYSIS_SYSTEM_PROMPT }
+  );
 
-  const text = response.content
-    .filter((b) => b.type === "text")
-    .map((b) => (b as { type: "text"; text: string }).text)
-    .join("");
-
-  try {
-    return JSON.parse(text);
-  } catch {
-    const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-    if (jsonMatch) {
-      return JSON.parse(jsonMatch[1].trim());
-    }
-    const braceMatch = text.match(/\{[\s\S]*\}/);
-    if (braceMatch) {
-      const cleaned = braceMatch[0]
-        .replace(/,\s*}/g, "}")
-        .replace(/,\s*]/g, "]");
-      return JSON.parse(cleaned);
-    }
-    throw new Error("Could not parse AI response as JSON");
-  }
+  return parseJSON(text);
 }
 
 async function runTests() {
-  console.log("\n🎨 AURA COLOR ANALYSIS ACCURACY TEST (Anthropic Claude)\n");
+  console.log(`\n🎨 AURA COLOR ANALYSIS ACCURACY TEST (OpenRouter: ${getModel()})\n`);
   console.log(`Testing ${TEST_CASES.length} celebrity cases...\n`);
   console.log("=".repeat(60));
 
@@ -214,8 +185,8 @@ async function runTests() {
         );
       }
 
-      // Small delay between requests
-      await new Promise((r) => setTimeout(r, 1000));
+      // Delay between requests — OpenRouter free tier is tightly rate-limited
+      await new Promise((r) => setTimeout(r, 5000));
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : String(e);
       result.error = message;
@@ -304,7 +275,7 @@ async function runTests() {
   const report = {
     timestamp: new Date().toISOString(),
     prompt: "Aura generalized system prompt",
-    model: "claude-sonnet-4-20250514",
+    model: getModel(),
     summary: {
       total: TEST_CASES.length,
       tested: totalTested,

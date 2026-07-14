@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { analysisStore } from "./analysis";
+import { callOpenRouter, isDemo } from "../services/openrouter";
 
 const router = Router();
 
@@ -111,8 +112,7 @@ router.post("/chat", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const apiKey = process.env.OPENROUTER_API_KEY;
-    if (!apiKey) {
+    if (isDemo()) {
       await new Promise((resolve) => setTimeout(resolve, 800));
       res.json({
         response: "Demo mode is active. Please set an OPENROUTER_API_KEY for AI-powered responses.",
@@ -120,39 +120,17 @@ router.post("/chat", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const systemPrompt = buildSystemPrompt(analysisResult);
-
-    const chatMessages = [
-      { role: "system", content: systemPrompt },
-      ...messages.map((msg: { role: "user" | "assistant"; content: string }) => ({
+    const chatMessages = messages.map(
+      (msg: { role: "user" | "assistant"; content: string }) => ({
         role: msg.role === "assistant" ? "assistant" : "user",
         content: msg.content,
-      })),
-    ];
+      })
+    );
 
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "nvidia/nemotron-nano-12b-v2-vl:free",
-        max_tokens: 1024,
-        messages: chatMessages,
-      }),
+    const text = await callOpenRouter(chatMessages, {
+      maxTokens: 1024,
+      system: buildSystemPrompt(analysisResult),
     });
-
-    if (!response.ok) {
-      const errBody = await response.text();
-      console.error(`OpenRouter chat error (${response.status}):`, errBody);
-      throw new Error(`OpenRouter error: ${response.status}`);
-    }
-
-    const data = (await response.json()) as {
-      choices?: { message?: { content?: string } }[];
-    };
-    const text = data.choices?.[0]?.message?.content || "";
 
     if (!text) throw new Error("Empty response from chat model");
     res.json({ response: cleanResponse(text) });

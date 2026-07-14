@@ -1,54 +1,9 @@
-import Anthropic from "@anthropic-ai/sdk";
-
-let _client: Anthropic | null = null;
-function getClient(): Anthropic {
-  if (!_client) {
-    _client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  }
-  return _client;
-}
-
 export async function fetchCelebrityPhoto(testCase: {
   name: string;
   searchQuery: string;
   wikipediaName: string;
 }): Promise<string | null> {
-  // Use Claude's web_search to find a natural daylight photo — skip Wikipedia event photos
-  try {
-    const client = getClient();
-    const searchResponse = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 500,
-      tools: [{ type: "web_search_20250305" as const, name: "web_search" }],
-      messages: [
-        {
-          role: "user",
-          content: `I need a photo of ${testCase.name} in NATURAL DAYLIGHT — no red carpet, no studio lighting, no heavy makeup. Search for: "${testCase.name} no makeup natural light candid" or "${testCase.name} bare face daylight street".
-
-Find a direct image URL (ending in .jpg, .jpeg, or .png) showing their face clearly in natural outdoor light. NO event photos, NO studio shoots, NO heavy makeup looks. Paparazzi/street style/casual photos are ideal.
-
-Return ONLY the direct image URL, nothing else.`,
-        },
-      ],
-    });
-
-    const textContent = searchResponse.content.find((b) => b.type === "text");
-    if (textContent && textContent.type === "text") {
-      const urlMatch = textContent.text.match(
-        /https?:\/\/[^\s"'<>]+\.(jpg|jpeg|png)/i
-      );
-      if (urlMatch) {
-        console.log(
-          `  Found natural light photo for ${testCase.name}: ${urlMatch[0].substring(0, 80)}...`
-        );
-        return urlMatch[0];
-      }
-    }
-  } catch {
-    console.log(`  Web search failed for ${testCase.name}`);
-  }
-
-  // Fallback: Wikipedia (better than nothing)
+  // Wikipedia portrait — deterministic source, so benchmark runs are comparable
   try {
     const wikiApiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${testCase.wikipediaName}`;
     const response = await fetch(wikiApiUrl);
@@ -57,13 +12,13 @@ Return ONLY the direct image URL, nothing else.`,
       if (data.thumbnail?.source) {
         const highRes = data.thumbnail.source.replace(/\/\d+px-/, "/400px-");
         console.log(
-          `  Fallback to Wikipedia for ${testCase.name}: ${highRes.substring(0, 80)}...`
+          `  Wikipedia photo for ${testCase.name}: ${highRes.substring(0, 80)}...`
         );
         return highRes;
       }
     }
   } catch {
-    console.log(`  Wikipedia also failed for ${testCase.name}`);
+    console.log(`  Wikipedia fetch failed for ${testCase.name}`);
   }
 
   console.log(`  Could not find photo for ${testCase.name}`);

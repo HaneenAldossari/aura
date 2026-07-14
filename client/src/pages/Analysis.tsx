@@ -72,7 +72,8 @@ export default function Analysis() {
     setStep("analyzing");
     setError(null);
     try {
-      const minDelay = new Promise<void>((r) => setTimeout(r, 7000));
+      // Brief pause so the loading choreography reads once, without feeling fake
+      const minDelay = new Promise<void>((r) => setTimeout(r, 2500));
       const { sessionId } = await loadDemoSample(sampleId);
       await minDelay;
       navigate(`/results/${sessionId}`);
@@ -249,7 +250,7 @@ export default function Analysis() {
         {step === "analyzing" && (
           <LoadingScreen
             uploadedPhotos={samplePreview ? [samplePreview] : photo.preview ? [photo.preview] : []}
-            totalDuration={samplePreview ? 7000 : undefined}
+            totalDuration={samplePreview ? 2500 : undefined}
           />
         )}
 

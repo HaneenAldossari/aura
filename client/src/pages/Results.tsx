@@ -10,7 +10,7 @@ import {
   Send,
   Camera,
 } from "lucide-react";
-import { getResults, sendChatMessage, checkLinkImage } from "../lib/api";
+import { getResults, sendChatMessage, checkLinkImage, getCelebrityImage } from "../lib/api";
 import {
   getSeasonMakeupSwatches,
   getJewelrySwatches,
@@ -101,17 +101,11 @@ export default function Results() {
     if (!celebrities) return;
 
     celebrities.forEach(async (celeb) => {
-      try {
-        const res = await fetch(`/api/celebrity-image/${encodeURIComponent(celeb.name)}`);
-        if (res.ok) {
-          const json = await res.json();
-          if (json.url) {
-            setCelebPhotos((prev) => ({ ...prev, [celeb.name]: json.url }));
-          }
-        }
-      } catch {
-        // Fallback to initials
+      const url = await getCelebrityImage(celeb.name);
+      if (url) {
+        setCelebPhotos((prev) => ({ ...prev, [celeb.name]: url }));
       }
+      // No image → card falls back to initials
     });
   }, [data]);
 
@@ -775,7 +769,7 @@ export default function Results() {
               <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", fontSize: 22, color: "#D4AF7A", marginBottom: 12, letterSpacing: "0.04em" }}>Your Aura</p>
               <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", fontSize: 14, color: "#B8B0A4", marginBottom: 8 }}>Created by Haneen</p>
               <a href="mailto:haneenabdulrahmand@gmail.com" style={{ fontSize: 12, color: "#B8B0A4", textDecoration: "none", opacity: 0.7 }}>haneenabdulrahmand@gmail.com</a>
-              <p style={{ fontSize: 10, color: "rgba(184,176,164,0.4)", marginTop: 16, textTransform: "uppercase", letterSpacing: "0.15em" }}>&copy; 2026 Your Aura &middot; AI Color Analysis &middot; 12 Season System</p>
+              <p style={{ fontSize: 10, color: "rgba(184,176,164,0.4)", marginTop: 16, textTransform: "uppercase", letterSpacing: "0.15em" }}>&copy; {new Date().getFullYear()} Your Aura &middot; AI Color Analysis &middot; 12 Season System</p>
             </footer>
 
           </div>
@@ -1217,9 +1211,10 @@ export default function Results() {
       </main>
 
       {/* ==================== FLOATING CHATBOT ==================== */}
-      {!chatOpen && tab !== "overview" && (
+      {!chatOpen && (
         <button
           onClick={() => setChatOpen(true)}
+          aria-label="Ask the color advisor"
           className="fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition cursor-pointer animate-bounce-in z-50"
           style={{ background: 'var(--accent-gold)', color: 'var(--text-on-accent)' }}
         >

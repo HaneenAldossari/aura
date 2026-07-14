@@ -94,6 +94,17 @@ export async function checkLinkImage(file: File, sessionId: string) {
   return data;
 }
 
+export async function getCelebrityImage(name: string): Promise<string | null> {
+  try {
+    const res = await fetch(`${BASE}/celebrity-image/${encodeURIComponent(name)}`);
+    if (!res.ok) return null;
+    const data = await safeJson(res);
+    return typeof data.url === "string" ? data.url : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function checkLinkManual(
   colorDesc: string,
   category: string,
@@ -112,40 +123,3 @@ export async function checkLinkManual(
   return mdata;
 }
 
-export async function wardrobeAudit(
-  sessionId: string,
-  files: File[]
-): Promise<{
-  items: Array<{
-    itemIndex: number;
-    verdict: "KEEP" | "CAUTION" | "RESTYLE";
-    dominantColor: string;
-    dominantHex: string;
-    undertone: string;
-    reason: string;
-    tip: string;
-  }>;
-  summary: {
-    total: number;
-    keep: number;
-    caution: number;
-    restyle: number;
-    missingColors: string[];
-  };
-}> {
-  const formData = new FormData();
-  formData.append("sessionId", sessionId);
-  files.forEach((f) => formData.append("photos", f));
-
-  const res = await fetch(`${BASE}/wardrobe-audit`, {
-    method: "POST",
-    body: formData,
-  });
-
-  const wdata = await safeJson(res);
-  if (!res.ok) {
-    throw new Error(wdata.error || "Wardrobe audit failed");
-  }
-
-  return wdata;
-}

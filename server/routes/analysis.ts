@@ -9,17 +9,11 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { v4 as uuid } from "uuid";
-import { analyzePhotos } from "../services/claudeVision";
+import { analyzePhotos } from "../services/vision";
 import { DEMO_RESULT } from "../services/demoData";
+import { isDemo } from "../services/openrouter";
 import { validatePhoto } from "../utils/validatePhoto";
 import { getCanonicalPalette } from "../utils/seasonPalettes";
-
-// Check at runtime, not import time (dotenv hasn't loaded yet at import time)
-function isDemo(): boolean {
-  const hasGemini = !!(process.env.GEMINI_API_KEY || process.env.GOOGLE_AI_STUDIO_API_KEY);
-  const hasAnthropic = !!process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY !== "your_key_here" && process.env.ANTHROPIC_API_KEY !== "";
-  return !hasGemini && !hasAnthropic;
-}
 
 const router = Router();
 

@@ -2,52 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ShinyText from "../components/ShinyText";
 import BounceCards from "../components/BounceCards";
-
-/* ─── Star Field Background ─────────────────────── */
-interface Star {
-  id: number;
-  cx: number;
-  cy: number;
-  r: number;
-  duration: number;
-  delay: number;
-}
-
-function StarField() {
-  const [stars, setStars] = useState<Star[]>([]);
-
-  useEffect(() => {
-    const generated = Array.from({ length: 220 }).map((_, i) => ({
-      id: i,
-      cx: Math.random() * 96 + 2,
-      cy: Math.random() * 96 + 2,
-      r: Math.random() * 1.1 + 0.3,
-      duration: Math.random() * 4 + 2.5,
-      delay: Math.random() * 9,
-    }));
-    setStars(generated);
-  }, []);
-
-  return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}>
-      <svg style={{ width: "100%", height: "100%" }}>
-        {stars.map((star) => (
-          <circle
-            key={star.id}
-            cx={`${star.cx}%`}
-            cy={`${star.cy}%`}
-            r={star.r}
-            fill="var(--text-primary)"
-            style={{
-              animation: `twinkle ${star.duration}s ease-in-out infinite`,
-              animationDelay: `${star.delay}s`,
-            }}
-          />
-        ))}
-      </svg>
-    </div>
-  );
-}
+import StarField from "../components/StarField";
 
 /* ─── BounceCards Season Card SVG Images ────────── */
 const bounceCardData = [
@@ -890,7 +845,7 @@ export default function Home() {
           margin: 0,
           opacity: 0.7,
         }}>
-          Created by Haneen · AI Color Analysis · 2025
+          Created by Haneen · AI Color Analysis · {new Date().getFullYear()}
         </p>
       </footer>
     </div>
