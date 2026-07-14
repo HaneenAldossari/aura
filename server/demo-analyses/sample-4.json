@@ -1,0 +1,216 @@
+{
+  "season": "Deep Winter",
+  "seasonTagline": "You shine with the dramatic clarity and depth of a moonlit night, captivating in your cool, striking presence.",
+  "koreanTone": "쿨톤 (Cool Tone)",
+  "undertone": "cool",
+  "skinDescription": "Your skin has a cool, porcelain undertone with a medium depth, displaying a subtle rosiness.",
+  "hairDescription": "Your hair is a deep, rich black with a cool, neutral tone.",
+  "eyeDescription": "Your eyes are a dark, clear brown, lacking warmth and contributing to your overall cool and high-contrast appearance.",
+  "contrastLevel": "high",
+  "chromaLevel": "clear",
+  "confidence": "high",
+  "colorDNA": {
+    "warmth": 20,
+    "depth": 80,
+    "clarity": 85,
+    "contrast": 90
+  },
+  "seasonStory": "You possess the striking beauty of Deep Winter, characterized by your deep coloring, high contrast, and cool undertones. Your natural features command attention, and you are perfectly complemented by clear, deep, and cool colors that mirror your own intensity.",
+  "palette": {
+    "bestColors": [
+      {
+        "name": "Pure Black",
+        "hex": "#000000",
+        "reason": "Your hair is naturally this deep, rich black, making it a foundational neutral that highlights your features."
+      },
+      {
+        "name": "True White",
+        "hex": "#FFFFFF",
+        "reason": "The stark contrast of pure white against your deep coloring creates a dramatic and sharp look."
+      },
+      {
+        "name": "Royal Blue",
+        "hex": "#4169E1",
+        "reason": "A vibrant and clear blue that harmonizes beautifully with your cool undertones and deep features."
+      },
+      {
+        "name": "Cool Red",
+        "hex": "#CC0000",
+        "reason": "This intense, blue-based red is striking and complements your high contrast and cool palette."
+      },
+      {
+        "name": "Emerald Green",
+        "hex": "#50C878",
+        "reason": "A clear, deep green that resonates with your cool and vivid coloring."
+      },
+      {
+        "name": "Icy Pink",
+        "hex": "#F0D4D4",
+        "reason": "A bright, cool pink that adds a touch of delicate vibrancy without compromising your cool tones."
+      },
+      {
+        "name": "Deep Navy",
+        "hex": "#000080",
+        "reason": "A sophisticated and dark blue that offers a strong alternative to black."
+      },
+      {
+        "name": "Burgundy (Cool Tone)",
+        "hex": "#8B0040",
+        "reason": "A rich, deep, and cool-toned red that adds depth and elegance."
+      },
+      {
+        "name": "Charcoal Grey",
+        "hex": "#36454F",
+        "reason": "A softer alternative to black, this deep grey maintains your high contrast and cool palette."
+      },
+      {
+        "name": "Deep Emerald",
+        "hex": "#006400",
+        "reason": "A richer, darker version of emerald green that enhances your deep coloring."
+      },
+      {
+        "name": "Cool Plum",
+        "hex": "#7B6688",
+        "reason": "A deep, enigmatic purple that aligns perfectly with your cool and striking features."
+      },
+      {
+        "name": "Fuchsia",
+        "hex": "#FF00FF",
+        "reason": "A bold and bright cool-toned pink that adds a vibrant pop of color."
+      }
+    ],
+    "avoidColors": [
+      {
+        "name": "Warm Yellow",
+        "hex": "#FFFF00",
+        "reason": "Warm yellows clash with your cool undertones and can make your skin appear sallow."
+      },
+      {
+        "name": "Burnt Orange",
+        "hex": "#CC5500",
+        "reason": "This warm, earthy tone is too muted and warm for your clear, cool coloring."
+      },
+      {
+        "name": "Olive Green",
+        "hex": "#808000",
+        "reason": "Muted, warm greens do not harmonize with your clear, cool complexion."
+      }
+    ],
+    "neutrals": [
+      {
+        "name": "Pure Black",
+        "hex": "#000000"
+      },
+      {
+        "name": "True White",
+        "hex": "#FFFFFF"
+      },
+      {
+        "name": "Charcoal Grey",
+        "hex": "#36454F"
+      },
+      {
+        "name": "Deep Navy",
+        "hex": "#000080"
+      }
+    ]
+  },
+  "makeup": {
+    "foundation": {
+      "recommended": [
+        {
+          "name": "Cool Ivory",
+          "hex": "#F0E6D6"
+        },
+        {
+          "name": "Cool Beige",
+          "hex": "#E1D4C8"
+        }
+      ],
+      "avoid": [
+        {
+          "name": "Warm Ivory",
+          "hex": "#FFF8DC"
+        }
+      ],
+      "tip": "Opt for cool-toned foundations with a neutral or pink base to match your skin's natural rosiness and avoid any yellow or golden undertones."
+    },
+    "blush": [
+      "Rose Pink",
+      "Cool Rose",
+      "Deep Rose",
+      "Plum Blush"
+    ],
+    "lipColors": [
+      "Cherry Red",
+      "Deep Red",
+      "Cool Pink",
+      "Hot Pink",
+      "Raspberry",
+      "Deep Plum"
+    ],
+    "eyeshadow": [
+      "Silver",
+      "Charcoal",
+      "Deep Navy",
+      "Cool Plum",
+      "Emerald Green",
+      "Icy Pink"
+    ],
+    "eyeliner": [
+      "Jet Black",
+      "Deep Navy",
+      "Charcoal"
+    ]
+  },
+  "nails": {
+    "bestColors": [
+      "Midnight Cami",
+      "Charged Up Cherry",
+      "Malaga Wine",
+      "Ballet Slippers",
+      "Princesses Rule",
+      "Limo-Scene"
+    ],
+    "avoidColors": [
+      "Cajun Shrimp",
+      "Strawberry Margarita",
+      "Mademoiselle"
+    ]
+  },
+  "wardrobe": {
+    "metals": [
+      "Silver",
+      "Platinum"
+    ]
+  },
+  "gemstones": [
+    {
+      "name": "sapphire"
+    },
+    {
+      "name": "ruby"
+    },
+    {
+      "name": "diamond"
+    }
+  ],
+  "celebrities": [
+    {
+      "name": "Zoe Saldana",
+      "reason": "She has a similar deep skin tone, dark hair, and striking cool features that align with Deep Winter."
+    },
+    {
+      "name": "Penélope Cruz",
+      "reason": "Her high contrast, dark hair, and cool undertones are characteristic of a Deep Winter."
+    },
+    {
+      "name": "Connie Britton",
+      "reason": "She exhibits the deep coloring, high contrast, and cool clarity typical of the Deep Winter season."
+    },
+    {
+      "name": "Shakira",
+      "reason": "Her naturally dark hair, deep eyes, and tendency to look best in cool, vibrant colors align with Deep Winter characteristics."
+    }
+  ]
+}

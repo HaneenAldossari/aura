@@ -1,0 +1,55 @@
+{
+  "name": "aura",
+  "version": "1.0.0",
+  "description": "AI personal color analysis web app — classifies a face photo into one of 12 seasonal color types and generates personalized palette, makeup, and shopping recommendations using Google Gemini vision.",
+  "main": "server/index.ts",
+  "homepage": "https://aura-azure-six.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HaneenAldossari/aura.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HaneenAldossari/aura/issues"
+  },
+  "scripts": {
+    "server": "tsx server/index.ts",
+    "client": "cd client && npm run dev",
+    "dev": "npm run server & npm run client",
+    "test:accuracy": "tsx tests/runAccuracyTest.ts",
+    "generate:gemstones": "tsx scripts/generateGemstones.ts",
+    "precompute:demos": "tsx scripts/precomputeDemoAnalyses.ts"
+  },
+  "keywords": [
+    "color-analysis",
+    "seasonal-color",
+    "gemini",
+    "ai",
+    "computer-vision",
+    "react",
+    "typescript",
+    "express"
+  ],
+  "author": "Haneen Aldossari",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^25.3.5",
+    "@types/uuid": "^10.0.0",
+    "puppeteer": "^24.39.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "season": "Soft Autumn",
+  "seasonTagline": "You glow in the rich, earthy warmth of a golden forest \u2014 think burnished copper, mossy greens, and spicy terracottas.",
+  "koreanTone": "Warm Tone",
+  "undertone": "warm",
+  "skinDescription": "Your skin has a beautiful golden-peachy undertone with a warm, healthy glow and subtle sun-kissed freckles.",
+  "hairDescription": "Your hair is a rich, warm medium brown that likely reveals golden or bronze glints when it catches the light.",
+  "eyeDescription": "Your eyes are a warm, amber-brown that perfectly harmonizes with your overall earthy and golden coloring.",
+  "contrastLevel": "medium",
+  "chromaLevel": "muted",
+  "confidence": "high",
+  "colorDNA": {
+    "warmth": 88,
+    "depth": 58,
+    "clarity": 42,
+    "contrast": 55
+  },
+  "seasonStory": "As a True Autumn, your coloring is defined by its profound warmth and natural richness. You look most radiant in the saturated, earthy colors of peak fall, which mirror the golden-olive tones in your skin and the warmth in your eyes.",
+  "palette": {
+    "bestColors": [
+      {
+        "name": "Terracotta",
+        "hex": "#C4622D",
+        "reason": "Enhances the warm, earthy glow of your skin"
+      },
+      {
+        "name": "Olive Green",
+        "hex": "#6B7A3A",
+        "reason": "Complements your golden-olive undertones perfectly"
+      },
+      {
+        "name": "Rust",
+        "hex": "#B7410E",
+        "reason": "Adds vibrant warmth that matches your hair's depth"
+      },
+      {
+        "name": "Mustard Yellow",
+        "hex": "#9B8B00",
+        "reason": "Brings out the golden flecks in your amber eyes"
+      },
+      {
+        "name": "Warm Teal",
+        "hex": "#2E8B57",
+        "reason": "A sophisticated cool-leaning warm shade for contrast"
+      },
+      {
+        "name": "Camel",
+        "hex": "#C19A6B",
+        "reason": "An ideal warm neutral that doesn't wash you out"
+      },
+      {
+        "name": "Pumpkin",
+        "hex": "#D97D3A",
+        "reason": "A signature Autumn shade that brightens your complexion"
+      },
+      {
+        "name": "Moss Green",
+        "hex": "#8A9352",
+        "reason": "Harmonizes with your natural, earthy coloring"
+      },
+      {
+        "name": "Burnt Orange",
+        "hex": "#CC5500",
+        "reason": "Vivid yet grounded, this brings vitality to your look"
+      },
+      {
+        "name": "Coffee Brown",
+        "hex": "#6F4E37",
+        "reason": "A rich depth that grounds your more colorful outfits"
+      },
+      {
+        "name": "Forest Green",
+        "hex": "#228B22",
+        "reason": "Provides elegant depth while maintaining warmth"
+      },
+      {
+        "name": "Marigold",
+        "hex": "#EAA221",
+        "reason": "A sunny, warm yellow that highlights your skin's clarity"
+      }
+    ],
+    "avoidColors": [
+      {
+        "name": "Hot Pink",
+        "hex": "#FF69B4",
+        "reason": "Too cool and neon; it will clash with your warm skin"
+      },
+      {
+        "name": "Icy Blue",
+        "hex": "#ACE5EE",
+        "reason": "The cold, pale undertone will make your skin look sallow"
+      },
+      {
+        "name": "Pure Black",
+        "hex": "#000000",
+        "reason": "Too stark and heavy for your beautifully muted coloring"
+      }
+    ],
+    "neutrals": [
+      {
+        "name": "Warm Beige",
+        "hex": "#D5BA98"
+      },
+      {
+        "name": "Cream",
+        "hex": "#FFFDD0"
+      },
+      {
+        "name": "Chocolate Brown",
+        "hex": "#3D1C02"
+      },
+      {
+        "name": "Dark Olive",
+        "hex": "#556B2F"
+      }
+    ]
+  },
+  "makeup": {
+    "foundation": {
+      "recommended": [
+        {
+          "name": "Warm Sand",
+          "hex": "#E5C298"
+        },
+        {
+          "name": "Golden Beige",
+          "hex": "#E1B382"
+        }
+      ],
+      "avoid": [
+        {
+          "name": "Fair Porcelain",
+          "hex": "#F3E5DE"
+        }
+      ],
+      "tip": "Always look for foundations with a golden or yellow base to blend seamlessly with your skin's natural warmth."
+    },
+    "blush": [
+      "Warm Peach",
+      "Terracotta",
+      "Apricot"
+    ],
+    "bronzer": [
+      "Golden Bronze",
+      "Soft Bronze",
+      "Matte Warm Bronze"
+    ],
+    "lipColors": [
+      "Brick Red",
+      "Warm Coral",
+      "Warm Peach",
+      "Brown Nude"
+    ],
+    "eyeshadow": [
+      "Warm Brown",
+      "Gold",
+      "Bronze",
+      "Copper"
+    ],
+    "eyeliner": [
+      "Deep Brown",
+      "Forest Green"
+    ]
+  },
+  "nails": {
+    "bestColors": [
+      "Berry Naughty",
+      "Cajun Shrimp",
+      "Strawberry Margarita",
+      "Mademoiselle",
+      "Bare With Me",
+      "Watermelon"
+    ],
+    "avoidColors": [
+      "Midnight Cami",
+      "Mod About You",
+      "Limo-Scene"
+    ]
+  },
+  "wardrobe": {
+    "metals": [
+      "Gold",
+      "Rose Gold"
+    ]
+  },
+  "gemstones": [
+    {
+      "name": "amber"
+    },
+    {
+      "name": "citrine"
+    },
+    {
+      "name": "tigers eye"
+    }
+  ],
+  "celebrities": [
+    {
+      "name": "Debra Messing",
+      "reason": "She epitomizes the rich warmth and earthy depth of the True Autumn palette."
+    },
+    {
+      "name": "Isla Fisher",
+      "reason": "Her skin's golden-olive quality and warm brown eyes mirror your own natural harmony."
+    },
+    {
+      "name": "Julianne Moore",
+      "reason": "A classic example of how warm, saturated Autumn tones illuminate this coloring."
+    },
+    {
+      "name": "Mariska Hargitay",
+      "reason": "Shares your medium-depth warmth and ability to pull off rich, earthy greens and browns."
+    }
+  ]
+}

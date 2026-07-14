@@ -1,0 +1,226 @@
+{
+  "season": "Light Summer",
+  "seasonTagline": "You glow in the delicate, misty colors of a cool summer morning — think soft sea glass, pale peonies, and hazy skies.",
+  "koreanTone": "Light Tone",
+  "undertone": "cool",
+  "skinDescription": "Your skin is fair and porcelain-like with clear, cool pink and rosy undertones that provide a delicate luminosity.",
+  "hairDescription": "Your hair is a soft ash blonde with muted, cool tones that perfectly complement your low-contrast features.",
+  "eyeDescription": "Your eyes are a gentle blue-grey, appearing misty and soft rather than sharply vivid.",
+  "contrastLevel": "low",
+  "chromaLevel": "muted",
+  "confidence": "high",
+  "colorDNA": {
+    "warmth": 15,
+    "depth": 20,
+    "clarity": 35,
+    "contrast": 25
+  },
+  "seasonStory": "You belong to the lightest and most delicate part of the Summer family. Your coloring is defined by coolness and a soft, diffused quality, meaning you look your absolute best in pastel and watercolor shades that don't overwhelm your natural ethereal beauty.",
+  "palette": {
+    "bestColors": [
+      {
+        "name": "Powder Blue",
+        "hex": "#B0C4DE",
+        "reason": "This soft, cool blue mirrors the coolness of your eyes and skin."
+      },
+      {
+        "name": "Soft Rose",
+        "hex": "#E8B4BC",
+        "reason": "A delicate pink that harmonizes with your natural rosy undertones."
+      },
+      {
+        "name": "Lavender",
+        "hex": "#C4B5D0",
+        "reason": "This light purple enhances the clarity of your fair skin without overpowering it."
+      },
+      {
+        "name": "Pale Mint",
+        "hex": "#B5CEC4",
+        "reason": "A cool, muted green that brings out the freshness in your complexion."
+      },
+      {
+        "name": "Blush Pink",
+        "hex": "#E8C4C4",
+        "reason": "The ultimate neutral-cool pink that looks completely natural on you."
+      },
+      {
+        "name": "Periwinkle",
+        "hex": "#CCCCEE",
+        "reason": "Adds a soft pop of color that highlights the blue-grey in your eyes."
+      },
+      {
+        "name": "Soft Lilac",
+        "hex": "#C9B8D8",
+        "reason": "A misty purple that complements the muted quality of your hair."
+      },
+      {
+        "name": "Icy Pink",
+        "hex": "#F0D4D4",
+        "reason": "This very light, cool pink provides just enough contrast for your fair skin."
+      },
+      {
+        "name": "Sky Blue",
+        "hex": "#87CEEB",
+        "reason": "A classic Light Summer color that provides a crisp, clean look."
+      },
+      {
+        "name": "Light Grey-Blue",
+        "hex": "#A9B2C3",
+        "reason": "The perfect sophisticated neutral that mimics your eye color."
+      },
+      {
+        "name": "Rosewater",
+        "hex": "#F4D7D7",
+        "reason": "A barely-there pink that keeps your look light and airy."
+      },
+      {
+        "name": "Pearl White",
+        "hex": "#F0F0F0",
+        "reason": "A soft, cool white is much more flattering on you than harsh optic white."
+      }
+    ],
+    "avoidColors": [
+      {
+        "name": "Bright Orange",
+        "hex": "#FF6600",
+        "reason": "This warm, vivid color clashes aggressively with your cool, muted skin."
+      },
+      {
+        "name": "Mustard Yellow",
+        "hex": "#E1AD01",
+        "reason": "Earthiness and warmth make your skin look sallow or tired."
+      },
+      {
+        "name": "Chocolate Brown",
+        "hex": "#3D1C02",
+        "reason": "This deep, warm brown is too heavy and dark for your delicate contrast."
+      }
+    ],
+    "neutrals": [
+      {
+        "name": "Soft Silver Grey",
+        "hex": "#C0C0C0"
+      },
+      {
+        "name": "Light Cool Grey",
+        "hex": "#D3D3D3"
+      },
+      {
+        "name": "Off White",
+        "hex": "#F5F5F5"
+      },
+      {
+        "name": "Cool Taupe",
+        "hex": "#8B7D7B"
+      }
+    ]
+  },
+  "makeup": {
+    "foundation": {
+      "recommended": [
+        {
+          "name": "Fair Porcelain",
+          "hex": "#F8ECE0"
+        },
+        {
+          "name": "Light Ivory",
+          "hex": "#FFF5EC"
+        }
+      ],
+      "avoid": [
+        {
+          "name": "Honey Beige",
+          "hex": "#D6B48D"
+        }
+      ],
+      "tip": "Your porcelain skin looks best with sheer-to-medium coverage in a cool or pink-toned base to enhance your natural luminosity."
+    },
+    "blush": [
+      "Baby Pink",
+      "Soft Pink",
+      "Rose Pink"
+    ],
+    "lipColors": [
+      "Nude Pink",
+      "Dusty Rose",
+      "Rose Pink",
+      "Cool Pink"
+    ],
+    "eyeshadow": [
+      "Champagne",
+      "Taupe",
+      "Mauve",
+      "Silver"
+    ],
+    "eyeliner": [
+      "Grey Brown",
+      "Navy"
+    ],
+    "bronzer": {
+      "recommended": [
+        {
+          "name": "Cool Taupe Bronze",
+          "hex": "#A89A90"
+        },
+        {
+          "name": "Soft Bronze",
+          "hex": "#C5B2A1"
+        },
+        {
+          "name": "Cool Espresso Bronze",
+          "hex": "#63554A"
+        }
+      ],
+      "tip": "Avoid orange-based bronzers; look for 'ash' or 'cool' tones to simulate a natural shadow rather than a tan."
+    }
+  },
+  "nails": {
+    "bestColors": [
+      "Bubble Bath",
+      "Ballet Slippers",
+      "Mademoiselle",
+      "Sheer Bliss",
+      "Tiara",
+      "Limo-Scene"
+    ],
+    "avoidColors": [
+      "Cajun Shrimp",
+      "Berry Naughty",
+      "Midnight Cami"
+    ]
+  },
+  "wardrobe": {
+    "metals": [
+      "Silver"
+    ]
+  },
+  "gemstones": [
+    {
+      "name": "rose quartz"
+    },
+    {
+      "name": "pearl"
+    },
+    {
+      "name": "aquamarine"
+    }
+  ],
+  "celebrities": [
+    {
+      "name": "Margot Robbie",
+      "reason": "She shares your delicate, cool blonde coloring and low-contrast features."
+    },
+    {
+      "name": "Elle Fanning",
+      "reason": "Her porcelain skin and cool ash tones are a perfect match for your ethereal Light Summer palette."
+    },
+    {
+      "name": "Amanda Seyfried",
+      "reason": "She has the classic Light Summer mix of fair skin and soft, cool blue eyes."
+    },
+    {
+      "name": "Saoirse Ronan",
+      "reason": "Her cool-toned, light features are best enhanced by the same misty watercolor tones that suit you."
+    }
+  ]
+}
