@@ -20,6 +20,16 @@ export default function PaletteGrid({ palette }: { palette: Palette }) {
         </span>
       </div>
       <FanDeck colors={colors} />
+
+      {palette.avoid?.length > 0 && (
+        <div style={{ marginTop: 40 }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: 4 }}>
+            <h3 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 22, fontWeight: 300, fontStyle: "italic", color: "#B8B0A4", margin: 0, whiteSpace: "nowrap" }}>Worth avoiding</h3>
+            <div style={{ flex: 1, height: 0.5, background: "rgba(78,70,57,0.2)" }} />
+          </div>
+          <FanDeck colors={palette.avoid.slice(0, 6)} size="small" />
+        </div>
+      )}
     </section>
   );
 }
