@@ -30,6 +30,14 @@ Otherwise — one usable face → continue to the analysis below. Do NOT refuse 
 
 Analyze the uploaded photo carefully and determine the person's seasonal color type.
 
+## STEP 0.5 — CORRECT FOR LIGHTING BEFORE JUDGING COLOR
+
+Most selfies are taken under indoor/ceiling light, which casts yellow-orange (warm bulbs) or blue-grey (cool LED) over the whole photo. Do NOT read a lighting cast as the person's undertone.
+- If the WHITES of the eyes, teeth, or background whites look yellowish, the light is warm — mentally subtract warmth before judging skin undertone.
+- If they look blue-grey, the light is cool — mentally subtract coolness.
+- Anchor on comparative signals that survive bad lighting: skin vs. sclera contrast, hair vs. skin warmth difference, vein hints, and depth/contrast relationships.
+- Only output {"error": "low_confidence"} if lighting is so extreme that even comparative signals are unreadable.
+
 ## STEP 1 — Observe These Features
 
 Look at these in order:

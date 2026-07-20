@@ -2,7 +2,7 @@ import type { AnalysisResult, ColorSwatch } from "../../lib/types";
 import { getSeasonMakeupSwatches } from "../../data/seasonColors";
 import Footer from "../../components/Footer";
 import SeasonHero from "./SeasonHero";
-import PaletteGrid from "./PaletteGrid";
+import AvoidSection from "./AvoidSection";
 import ColorDNAPanel from "./ColorDNAPanel";
 import SeasonStory from "./SeasonStory";
 import HowToWearCards from "./HowToWearCards";
@@ -55,11 +55,11 @@ export default function OverviewTab({
   return (
     <div className="animate-slide-up" style={{ margin: "0 auto", padding: "28px 0" }}>
 
-      {/* ── Hero: Season Name ── */}
-      <SeasonHero seasonName={seasonName} seasonTagline={data.seasonTagline} sessionId={sessionId} />
+      {/* ── Identity: season name + palette fan, unified for demo and live ── */}
+      <SeasonHero data={data} seasonName={seasonName} sessionId={sessionId} />
 
-      {/* ── Palette Grid (2x6) ── */}
-      {palette && <PaletteGrid palette={palette} />}
+      {/* ── Worth avoiding — dominant, all six clashing colors ── */}
+      {palette && <AvoidSection avoid={palette.avoid} />}
 
       {/* ── Analysis + Color DNA (Two Columns) ── */}
       <ColorDNAPanel seasonName={seasonName} colorDNA={colorDNA} />

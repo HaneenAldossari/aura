@@ -53,6 +53,9 @@ export async function analyzePhotos(
       {
         maxTokens: 8192,
         system: COLOR_ANALYSIS_SYSTEM_PROMPT,
+        // Deterministic: the same photo must give the same season every time
+        temperature: 0,
+        seed: 12,
       }
     );
     try {
@@ -119,7 +122,7 @@ async function crossValidate(
 
     const text = await callOpenRouter(
       [{ role: "user", content: prompt }],
-      { maxTokens: 512 }
+      { maxTokens: 512, temperature: 0, seed: 12 }
     );
 
     return parseJSON(text);

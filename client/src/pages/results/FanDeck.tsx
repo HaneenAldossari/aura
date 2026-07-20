@@ -3,8 +3,8 @@ import type { ColorSwatch } from "../../lib/types";
 
 interface FanDeckProps {
   colors: ColorSwatch[];
-  /** large = signature palette; small = compact strip (e.g. avoid colors) */
-  size?: "large" | "small";
+  /** large = full-width palette; medium = split-column palette; small = compact strip */
+  size?: "large" | "medium" | "small";
 }
 
 /**
@@ -63,11 +63,13 @@ export default function FanDeck({ colors, size = "large" }: FanDeckProps) {
 
   const activeColor = active !== null ? colors[active] : null;
 
-  const large = size === "large";
-  const cardW = large ? 88 : 56;
-  const cardH = large ? 190 : 110;
-  const overlap = large ? 30 : 20;
-  const anglePer = large ? 4.2 : 5;
+  const large = size !== "small";
+  const dims = {
+    large: { cardW: 88, cardH: 190, overlap: 30, anglePer: 4.2 },
+    medium: { cardW: 62, cardH: 150, overlap: 26, anglePer: 4.4 },
+    small: { cardW: 56, cardH: 110, overlap: 20, anglePer: 5 },
+  }[size];
+  const { cardW, cardH, overlap, anglePer } = dims;
   const mid = (colors.length - 1) / 2;
 
   // ── Mobile: stacked chip list ──

@@ -57,7 +57,7 @@ export default function Results() {
 
       <ResultsNav tab={tab} onTabChange={setTab} seasonName={seasonName} palette={data.palette} />
 
-      <main style={{ maxWidth: tab === "overview" ? 900 : 760, margin: "0 auto", padding: "28px 20px", paddingTop: tab === "overview" ? "112px" : "140px", transition: "max-width 0.3s ease" }}>
+      <main style={{ maxWidth: tab === "overview" ? 1080 : 760, margin: "0 auto", padding: "28px 20px", paddingTop: tab === "overview" ? "112px" : "140px", transition: "max-width 0.3s ease" }}>
         {/* key={tab} remounts the wrapper so each tab change fades up */}
         <div key={tab} role="tabpanel" className="animate-fade-in-up">
           {tab === "overview" && (

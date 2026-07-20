@@ -26,6 +26,14 @@ export function getModel(): string {
   return process.env.OPENROUTER_MODEL || DEFAULT_MODEL;
 }
 
+// Chat is text-only, so it uses a much faster free text model than the
+// vision model that handles photo analysis.
+const DEFAULT_CHAT_MODEL = "nvidia/nemotron-3-nano-30b-a3b:free";
+
+export function getChatModel(): string {
+  return process.env.OPENROUTER_CHAT_MODEL || DEFAULT_CHAT_MODEL;
+}
+
 export type ChatMessage = { role: string; content: unknown };
 
 export interface CallOptions {
@@ -33,6 +41,10 @@ export interface CallOptions {
   maxTokens?: number;
   system?: string;
   temperature?: number;
+  /** Fixed sampling seed — with temperature 0 makes calls repeatable */
+  seed?: number;
+  /** Disable reasoning-model "thinking" (faster first token for chat) */
+  disableReasoning?: boolean;
   /** AbortSignal for cancellation/timeout */
   signal?: AbortSignal;
 }
@@ -58,6 +70,8 @@ function buildBody(
     messages: chatMessages,
   };
   if (options.temperature !== undefined) body.temperature = options.temperature;
+  if (options.seed !== undefined) body.seed = options.seed;
+  if (options.disableReasoning) body.reasoning = { enabled: false };
 
   // Server-side fallback: OpenRouter tries each model in order on failure.
   const fallback = process.env.OPENROUTER_FALLBACK_MODEL;
