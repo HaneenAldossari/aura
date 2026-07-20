@@ -100,7 +100,16 @@ export default function ShopTab({
             }}
           />
           <div
+            role="button"
+            tabIndex={0}
+            aria-label="Upload a product photo to check against your palette"
             onClick={() => fileInputRef.current?.click()}
+            onKeyDown={e => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                fileInputRef.current?.click();
+              }
+            }}
             onDragOver={e => { e.preventDefault(); e.stopPropagation(); }}
             onDrop={e => {
               e.preventDefault();
