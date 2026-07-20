@@ -20,3 +20,10 @@
   height: 100%;
   object-fit: cover;
 }
+
+/* Entrance pop — uses the independent `scale` property so the gsap hover
+   tweens (which animate `transform`) can never freeze it */
+@keyframes card-pop {
+  from { scale: 0; }
+  to { scale: 1; }
+}

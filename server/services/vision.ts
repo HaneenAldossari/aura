@@ -43,15 +43,26 @@ export async function analyzePhotos(
     text: "Analyze all provided photos together and return the full color analysis JSON.",
   });
 
-  const text = await callOpenRouter(
-    [{ role: "user", content }],
-    {
-      maxTokens: 8192,
-      system: COLOR_ANALYSIS_SYSTEM_PROMPT,
+  // The free model returns malformed/truncated JSON on a meaningful share of
+  // calls — one retry recovers most of them.
+  let parsed: Record<string, unknown> | null = null;
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 2 && !parsed; attempt++) {
+    const text = await callOpenRouter(
+      [{ role: "user", content }],
+      {
+        maxTokens: 8192,
+        system: COLOR_ANALYSIS_SYSTEM_PROMPT,
+      }
+    );
+    try {
+      parsed = parseJSON(text);
+    } catch (err) {
+      lastError = err;
+      console.warn(`Analysis JSON parse failed (attempt ${attempt + 1})`);
     }
-  );
-
-  const parsed = parseJSON(text);
+  }
+  if (!parsed) throw lastError;
 
   // Correct color hex mismatches
   correctAllColors(parsed);

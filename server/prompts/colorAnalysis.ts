@@ -174,10 +174,19 @@ IMPORTANT: The "colorDNA" object contains four personal metrics scored 0–100 f
 - contrast: 0 = very low (features blend together), 100 = very high (stark difference between skin, hair, eyes).
 These values must reflect the INDIVIDUAL person in the photo — two people classified as the same season can have different DNA values.
 
-IMPORTANT: The palette MUST contain exactly 12 bestColors. Never return fewer than 12. Include a mix of neutrals, accent colors, and statement colors appropriate for this season.
+NOTE: The final displayed palette is a curated set chosen by your SEASON verdict, so keep palette entries brief — 6 bestColors, no reasons. Spend your effort on getting the season right, not on palette prose.
 
 {
-  "season": "[Sub-season] [Base-season]",
+  "assessment": {
+    "undertone": "warm | cool | neutral",
+    "undertoneEvidence": "one sentence citing what you see in THIS photo",
+    "depth": "light | light-medium | medium | medium-deep | deep",
+    "depthEvidence": "one sentence",
+    "chroma": "clear | muted",
+    "chromaEvidence": "one sentence",
+    "contrast": "low | medium | high"
+  },
+  "season": "[Sub-season] [Base-season] — must agree with the assessment above",
   "seasonTagline": "A poetic one-sentence tagline in second person describing their season's vibe. Example for Soft Autumn: 'You glow in earthy, muted tones — think terracotta sunsets and warm olive groves.'",
   "koreanTone": "[Korean label (English)]",
   "undertone": "warm | cool | neutral",
@@ -196,18 +205,12 @@ IMPORTANT: The palette MUST contain exactly 12 bestColors. Never return fewer th
   "seasonStory": "2-3 sentences about this person's season in second person. Warm, direct tone. Describe the essence of their season and how it shows in their natural coloring. No spiritual language.",
   "palette": {
     "bestColors": [
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this works" }
+      { "name": "Color Name", "hex": "#RRGGBB" },
+      { "name": "Color Name", "hex": "#RRGGBB" },
+      { "name": "Color Name", "hex": "#RRGGBB" },
+      { "name": "Color Name", "hex": "#RRGGBB" },
+      { "name": "Color Name", "hex": "#RRGGBB" },
+      { "name": "Color Name", "hex": "#RRGGBB" }
     ],
     "avoidColors": [
       { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this clashes" },

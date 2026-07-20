@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { gsap } from 'gsap';
 import './BounceCards.css';
 
@@ -32,22 +32,11 @@ export default function BounceCards({
   enableHover = true
 }: BounceCardsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.card',
-        { scale: 0 },
-        {
-          scale: 1,
-          stagger: animationStagger,
-          ease: easeType,
-          delay: animationDelay
-        }
-      );
-    }, containerRef);
-    return () => ctx.revert();
-  }, [animationStagger, easeType, animationDelay]);
+  // Entrance is pure CSS (see .card animation below): the previous gsap
+  // fromTo entrance was killed by StrictMode's double-mounted effect
+  // cleanup, leaving cards stuck at scale(0). CSS `scale` also can't be
+  // clobbered by the hover tweens, which only animate `transform`.
+  void easeType;
 
   const getNoRotationTransform = (transformStr: string) => {
     const hasRotate = /rotate\([\s\S]*?\)/.test(transformStr);
@@ -142,7 +131,8 @@ export default function BounceCards({
           key={idx}
           className={`card card-${idx}`}
           style={{
-            transform: transformStyles[idx] ?? 'none'
+            transform: transformStyles[idx] ?? 'none',
+            animation: `card-pop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) ${animationDelay + idx * animationStagger}s both`
           }}
           onMouseEnter={() => pushSiblings(idx)}
           onMouseLeave={resetSiblings}
