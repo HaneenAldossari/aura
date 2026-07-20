@@ -3,18 +3,18 @@ export async function fetchCelebrityPhoto(testCase: {
   searchQuery: string;
   wikipediaName: string;
 }): Promise<string | null> {
-  // Wikipedia portrait — deterministic source, so benchmark runs are comparable
+  // Wikipedia portrait — deterministic source, so benchmark runs are comparable.
+  // Use originalimage (full-res) — thumbnails only exist at specific widths,
+  // and the analysis pipeline downscales anyway.
   try {
     const wikiApiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${testCase.wikipediaName}`;
     const response = await fetch(wikiApiUrl);
     if (response.ok) {
       const data = await response.json();
-      if (data.thumbnail?.source) {
-        const highRes = data.thumbnail.source.replace(/\/\d+px-/, "/400px-");
-        console.log(
-          `  Wikipedia photo for ${testCase.name}: ${highRes.substring(0, 80)}...`
-        );
-        return highRes;
+      const url = data.originalimage?.source || data.thumbnail?.source;
+      if (url) {
+        console.log(`  Wikipedia photo for ${testCase.name}: ${url.substring(0, 80)}...`);
+        return url;
       }
     }
   } catch {

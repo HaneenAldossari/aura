@@ -65,6 +65,17 @@
   border-radius: inherit;
 }
 
+/* Scroll reveal (useReveal hook adds .reveal, observer adds .revealed) */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Standard interactive lift for cards and buttons */
 .lift-hover {
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -312,6 +323,10 @@ body {
   );
   animation: shimmer-move 3s ease-in-out infinite;
 }
+@keyframes hero-shimmer {
+  to { transform: translateX(100%); }
+}
+
 @keyframes skeleton-sweep {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }

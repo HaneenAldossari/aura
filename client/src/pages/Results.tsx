@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import StarField from "../components/StarField";
+import Skeleton from "../components/ui/Skeleton";
 import { formatSeasonName } from "../utils/formatSeason";
 import ResultsNav, { type Tab } from "./results/ResultsNav";
 import OverviewTab from "./results/OverviewTab";
@@ -19,9 +20,20 @@ export default function Results() {
   const linkChecker = useLinkChecker(sessionId);
 
   if (loading) {
+    // Skeleton of the overview: season hero + palette fan area
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-12 h-12 rounded-full border-4 animate-spin-slow" style={{ borderColor: 'var(--border-color)', borderTopColor: 'var(--accent-gold)' }} />
+      <div className="min-h-screen" style={{ maxWidth: 900, margin: "0 auto", padding: "112px 20px 28px" }}>
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <Skeleton width={140} height={12} style={{ margin: "0 auto 20px" }} />
+          <Skeleton width="min(480px, 80%)" height={72} radius={16} style={{ margin: "0 auto 16px" }} />
+          <Skeleton width="min(320px, 60%)" height={16} style={{ margin: "0 auto" }} />
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", gap: 6, marginBottom: 40 }}>
+          {Array.from({ length: 8 }, (_, i) => (
+            <Skeleton key={i} width={64} height={150} radius={12} />
+          ))}
+        </div>
+        <Skeleton width="100%" height={180} radius={16} />
       </div>
     );
   }
@@ -40,29 +52,26 @@ export default function Results() {
   const seasonName = formatSeasonName(data.season);
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 animate-fade-in">
       <StarField maxOpacity={0.45} minDuration={4} durationRange={5} />
 
       <ResultsNav tab={tab} onTabChange={setTab} seasonName={seasonName} palette={data.palette} />
 
       <main style={{ maxWidth: tab === "overview" ? 900 : 760, margin: "0 auto", padding: "28px 20px", paddingTop: tab === "overview" ? "112px" : "140px", transition: "max-width 0.3s ease" }}>
-        {/* ==================== OVERVIEW ==================== */}
-        {tab === "overview" && (
-          <OverviewTab
-            data={data}
-            seasonName={seasonName}
-            onContinue={() => { setTab("beauty"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-          />
-        )}
-
-        {/* ==================== BEAUTY (Makeup + Nails) ==================== */}
-        {tab === "beauty" && <BeautyTab makeup={data.makeup} seasonName={seasonName} />}
-
-        {/* ==================== STYLE (Jewelry + Hair) ==================== */}
-        {tab === "style" && <StyleTab data={data} seasonName={seasonName} />}
-
-        {/* ==================== SHOP (Image Upload Checker) ==================== */}
-        {tab === "shop" && <ShopTab palette={data.palette} seasonName={seasonName} checker={linkChecker} />}
+        {/* key={tab} remounts the wrapper so each tab change fades up */}
+        <div key={tab} role="tabpanel" className="animate-fade-in-up">
+          {tab === "overview" && (
+            <OverviewTab
+              data={data}
+              seasonName={seasonName}
+              sessionId={sessionId}
+              onContinue={() => { setTab("beauty"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+            />
+          )}
+          {tab === "beauty" && <BeautyTab makeup={data.makeup} seasonName={seasonName} />}
+          {tab === "style" && <StyleTab data={data} seasonName={seasonName} />}
+          {tab === "shop" && <ShopTab palette={data.palette} seasonName={seasonName} checker={linkChecker} />}
+        </div>
       </main>
 
       {/* ==================== FLOATING CHATBOT ==================== */}

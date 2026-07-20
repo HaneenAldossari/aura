@@ -102,7 +102,7 @@ export default function Analysis() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen animate-fade-in">
       {/* Nav — kept local instead of NavShell: this page uses py-4 (NavShell is py-3 + gap-4) */}
       <nav className="fixed top-0 w-full z-50 glass-dark">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">

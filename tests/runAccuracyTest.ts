@@ -10,6 +10,7 @@ dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 // Import after dotenv so the provider sees the key at call time
 import { callOpenRouter, parseJSON, getModel, imageBlock } from "../server/services/openrouter";
+import { prepareImage } from "../server/utils/prepareImage";
 
 interface TestResult {
   name: string;
@@ -37,14 +38,16 @@ function getSeasonFamily(season: string): string {
 
 async function analyzePhoto(
   base64Image: string,
-  mimeType: string = "image/jpeg"
+  _mimeType: string = "image/jpeg"
 ): Promise<Record<string, unknown>> {
+  // Same downscale/re-encode as production (server/routes/analysis.ts)
+  const prepared = await prepareImage(Buffer.from(base64Image, "base64"));
   const text = await callOpenRouter(
     [
       {
         role: "user",
         content: [
-          imageBlock(base64Image, mimeType),
+          imageBlock(prepared.base64, prepared.mimeType),
           {
             type: "text",
             text: "Analyze this person's personal color season. This is 1 photo: face in natural light. Return the full color analysis JSON.",

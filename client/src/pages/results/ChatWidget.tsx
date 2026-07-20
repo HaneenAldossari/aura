@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MessageCircle, Send, Sparkles, X } from "lucide-react";
-import { sendChatMessage } from "../../lib/api";
+import { streamChatMessage } from "../../lib/api";
+import type { ChatMessage } from "../../lib/types";
 import IconButton from "../../components/ui/IconButton";
 
 const quickQuestions = [
@@ -11,7 +12,19 @@ const quickQuestions = [
   "Gold or silver jewelry for me?",
 ];
 
-/** Floating chatbot: launcher button + panel + quick questions + send logic. */
+function loadHistory(sessionId: string | undefined): ChatMessage[] {
+  if (!sessionId) return [];
+  try {
+    const raw = sessionStorage.getItem(`aura-chat-${sessionId}`);
+    return raw ? (JSON.parse(raw) as ChatMessage[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Floating chatbot: launcher button + panel + quick questions + send logic.
+ * History persists per session in sessionStorage; responses stream in live.
+ * Renders as a bottom sheet on small screens. */
 export default function ChatWidget({
   sessionId,
   seasonName,
@@ -20,13 +33,32 @@ export default function ChatWidget({
   seasonName: string;
 }) {
   const [chatOpen, setChatOpen] = useState(false);
-  const [chatMessages, setChatMessages] = useState<
-    { role: "user" | "assistant"; content: string }[]
-  >([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() =>
+    loadHistory(sessionId)
+  );
   const [chatInput, setChatInput] = useState("");
   const [chatLoading, setChatLoading] = useState(false);
   const [chatSearchPhase, setChatSearchPhase] = useState(false);
+  const [isNarrow, setIsNarrow] = useState(
+    typeof window !== "undefined" && window.innerWidth < 640
+  );
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onResize = () => setIsNarrow(window.innerWidth < 640);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Persist history so closing the panel (or switching tabs) keeps the thread
+  useEffect(() => {
+    if (!sessionId) return;
+    try {
+      sessionStorage.setItem(`aura-chat-${sessionId}`, JSON.stringify(chatMessages));
+    } catch {
+      // storage full/blocked — chat still works, just unpersisted
+    }
+  }, [chatMessages, sessionId]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -65,15 +97,28 @@ export default function ChatWidget({
     setChatSearchPhase(false);
 
     const searchTimer = setTimeout(() => setChatSearchPhase(true), 1500);
+    let streamed = false;
 
     try {
-      const response = await sendChatMessage(sessionId, newMessages);
+      const response = await streamChatMessage(sessionId, newMessages, (partial) => {
+        // First delta: replace the typing indicator with a live message bubble
+        streamed = true;
+        clearTimeout(searchTimer);
+        setChatLoading(false);
+        setChatSearchPhase(false);
+        setChatMessages([
+          ...newMessages,
+          { role: "assistant", content: cleanChat(partial) },
+        ]);
+      });
       setChatMessages([...newMessages, { role: "assistant", content: cleanChat(response) }]);
     } catch {
-      setChatMessages([
-        ...newMessages,
-        { role: "assistant", content: "Sorry, I had trouble responding. Please try again." },
-      ]);
+      if (!streamed) {
+        setChatMessages([
+          ...newMessages,
+          { role: "assistant", content: "Sorry, I had trouble responding. Please try again." },
+        ]);
+      }
     }
     clearTimeout(searchTimer);
     setChatLoading(false);
@@ -96,7 +141,16 @@ export default function ChatWidget({
       )}
 
       {chatOpen && (
-        <div className="fixed bottom-6 right-6 w-[380px] max-w-[calc(100vw-2rem)] h-[520px] rounded-2xl shadow-2xl flex flex-col z-50 animate-bounce-in overflow-hidden" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
+        <div
+          className={
+            isNarrow
+              ? "fixed inset-x-0 bottom-0 h-[70dvh] rounded-t-2xl shadow-2xl flex flex-col z-50 animate-bounce-in overflow-hidden"
+              : "fixed bottom-6 right-6 w-[380px] max-w-[calc(100vw-2rem)] h-[520px] rounded-2xl shadow-2xl flex flex-col z-50 animate-bounce-in overflow-hidden"
+          }
+          role="dialog"
+          aria-label="Color advisor chat"
+          style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
+        >
           <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-color)' }}>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(212,175,122,0.12)' }}><Sparkles className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} /></div>
@@ -119,7 +173,7 @@ export default function ChatWidget({
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar" aria-live="polite">
             {chatMessages.length === 0 && (
               <div className="space-y-3">
                 <div className="rounded-xl rounded-tl-sm p-3" style={{ background: 'rgba(212,175,122,0.12)' }}>
@@ -179,6 +233,7 @@ export default function ChatWidget({
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") handleSendChat(); }}
                 placeholder="Ask about a product or shade..."
+                aria-label="Message the color advisor"
                 className="flex-1 rounded-xl px-4 py-2.5 text-sm outline-none"
                 style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
               />

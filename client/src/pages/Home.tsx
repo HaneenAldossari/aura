@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import StarField from "../components/StarField";
+import Reveal from "../components/Reveal";
 import HeroSection from "./home/HeroSection";
 import PoetrySection from "./home/PoetrySection";
 import JourneySection from "./home/JourneySection";
@@ -27,7 +28,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)", fontFamily: "'Inter', system-ui, sans-serif" }}>
+    <div className="animate-fade-in" style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)", fontFamily: "'Inter', system-ui, sans-serif" }}>
       <StarField />
 
       {/* ─── Navbar ─────────────────────── */}
@@ -52,15 +53,15 @@ export default function Home() {
 
       <GoldDivider />
 
-      <PoetrySection />
+      <Reveal><PoetrySection /></Reveal>
 
       <GoldDivider />
 
-      <JourneySection />
+      <Reveal><JourneySection /></Reveal>
 
       <GoldDivider />
 
-      <WhatYouGetSection />
+      <Reveal><WhatYouGetSection /></Reveal>
 
       <GoldDivider />
 
@@ -68,7 +69,7 @@ export default function Home() {
 
       <GoldDivider />
 
-      <CTASection />
+      <Reveal><CTASection /></Reveal>
 
       {/* ─── Footer ─────────────────────── */}
       {/* NOTE: intentionally NOT the shared Footer — its default variant uses a

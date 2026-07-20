@@ -13,10 +13,12 @@ import { luminance, saturation } from "./utils";
 export default function OverviewTab({
   data,
   seasonName,
+  sessionId,
   onContinue,
 }: {
   data: AnalysisResult;
   seasonName: string;
+  sessionId?: string;
   onContinue: () => void;
 }) {
   const palette = data.palette;
@@ -54,7 +56,7 @@ export default function OverviewTab({
     <div className="animate-slide-up" style={{ margin: "0 auto", padding: "28px 0" }}>
 
       {/* ── Hero: Season Name ── */}
-      <SeasonHero seasonName={seasonName} seasonTagline={data.seasonTagline} />
+      <SeasonHero seasonName={seasonName} seasonTagline={data.seasonTagline} sessionId={sessionId} />
 
       {/* ── Palette Grid (2x6) ── */}
       {palette && <PaletteGrid palette={palette} />}
