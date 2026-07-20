@@ -1,12 +1,22 @@
 import SplitText from "../../components/SplitText";
 import type { AnalysisResult } from "../../lib/types";
-import { getJewelrySwatches } from "../../data/seasonColors";
+import { getSeasonBeautyGuide } from "../../data/seasonBeautyGuide";
 import { MetalCircle, ALL_METALS, METAL_FILE_MAP } from "../../components/MetalCircle";
-import { GemstoneCard } from "../../components/GemstoneCard";
 import { HairCard } from "../../components/HairCard";
 import { getHairShadesForSeason, getHairSubtitle } from "../../data/hairShadeLibrary";
+import EditorialSection from "./MakeupSection";
+import GemFacet from "./GemFacet";
+import "./results-tabs.css";
 
-/** Style tab: metals, gemstones, style tips, and the hair color guide. */
+const groupLabelStyle = {
+  fontSize: 10,
+  textTransform: "uppercase",
+  letterSpacing: "0.15em",
+  color: "var(--accent-gold)",
+  marginBottom: 14,
+} as const;
+
+/** Style tab: metals, faceted gemstones, style tips, and the hair color guide. */
 export default function StyleTab({
   data,
   seasonName,
@@ -17,137 +27,171 @@ export default function StyleTab({
   const palette = data.palette;
   const jewelry = data.jewelry;
   const hairColor = data.hairColor;
-  const jewelrySwatches = getJewelrySwatches(seasonName);
+  const guide = getSeasonBeautyGuide(seasonName);
   const hairShades = getHairShadesForSeason(seasonName);
   const hairSubtitle = getHairSubtitle(seasonName);
 
+  const rec = (palette.metals?.best || []).map((m: string) => m.toLowerCase());
+  const isRecommended = (metal: string) => {
+    const file = METAL_FILE_MAP[metal.toLowerCase()];
+    return rec.includes(metal.toLowerCase()) || rec.some((r: string) => METAL_FILE_MAP[r] === file);
+  };
+  const yourMetals = ALL_METALS.filter(isRecommended);
+  const notYourMetals = ALL_METALS.filter((m) => !isRecommended(m));
+
   return (
     <div className="animate-slide-up space-y-6">
-
       <div id="section-jewelry">
         {jewelry && (
-          <div className="animate-slide-up space-y-8 rounded-2xl p-6" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)' }}>
-            <SplitText key="style-heading" text="Your Style Guide" className="text-3xl font-bold" tag="h2" delay={30} duration={0.5} />
+          <div
+            className="animate-slide-up rounded-2xl p-6"
+            style={{
+              background: "var(--bg-card)",
+              border: "1px solid var(--border-color)",
+              boxShadow: "var(--shadow-card)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 44,
+            }}
+          >
+            <SplitText
+              key="style-heading"
+              text="Your Style Guide"
+              className="text-3xl font-bold"
+              tag="h2"
+              delay={30}
+              duration={0.5}
+            />
 
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold" style={{ fontFamily: "Cormorant Garamond, serif", color: 'var(--text-primary)' }}>Metals</h3>
-              <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-                {ALL_METALS.map((metal) => {
-                  const file = METAL_FILE_MAP[metal.toLowerCase()];
-                  const rec = (palette.metals?.best || []).map((m: string) => m.toLowerCase());
-                  return (
-                    <MetalCircle
-                      key={metal}
-                      metal={file as "rose-gold" | "silver" | "gold"}
-                      recommended={rec.includes(metal.toLowerCase()) || rec.some((r: string) => METAL_FILE_MAP[r] === file)}
-                    />
-                  );
-                })}
+            {/* ── Metals — yours vs not yours ── */}
+            <EditorialSection title="Metals" direction="The hardware that agrees with your skin.">
+              <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                {yourMetals.length > 0 && (
+                  <div>
+                    <p style={groupLabelStyle}>Your metals</p>
+                    <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+                      {yourMetals.map((metal) => (
+                        <MetalCircle
+                          key={metal}
+                          metal={METAL_FILE_MAP[metal.toLowerCase()] as "rose-gold" | "silver" | "gold"}
+                          recommended
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {notYourMetals.length > 0 && (
+                  <div>
+                    <p style={{ ...groupLabelStyle, color: "var(--text-muted)" }}>Not yours</p>
+                    <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+                      {notYourMetals.map((metal) => (
+                        <div key={metal} className="metal-not-yours">
+                          <MetalCircle
+                            metal={METAL_FILE_MAP[metal.toLowerCase()] as "rose-gold" | "silver" | "gold"}
+                            recommended={false}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            </EditorialSection>
 
-            <div>
-              <h3 className="text-lg font-semibold mb-3" style={{ fontFamily: "Cormorant Garamond, serif", color: 'var(--text-primary)' }}>Gemstones</h3>
-              <div className="flex flex-wrap gap-5">
-                {(data.gemstones || []).length > 0
-                  ? data.gemstones.map((g) => (
-                      <GemstoneCard key={g.name} name={g.name} />
-                    ))
-                  : jewelrySwatches.stones.map((s) => (
-                      <GemstoneCard key={s.name} name={s.name} />
-                    ))
-                }
+            {/* ── Gemstones — faceted SVG stones from the season guide ── */}
+            <EditorialSection title="Gemstones" direction="Stones that return your light.">
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 28, alignItems: "flex-start" }}>
+                {guide.gemstones.map((g) => (
+                  <GemFacet key={g.name} gem={g} />
+                ))}
               </div>
-            </div>
+            </EditorialSection>
 
             {jewelry.style && (
-              <div className="rounded-xl p-5" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-                <p className="text-xs uppercase tracking-wide mb-2" style={{ color: 'var(--accent-gold)' }}>Style Tips</p>
-                <p className="leading-relaxed text-sm" style={{ color: 'var(--text-primary)' }}>{jewelry.style}</p>
-              </div>
-            )}
-
-            {/* Avoided Metals — faded discs */}
-            {palette.metals?.avoid && palette.metals.avoid.length > 0 && (
-              <div>
-                <p className="text-xs uppercase tracking-wide mb-3" style={{ color: 'var(--accent-gold)' }}>Colours to Avoid</p>
-                <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-                  {palette.metals.avoid.map((metalName: string) => {
-                    const file = METAL_FILE_MAP[metalName.toLowerCase()];
-                    const METAL_GRADIENT: Record<string, string> = {
-                      "copper": "radial-gradient(circle at 35% 35%, #D4855C, #8B4513)",
-                      "bronze": "radial-gradient(circle at 35% 35%, #CD7F32, #8B6914)",
-                    };
-                    const hasFile = file && ["rose-gold", "silver", "gold"].includes(file);
-                    return (
-                      <div key={metalName} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-                        {hasFile ? (
-                          <img loading="lazy" decoding="async"
-                            src={`/makeup/metals/${file}.webp`}
-                            alt={metalName}
-                            style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", filter: "saturate(0.4) opacity(0.6)", boxShadow: "0 2px 12px rgba(0,0,0,0.5)" }}
-                          />
-                        ) : (
-                          <div style={{ width: 52, height: 52, borderRadius: "50%", background: METAL_GRADIENT[metalName.toLowerCase()] || "radial-gradient(circle at 35% 35%, #B87333, #704214)", filter: "saturate(0.4) opacity(0.6)", boxShadow: "0 2px 12px rgba(0,0,0,0.5)" }} />
-                        )}
-                        <span style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em" }}>{metalName}</span>
-                      </div>
-                    );
-                  })}
-                </div>
+              <div
+                className="rounded-xl p-5"
+                style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
+              >
+                <p className="text-xs uppercase tracking-wide mb-2" style={{ color: "var(--accent-gold)" }}>
+                  Style Tips
+                </p>
+                <p className="leading-relaxed text-sm" style={{ color: "var(--text-primary)" }}>
+                  {jewelry.style}
+                </p>
               </div>
             )}
           </div>
         )}
       </div>
 
-      <div className="h-px my-10" style={{ background: 'linear-gradient(90deg, transparent, var(--border-color), transparent)' }} />
+      <div
+        className="h-px my-10"
+        style={{ background: "linear-gradient(90deg, transparent, var(--border-color), transparent)" }}
+      />
 
+      {/* ── Hair — existing shade cards under the shared editorial header ── */}
       <div id="section-hair">
-        <div className="animate-slide-up space-y-8 rounded-2xl p-6" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)' }}>
-          <div>
-            <h2 className="text-3xl font-bold" style={{ fontFamily: "Cormorant Garamond, serif", color: 'var(--text-primary)' }}>Hair Color Guide</h2>
-            <p style={{ fontFamily: "Cormorant Garamond, serif", fontStyle: "italic", fontWeight: 300, fontSize: 14, color: "var(--text-secondary)", marginTop: 6 }}>
-              {hairSubtitle}
-            </p>
-          </div>
-
-          {/* Recommended hair shades */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4" style={{ fontFamily: "Cormorant Garamond, serif", color: 'var(--text-primary)' }}>Recommended</h3>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-              {hairShades.best.map((shade) => (
-                <HairCard key={shade.id} shade={shade} />
-              ))}
-            </div>
-          </div>
-
-          {/* Avoid hair shades */}
-          {hairShades.avoid.length > 0 && (
-            <div>
-              <div style={{ height: "0.5px", background: "var(--accent-gold)", opacity: 0.4, marginBottom: 12 }} />
-              <h3 className="text-xs uppercase tracking-widest mb-4" style={{ color: 'var(--accent-gold)', letterSpacing: "0.15em", fontWeight: 500 }}>
-                Colours to Avoid
-              </h3>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-                {hairShades.avoid.map((shade) => (
-                  <HairCard key={shade.id} shade={shade} avoid />
-                ))}
+        <div
+          className="animate-slide-up rounded-2xl p-6"
+          style={{
+            background: "var(--bg-card)",
+            border: "1px solid var(--border-color)",
+            boxShadow: "var(--shadow-card)",
+            display: "flex",
+            flexDirection: "column",
+            gap: 36,
+          }}
+        >
+          <EditorialSection title="Hair" direction={hairSubtitle}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+              <div>
+                <p style={groupLabelStyle}>Recommended</p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                  {hairShades.best.map((shade) => (
+                    <HairCard key={shade.id} shade={shade} />
+                  ))}
+                </div>
               </div>
+
+              {hairShades.avoid.length > 0 && (
+                <div>
+                  <div style={{ height: "0.5px", background: "var(--accent-gold)", opacity: 0.4, marginBottom: 12 }} />
+                  <p style={{ ...groupLabelStyle, color: "var(--text-muted)" }}>Colours to avoid</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                    {hairShades.avoid.map((shade) => (
+                      <HairCard key={shade.id} shade={shade} avoid />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          )}
+          </EditorialSection>
 
           {/* Additional tips from AI analysis */}
           {hairColor && hairColor.bestHighlights && (
-            <div className="rounded-xl p-5" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-              <p className="text-xs uppercase tracking-wide mb-2" style={{ color: 'var(--accent-gold)' }}>Best Highlights</p>
-              <p className="leading-relaxed text-sm" style={{ color: 'var(--text-primary)' }}>{hairColor.bestHighlights}</p>
+            <div
+              className="rounded-xl p-5"
+              style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
+            >
+              <p className="text-xs uppercase tracking-wide mb-2" style={{ color: "var(--accent-gold)" }}>
+                Best Highlights
+              </p>
+              <p className="leading-relaxed text-sm" style={{ color: "var(--text-primary)" }}>
+                {hairColor.bestHighlights}
+              </p>
             </div>
           )}
           {hairColor && hairColor.bestOverall && (
-            <div className="rounded-xl p-5" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-              <p className="text-xs uppercase tracking-wide mb-2" style={{ color: 'var(--accent-gold)' }}>Overall Direction</p>
-              <p className="leading-relaxed text-sm" style={{ color: 'var(--text-primary)' }}>{hairColor.bestOverall}</p>
+            <div
+              className="rounded-xl p-5"
+              style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
+            >
+              <p className="text-xs uppercase tracking-wide mb-2" style={{ color: "var(--accent-gold)" }}>
+                Overall Direction
+              </p>
+              <p className="leading-relaxed text-sm" style={{ color: "var(--text-primary)" }}>
+                {hairColor.bestOverall}
+              </p>
             </div>
           )}
         </div>

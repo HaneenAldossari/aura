@@ -1,0 +1,169 @@
+/* ─── The Drape Wall — hero fabric-drape rail ─── */
+
+.drape-wall {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 8px 4px 0;
+}
+
+/* Radial background tint of the focused drape's dominant color */
+.drape-wall__tint {
+  position: absolute;
+  inset: -18% -26%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+  z-index: 0;
+}
+.drape-wall__tint--on {
+  opacity: 1;
+}
+
+/* Caption — "Which one wakes up your face?" */
+.drape-wall__caption {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+  text-align: center;
+  min-height: 26px;
+  transition: color 0.4s ease;
+}
+.drape-wall__caption--focused {
+  color: var(--accent-gold-light);
+}
+
+.drape-wall__scroller {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+}
+
+.drape-wall__track {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 28px;
+  padding: 10px 18px 8px;
+}
+
+/* The rail — 1px gold line with two tiny rings */
+.drape-wall__rail {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent-gold);
+  opacity: 0.75;
+}
+.drape-wall__rail::before,
+.drape-wall__rail::after {
+  content: "";
+  position: absolute;
+  top: -3.5px;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--accent-gold);
+  border-radius: 50%;
+  background: var(--bg-primary);
+}
+.drape-wall__rail::before {
+  left: 2px;
+}
+.drape-wall__rail::after {
+  right: 2px;
+}
+
+/* One hanging drape (a real button) */
+.drape {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transform-origin: top center;
+  transition: opacity 0.45s ease;
+}
+.drape--dimmed {
+  opacity: 0.55;
+}
+
+/* The fabric panel */
+.drape__cloth {
+  display: block;
+  width: 120px;
+  height: 340px;
+  border-radius: 3px 3px 50% 50% / 3px 3px 30px 30px;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.45);
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.5s ease;
+  will-change: transform;
+}
+.drape--focused .drape__cloth {
+  transform: translateY(6px) scale(1.04);
+  box-shadow: 0 30px 52px rgba(0, 0, 0, 0.62);
+}
+/* prefers-reduced-motion: no swing — dim only */
+.drape--static .drape__cloth {
+  transform: none !important;
+  transition: none;
+}
+
+.drape__label {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  transition: color 0.4s ease;
+}
+.drape--focused .drape__label {
+  color: var(--accent-gold);
+}
+
+/* Idle sway (applied per-drape via inline animation shorthand) */
+@keyframes drape-sway {
+  from {
+    transform: rotate(-1.2deg);
+  }
+  to {
+    transform: rotate(1.2deg);
+  }
+}
+
+/* Mobile: horizontal scroll-snap rail, smaller drapes */
+@media (max-width: 1023px) {
+  .drape-wall__scroller {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .drape-wall__scroller::-webkit-scrollbar {
+    display: none;
+  }
+  .drape {
+    scroll-snap-align: center;
+  }
+  .drape__cloth {
+    width: 96px;
+    height: 260px;
+  }
+}

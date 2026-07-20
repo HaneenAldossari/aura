@@ -1,0 +1,143 @@
+/* ---------------------------------------------------------------------------
+   results-tabs.css — shared styles for the redesigned results tabs
+   (ShadeDab, GemFacet, metals grouping, DNA axes, shop gauge)
+--------------------------------------------------------------------------- */
+
+/* ── ShadeDab (artistic makeup smear) ────────────────────────────────────── */
+
+.shade-dab {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.shade-dab__blob-wrap {
+  position: relative;
+  transition: transform 0.25s ease;
+}
+
+.shade-dab:hover .shade-dab__blob-wrap,
+.shade-dab:focus-visible .shade-dab__blob-wrap {
+  transform: translateY(-2px);
+}
+
+/* Gold hairline ring — separate overlay so it follows the organic radius */
+.shade-dab__ring {
+  position: absolute;
+  inset: -3px;
+  border: 1px solid var(--accent-gold);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.shade-dab:hover .shade-dab__ring,
+.shade-dab:focus-visible .shade-dab__ring {
+  opacity: 0.85;
+}
+
+/* Tiny hex chip revealed on hover / focus */
+.shade-dab__hexchip {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: Inter, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 8px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 6;
+}
+
+.shade-dab:hover .shade-dab__hexchip,
+.shade-dab:focus-visible .shade-dab__hexchip {
+  opacity: 1;
+}
+
+/* Recessive "skip these" treatment — dim + slash line through the shape */
+.shade-dab--avoid {
+  opacity: 0.55;
+}
+
+.shade-dab--avoid .shade-dab__blob-wrap::after {
+  content: "";
+  position: absolute;
+  left: -7px;
+  right: -7px;
+  top: 50%;
+  height: 1px;
+  background: var(--text-muted);
+  transform: rotate(-28deg);
+  z-index: 4;
+}
+
+/* ── GemFacet (SVG faceted gemstone) ─────────────────────────────────────── */
+
+.gem-facet {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.gem-facet svg {
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.gem-facet:hover svg,
+.gem-facet:focus-visible svg {
+  transform: rotate(8deg);
+  filter: drop-shadow(0 0 12px var(--gem-glow, rgba(212, 175, 122, 0.4)));
+}
+
+/* ── Metals: "Not yours" group ───────────────────────────────────────────── */
+
+.metal-not-yours {
+  position: relative;
+  opacity: 0.55;
+  filter: saturate(0.45);
+}
+
+.metal-not-yours::after {
+  content: "";
+  position: absolute;
+  top: 26px;
+  left: -4px;
+  right: -4px;
+  height: 1px;
+  background: var(--text-muted);
+  transform: rotate(-28deg);
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .shade-dab__blob-wrap,
+  .shade-dab__ring,
+  .shade-dab__hexchip,
+  .gem-facet svg,
+  .gauge-arc {
+    transition: none !important;
+  }
+
+  .gem-facet:hover svg,
+  .gem-facet:focus-visible svg {
+    transform: none;
+  }
+}

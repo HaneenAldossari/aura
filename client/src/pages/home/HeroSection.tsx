@@ -1,19 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import ShinyText from "../../components/ShinyText";
-import BounceCards from "../../components/BounceCards";
-import { bounceCardImages } from "./homeData";
+import DrapeWall from "./DrapeWall";
 
-const bounceTransforms = [
-  "rotate(8deg) translate(-210px)",
-  "rotate(4deg) translate(-140px)",
-  "rotate(-2deg) translate(-70px)",
-  "rotate(0deg)",
-  "rotate(2deg) translate(70px)",
-  "rotate(-4deg) translate(140px)",
-  "rotate(-8deg) translate(210px)",
-];
-
-/* ─── Hero: Split Layout with BounceCards ── */
+/* ─── Hero: Split Layout with the Drape Wall ── */
 export default function HeroSection() {
   const navigate = useNavigate();
 
@@ -106,19 +95,9 @@ export default function HeroSection() {
         {/* spacer */}
       </div>
 
-      {/* Right: BounceCards */}
-      <div style={{ flex: "0 0 auto" }}>
-        <BounceCards
-          className="custom-bounceCards"
-          images={bounceCardImages}
-          containerWidth={580}
-          containerHeight={260}
-          animationDelay={1.2}
-          animationStagger={0.15}
-          easeType="elastic.out(1, 0.6)"
-          transformStyles={bounceTransforms}
-          enableHover
-        />
+      {/* Right: The Drape Wall */}
+      <div style={{ flex: "0 0 auto", maxWidth: "100%", minWidth: 0 }}>
+        <DrapeWall />
       </div>
     </section>
   );

@@ -68,7 +68,7 @@ export default function Results() {
               onContinue={() => { setTab("beauty"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
             />
           )}
-          {tab === "beauty" && <BeautyTab makeup={data.makeup} seasonName={seasonName} />}
+          {tab === "beauty" && <BeautyTab makeup={data.makeup} seasonName={seasonName} depth={data.colorDNA?.depth ?? null} />}
           {tab === "style" && <StyleTab data={data} seasonName={seasonName} />}
           {tab === "shop" && <ShopTab palette={data.palette} seasonName={seasonName} checker={linkChecker} />}
         </div>

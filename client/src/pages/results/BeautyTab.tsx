@@ -1,167 +1,242 @@
 import SplitText from "../../components/SplitText";
-import type { Makeup } from "../../lib/types";
-import { getSeasonMakeupSwatches } from "../../data/seasonColors";
-import { filterValidSwatches } from "../../utils/filterValidSwatches";
-import { getMakeupSwatchImage } from "../../utils/makeupSwatchImage";
-import { getNailMeta } from "../../utils/nailMetadata";
-import { MakeupSwatch } from "../../components/MakeupSwatch";
-import MakeupSection from "./MakeupSection";
-import { normalizeNailColors } from "./utils";
+import type { Foundation, Makeup } from "../../lib/types";
+import { getSeasonBeautyGuide } from "../../data/seasonBeautyGuide";
+import { isWarmSeason } from "../../data/seasonColors";
+import EditorialSection from "./MakeupSection";
+import ShadeDab from "./ShadeDab";
+import "./results-tabs.css";
 
-/** Single nail shade: swatch + description/brand/shade-name labels. */
-function NailShadeItem({ shadeName, avoid }: { shadeName: string; avoid?: boolean }) {
-  const meta = getNailMeta(shadeName);
-  return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", ...(avoid ? { opacity: 0.85 } : {}) }}>
-      <MakeupSwatch category="nails" name={shadeName} size={52} avoid={avoid} label={false} />
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", maxWidth: "92px" }}>
-        <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-primary)", textAlign: "center", lineHeight: 1.3 }}>
-          {meta?.colorDescription ?? shadeName}
-        </span>
-        <span style={{ fontSize: "11px", color: "var(--accent-gold)", textAlign: "center", fontWeight: 500, letterSpacing: "0.05em", textTransform: "uppercase" }}>
-          {meta?.brand ?? ""}
-        </span>
-        <span style={{ fontSize: "11px", color: "var(--text-muted)", textAlign: "center", fontStyle: "italic", lineHeight: 1.3 }}>
-          {meta?.shadeName ?? shadeName}
-        </span>
-      </div>
-    </div>
-  );
-}
+/** Undertone families for the foundation bar, fair → deep. */
+const WARM_UNDERTONES = ["#F6E7CF", "#EBC79B", "#D2A06A", "#A06B3C", "#5C3A22", "#2A1B10"];
+const COOL_UNDERTONES = ["#F5E9E6", "#E5C9BD", "#C39A8C", "#8F6355", "#553A31", "#241813"];
 
-/** Beauty tab: makeup guide (config-driven sections) + nail guide. */
+const BRONZER_ROLES = ["day", "warmth", "sculpt"];
+
+/** Loose overlapping cluster transforms for the eye palette. */
+const EYE_ROTATIONS = [-6, 5, -4, 7, -5, 4, -6];
+const EYE_OFFSETS = [0, 9, -5, 11, -3, 8, 0];
+
+const captionStyle = {
+  fontSize: 13,
+  color: "var(--text-secondary)",
+  lineHeight: 1.65,
+  marginTop: 16,
+  marginBottom: 0,
+  maxWidth: 560,
+} as const;
+
+const microLabelStyle = {
+  fontSize: 10,
+  textTransform: "uppercase",
+  letterSpacing: "0.15em",
+  color: "var(--accent-gold)",
+  marginBottom: 14,
+} as const;
+
+/**
+ * Beauty tab — editorial shade guide. All shade content is season-derived
+ * (seasonBeautyGuide) so demo and live analyses render identically; live-model
+ * text extras (foundation tip, per-category notes) layer on top when present.
+ */
 export default function BeautyTab({
   makeup,
   seasonName,
+  depth,
 }: {
   makeup: Makeup;
   seasonName: string;
+  /** colorDNA depth 0–100; positions the foundation marker (default 50) */
+  depth?: number | null;
 }) {
-  const makeupSwatches = getSeasonMakeupSwatches(seasonName);
-  const nailsRaw = makeup?.nails;
-  const bestNails = normalizeNailColors(nailsRaw?.bestColors);
-  const avoidNails = normalizeNailColors(nailsRaw?.avoidColors);
+  const guide = getSeasonBeautyGuide(seasonName);
+  const undertones = isWarmSeason(seasonName) ? WARM_UNDERTONES : COOL_UNDERTONES;
+  const depthPct = Math.max(0, Math.min(100, depth ?? 50));
 
   // Foundation may arrive as an object ({recommended, avoid, tip}) or a legacy tip string
-  const fd = makeup?.foundation as { recommended?: Array<{ name: string; hex: string }>; avoid?: Array<{ name: string; hex: string }>; tip?: string } | string | undefined;
-  const isObj = fd && typeof fd === "object" && !Array.isArray(fd);
-  const foundationRec = isObj ? filterValidSwatches("foundation", fd.recommended || []) : filterValidSwatches("foundation", makeupSwatches.foundation.recommended);
-  const foundationAvoid = isObj ? filterValidSwatches("foundation", fd.avoid || []) : filterValidSwatches("foundation", makeupSwatches.foundation.avoid);
-  const foundationTip = isObj ? fd.tip : (typeof fd === "string" ? fd : "");
+  const fd = makeup?.foundation as Foundation | string | undefined;
+  const liveFoundationTip = typeof fd === "string" ? fd : fd?.tip;
+  const foundationTip = liveFoundationTip || guide.foundationTip;
 
-  const sectionDivider = (
-    <div className="h-px my-8" style={{ background: 'linear-gradient(90deg, transparent, var(--border-color), transparent)' }} />
-  );
+  const liveTip = (v: unknown): string | undefined =>
+    typeof v === "string" && v.trim() ? v : undefined;
 
   return (
-    <div className="animate-slide-up space-y-6">
-      <div className="flex gap-2 mb-6">
-        <button onClick={() => document.getElementById('section-makeup')?.scrollIntoView({ behavior: 'smooth' })} className="px-3 py-1.5 rounded-full text-xs font-medium transition cursor-pointer" style={{ color: 'var(--text-muted)', border: '1px solid var(--border-color)' }}>
-          Makeup
-        </button>
-        <button onClick={() => document.getElementById('section-nails')?.scrollIntoView({ behavior: 'smooth' })} className="px-3 py-1.5 rounded-full text-xs font-medium transition cursor-pointer" style={{ color: 'var(--text-muted)', border: '1px solid var(--border-color)' }}>
-          Nails
-        </button>
-      </div>
+    <div className="animate-slide-up">
+      <div
+        className="rounded-2xl p-6"
+        style={{
+          background: "var(--bg-card)",
+          border: "1px solid var(--border-color)",
+          boxShadow: "var(--shadow-card)",
+          display: "flex",
+          flexDirection: "column",
+          gap: 44,
+        }}
+      >
+        <SplitText
+          key="beauty-heading"
+          text="Your Beauty Guide"
+          className="text-3xl font-bold"
+          tag="h2"
+          delay={30}
+          duration={0.5}
+        />
 
-      <div id="section-makeup">
-        {makeup && (
-          <div className="animate-slide-up space-y-8 rounded-2xl p-6" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)' }}>
-            <SplitText key="beauty-heading" text="Your Beauty Guide" className="text-3xl font-bold" tag="h2" delay={30} duration={0.5} />
-
-            {/* Foundation */}
-            <MakeupSection
-              title="Foundation"
-              category="foundation"
-              gapClass="gap-4"
-              groups={[
-                { label: "Recommended Shades", swatches: foundationRec, hideWhenEmpty: true },
-                { label: "Colours to Avoid", swatches: foundationAvoid, avoid: true, divider: true, hideWhenEmpty: true },
-              ]}
-              tip={foundationTip}
-            />
-
-            {sectionDivider}
-
-            {/* Blush */}
-            <MakeupSection
-              title="Blush"
-              category="blush"
-              groups={[{ swatches: filterValidSwatches("blush", makeupSwatches.blush) }]}
-              tip={makeup.blush as string}
-            />
-
-            {sectionDivider}
-
-            {/* Bronzer */}
-            <MakeupSection
-              title="Bronzer"
-              category="bronzer"
-              groups={[
-                { swatches: filterValidSwatches("bronzer", makeupSwatches.bronzer.yes) },
-                { label: "Colours to Avoid", swatches: filterValidSwatches("bronzer", makeupSwatches.bronzer.no), avoid: true, divider: true, dividerMarginTop: "16px", hideWhenEmpty: true },
-              ]}
-              tip={makeup.bronzer as string}
-            />
-
-            {sectionDivider}
-
-            {/* Lips */}
-            <MakeupSection
-              title="Lips"
-              category="lips"
-              groups={[
-                { label: "Everyday", swatches: filterValidSwatches("lips", makeupSwatches.lips.everyday) },
-                { label: "Bold", swatches: filterValidSwatches("lips", makeupSwatches.lips.bold) },
-                { label: "Colours to Avoid", swatches: filterValidSwatches("lips", makeupSwatches.lips.avoid), avoid: true, divider: true },
-              ]}
-              tip={makeup.lips as string}
-            />
-
-            {sectionDivider}
-
-            {/* Eye Makeup */}
-            <MakeupSection
-              title="Eye Makeup"
-              subtitle="Eyeshadow, liner & brow shades"
-              category="eyeshadow"
-              groups={[{ swatches: filterValidSwatches("eyeshadow", makeupSwatches.eyes) }]}
-              tip={makeup.eyes as string}
-            />
-
+        {/* ── Foundation — honest undertone bar, no fake shade chips ── */}
+        <EditorialSection title="Foundation" direction="Your undertone, met at its true depth.">
+          <div style={{ paddingTop: 8 }}>
+            <div
+              role="img"
+              aria-label={`Your undertone family from fair to deep, with your depth marked at ${Math.round(depthPct)} of 100`}
+              style={{
+                position: "relative",
+                height: 14,
+                borderRadius: 7,
+                background: `linear-gradient(90deg, ${undertones.join(", ")})`,
+                boxShadow: "inset 0 1px 3px rgba(0,0,0,0.3)",
+              }}
+            >
+              {/* Gold diamond marker at colorDNA depth */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  left: `${depthPct}%`,
+                  top: "50%",
+                  width: 12,
+                  height: 12,
+                  transform: "translate(-50%, -50%) rotate(45deg)",
+                  background: "var(--accent-gold)",
+                  border: "1px solid var(--accent-gold-light)",
+                  boxShadow: "0 0 8px rgba(212,175,122,0.65)",
+                }}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: 8,
+                fontSize: 9,
+                textTransform: "uppercase",
+                letterSpacing: "0.15em",
+                color: "var(--text-muted)",
+              }}
+            >
+              <span>Fair</span>
+              <span>Deep</span>
+            </div>
+            <p style={captionStyle}>{foundationTip}</p>
           </div>
-        )}
-      </div>
+        </EditorialSection>
 
-      <div className="h-px my-10" style={{ background: 'linear-gradient(90deg, transparent, var(--border-color), transparent)' }} />
-
-      <div id="section-nails">
-        <div className="animate-slide-up space-y-6 rounded-2xl p-6" style={{ background: "var(--bg-card)", border: "0.5px solid var(--border-color)", borderRadius: "12px" }}>
-          <div>
-            <h2 className="text-3xl font-bold mb-2" style={{ fontFamily: "Cormorant Garamond, serif", color: 'var(--text-primary)' }}>Nail Guide</h2>
-            <p style={{ color: 'var(--text-secondary)' }}>Shades curated for your {seasonName} palette.</p>
-          </div>
-
-          <div className="flex flex-wrap gap-5 justify-start">
-            {bestNails.filter(s => getMakeupSwatchImage("nails", s) !== null).map((shadeName) => (
-              <NailShadeItem key={shadeName} shadeName={shadeName} />
+        {/* ── Blush ── */}
+        <EditorialSection title="Blush" direction="Where the color meets your cheekbone.">
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 22, alignItems: "flex-start" }}>
+            {guide.blush.map((s) => (
+              <ShadeDab key={s.name} shade={s} />
             ))}
           </div>
+          {liveTip(makeup?.blush) && <p style={captionStyle}>{makeup.blush}</p>}
+        </EditorialSection>
 
-          {/* Avoid Section */}
-          {avoidNails.length > 0 && (
-            <div className="space-y-3">
-              <div style={{ height: "0.5px", background: "var(--accent-gold)", opacity: 0.4, marginBottom: "12px" }} />
-              <p className="text-xs uppercase tracking-widest" style={{ color: 'var(--accent-gold)', letterSpacing: "0.15em" }}>Colours to Avoid</p>
-              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>These shades don't complement your undertone.</p>
-              <div className="flex flex-wrap gap-5 justify-start">
-                {avoidNails.filter(s => getMakeupSwatchImage("nails", s) !== null).map((shadeName) => (
-                  <NailShadeItem key={shadeName} shadeName={shadeName} avoid />
+        {/* ── Bronzer — light → deep with day / warmth / sculpt roles ── */}
+        <EditorialSection title="Bronzer" direction="Warmth placed where the sun would find you.">
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 26, alignItems: "flex-start" }}>
+            {guide.bronzer.map((s, i) => (
+              <div key={s.name} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+                <ShadeDab shade={s} />
+                {BRONZER_ROLES[i] && (
+                  <span
+                    style={{
+                      fontSize: 9,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.18em",
+                      color: "var(--accent-gold-dim)",
+                    }}
+                  >
+                    {BRONZER_ROLES[i]}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+          {liveTip(makeup?.bronzer) && <p style={captionStyle}>{makeup.bronzer}</p>}
+        </EditorialSection>
+
+        {/* ── Lips — everyday and bold drops ── */}
+        <EditorialSection title="Lips" direction="From barely-there to unmistakable.">
+          <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
+            <div>
+              <p style={microLabelStyle}>Everyday</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 22, alignItems: "flex-start" }}>
+                {guide.lips.everyday.map((s) => (
+                  <ShadeDab key={s.name} shade={s} shape="drop" size={58} />
                 ))}
               </div>
             </div>
-          )}
-        </div>
+            <div>
+              <p style={microLabelStyle}>Bold</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 22, alignItems: "flex-start" }}>
+                {guide.lips.bold.map((s) => (
+                  <ShadeDab key={s.name} shade={s} shape="drop" size={68} />
+                ))}
+              </div>
+            </div>
+          </div>
+          {liveTip(makeup?.lips) && <p style={captionStyle}>{makeup.lips}</p>}
+        </EditorialSection>
+
+        {/* ── Eyes — loose overlapping cluster, like a used palette ── */}
+        <EditorialSection title="Eyes" direction="Worn soft, the way a palette actually gets used.">
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "flex-start",
+              paddingTop: 12,
+              paddingLeft: 8,
+            }}
+          >
+            {guide.eyes.map((s, i) => (
+              <div
+                key={s.name}
+                style={{
+                  transform: `rotate(${EYE_ROTATIONS[i % EYE_ROTATIONS.length]}deg) translateY(${EYE_OFFSETS[i % EYE_OFFSETS.length]}px)`,
+                  marginLeft: i === 0 ? 0 : -14,
+                  zIndex: i + 1,
+                }}
+              >
+                <ShadeDab shade={s} size={62} />
+              </div>
+            ))}
+          </div>
+          {liveTip(makeup?.eyes) && <p style={{ ...captionStyle, marginTop: 26 }}>{makeup.eyes}</p>}
+        </EditorialSection>
+
+        {/* ── Nails — almond chips, then a recessive avoid row ── */}
+        <EditorialSection title="Nails" direction="Ten small canvases, tuned to your season.">
+          <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+            <div>
+              <p style={microLabelStyle}>Your shades</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 20, alignItems: "flex-start" }}>
+                {guide.nails.best.map((s) => (
+                  <ShadeDab key={s.name} shade={s} shape="almond" size={58} />
+                ))}
+              </div>
+            </div>
+            {guide.nails.avoid.length > 0 && (
+              <div>
+                <p style={{ ...microLabelStyle, color: "var(--text-muted)" }}>Skip these</p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 20, alignItems: "flex-start" }}>
+                  {guide.nails.avoid.map((s) => (
+                    <ShadeDab key={s.name} shade={s} shape="almond" size={58} avoid />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </EditorialSection>
       </div>
     </div>
   );
