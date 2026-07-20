@@ -7,13 +7,14 @@
 import { Router, Request, Response } from "express";
 import multer from "multer";
 import path from "path";
-import fs from "fs";
 import { v4 as uuid } from "uuid";
 import { analyzePhotos } from "../services/vision";
 import { DEMO_RESULT } from "../services/demoData";
 import { isDemo } from "../services/openrouter";
-import { validatePhoto } from "../utils/validatePhoto";
 import { getCanonicalPalette } from "../utils/seasonPalettes";
+import { prepareImage } from "../utils/prepareImage";
+import { sessions } from "../utils/sessionStore";
+import { maxFileSizeBytes } from "../utils/config";
 
 const router = Router();
 
@@ -191,25 +192,12 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
   };
 }
 
-// Store analysis results in memory for the session
-const analysisStore: Record<string, Record<string, unknown>> = {};
-
-// Multer config
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    const dir = path.join(__dirname, "../../uploads");
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `${uuid()}${ext}`);
-  },
-});
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
+// Uploads stay in memory: they flow straight through sharp → base64 → the
+// vision API and never touch disk. Real format validation happens in
+// prepareImage (magic bytes); the extension filter is just a cheap first gate.
+export const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: maxFileSizeBytes() },
   fileFilter: (_req, file, cb) => {
     const allowed = [".jpg", ".jpeg", ".png", ".webp"];
     const ext = path.extname(file.originalname).toLowerCase();
@@ -229,38 +217,8 @@ router.post(
     try {
       const files = req.files as Express.Multer.File[];
       if (!files || files.length === 0) {
-        res.status(400).json({ error: "No photos uploaded" });
+        res.status(400).json({ error: "no_photos", message: "No photos uploaded" });
         return;
-      }
-
-      const photoPaths = files.map((f) => f.path);
-
-      // Validate first photo for face detection (skip in demo mode)
-      if (!isDemo()) {
-        const firstFile = files[0];
-        const base64 = fs.readFileSync(firstFile.path).toString("base64");
-        const ext = path.extname(firstFile.originalname).toLowerCase();
-        const mimeMap: Record<string, string> = {
-          ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
-          ".png": "image/png", ".webp": "image/webp",
-        };
-        const mimeType = mimeMap[ext] || "image/jpeg";
-
-        const validation = await validatePhoto(base64, mimeType);
-        if (!validation.valid) {
-          // Clean up files
-          photoPaths.forEach((p) => { try { fs.unlinkSync(p); } catch {} });
-
-          const messages: Record<string, string> = {
-            no_face: "No face detected. Please upload a clear photo showing your face.",
-            multiple_faces: "Multiple faces detected. Please upload a photo of just one person.",
-          };
-          res.status(400).json({
-            error: validation.error,
-            message: messages[validation.error],
-          });
-          return;
-        }
       }
 
       let result: Record<string, unknown>;
@@ -271,48 +229,73 @@ router.post(
         result = { ...DEMO_RESULT };
         console.log("Demo mode — returning sample Deep Autumn analysis");
       } else {
+        // Validate + downscale once; the same prepared image feeds face
+        // validation and the analysis call.
+        let prepared;
+        try {
+          prepared = await prepareImage(files[0].buffer);
+        } catch {
+          res.status(400).json({
+            error: "invalid_image",
+            message: "That file doesn't look like a valid photo. Please upload a JPG, PNG, or WebP image.",
+          });
+          return;
+        }
+
         console.log("Live mode — analyzing with OpenRouter");
-        const raw = await analyzePhotos(photoPaths);
+        const raw = await analyzePhotos([
+          { base64: prepared.base64, mimeType: prepared.mimeType },
+        ]);
+
+        // Face-count and photo-quality gates come back from the model itself
+        // (STEP 0 in the analysis prompt) — no separate validation round trip.
+        if (raw.error === "no_face" || raw.error === "multiple_faces") {
+          const messages: Record<string, string> = {
+            no_face: "No face detected. Please upload a clear photo showing your face.",
+            multiple_faces: "Multiple faces detected. Please upload a photo of just one person.",
+          };
+          res.status(400).json({
+            error: raw.error,
+            message: messages[raw.error as string],
+          });
+          return;
+        }
+        if (raw.error) {
+          // low_confidence — pass through so the client can show photo tips
+          res.json({ sessionId: "", result: raw });
+          return;
+        }
+
         // Normalize new prompt schema to frontend-compatible shape
         result = normalizeResult(raw);
       }
 
       // Store result with a session ID
       const sessionId = uuid();
-      analysisStore[sessionId] = result;
-
-      // Clean up uploaded files after analysis
-      photoPaths.forEach((p) => {
-        try {
-          fs.unlinkSync(p);
-        } catch {}
-      });
+      sessions.set(sessionId, result);
 
       res.json({ sessionId, result });
     } catch (err: unknown) {
       console.error("Analysis error:", err);
       const message = err instanceof Error ? err.message : "Analysis failed";
 
-      // Fallback to demo data on billing/credit errors
-      if (message.includes("credit balance") || message.includes("billing") || message.includes("400")) {
-        console.log("API billing error — falling back to demo data");
-        const sessionId = uuid();
-        analysisStore[sessionId] = { ...DEMO_RESULT };
-        res.json({ sessionId, result: DEMO_RESULT });
-        return;
-      }
-
-      // User-friendly error messages
       if (message.includes("429") || message.includes("Too Many Requests") || message.includes("quota")) {
         res.status(429).json({
-          error: "The AI service is temporarily busy (rate limit reached). Please wait 1 minute and try again.",
+          error: "rate_limited",
+          message: "The AI service is temporarily busy (rate limit reached). Please wait 1 minute and try again.",
+        });
+      } else if (message.includes("credit balance") || message.includes("billing")) {
+        res.status(502).json({
+          error: "ai_provider_error",
+          message: "The AI service rejected the request. Please try again later.",
         });
       } else if (message.includes("JSON") || message.includes("position")) {
-        res.status(500).json({
-          error: "The AI returned an incomplete response. Please try again — this usually works on the second attempt.",
+        res.status(502).json({
+          error: "ai_incomplete_response",
+          message: "The AI returned an incomplete response. Please try again — this usually works on the second attempt.",
         });
       } else {
-        res.status(500).json({ error: message });
+        res.status(500).json({ error: "analysis_failed", message });
       }
     }
   }
@@ -322,9 +305,9 @@ router.post(
 router.get(
   "/results/:sessionId",
   (req: Request, res: Response): void => {
-    const result = analysisStore[req.params.sessionId as string];
+    const result = sessions.get(req.params.sessionId as string);
     if (!result) {
-      res.status(404).json({ error: "Analysis not found" });
+      res.status(404).json({ error: "not_found", message: "Analysis not found" });
       return;
     }
     res.json(result);
@@ -336,10 +319,9 @@ router.post(
   "/demo-session",
   (_req: Request, res: Response): void => {
     const sessionId = uuid();
-    analysisStore[sessionId] = { ...DEMO_RESULT };
+    sessions.set(sessionId, { ...DEMO_RESULT });
     res.json({ sessionId, result: DEMO_RESULT });
   }
 );
 
 export default router;
-export { analysisStore };

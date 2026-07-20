@@ -1,39 +1,13 @@
 import { Router, Request, Response } from "express";
-import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { v4 as uuid } from "uuid";
 import { checkShoppingImage, checkManualItem } from "../services/linkChecker";
-import { analysisStore, normalizeResult } from "./analysis";
+import { normalizeResult, upload } from "./analysis";
+import { sessions } from "../utils/sessionStore";
+import { prepareImage } from "../utils/prepareImage";
 
 const router = Router();
-
-// Multer config for link-check image uploads
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    const dir = path.join(__dirname, "../../uploads");
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    cb(null, dir);
-  },
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, `${uuid()}${ext}`);
-  },
-});
-
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-  fileFilter: (_req, file, cb) => {
-    const allowed = [".jpg", ".jpeg", ".png", ".webp"];
-    const ext = path.extname(file.originalname).toLowerCase();
-    if (allowed.includes(ext)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only JPG, PNG, and WebP images are allowed"));
-    }
-  },
-});
 
 // POST /api/link-check-image
 router.post("/link-check-image", upload.single("photo"), async (req: Request, res: Response): Promise<void> => {
@@ -42,30 +16,33 @@ router.post("/link-check-image", upload.single("photo"), async (req: Request, re
     const sessionId = req.body.sessionId;
 
     if (!file || !sessionId) {
-      res.status(400).json({ error: "Image and sessionId are required" });
+      res.status(400).json({ error: "bad_request", message: "Image and sessionId are required" });
       return;
     }
 
-    const userProfile = analysisStore[sessionId];
+    const userProfile = sessions.get(sessionId);
     if (!userProfile) {
-      res.status(404).json({ error: "Analysis not found" });
+      res.status(404).json({ error: "not_found", message: "Analysis not found" });
       return;
     }
 
-    const result = await checkShoppingImage(file.path, userProfile);
+    let prepared;
+    try {
+      prepared = await prepareImage(file.buffer);
+    } catch {
+      res.status(400).json({
+        error: "invalid_image",
+        message: "That file doesn't look like a valid photo. Please upload a JPG, PNG, or WebP image.",
+      });
+      return;
+    }
 
-    // Clean up uploaded file
-    try { fs.unlinkSync(file.path); } catch {}
-
+    const result = await checkShoppingImage(prepared.base64, prepared.mimeType, userProfile);
     res.json(result);
   } catch (err: unknown) {
-    // Clean up uploaded file on error
-    if (req.file) {
-      try { fs.unlinkSync(req.file.path); } catch {}
-    }
     console.error("Image link check error:", err);
     const message = err instanceof Error ? err.message : "Image check failed";
-    res.status(500).json({ error: message });
+    res.status(500).json({ error: "link_check_failed", message });
   }
 });
 
@@ -93,22 +70,25 @@ router.post("/demo-load", async (req: Request, res: Response): Promise<void> => 
   try {
     const { sampleId } = req.body as { sampleId?: string };
     if (!sampleId || !/^sample-[0-9]+$/.test(sampleId)) {
-      res.status(400).json({ error: "Invalid sampleId" });
+      res.status(400).json({ error: "bad_request", message: "Invalid sampleId" });
       return;
     }
     const filePath = path.join(__dirname, "../demo-analyses", `${sampleId}.json`);
     if (!fs.existsSync(filePath)) {
-      res.status(404).json({ error: "Sample not found" });
+      res.status(404).json({ error: "not_found", message: "Sample not found" });
       return;
     }
     const raw = JSON.parse(fs.readFileSync(filePath, "utf-8"));
     const result = normalizeResult(raw);
     const sessionId = uuid();
-    analysisStore[sessionId] = result;
+    sessions.set(sessionId, result);
     res.json({ sessionId, result });
   } catch (err) {
     console.error("Demo load error:", err);
-    res.status(500).json({ error: err instanceof Error ? err.message : "Demo load failed" });
+    res.status(500).json({
+      error: "demo_load_failed",
+      message: err instanceof Error ? err.message : "Demo load failed",
+    });
   }
 });
 
@@ -118,13 +98,17 @@ router.post("/link-check-manual", async (req: Request, res: Response): Promise<v
     const { colorDesc, category, brand, sessionId } = req.body;
 
     if (!colorDesc || !sessionId) {
-      res.status(400).json({ error: "Color description and sessionId are required" });
+      res.status(400).json({ error: "bad_request", message: "Color description and sessionId are required" });
+      return;
+    }
+    if (typeof colorDesc !== "string" || colorDesc.length > 500) {
+      res.status(400).json({ error: "bad_request", message: "Color description too long" });
       return;
     }
 
-    const userProfile = analysisStore[sessionId];
+    const userProfile = sessions.get(sessionId);
     if (!userProfile) {
-      res.status(404).json({ error: "Analysis not found" });
+      res.status(404).json({ error: "not_found", message: "Analysis not found" });
       return;
     }
 
@@ -133,7 +117,7 @@ router.post("/link-check-manual", async (req: Request, res: Response): Promise<v
   } catch (err: unknown) {
     console.error("Manual check error:", err);
     const message = err instanceof Error ? err.message : "Manual check failed";
-    res.status(500).json({ error: message });
+    res.status(500).json({ error: "manual_check_failed", message });
   }
 });
 

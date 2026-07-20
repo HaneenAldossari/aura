@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
-import { analyzePhotos } from "../server/services/vision";
+import { analyzePhotoFiles } from "../server/services/vision";
 
 const FACES_DIR = path.join(__dirname, "../client/public/demo-faces");
 const OUT_DIR = path.join(__dirname, "../server/demo-analyses");
@@ -28,7 +28,7 @@ async function main() {
     let saved = false;
     for (let attempt = 1; attempt <= 5 && !saved; attempt++) {
       try {
-        const result = await analyzePhotos([inputPath]);
+        const result = await analyzePhotoFiles([inputPath]);
         fs.writeFileSync(outPath, JSON.stringify(result, null, 2));
         console.log(`  ✓ ${id} saved (attempt ${attempt})`);
         saved = true;

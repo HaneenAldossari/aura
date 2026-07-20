@@ -1,5 +1,4 @@
 import { callOpenRouter, parseJSON, isDemo, imageBlock } from "./openrouter";
-import { fileToBase64 } from "./vision";
 
 const NOT_CONFIGURED = {
   verdict: "avoid",
@@ -63,13 +62,13 @@ similarColors: 3 colors from their actual palette that are close to the product 
 tip: Always include a concrete styling suggestion.`;
 
 export async function checkShoppingImage(
-  imagePath: string,
+  imageBase64: string,
+  mimeType: string,
   userProfile: Record<string, unknown>
 ): Promise<Record<string, unknown>> {
   if (isDemo()) return { ...NOT_CONFIGURED };
 
   const { season, undertone, bestColors } = profileSummary(userProfile);
-  const { data, mimeType } = fileToBase64(imagePath);
 
   const text = await callOpenRouter(
     [
@@ -88,7 +87,7 @@ Respond ONLY with raw JSON (no markdown, no code fences):
 ${RESPONSE_SCHEMA}
 reason: Reference my specific season (${season}) by name.`,
           },
-          imageBlock(data, mimeType),
+          imageBlock(imageBase64, mimeType),
         ],
       },
     ],

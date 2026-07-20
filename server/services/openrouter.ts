@@ -112,6 +112,63 @@ export async function callOpenRouter(
 }
 
 /**
+ * Streaming variant — yields content deltas as they arrive from OpenRouter's
+ * SSE stream. Used by the chat route when the client opts into streaming.
+ */
+export async function* streamOpenRouter(
+  messages: ChatMessage[],
+  options: CallOptions = {}
+): AsyncGenerator<string> {
+  if (isDemo()) throw new Error("OPENROUTER_API_KEY not set");
+
+  const body = { ...buildBody(messages, options), stream: true };
+  let response = await requestOnce(body, options.signal);
+
+  if (response.status === 429) {
+    const retryAfter = Number(response.headers.get("retry-after")) || 5;
+    await new Promise((resolve) =>
+      setTimeout(resolve, Math.min(retryAfter, 15) * 1000)
+    );
+    response = await requestOnce(body, options.signal);
+  }
+
+  if (!response.ok || !response.body) {
+    const errText = await response.text();
+    throw new Error(`OpenRouter API error: ${response.status} ${errText}`);
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+
+    // SSE frames are separated by newlines; keep the trailing partial line
+    const lines = buffer.split("\n");
+    buffer = lines.pop() || "";
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed.startsWith("data:")) continue;
+      const payload = trimmed.slice(5).trim();
+      if (payload === "[DONE]") return;
+      try {
+        const parsed = JSON.parse(payload) as {
+          choices?: { delta?: { content?: string } }[];
+        };
+        const delta = parsed.choices?.[0]?.delta?.content;
+        if (delta) yield delta;
+      } catch {
+        // ignore malformed keep-alive/comment frames
+      }
+    }
+  }
+}
+
+/**
  * Parse a JSON object out of a model response, tolerating markdown fences
  * and trailing commas.
  */

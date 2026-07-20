@@ -4,37 +4,24 @@
  * lives in ./openrouter.
  */
 import fs from "fs";
-import path from "path";
 import {
   COLOR_ANALYSIS_SYSTEM_PROMPT,
   CROSS_VALIDATION_PROMPT,
 } from "../prompts/colorAnalysis";
 import { correctAllColors } from "../utils/colorCorrection";
+import { prepareImage } from "../utils/prepareImage";
 import { callOpenRouter, parseJSON, imageBlock } from "./openrouter";
 
-type ImageMimeType = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
-
-export function fileToBase64(filePath: string): {
-  data: string;
-  mimeType: ImageMimeType;
-} {
-  const buffer = fs.readFileSync(filePath);
-  const ext = path.extname(filePath).toLowerCase();
-  const mimeMap: Record<string, ImageMimeType> = {
-    ".jpg": "image/jpeg",
-    ".jpeg": "image/jpeg",
-    ".png": "image/png",
-    ".gif": "image/gif",
-    ".webp": "image/webp",
-  };
-  return {
-    data: buffer.toString("base64"),
-    mimeType: mimeMap[ext] || "image/jpeg",
-  };
+export interface AnalysisImage {
+  base64: string;
+  mimeType: string;
 }
 
+const CROSS_VALIDATION_ENABLED =
+  (process.env.ENABLE_CROSS_VALIDATION || "true").toLowerCase() !== "false";
+
 export async function analyzePhotos(
-  photoPaths: string[]
+  images: AnalysisImage[]
 ): Promise<Record<string, unknown>> {
   const labels = [
     "PHOTO — Face in natural light:",
@@ -46,10 +33,9 @@ export async function analyzePhotos(
     | { type: "image_url"; image_url: { url: string } }
   > = [];
 
-  photoPaths.forEach((filePath, i) => {
+  images.forEach((img, i) => {
     content.push({ type: "text", text: labels[i] || `PHOTO ${i + 1}:` });
-    const { data, mimeType } = fileToBase64(filePath);
-    content.push(imageBlock(data, mimeType));
+    content.push(imageBlock(img.base64, img.mimeType));
   });
 
   content.push({
@@ -75,19 +61,34 @@ export async function analyzePhotos(
     return parsed;
   }
 
-  // Cross-validation
-  const validated = await crossValidate(parsed);
-  if (validated && !validated.shouldStand) {
-    parsed.confidence = Math.min(
-      (parsed.confidence as number) || 70,
-      (validated.confidence as number) || 70
-    );
-    parsed.crossValidation = validated;
-  } else if (validated) {
-    parsed.crossValidation = { agrees: true, confidence: validated.confidence };
+  // Cross-validation (second-opinion call; disable with ENABLE_CROSS_VALIDATION=false)
+  if (CROSS_VALIDATION_ENABLED) {
+    const validated = await crossValidate(parsed);
+    if (validated && !validated.shouldStand) {
+      parsed.confidence = Math.min(
+        (parsed.confidence as number) || 70,
+        (validated.confidence as number) || 70
+      );
+      parsed.crossValidation = validated;
+    } else if (validated) {
+      parsed.crossValidation = { agrees: true, confidence: validated.confidence };
+    }
   }
 
   return parsed;
+}
+
+/** Convenience for scripts: read files from disk, downscale, analyze. */
+export async function analyzePhotoFiles(
+  photoPaths: string[]
+): Promise<Record<string, unknown>> {
+  const images = await Promise.all(
+    photoPaths.map(async (p) => {
+      const prepared = await prepareImage(fs.readFileSync(p));
+      return { base64: prepared.base64, mimeType: prepared.mimeType };
+    })
+  );
+  return analyzePhotos(images);
 }
 
 async function crossValidate(
