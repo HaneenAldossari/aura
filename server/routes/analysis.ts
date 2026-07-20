@@ -243,9 +243,18 @@ router.post(
         }
 
         console.log("Live mode — analyzing with OpenRouter");
-        const raw = await analyzePhotos([
+        let raw = await analyzePhotos([
           { base64: prepared.base64, mimeType: prepared.mimeType },
         ]);
+
+        // The small free model occasionally misfires the face gate on a
+        // valid photo — one retry recovers most false negatives cheaply.
+        if (raw.error === "no_face") {
+          console.log("no_face on first pass — retrying once");
+          raw = await analyzePhotos([
+            { base64: prepared.base64, mimeType: prepared.mimeType },
+          ]);
+        }
 
         // Face-count and photo-quality gates come back from the model itself
         // (STEP 0 in the analysis prompt) — no separate validation round trip.

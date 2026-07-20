@@ -1,19 +1,19 @@
 <div align="center">
 
-# Aura — AI Personal Color Analysis
+# Aura v2 — AI Personal Color Analysis
 
 **Discover the colors that were made for you.**
 
-A full-stack web app that analyzes a photo to determine your seasonal color type and generates personalized recommendations across wardrobe, makeup, hair, nails, gemstones, and metals — powered by Google Gemini vision.
+A full-stack web app that analyzes a photo to determine your seasonal color type and generates personalized recommendations across wardrobe, makeup, hair, nails, gemstones, and metals — powered by a vision LLM via OpenRouter.
 
-[**Live Demo**](https://aura-azure-six.vercel.app) · [Report a Bug](https://github.com/HaneenAldossari/aura/issues)
+[Report a Bug](https://github.com/HaneenAldossari/aura/issues)
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)
 ![Tailwind](https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwindcss&logoColor=white)
 ![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)
-![Gemini](https://img.shields.io/badge/Google%20Gemini-2.5%20Flash-4285F4?logo=google&logoColor=white)
+![OpenRouter](https://img.shields.io/badge/OpenRouter-vision%20LLM-8A2BE2)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen)
 
 <img src="docs/screenshots/01-home.png" alt="Aura landing page" width="780" />
@@ -28,46 +28,59 @@ Personal color analysis (the 12-season system) is a $200–$500 in-person servic
 
 Upload a single selfie, or try one of nine AI-generated sample faces (no personal photo required). The system classifies you into one of 12 color seasons, then surfaces a curated palette, makeup recommendations, hair color suggestions, gemstone and metal pairings, and a "Before You Buy" tool that scores any product photo against your palette.
 
+> **This is aura-v2** — an enhanced rebuild of [aura](https://github.com/HaneenAldossari/aura). See [What's new in v2](#whats-new-in-v2).
+
 ## Features
 
-- **AI Color Season Classification** — Gemini 2.5 Flash analyzes facial features (skin undertone, hair, eyes, contrast) and outputs one of 12 seasons with confidence scoring.
-- **Canonical Palettes** — Every person classified as a given season sees the same curated 12-color palette, so results are deterministic and consistent across analyses.
-- **Personalized Recommendations** — Makeup swatches, wardrobe colors, neutral anchors, hair color directions, gemstones, and best/avoid metals.
+- **AI Color Season Classification** — a vision LLM analyzes facial features (skin undertone, hair, eyes, contrast) through a structured decision tree and outputs one of 12 seasons with confidence scoring and a second-opinion cross-validation pass.
+- **Canonical Palettes** — every person classified as a given season sees the same curated 12-color palette, so results are deterministic and consistent.
+- **Paint-Chip Fan Deck** — the palette is presented as a fanned deck of designer paint chips; hover lifts a card to reveal its name, hex, and styling note; click copies the hex.
+- **Personalized Recommendations** — makeup swatches, wardrobe colors, neutral anchors, hair color directions, gemstones, and best/avoid metals.
 - **Privacy-First Demo Gallery** — 9 AI-generated faces with pre-computed analyses let users explore the full app without uploading their own photo.
-- **Before You Buy** — Upload a product photo (clothing, bag, makeup) and the AI scores how well that color matches your seasonal palette, with similar in-palette alternatives.
-- **AI Stylist Chatbot** — Conversational Gemini-powered advisor, grounded in the user's own analysis.
-- **Multi-Stage Loading Animation** — A 6-stage loading screen ("Detecting features → Analyzing undertone → Determining your season → Cross-validating → Building your profile") matches the perceived effort of a real analysis.
+- **Before You Buy** — upload a product photo (clothing, bag, makeup) and the AI scores how well that color matches your seasonal palette, with similar in-palette alternatives.
+- **AI Stylist Chatbot** — conversational advisor grounded in your analysis, with live streamed responses and per-session history.
+- **Reveal Moment** — first visit to your results plays a word-by-word season reveal with a gold shimmer sweep and a staggered fan-out of your palette.
 
-## Screenshots
+## What's new in v2
 
-<table>
-<tr>
-<td><img src="docs/screenshots/02-upload.png" alt="Upload + sample gallery" /></td>
-<td><img src="docs/screenshots/03-results.png" alt="Results page" /></td>
-</tr>
-<tr>
-<td align="center"><sub>Upload your photo or pick from 9 AI-generated samples.</sub></td>
-<td align="center"><sub>Season, color DNA, palette, and metals — all derived from a single photo.</sub></td>
-</tr>
-<tr>
-<td><img src="docs/screenshots/04-shop.png" alt="Before You Buy shop check" /></td>
-<td><img src="docs/screenshots/05-chatbot.png" alt="AI advisor chatbot" /></td>
-</tr>
-<tr>
-<td align="center"><sub>"Before You Buy" — score any product photo against your palette.</sub></td>
-<td align="center"><sub>Conversational AI advisor grounded in your analysis.</sub></td>
-</tr>
-</table>
+**Correctness & AI**
+- Fixed demo-mode detection (the OpenRouter migration previously left real analysis unreachable — every "analysis" silently returned canned demo data).
+- All AI calls consolidated into one OpenRouter client with automatic 429 retry and optional model fallback (`OPENROUTER_FALLBACK_MODEL`).
+- Photos are validated (magic bytes), EXIF-rotated, and downscaled to 1024px JPEG before hitting the model — a 10MB upload becomes ~200KB, cutting analysis latency from minutes to seconds *and* fixing face-detection failures on large images.
+- Face-count checking is folded into the main analysis prompt (one round trip instead of two), and the prompt now forces an evidence-first undertone → depth → chroma assessment before naming a season.
+- The accuracy harness (`npm run test:accuracy`) runs against any OpenRouter model via `OPENROUTER_MODEL` for benchmarking.
+
+**Security & robustness**
+- helmet, tiered rate limiting (strict on LLM routes), strict CORS allowlist, JSON body limit, chat input caps.
+- Uploads live in memory only — nothing is written to disk, and the public `/uploads` mount is gone.
+- Removed an open image-proxy endpoint (SSRF risk) and unused scraping code.
+- Honest error contract: `{ error: <code>, message: <text> }` with real status codes — no more silent demo-data fallbacks masking provider failures.
+- Sessions live in a TTL store (24h default, capped) instead of an unbounded object.
+
+**Performance**
+- Route-level code splitting: 547KB single bundle → ~230KB initial + lazy per-page chunks.
+- Static imagery converted to WebP with sane dimensions: 62.5MB → 2.9MB.
+- StarField background rewritten from 220 animated SVG circles to a single canvas loop (paused when the tab is hidden).
+- Chat responses stream token-by-token over SSE.
+
+**UX / UI / accessibility**
+- Palette fan deck, sliding gold tab indicator, scroll reveals, page crossfades, gold-shimmer skeleton loaders, mobile bottom-sheet chat.
+- Full keyboard support (upload zones, fan deck, tabs), gold `:focus-visible` ring, `aria-live` chat, `prefers-reduced-motion` respected throughout, contrast-bumped muted text.
+- Chatbot is available on every results tab and keeps history per session.
+
+**Code health**
+- `Results.tsx` 1322 → 72 lines; pages decomposed into `pages/{results,home,analysis}/` components with a shared typed API layer (`client/src/lib/types.ts`) and reusable UI primitives.
+- Removed ~15 dead components/files and 5 unused dependencies (three.js, recharts, puppeteer, legacy AI SDKs).
 
 ## Tech Stack
 
 | Layer        | Technology                                                                  |
 | ------------ | --------------------------------------------------------------------------- |
-| Frontend     | React 19 · TypeScript · Vite · Tailwind CSS · React Router · Framer Motion  |
-| Backend      | Node.js · Express · TypeScript (via `tsx`) · Multer · CORS                  |
-| AI / Vision  | Google Gemini 2.5 Flash (via Google AI Studio)                              |
+| Frontend     | React 19 · TypeScript · Vite 7 · Tailwind CSS 4 · React Router 7            |
+| Backend      | Node.js · Express 5 · TypeScript (via `tsx`) · Multer · sharp · helmet      |
+| AI / Vision  | OpenRouter (default: `nvidia/nemotron-nano-12b-v2-vl:free`)                 |
 | Hosting      | Vercel (frontend) · Render (backend)                                        |
-| Persistence  | In-memory session store (analysis results) · static JSON for demo samples   |
+| Persistence  | In-memory TTL session store · static JSON for demo samples                  |
 
 ## Architecture
 
@@ -76,36 +89,35 @@ Upload a single selfie, or try one of nine AI-generated sample faces (no persona
 │  React + Vite    │ ─────────▶ │  Express server  │
 │  (Vercel CDN)    │            │  (Render)        │
 └──────────────────┘            └──────┬───────────┘
-                                       │
-                                       │ HTTPS
+                                       │ sharp downscale → base64
                                        ▼
                                  ┌─────────────────┐
-                                 │  Google Gemini  │
-                                 │  2.5 Flash      │
+                                 │   OpenRouter    │
+                                 │  (vision LLM)   │
                                  └─────────────────┘
 ```
 
 **Request flow:**
 1. User uploads a photo (or picks a pre-computed sample) on the React client.
 2. Client posts `multipart/form-data` to `POST /api/analyze`.
-3. Server validates face count, calls Gemini with a structured prompt + base64 image.
-4. Response is parsed, normalized to the front-end schema, and the canonical per-season palette is injected.
-5. Result is stored in memory under a UUID session ID and returned to the client.
-6. Subsequent calls (chat, shop check, etc.) reference that session for context.
+3. Server validates the image (magic bytes), EXIF-rotates, downscales to 1024px JPEG.
+4. One vision call performs the face-count gate + full structured analysis; an optional second call cross-validates the season.
+5. Response is normalized to the frontend schema and the canonical per-season palette is injected.
+6. Result is stored in a TTL session store under a UUID and returned to the client.
+7. Subsequent calls (chat, shop check) reference that session; chat streams over SSE.
 
 ## Local Development
 
 ### Prerequisites
 - Node.js 20+
-- A free [Google AI Studio API key](https://aistudio.google.com/apikey)
+- A free [OpenRouter API key](https://openrouter.ai/keys)
 
 ### Setup
 
 ```bash
-git clone https://github.com/HaneenAldossari/aura.git
-cd aura
+cd aura-v2
 cp .env.example .env
-# edit .env and add your GEMINI_API_KEY
+# edit .env and add your OPENROUTER_API_KEY
 npm install
 cd client && npm install && cd ..
 ```
@@ -122,54 +134,40 @@ cd client && npm run dev
 
 Open http://localhost:5173.
 
-### Pre-compute sample analyses (optional, one-time)
-
-The repo ships with 9 pre-computed sample analyses in `server/demo-analyses/`. To regenerate them:
+### Useful scripts
 
 ```bash
-npx tsx scripts/precomputeDemoAnalyses.ts
+npm run test:accuracy                      # season-accuracy benchmark (uses OPENROUTER_MODEL)
+npx tsx scripts/probeModels.ts             # quick latency/sanity probe of candidate models
+npx tsx scripts/precomputeDemoAnalyses.ts  # regenerate the 9 demo analyses
+npx tsx scripts/convertImagesToWebp.ts     # one-time image optimization pass
 ```
 
 ## Deployment
 
-The app is deployed across two free-tier services:
-
-- **Frontend** → Vercel (auto-deploys on push to `main`, root directory: `client/`)
-- **Backend** → Render (auto-deploys on push, build: `npm install`, start: `npx tsx server/index.ts`)
+- **Frontend** → Vercel (root directory: `client/`)
+- **Backend** → Render (build: `npm install`, start: `npx tsx server/index.ts`)
 
 Required environment variables in production:
 
-| Variable          | Where        | Value                                               |
-| ----------------- | ------------ | --------------------------------------------------- |
-| `GEMINI_API_KEY`  | Render       | your Google AI Studio API key                       |
-| `CORS_ORIGINS`    | Render       | comma-separated list of allowed Vercel URLs        |
-| `VITE_API_BASE`   | Vercel       | `https://your-render-url.onrender.com/api`          |
+| Variable             | Where   | Value                                                |
+| -------------------- | ------- | ---------------------------------------------------- |
+| `OPENROUTER_API_KEY` | Render  | your OpenRouter key                                  |
+| `CORS_ORIGINS`       | Render  | comma-separated allowed frontend URLs                |
+| `VITE_API_BASE`      | Vercel  | `https://your-render-url.onrender.com/api`           |
 
-The `vercel.json` rewrite rule ensures direct links to client-side routes (`/analyze`, `/results/:id`) fall back to `index.html` for the SPA router.
+Optional: `OPENROUTER_MODEL`, `OPENROUTER_FALLBACK_MODEL`, `ENABLE_CROSS_VALIDATION`, `SESSION_TTL_HOURS`, `MAX_FILE_SIZE`.
 
-## Project Structure
+## Roadmap / Recommendations
 
-```
-aura/
-├── client/                    # React + Vite frontend
-│   ├── public/
-│   │   └── demo-faces/        # 9 AI-generated sample faces (static)
-│   └── src/
-│       ├── pages/             # Home, Analysis, Results
-│       ├── components/        # Color swatches, palette grid, chatbot, etc.
-│       ├── lib/api.ts         # Backend API client
-│       └── data/              # Season palettes, makeup swatches
-├── server/
-│   ├── routes/                # /analyze, /chat, /tools (shop), /demo-load
-│   ├── services/
-│   │   ├── claudeVision.ts    # Gemini API wrapper
-│   │   └── linkChecker.ts     # Shop tab product scoring
-│   ├── prompts/               # System prompts for color analysis & chat
-│   ├── utils/seasonPalettes.ts # Canonical 12-season palette table
-│   └── demo-analyses/         # Pre-computed sample analyses (JSON)
-└── scripts/
-    └── precomputeDemoAnalyses.ts  # Re-generate sample analyses
-```
+Ideas documented for future iterations:
+
+1. **Real session persistence** — Upstash Redis (free tier) behind the existing session-store interface; Render's free tier wipes memory on restart.
+2. **Unit tests + CI** — vitest for the pure functions (`parseJSON`, `normalizeResult`, `getCanonicalPalette`, `cleanResponse`, session TTL) plus a GitHub Actions workflow running `tsc --noEmit` and the tests.
+3. **PDF export / share card** of the color report; PWA manifest for home-screen install.
+4. **Arabic UI (i18n)** — the chatbot already answers in Arabic; the interface could follow.
+5. **Model upgrades** — the accuracy harness makes it a one-line env change to A/B a paid vision model when accuracy matters more than cost.
+6. **Analytics** — a PostHog funnel (land → upload → result → chat) to see where users drop off.
 
 ## License
 
