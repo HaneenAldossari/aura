@@ -1,3 +1,10 @@
+import type {
+  AnalysisResult,
+  AnalyzeResponse,
+  ChatMessage,
+  LinkCheckResultData,
+} from "./types";
+
 // In dev, Vite proxies /api → backend. In prod, set VITE_API_BASE to the deployed backend URL.
 const BASE = import.meta.env.VITE_API_BASE || "/api";
 
@@ -12,9 +19,7 @@ async function safeJson(res: Response) {
   }
 }
 
-export async function analyzePhotos(
-  files: File[]
-): Promise<{ sessionId: string; result: Record<string, unknown> }> {
+export async function analyzePhotos(files: File[]): Promise<AnalyzeResponse> {
   const formData = new FormData();
   files.forEach((f) => formData.append("photos", f));
 
@@ -38,9 +43,7 @@ export async function listDemoSamples(): Promise<string[]> {
   return Array.isArray(data.samples) ? data.samples : [];
 }
 
-export async function loadDemoSample(
-  sampleId: string
-): Promise<{ sessionId: string; result: Record<string, unknown> }> {
+export async function loadDemoSample(sampleId: string): Promise<AnalyzeResponse> {
   const res = await fetch(`${BASE}/demo-load`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -51,9 +54,7 @@ export async function loadDemoSample(
   return data;
 }
 
-export async function getResults(
-  sessionId: string
-): Promise<Record<string, unknown>> {
+export async function getResults(sessionId: string): Promise<AnalysisResult> {
   const res = await fetch(`${BASE}/results/${sessionId}`);
   const data = await safeJson(res);
   if (!res.ok) throw new Error(data.error || "Results not found");
@@ -62,7 +63,7 @@ export async function getResults(
 
 export async function sendChatMessage(
   sessionId: string,
-  messages: { role: "user" | "assistant"; content: string }[]
+  messages: ChatMessage[]
 ): Promise<string> {
   const res = await fetch(`${BASE}/chat`, {
     method: "POST",
@@ -78,7 +79,10 @@ export async function sendChatMessage(
   return data.response;
 }
 
-export async function checkLinkImage(file: File, sessionId: string) {
+export async function checkLinkImage(
+  file: File,
+  sessionId: string
+): Promise<LinkCheckResultData> {
   const formData = new FormData();
   formData.append("photo", file);
   formData.append("sessionId", sessionId);
@@ -110,7 +114,7 @@ export async function checkLinkManual(
   category: string,
   brand: string,
   sessionId: string
-) {
+): Promise<LinkCheckResultData> {
   const res = await fetch(`${BASE}/link-check-manual`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

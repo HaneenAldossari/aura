@@ -14,7 +14,7 @@
   /* Text — cooler white, not warm beige */
   --text-primary:     #F2EEE8;
   --text-secondary:   #B8B0A4;
-  --text-muted:       #706860;
+  --text-muted:       #847B70; /* ≥4.5:1 on --bg-primary while staying visibly muted */
   --text-on-accent:   #0D0D0F;
 
   /* Accent — Champagne Gold */
@@ -47,7 +47,7 @@
   --color-gold-dark:       #A8895A;
   --color-cream:           #F2EEE8;
   --color-cream-dark:      #B8B0A4;
-  --color-cream-muted:     #706860;
+  --color-cream-muted:     #847B70;
   --color-warm-red:        #C85A4A;
   --color-warm-green:      #6B8E4E;
   --color-bg-primary:      #0D0D0F;
@@ -56,6 +56,31 @@
 
 * {
   box-sizing: border-box;
+}
+
+/* Keyboard focus — gold ring, brand-consistent everywhere */
+:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+  border-radius: inherit;
+}
+
+/* Standard interactive lift for cards and buttons */
+.lift-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.lift-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 body {
@@ -287,6 +312,11 @@ body {
   );
   animation: shimmer-move 3s ease-in-out infinite;
 }
+@keyframes skeleton-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 @keyframes shimmer-move {
   0% { transform: translateX(-100%) translateY(-100%); }
   100% { transform: translateX(100%) translateY(100%); }

@@ -11,6 +11,7 @@ import {
   Camera,
 } from "lucide-react";
 import { getResults, sendChatMessage, checkLinkImage, getCelebrityImage } from "../lib/api";
+import type { AnalysisResult } from "../lib/types";
 import {
   getSeasonMakeupSwatches,
   getJewelrySwatches,
@@ -71,7 +72,7 @@ function getDescriptors(season: string): Descriptors {
 export default function Results() {
   const { sessionId } = useParams<{ sessionId: string }>();
   const navigate = useNavigate();
-  const [data, setData] = useState<Record<string, unknown> | null>(null);
+  const [data, setData] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("overview");
   const [celebPhotos, setCelebPhotos] = useState<Record<string, string>>({});
@@ -97,7 +98,7 @@ export default function Results() {
 
   useEffect(() => {
     if (!data) return;
-    const celebrities = data.celebrities as { name: string; why: string }[];
+    const celebrities = data.celebrities;
     if (!celebrities) return;
 
     celebrities.forEach(async (celeb) => {
@@ -216,8 +217,8 @@ export default function Results() {
     );
   }
 
-  const palette = data.palette as { best: ColorSwatch[]; avoid: ColorSwatch[]; neutrals: string[]; neutralsWithHex?: { name: string; hex: string }[]; metals: { best: string[]; avoid: string[] } };
-  const makeup = data.makeup as Record<string, unknown>;
+  const palette = data.palette;
+  const makeup = data.makeup;
   // Normalize nails — handle both string arrays and object arrays
   const normalizeNailColors = (colors: unknown): string[] => {
     if (!Array.isArray(colors)) return [];
@@ -230,21 +231,21 @@ export default function Results() {
       return String(c);
     }).filter(Boolean);
   };
-  const nailsRaw = makeup?.nails as Record<string, unknown> | undefined;
+  const nailsRaw = makeup?.nails;
   const bestNails = normalizeNailColors(nailsRaw?.bestColors);
   const avoidNails = normalizeNailColors(nailsRaw?.avoidColors);
-  const wardrobe = data.wardrobe as Record<string, string>;
-  const jewelry = data.jewelry as Record<string, string>;
-  const hairColor = data.hairColor as Record<string, string>;
-  const celebrities = data.celebrities as { name: string; why: string }[];
-  const keyFeatures = data.keyFeatures as Record<string, string>;
-  const seasonName = formatSeasonName(data.season as string);
+  const wardrobe = data.wardrobe;
+  const jewelry = data.jewelry;
+  const hairColor = data.hairColor;
+  const celebrities = data.celebrities;
+  const keyFeatures = data.keyFeatures;
+  const seasonName = formatSeasonName(data.season);
   const makeupSwatches = getSeasonMakeupSwatches(seasonName);
   const jewelrySwatches = getJewelrySwatches(seasonName);
   const hairShades = getHairShadesForSeason(seasonName);
   const hairSubtitle = getHairSubtitle(seasonName);
   // Use AI-returned personal DNA values; fall back to 50 (neutral) if missing
-  const aiDNA = data.colorDNA as { warmth?: number; depth?: number; clarity?: number; contrast?: number } | undefined;
+  const aiDNA = data.colorDNA;
   const colorDNA = {
     temperature: aiDNA?.warmth ?? 50,
     depth: aiDNA?.depth ?? 50,
@@ -389,7 +390,7 @@ export default function Results() {
               }}>
                 {seasonWords[0]} <span style={{ color: "#D4AF7A", fontStyle: "italic" }}>{seasonWords.slice(1).join(" ")}</span>
               </h1>
-              {(data.seasonTagline as string) && (
+              {data.seasonTagline && (
                 <p style={{
                   fontFamily: "Cormorant Garamond, serif",
                   fontStyle: "italic",
@@ -402,7 +403,7 @@ export default function Results() {
                   paddingTop: 4,
                   paddingBottom: 4,
                 }}>
-                  &ldquo;{data.seasonTagline as string}&rdquo;
+                  &ldquo;{data.seasonTagline}&rdquo;
                 </p>
               )}
             </section>
@@ -632,7 +633,7 @@ export default function Results() {
                     Your Season Story
                   </h2>
                   <p style={{ fontSize: 15, color: "#B8B0A4", lineHeight: 1.8, maxWidth: 520 }}>
-                    {(data.seasonStory as string) || `As a ${seasonName}, your coloring reflects ${colorDNA.temperature > 60 ? "warmth and richness" : "coolness and clarity"}. Your features carry a ${colorDNA.contrast > 60 ? "high-contrast" : "soft"} quality with ${colorDNA.depth > 60 ? "deep" : "light"}, ${colorDNA.clarity > 50 ? "clear" : "muted"} tones that define your unique palette. The colours chosen for you enhance your natural harmony and bring out your best features.`}
+                    {data.seasonStory || `As a ${seasonName}, your coloring reflects ${colorDNA.temperature > 60 ? "warmth and richness" : "coolness and clarity"}. Your features carry a ${colorDNA.contrast > 60 ? "high-contrast" : "soft"} quality with ${colorDNA.depth > 60 ? "deep" : "light"}, ${colorDNA.clarity > 50 ? "clear" : "muted"} tones that define your unique palette. The colours chosen for you enhance your natural harmony and bring out your best features.`}
                   </p>
                 </div>
               </div>
@@ -1012,8 +1013,8 @@ export default function Results() {
             <div>
               <h3 className="text-lg font-semibold mb-3" style={{ fontFamily: "Cormorant Garamond, serif", color: 'var(--text-primary)' }}>Gemstones</h3>
               <div className="flex flex-wrap gap-5">
-                {((data.gemstones as Array<{ name: string }>) || []).length > 0
-                  ? (data.gemstones as Array<{ name: string }>).map((g) => (
+                {(data.gemstones || []).length > 0
+                  ? data.gemstones.map((g) => (
                       <GemstoneCard key={g.name} name={g.name} />
                     ))
                   : jewelrySwatches.stones.map((s) => (
