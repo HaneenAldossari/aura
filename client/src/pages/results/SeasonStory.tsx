@@ -26,8 +26,8 @@ export default function SeasonStory({
           flexShrink: 0,
           position: "relative",
         }}>
-          <img
-            src={`/seasons/${seasonName.toLowerCase().includes("winter") ? "winter" : seasonName.toLowerCase().includes("summer") ? "summer" : seasonName.toLowerCase().includes("spring") ? "spring" : "autumn"}.png`}
+          <img loading="lazy" decoding="async"
+            src={`/seasons/${seasonName.toLowerCase().includes("winter") ? "winter" : seasonName.toLowerCase().includes("summer") ? "summer" : seasonName.toLowerCase().includes("spring") ? "spring" : "autumn"}.webp`}
             alt={`${seasonName} season`}
             onError={e => { (e.target as HTMLImageElement).style.display = "none"; }}
             style={{

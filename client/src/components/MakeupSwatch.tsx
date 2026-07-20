@@ -49,7 +49,7 @@ export function MakeupSwatch({
         }}
       >
         {src ? (
-          <img
+          <img loading="lazy" decoding="async"
             src={src}
             alt={name}
             style={{

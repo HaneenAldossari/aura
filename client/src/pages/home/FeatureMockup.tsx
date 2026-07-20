@@ -56,13 +56,13 @@ export default function FeatureMockup({ index }: { index: number }) {
           <h4 style={titleStyle}>Lips & Cheeks</h4>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
             {[
-              { label: "Lips", img: "/makeup/lips/warm-coral.png", name: "Warm Coral" },
-              { label: "Blush", img: "/makeup/blush/Peach.png", name: "Peach" },
-              { label: "Bronzer", img: "/makeup/bronzer/golden-bronze.png", name: "Golden Bronze" },
-              { label: "Eyeshadow", img: "/makeup/eyeshadow/copper.png", name: "Copper" },
+              { label: "Lips", img: "/makeup/lips/warm-coral.webp", name: "Warm Coral" },
+              { label: "Blush", img: "/makeup/blush/Peach.webp", name: "Peach" },
+              { label: "Bronzer", img: "/makeup/bronzer/golden-bronze.webp", name: "Golden Bronze" },
+              { label: "Eyeshadow", img: "/makeup/eyeshadow/copper.webp", name: "Copper" },
             ].map((item, j) => (
               <div key={j} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", padding: "10px", borderRadius: "8px", background: "rgba(212,175,122,0.05)" }}>
-                <img src={item.img} alt={item.name} style={imgStyle} />
+                <img loading="lazy" decoding="async" src={item.img} alt={item.name} style={imgStyle} />
                 <span style={{ fontSize: "9px", color: "var(--accent-gold)", textTransform: "uppercase", letterSpacing: "0.15em" }}>{item.label}</span>
                 <span style={{ fontSize: "12px", color: "var(--text-primary)" }}>{item.name}</span>
               </div>
@@ -78,9 +78,9 @@ export default function FeatureMockup({ index }: { index: number }) {
           <h4 style={titleStyle}>Top Picks</h4>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "14px" }}>
             {[
-              { img: "/makeup/nails/big-apple-red.png", name: "Big Apple Red", brand: "OPI" },
-              { img: "/makeup/nails/malaga-wine.png", name: "Malaga Wine", brand: "OPI" },
-              { img: "/makeup/nails/cajun-shrimp.png", name: "Cajun Shrimp", brand: "OPI" },
+              { img: "/makeup/nails/big-apple-red.webp", name: "Big Apple Red", brand: "OPI" },
+              { img: "/makeup/nails/malaga-wine.webp", name: "Malaga Wine", brand: "OPI" },
+              { img: "/makeup/nails/cajun-shrimp.webp", name: "Cajun Shrimp", brand: "OPI" },
             ].map((item, j) => (
               <div key={j} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
                 <div style={{
@@ -94,7 +94,7 @@ export default function FeatureMockup({ index }: { index: number }) {
                   alignItems: "center",
                   justifyContent: "center",
                 }}>
-                  <img src={item.img} alt={item.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                  <img loading="lazy" decoding="async" src={item.img} alt={item.name} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                 </div>
                 <span style={{ fontSize: "11px", color: "var(--text-primary)", textAlign: "center", lineHeight: 1.3 }}>{item.name}</span>
                 <span style={{ fontSize: "9px", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.1em" }}>{item.brand}</span>
@@ -111,13 +111,13 @@ export default function FeatureMockup({ index }: { index: number }) {
           <h4 style={titleStyle}>Your Metals</h4>
           <div style={{ display: "flex", gap: "20px", justifyContent: "center" }}>
             {[
-              { img: "/makeup/metals/gold.png", name: "Gold", rec: true },
-              { img: "/makeup/metals/rose-gold.png", name: "Rose Gold", rec: true },
-              { img: "/makeup/metals/silver.png", name: "Silver", rec: false },
+              { img: "/makeup/metals/gold.webp", name: "Gold", rec: true },
+              { img: "/makeup/metals/rose-gold.webp", name: "Rose Gold", rec: true },
+              { img: "/makeup/metals/silver.webp", name: "Silver", rec: false },
             ].map((item, j) => (
               <div key={j} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
                 <div style={{ position: "relative" }}>
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={item.img}
                     alt={item.name}
                     style={{

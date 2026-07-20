@@ -57,7 +57,7 @@ export default function Analysis() {
   };
 
   const handleSampleClick = async (sampleId: string) => {
-    setSamplePreview(`/demo-faces/${sampleId}.png`);
+    setSamplePreview(`/demo-faces/${sampleId}.webp`);
     setStep("analyzing");
     setError(null);
     try {

@@ -1,6 +1,6 @@
 /**
  * Maps AI-returned hair color names to local PNG filenames.
- * Files live in public/haircolors/*.png
+ * Files live in public/haircolors/*.webp
  */
 const HAIR_IMAGE_MAP: Record<string, string> = {
   // Blondes
@@ -53,9 +53,9 @@ const HAIR_IMAGE_MAP: Record<string, string> = {
 
 export function getHairImagePath(name: string): string | null {
   const key = name.toLowerCase().trim();
-  if (HAIR_IMAGE_MAP[key]) return `/haircolors/${HAIR_IMAGE_MAP[key]}.png`;
+  if (HAIR_IMAGE_MAP[key]) return `/haircolors/${HAIR_IMAGE_MAP[key]}.webp`;
   const match = Object.keys(HAIR_IMAGE_MAP).find(
     k => key.includes(k) || k.includes(key)
   );
-  return match ? `/haircolors/${HAIR_IMAGE_MAP[match]}.png` : null;
+  return match ? `/haircolors/${HAIR_IMAGE_MAP[match]}.webp` : null;
 }

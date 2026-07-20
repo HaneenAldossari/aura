@@ -82,8 +82,8 @@ export default function StyleTab({
                     return (
                       <div key={metalName} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
                         {hasFile ? (
-                          <img
-                            src={`/makeup/metals/${file}.png`}
+                          <img loading="lazy" decoding="async"
+                            src={`/makeup/metals/${file}.webp`}
                             alt={metalName}
                             style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", filter: "saturate(0.4) opacity(0.6)", boxShadow: "0 2px 12px rgba(0,0,0,0.5)" }}
                           />

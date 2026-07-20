@@ -150,34 +150,34 @@ export function getMakeupSwatchImage(
   const key = name.toLowerCase().trim();
 
   // Step 1: Exact map match
-  if (map[key]) return `/makeup/${category}/${map[key]}.png`;
+  if (map[key]) return `/makeup/${category}/${map[key]}.webp`;
 
   // Alias exact match
-  if (aliases[key]) return `/makeup/${category}/${aliases[key]}.png`;
+  if (aliases[key]) return `/makeup/${category}/${aliases[key]}.webp`;
 
   // Existing partial match on map keys
   const mainMatch = Object.keys(map).find(k => key.includes(k) || k.includes(key));
-  if (mainMatch) return `/makeup/${category}/${map[mainMatch]}.png`;
+  if (mainMatch) return `/makeup/${category}/${map[mainMatch]}.webp`;
 
   // Existing partial match on alias keys
   const aliasMatch = Object.keys(aliases).find(k => key.includes(k) || k.includes(key));
-  if (aliasMatch) return `/makeup/${category}/${aliases[aliasMatch]}.png`;
+  if (aliasMatch) return `/makeup/${category}/${aliases[aliasMatch]}.webp`;
 
   // Step 2 & 3: Try matching map keys that contain the first or second word
   const words = key.split(/\s+/).filter(w => w.length >= 3);
   for (const word of words) {
     const wordMatch = Object.keys(map).find(k => k.includes(word));
-    if (wordMatch) return `/makeup/${category}/${map[wordMatch]}.png`;
+    if (wordMatch) return `/makeup/${category}/${map[wordMatch]}.webp`;
   }
 
   // Step 4: Try significant words (skip common modifier words)
   const significantWords = words.filter(w => !COMMON_WORDS.has(w));
   for (const word of significantWords) {
     const wordMatch = Object.keys(map).find(k => k.includes(word));
-    if (wordMatch) return `/makeup/${category}/${map[wordMatch]}.png`;
+    if (wordMatch) return `/makeup/${category}/${map[wordMatch]}.webp`;
     // Also try alias keys
     const aliasWordMatch = Object.keys(aliases).find(k => k.includes(word));
-    if (aliasWordMatch) return `/makeup/${category}/${aliases[aliasWordMatch]}.png`;
+    if (aliasWordMatch) return `/makeup/${category}/${aliases[aliasWordMatch]}.webp`;
   }
 
   // Step 5: No match — log and return null

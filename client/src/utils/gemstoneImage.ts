@@ -33,9 +33,9 @@ const GEMSTONE_MAP: Record<string, string> = {
 
 export function getGemstoneImage(name: string): string | null {
   const key = name.toLowerCase().trim();
-  if (GEMSTONE_MAP[key]) return `/gemstones/${GEMSTONE_MAP[key]}.png`;
+  if (GEMSTONE_MAP[key]) return `/gemstones/${GEMSTONE_MAP[key]}.webp`;
   const match = Object.keys(GEMSTONE_MAP).find(k =>
     key.includes(k) || k.includes(key)
   );
-  return match ? `/gemstones/${GEMSTONE_MAP[match]}.png` : null;
+  return match ? `/gemstones/${GEMSTONE_MAP[match]}.webp` : null;
 }

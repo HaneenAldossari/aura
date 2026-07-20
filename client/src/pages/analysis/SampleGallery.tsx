@@ -20,8 +20,8 @@ export default function SampleGallery({
             onClick={() => onSampleClick(id)}
             className="relative aspect-square rounded-lg overflow-hidden border border-gold/15 hover:border-gold/50 transition cursor-pointer group"
           >
-            <img
-              src={`/demo-faces/${id}.png`}
+            <img loading="lazy" decoding="async"
+              src={`/demo-faces/${id}.webp`}
               alt={id}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />

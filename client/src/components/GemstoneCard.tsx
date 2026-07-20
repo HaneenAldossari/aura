@@ -38,7 +38,7 @@ export function GemstoneCard({ name, size = 64 }: GemstoneCardProps) {
         }}
       >
         {src ? (
-          <img
+          <img loading="lazy" decoding="async"
             src={src}
             alt={name}
             style={{

@@ -32,8 +32,8 @@ export function MetalCircle({ metal, recommended, size = 52 }: MetalCircleProps)
       gap: "6px",
       opacity: recommended ? 1 : 0.55,
     }}>
-      <img
-        src={`/makeup/metals/${metal}.png`}
+      <img loading="lazy" decoding="async"
+        src={`/makeup/metals/${metal}.webp`}
         alt={METAL_LABELS[metal]}
         style={{
           width: size,
