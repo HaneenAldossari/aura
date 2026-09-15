@@ -1,8 +1,12 @@
 /**
- * AURA — Model Architecture (OpenRouter)
+ * AURA — analysis routes.
  *
- * All vision + text tasks use nvidia/nemotron-nano-12b-v2-vl:free via OpenRouter
- * (Google's direct Gemini free tier was cut to 0 quota).
+ * All vision + text tasks run through OpenRouter; per-task model IDs come from
+ * server/utils/config.ts (MODEL_CLASSIFY / MODEL_CHAT / MODEL_SHOP).
+ *
+ * Uploads are held in memory only — multer uses memoryStorage and the buffer
+ * flows straight through sharp to base64. Image bytes are never written to
+ * disk or logged.
  */
 import { Router, Request, Response } from "express";
 import multer from "multer";
@@ -20,9 +24,20 @@ const router = Router();
 
 // Normalize AI response (new prompt schema) to frontend-compatible shape
 export function normalizeResult(raw: Record<string, unknown>): Record<string, unknown> {
+  // The classifier emits `primarySeason` (enum-constrained to the 12 canonical
+  // names); demo fixtures and older payloads use `season`. Accept both.
+  const season = ((raw.primarySeason || raw.season) as string) || "";
+  const assessment = raw.assessment as Record<string, string> | undefined;
+  const observations = raw.observations as Record<string, string> | undefined;
+  const skinDesc = (observations?.skin || raw.skinDescription || "") as string;
+  const hairDesc = (observations?.hair || raw.hairDescription || "") as string;
+  const eyeDesc = (observations?.eyes || raw.eyeDescription || "") as string;
+
   // Canonical palette: every person classified as e.g. "Deep Autumn" gets the same
-  // 12-color palette so the demo (and real analyses) are consistent.
-  const canonical = getCanonicalPalette(raw.season as string);
+  // 12-color palette so the demo (and real analyses) are consistent. Because
+  // primarySeason is enum-constrained, this lookup always resolves for live
+  // analyses; the fallback below only serves legacy fixtures.
+  const canonical = getCanonicalPalette(season);
   const palette = raw.palette as Record<string, unknown> | undefined;
   const rawBest = (palette?.bestColors || palette?.best || []) as Array<{ name: string; hex: string; reason?: string; note?: string }>;
   const rawAvoid = (palette?.avoidColors || palette?.avoid || []) as Array<{ name: string; hex: string; reason?: string }>;
@@ -69,10 +84,17 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
 
   // Map confidence string to number
   const confMap: Record<string, number> = { high: 90, medium: 75, low: 55 };
-  const confidence = typeof raw.confidence === "number" ? raw.confidence : confMap[(raw.confidence as string)?.toLowerCase()] || 75;
+  const confidence =
+    typeof raw.confidence === "number"
+      // The schema expresses confidence as 0-1; the client renders 0-100.
+      ? raw.confidence <= 1
+        ? Math.round(raw.confidence * 100)
+        : raw.confidence
+      : confMap[(raw.confidence as string)?.toLowerCase()] || 75;
 
   // Build old-format makeup
   const makeup = raw.makeup as Record<string, unknown> | undefined;
+  const rawHair = raw.hairColor as Record<string, unknown> | undefined;
 
   // Build old-format celebrities (reason → why)
   const celebrities = ((raw.celebrities || []) as Array<{ name: string; reason?: string; why?: string }>).map(c => ({
@@ -80,8 +102,7 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
     why: c.reason || c.why || "",
   }));
 
-  // Derive depth/chroma from season name
-  const season = (raw.season as string) || "";
+  // Derive depth/chroma display strings from the season name
   const sl = season.toLowerCase();
   let depth = "Medium";
   if (sl.includes("deep") || sl.includes("dark")) depth = "Deep / high contrast";
@@ -98,27 +119,27 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
     season,
     seasonTagline: (raw as Record<string, unknown>).seasonTagline || "",
     confidence,
-    undertone: raw.undertone || "unknown",
+    undertone: assessment?.undertone || raw.undertone || "unknown",
     depth,
     chroma,
     koreanTone,
-    contrastLevel: raw.contrastLevel || "medium",
-    chromaLevel: raw.chromaLevel || "muted",
+    contrastLevel: assessment?.contrast || raw.contrastLevel || "medium",
+    chromaLevel: assessment?.chroma || raw.chromaLevel || "muted",
     colorDNA: {
       warmth: (raw.colorDNA as Record<string, number>)?.warmth ?? null,
       depth: (raw.colorDNA as Record<string, number>)?.depth ?? null,
       clarity: (raw.colorDNA as Record<string, number>)?.clarity ?? null,
       contrast: (raw.colorDNA as Record<string, number>)?.contrast ?? null,
     },
-    reasoning: `${raw.skinDescription || ""} ${raw.hairDescription || ""} ${raw.eyeDescription || ""}`.trim(),
+    reasoning: `${skinDesc} ${hairDesc} ${eyeDesc}`.trim(),
     seasonStory: (raw as Record<string, unknown>).seasonStory || "",
     lightingQuality: "Natural daylight",
     keyFeatures: {
-      skinTone: raw.skinDescription || "",
-      eyeColor: raw.eyeDescription || "",
-      hairColor: raw.hairDescription || "",
+      skinTone: skinDesc,
+      eyeColor: eyeDesc,
+      hairColor: hairDesc,
       veinColor: "",
-      contrast: `${raw.contrastLevel || "medium"} contrast`,
+      contrast: `${assessment?.contrast || raw.contrastLevel || "medium"} contrast`,
     },
     palette: {
       best,
@@ -138,11 +159,15 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
             tip: (fo.tip as string) || "",
           };
         }
-        // Legacy string format fallback
-        return { recommended: [], avoid: [], tip: typeof f === "string" ? f : "" };
+        // Schema shape (foundationTip) or legacy string
+        return {
+          recommended: [],
+          avoid: [],
+          tip: (makeup?.foundationTip as string) || (typeof f === "string" ? f : ""),
+        };
       })(),
       blush: Array.isArray(makeup?.blush) ? (makeup.blush as string[]).join(", ") : (makeup?.blush || ""),
-      bronzer: "",
+      bronzer: (makeup?.bronzer as string) || "",
       lips: Array.isArray(makeup?.lipColors) ? (makeup.lipColors as string[]).join(", ") : (makeup?.lips || ""),
       eyes: Array.isArray(makeup?.eyeshadow) ? (makeup.eyeshadow as string[]).join(", ") : (makeup?.eyes || ""),
 
@@ -175,12 +200,12 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
       metals: bestMetals.join(", "),
       stones: "",
       avoid: avoidMetals.join(", "),
-      style: "",
+      style: (raw.jewelryStyle as string) || "",
     },
     hairColor: {
-      bestHighlights: "",
-      bestOverall: "",
-      avoid: "",
+      bestHighlights: (rawHair?.bestHighlights as string) || "",
+      bestOverall: (rawHair?.bestOverall as string) || "",
+      avoid: (rawHair?.avoid as string) || "",
     },
     celebrities,
     koreanAnalysis: {
@@ -189,6 +214,13 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
       kbeautyTips: "",
     },
     crossValidation: raw.crossValidation || { agrees: true, confidence },
+
+    // Additive: measured/derived classification detail. Phase 2 fills `axes`
+    // from the measurement service when ANALYSIS_MODE=hybrid.
+    secondarySeason: (raw.secondarySeason as string) || "",
+    axes: raw.axes || null,
+    assessment: assessment || null,
+    rationale: (raw.rationale as string) || "",
   };
 }
 

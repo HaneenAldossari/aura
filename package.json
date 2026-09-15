@@ -1,7 +1,7 @@
 {
   "name": "aura",
   "version": "1.0.0",
-  "description": "AI personal color analysis web app \u2014 classifies a face photo into one of 12 seasonal color types and generates personalized palette, makeup, and shopping recommendations using a vision LLM via OpenRouter.",
+  "description": "AI personal color analysis web app — classifies a face photo into one of 12 seasonal color types and generates personalized palette, makeup, and shopping recommendations using a vision LLM via OpenRouter.",
   "main": "server/index.ts",
   "homepage": "https://aura-azure-six.vercel.app",
   "repository": {
@@ -16,7 +16,9 @@
     "client": "cd client && npm run dev",
     "dev": "npm run server & npm run client",
     "test:accuracy": "tsx tests/runAccuracyTest.ts",
-    "precompute:demos": "tsx scripts/precomputeDemoAnalyses.ts"
+    "precompute:demos": "tsx scripts/precomputeDemoAnalyses.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [
     "color-analysis",
@@ -48,6 +50,7 @@
     "@types/node": "^25.3.5",
     "@types/uuid": "^10.0.0",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.1"
   }
 }

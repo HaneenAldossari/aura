@@ -63,7 +63,6 @@ Look at these in order:
 - **True/Warm Spring**: warm golden skin, warm hair, high chroma — colors are vivid and warm
 - **Light Spring**: very fair skin, light warm hair, delicate features — lightest of the springs
 - **Bright Spring**: clear bright eyes, noticeable contrast, can handle vivid warm-cool colors
-- **Soft Spring**: warm but gentle/muted coloring, light-medium depth, warm undertone but LOW chroma — not as vivid as True Spring, not as earthy as Soft Autumn
 
 ### SUMMER (cool, light-medium, muted/soft):
 - **True/Cool Summer**: cool pink-beige skin, ash or cool brown hair, low-medium contrast, MEDIUM depth — not as fair as Light Summer
@@ -104,7 +103,7 @@ If the person has natural red, auburn, copper, or strawberry blonde hair:
 - If someone looks "blended" with nothing dominant, they are likely Soft Summer or Soft Autumn
 - Check the SKIN undertone first, then the hair — skin always wins
 - Natural freckles are a strong warm-season signal — freckled people are rarely Summer or Winter
-- Soft Spring exists — not everyone warm + muted is Soft Autumn. If coloring is LIGHT + warm + muted → Soft Spring
+- Warm + muted + LIGHT is Light Spring if the coloring stays clear and delicate, Soft Autumn if it reads earthy and blended. There is no "Soft Spring" in the 12-season system
 
 ## STEP 5 — Refinement Rules (Accuracy Corrections)
 
@@ -131,7 +130,6 @@ Map the season to the Korean color season tone:
 - Light Spring / Light Summer → 라이트톤 (Light Tone)
 - True Spring / Warm Spring → 웜톤 (Warm Tone)
 - Bright Spring / Bright Winter → 브라이트톤 (Bright Tone)
-- Soft Spring → 웜뮤트톤 (Warm Mute Tone)
 - True Summer / Cool Summer → 쿨톤 (Cool Tone)
 - Soft Summer / Soft Autumn → 뮤트톤 (Mute Tone)
 - True Autumn / Warm Autumn → 웜톤 (Warm Tone)
@@ -149,7 +147,7 @@ Generate palette data appropriate for the DETECTED season. Do not use a generic 
 ## OUTPUT FORMAT
 
 IMPORTANT: The "season" field must be a SINGLE clean season name. Use ONE qualifier + ONE base season.
-Good: "Deep Autumn", "Light Summer", "Bright Winter", "Soft Spring"
+Good: "Deep Autumn", "Light Summer", "Bright Winter", "Soft Autumn"
 BAD: "True/Cool Winter", "Warm/True Autumn"
 Pick the MOST SPECIFIC qualifier. If torn between "True" and another word, pick the other word.
 
@@ -161,7 +159,7 @@ IMPORTANT — the "assessment" object comes FIRST in the JSON and you must fill 
 |-----------|------------|-------------|---------------|
 | warm      | light      | clear       | Light Spring  |
 | warm      | light-med  | clear/vivid | True Spring or Bright Spring |
-| warm      | light-med  | muted       | Soft Spring   |
+| warm      | light-med  | muted       | Light Spring (clear) or Soft Autumn (earthy) |
 | warm      | medium     | muted/earthy| Soft Autumn or True Autumn |
 | warm      | deep       | any         | Deep Autumn   |
 | cool      | light      | muted       | Light Summer  |
@@ -482,12 +480,6 @@ metals: yellow gold, rose gold, warm copper
 bestColors: dusty peach (#D4A088), warm sage (#8B9E6B), caramel (#C19A6B), muted coral (#C47A6B), warm taupe (#A08070), dusty teal (#7A9E9B)
 metals: yellow gold (muted), bronze
 
-### Soft Spring palette examples:
-bestColors: warm peach (#FFDAB9), soft coral (#F08080), warm sand (#F4A460), muted golden (#DAA520), soft warm green (#8FBC8F), dusty rose (#BC8F8F), light caramel (#D2B48C), warm lavender (#C9A9C9)
-avoidColors: pure black (#000000), icy blue (#B0E0E6), bright magenta (#FF00FF), cool grey (#808080)
-metals: yellow gold (muted), rose gold
-makeup: warm-toned foundation, soft peach or warm pink blush, warm nude or soft coral lips, warm taupe or soft gold eyeshadow
-
 ### Light Spring palette examples:
 bestColors: peach (#FFCBA4), warm coral (#FF8C69), golden yellow (#FFD700), warm pink (#FFB6C1), light warm green (#98FB98)
 metals: yellow gold, rose gold
@@ -557,14 +549,14 @@ BRAND KNOWLEDGE — Moonglaze:
 Moonglaze is a Middle Eastern makeup brand founded by Saudi makeup artist Yara AlNamlah. Available at moonglaze.co, Sephora Middle East, and Selfridges. Founded 2015. Known for dewy, second-skin finish products.
 
 FEELS Lip Liners (waterproof velvety formula):
-Flow: warm nude brown, neutral-warm undertone. Best for Soft Autumn, True Autumn, Warm Spring, Light Autumn.
+Flow: warm nude brown, neutral-warm undertone. Best for Soft Autumn, True Autumn, Warm Spring.
 Passenger Princess: deep mauve-pink berry. Best for Cool Summer, True Summer, Soft Summer, True Winter.
 Hot Tea: warm terracotta-brown, orange-red undertone. Best for Deep Autumn, True Autumn, Warm Autumn, Warm Spring.
 Late-hour: medium warm brown nude. Best for True Autumn, Warm Autumn, Soft Autumn, Deep Autumn, Warm Spring medium skin.
 The Exec: deep warm burgundy-brown. Best for Deep Autumn, True Autumn, Warm Autumn, Deep Winter warm.
 
 MOODS Water Lip Tints (lightweight sheer-to-buildable water tint):
-Sugarcoated: sheer warm pink-nude, barely-there tint. Best for Light Spring, Warm Spring, Soft Autumn fair, Light Autumn.
+Sugarcoated: sheer warm pink-nude, barely-there tint. Best for Light Spring, Warm Spring, Soft Autumn fair.
 Major Moves: bright vivid pink, cool-toned. Best for True Winter, Deep Winter, Cool Summer, Light Summer.
 Hot Topic: deep cool burgundy-red, glossy. Best for True Winter, Deep Winter, Cool Summer deep, True Summer deep.
 Main Character: warm caramel-brown tint, glossy. Best for Deep Autumn, True Autumn, Warm Autumn, Warm Spring deep.
@@ -580,7 +572,7 @@ Bronspresso: rich-deep depth, neutral undertone. Best for Deep Winter, True Wint
 
 SHEERS Highlighter Sticks:
 Glazed: clear iridescent reflection, pearl-white shimmer. Best for all cool and neutral seasons — Cool Summer, True Summer, Soft Summer, Light Summer, True Winter, Soft Autumn.
-Gilded: golden shimmer reflection, warm gold shimmer. Best for all warm seasons — Deep Autumn, True Autumn, Warm Autumn, Light Autumn, True Spring, Warm Spring, Light Spring.
+Gilded: golden shimmer reflection, warm gold shimmer. Best for all warm seasons — Deep Autumn, True Autumn, Warm Autumn, True Spring, Warm Spring, Light Spring.
 
 PHASES Blush Sticks:
 Sway: warm neutral nude. Best for warm and neutral seasons.
@@ -606,3 +598,162 @@ Never mention percentages, scores, or metric names.
 Sound warm and personal, not clinical.
 Respond in the same language the user writes in — Arabic or English.`;
 }
+
+/**
+ * The twelve canonical seasons. These are the only values the classifier may
+ * emit, and they match the keys in server/utils/seasonPalettes.ts exactly
+ * (lookup lowercases), so getCanonicalPalette() can never miss.
+ *
+ * "Soft Spring" and "Light Autumn" are deliberately absent — they are not
+ * seasons in the 12-season system.
+ */
+export const CANONICAL_SEASONS = [
+  "Light Spring",
+  "True Spring",
+  "Bright Spring",
+  "Light Summer",
+  "True Summer",
+  "Soft Summer",
+  "Soft Autumn",
+  "True Autumn",
+  "Deep Autumn",
+  "Deep Winter",
+  "True Winter",
+  "Bright Winter",
+] as const;
+
+export type CanonicalSeason = (typeof CANONICAL_SEASONS)[number];
+
+const str = { type: "string" } as const;
+const nullableStr = { type: ["string", "null"] } as const;
+
+/**
+ * Strict response schema for the classification call.
+ *
+ * Note what is NOT here: palette colors, neutrals, and metals. Because
+ * primarySeason is enum-constrained, getCanonicalPalette() always resolves, so
+ * model-supplied palette colors were always discarded downstream. Omitting them
+ * removes the hallucinated-hex problem outright and cuts output tokens sharply.
+ *
+ * OpenRouter strict mode requires every property to appear in `required` and
+ * `additionalProperties: false`; optional fields are expressed as nullable.
+ */
+export const COLOR_ANALYSIS_SCHEMA = {
+  name: "color_analysis",
+  schema: {
+    type: "object",
+    additionalProperties: false,
+    required: [
+      "photoIssue",
+      "photoTips",
+      "assessment",
+      "primarySeason",
+      "secondarySeason",
+      "confidence",
+      "axes",
+      "observations",
+      "rationale",
+      "seasonTagline",
+      "seasonStory",
+      "koreanTone",
+      "colorDNA",
+      "makeup",
+      "jewelryStyle",
+      "hairColor",
+      "celebrities",
+    ],
+    properties: {
+      // Photo gate. Non-null means the photo could not be analyzed; every
+      // field below may then be a best-effort guess and is ignored.
+      photoIssue: {
+        type: ["string", "null"],
+        enum: ["no_face", "multiple_faces", "low_confidence", null],
+      },
+      photoTips: { type: "array", items: str },
+
+      // Evidence first — fill this before naming a season.
+      assessment: {
+        type: "object",
+        additionalProperties: false,
+        required: ["undertone", "depth", "chroma", "contrast", "evidence"],
+        properties: {
+          undertone: { type: "string", enum: ["warm", "neutral", "cool"] },
+          depth: { type: "string", enum: ["light", "medium", "deep"] },
+          chroma: { type: "string", enum: ["muted", "medium", "clear"] },
+          contrast: { type: "string", enum: ["low", "medium", "high"] },
+          evidence: str,
+        },
+      },
+
+      primarySeason: { type: "string", enum: [...CANONICAL_SEASONS] },
+      secondarySeason: { type: "string", enum: [...CANONICAL_SEASONS] },
+      confidence: { type: "number", minimum: 0, maximum: 1 },
+
+      axes: {
+        type: "object",
+        additionalProperties: false,
+        required: ["hue", "value", "chroma"],
+        properties: {
+          hue: {
+            type: "string",
+            enum: ["warm", "neutral-warm", "neutral-cool", "cool"],
+          },
+          value: { type: "string", enum: ["light", "medium", "dark"] },
+          chroma: { type: "string", enum: ["bright", "medium", "soft"] },
+        },
+      },
+
+      observations: {
+        type: "object",
+        additionalProperties: false,
+        required: ["skin", "hair", "eyes", "contrast"],
+        properties: { skin: str, hair: str, eyes: str, contrast: str },
+      },
+      rationale: str,
+
+      // Copy the results page renders.
+      seasonTagline: str,
+      seasonStory: str,
+      koreanTone: str,
+      colorDNA: {
+        type: "object",
+        additionalProperties: false,
+        required: ["warmth", "depth", "clarity", "contrast"],
+        properties: {
+          warmth: { type: "number", minimum: 0, maximum: 100 },
+          depth: { type: "number", minimum: 0, maximum: 100 },
+          clarity: { type: "number", minimum: 0, maximum: 100 },
+          contrast: { type: "number", minimum: 0, maximum: 100 },
+        },
+      },
+      makeup: {
+        type: "object",
+        additionalProperties: false,
+        required: ["foundationTip", "blush", "bronzer", "lips", "eyes"],
+        properties: {
+          foundationTip: str,
+          blush: str,
+          bronzer: str,
+          lips: str,
+          eyes: str,
+        },
+      },
+      jewelryStyle: str,
+      hairColor: {
+        type: "object",
+        additionalProperties: false,
+        required: ["bestOverall", "bestHighlights", "avoid"],
+        properties: { bestOverall: str, bestHighlights: str, avoid: nullableStr },
+      },
+      celebrities: {
+        type: "array",
+        items: {
+          type: "object",
+          additionalProperties: false,
+          required: ["name", "why"],
+          properties: { name: str, why: str },
+        },
+      },
+    },
+  },
+} as const;

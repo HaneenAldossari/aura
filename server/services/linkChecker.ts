@@ -1,4 +1,5 @@
 import { callOpenRouter, parseJSON, isDemo, imageBlock } from "./openrouter";
+import { modelShop } from "../utils/config";
 
 const NOT_CONFIGURED = {
   verdict: "avoid",
@@ -91,7 +92,7 @@ reason: Reference my specific season (${season}) by name.`,
         ],
       },
     ],
-    { maxTokens: 2048 }
+    { model: modelShop(), maxTokens: 2048 }
   );
 
   return normalizeVerdict(parseJSON(text));
@@ -121,6 +122,7 @@ export async function checkManualItem(
       },
     ],
     {
+      model: modelShop(),
       maxTokens: 2048,
       system: `You are a color analysis expert. A user wants to check if an item color matches their season.
 

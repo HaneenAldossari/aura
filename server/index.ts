@@ -11,7 +11,8 @@ import analysisRoutes from "./routes/analysis";
 import chatRoutes from "./routes/chat";
 import imageRoutes from "./routes/images";
 import toolRoutes from "./routes/tools";
-import { isDemo, getModel } from "./services/openrouter";
+import { isDemo } from "./services/openrouter";
+import { modelChat, modelClassify, modelShop } from "./utils/config";
 import { sessions } from "./utils/sessionStore";
 
 const app = express();
@@ -93,7 +94,7 @@ app.get("/api/health", (_req, res) => {
     timestamp: new Date().toISOString(),
     provider: "openrouter",
     providerConfigured: !isDemo(),
-    model: getModel(),
+    models: { classify: modelClassify(), chat: modelChat(), shop: modelShop() },
     sessions: sessions.size,
     uptimeSeconds: Math.round((Date.now() - startedAt) / 1000),
   });

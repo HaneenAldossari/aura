@@ -9,7 +9,8 @@ import * as path from "path";
 dotenv.config({ path: path.join(__dirname, "..", ".env") });
 
 // Import after dotenv so the provider sees the key at call time
-import { callOpenRouter, parseJSON, getModel, imageBlock } from "../server/services/openrouter";
+import { callOpenRouter, parseJSON, imageBlock } from "../server/services/openrouter";
+import { modelClassify } from "../server/utils/config";
 import { prepareImage } from "../server/utils/prepareImage";
 
 interface TestResult {
@@ -62,7 +63,7 @@ async function analyzePhoto(
 }
 
 async function runTests() {
-  console.log(`\n🎨 AURA COLOR ANALYSIS ACCURACY TEST (OpenRouter: ${getModel()})\n`);
+  console.log(`\n🎨 AURA COLOR ANALYSIS ACCURACY TEST (OpenRouter: ${modelClassify()})\n`);
   console.log(`Testing ${TEST_CASES.length} celebrity cases...\n`);
   console.log("=".repeat(60));
 
@@ -278,7 +279,7 @@ async function runTests() {
   const report = {
     timestamp: new Date().toISOString(),
     prompt: "Aura generalized system prompt",
-    model: getModel(),
+    model: modelClassify(),
     summary: {
       total: TEST_CASES.length,
       tested: totalTested,

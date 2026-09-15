@@ -4,12 +4,12 @@
     "module": "commonjs",
     "lib": ["ES2020"],
     "outDir": "./dist",
-    "rootDir": "./server",
+    "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["server/**/*"],
+  "include": ["server/**/*", "tests/**/*", "scripts/**/*"],
   "exclude": ["node_modules", "client"]
 }

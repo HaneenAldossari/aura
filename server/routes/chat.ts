@@ -1,7 +1,8 @@
 import { Router, Request, Response } from "express";
 import { sessions } from "../utils/sessionStore";
 import { getChatbotSystemPrompt } from "../prompts/colorAnalysis";
-import { callOpenRouter, streamOpenRouter, isDemo, getChatModel } from "../services/openrouter";
+import { callOpenRouter, streamOpenRouter, isDemo } from "../services/openrouter";
+import { modelChat } from "../utils/config";
 
 // Input caps — keep hostile/buggy clients from stuffing the context window
 const MAX_MESSAGES = 20;
@@ -73,8 +74,7 @@ router.post("/chat", async (req: Request, res: Response): Promise<void> => {
       }));
 
     const options = {
-      // Text-only fast model — the vision model is far too slow for chat
-      model: getChatModel(),
+      model: modelChat(),
       disableReasoning: true,
       maxTokens: 1024,
       system: getChatbotSystemPrompt(analysisResult),

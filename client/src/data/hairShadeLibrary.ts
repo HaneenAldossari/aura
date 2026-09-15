@@ -78,7 +78,7 @@ export const HAIR_SHADE_LIBRARY: HairShade[] = [
     gradientBottom: "#4A2814",
     serviceType: "Balayage",
     description: "Dark root melt into warm beige-brown ends",
-    seasons: ["Soft Autumn", "Soft Summer", "True Autumn", "Light Autumn"],
+    seasons: ["Soft Autumn", "Soft Summer", "True Autumn"],
   },
 
   // ── Full Color ──────────────────────────────────────────
@@ -110,7 +110,7 @@ export const HAIR_SHADE_LIBRARY: HairShade[] = [
     gradientBottom: "#6A3A18",
     serviceType: "Full Color",
     description: "Classic warm brown, natural and versatile",
-    seasons: ["Soft Autumn", "True Autumn", "Warm Spring", "Light Autumn"],
+    seasons: ["Soft Autumn", "True Autumn", "Warm Spring"],
   },
   {
     id: "cool-dark-brown",

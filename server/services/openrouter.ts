@@ -4,11 +4,9 @@
  * go through callOpenRouter().
  */
 
-const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
+import { fallbackModel, modelClassify } from "../utils/config";
 
-// Free vision-capable model served via OpenRouter. Google's direct Gemini
-// free tier was cut to 0 quota, so all AI calls now route through OpenRouter.
-const DEFAULT_MODEL = "nvidia/nemotron-nano-12b-v2-vl:free";
+const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 const PLACEHOLDER_VALUES = new Set(["", "your_key_here", "your-key-here"]);
 
@@ -22,19 +20,17 @@ export function isDemo(): boolean {
   return !getApiKey();
 }
 
-export function getModel(): string {
-  return process.env.OPENROUTER_MODEL || DEFAULT_MODEL;
-}
-
-// Chat is text-only, so it uses a much faster free text model than the
-// vision model that handles photo analysis.
-const DEFAULT_CHAT_MODEL = "nvidia/nemotron-3-nano-30b-a3b:free";
-
-export function getChatModel(): string {
-  return process.env.OPENROUTER_CHAT_MODEL || DEFAULT_CHAT_MODEL;
-}
-
 export type ChatMessage = { role: string; content: unknown };
+
+/** A strict JSON-schema response format, as accepted by OpenRouter. */
+export interface JsonSchemaFormat {
+  type: "json_schema";
+  json_schema: {
+    name: string;
+    strict: boolean;
+    schema: Record<string, unknown>;
+  };
+}
 
 export interface CallOptions {
   model?: string;
@@ -47,6 +43,8 @@ export interface CallOptions {
   disableReasoning?: boolean;
   /** AbortSignal for cancellation/timeout */
   signal?: AbortSignal;
+  /** Constrain the reply to a JSON schema. */
+  responseFormat?: JsonSchemaFormat;
 }
 
 function buildBody(
@@ -65,19 +63,14 @@ function buildBody(
   }
 
   const body: Record<string, unknown> = {
-    model: options.model || getModel(),
+    model: options.model || modelClassify(),
     max_tokens: options.maxTokens || 8192,
     messages: chatMessages,
   };
   if (options.temperature !== undefined) body.temperature = options.temperature;
   if (options.seed !== undefined) body.seed = options.seed;
   if (options.disableReasoning) body.reasoning = { enabled: false };
-
-  // Server-side fallback: OpenRouter tries each model in order on failure.
-  const fallback = process.env.OPENROUTER_FALLBACK_MODEL;
-  if (fallback && !options.model) {
-    body.models = [getModel(), fallback];
-  }
+  if (options.responseFormat) body.response_format = options.responseFormat;
   return body;
 }
 
@@ -96,16 +89,15 @@ async function requestOnce(
   });
 }
 
-export async function callOpenRouter(
+/** One model attempt: build, send, retry once on 429, throw on any other error. */
+async function sendOnce(
   messages: ChatMessage[],
-  options: CallOptions = {}
+  options: CallOptions
 ): Promise<string> {
-  if (isDemo()) throw new Error("OPENROUTER_API_KEY not set");
-
   const body = buildBody(messages, options);
   let response = await requestOnce(body, options.signal);
 
-  // Free-tier 429s are the most common failure mode — retry once, honoring
+  // 429s are the most common transient failure — retry once, honoring
   // Retry-After when present (capped at 15s).
   if (response.status === 429) {
     const retryAfter = Number(response.headers.get("retry-after")) || 5;
@@ -126,15 +118,70 @@ export async function callOpenRouter(
 }
 
 /**
+ * Run `fn` against the requested model; if it throws and OPENROUTER_FALLBACK_MODEL
+ * names a different model, run it once more against that.
+ *
+ * The fallback engages on *failure* of the primary call — a withdrawn model ID,
+ * a provider outage, a persistent 429 — not merely when no model was specified.
+ */
+async function withFallback<T>(
+  options: CallOptions,
+  run: (opts: CallOptions) => Promise<T>
+): Promise<T> {
+  try {
+    return await run(options);
+  } catch (primaryError) {
+    const fallback = fallbackModel();
+    const primary = options.model || modelClassify();
+    if (!fallback || fallback === primary) throw primaryError;
+
+    console.warn(
+      `[openrouter] "${primary}" failed (${(primaryError as Error).message}); ` +
+        `retrying with fallback "${fallback}".`
+    );
+    return run({ ...options, model: fallback });
+  }
+}
+
+export async function callOpenRouter(
+  messages: ChatMessage[],
+  options: CallOptions = {}
+): Promise<string> {
+  if (isDemo()) throw new Error("OPENROUTER_API_KEY not set");
+  return withFallback(options, (opts) => sendOnce(messages, opts));
+}
+
+/**
+ * Structured variant: constrains the reply to `schema` and returns parsed JSON.
+ *
+ * `parseJSON` is still the safety net — a model or provider that ignores
+ * response_format returns fenced text rather than failing, and swapping
+ * MODEL_CLASSIFY to a model without schema support stays non-fatal.
+ */
+export async function callOpenRouterJSON<T = Record<string, unknown>>(
+  messages: ChatMessage[],
+  schema: { name: string; schema: Record<string, unknown> },
+  options: CallOptions = {}
+): Promise<T> {
+  const text = await callOpenRouter(messages, {
+    ...options,
+    responseFormat: {
+      type: "json_schema",
+      json_schema: { name: schema.name, strict: true, schema: schema.schema },
+    },
+  });
+  return parseJSON(text) as T;
+}
+
+/**
  * Streaming variant — yields content deltas as they arrive from OpenRouter's
  * SSE stream. Used by the chat route when the client opts into streaming.
  */
-export async function* streamOpenRouter(
+/** Open a streaming response, retrying once on 429. Throws before any token is yielded. */
+async function openStream(
   messages: ChatMessage[],
-  options: CallOptions = {}
-): AsyncGenerator<string> {
-  if (isDemo()) throw new Error("OPENROUTER_API_KEY not set");
-
+  options: CallOptions
+): Promise<Response> {
   const body = { ...buildBody(messages, options), stream: true };
   let response = await requestOnce(body, options.signal);
 
@@ -150,8 +197,22 @@ export async function* streamOpenRouter(
     const errText = await response.text();
     throw new Error(`OpenRouter API error: ${response.status} ${errText}`);
   }
+  return response;
+}
 
-  const reader = response.body.getReader();
+export async function* streamOpenRouter(
+  messages: ChatMessage[],
+  options: CallOptions = {}
+): AsyncGenerator<string> {
+  if (isDemo()) throw new Error("OPENROUTER_API_KEY not set");
+
+  // Falling back is only safe while no token has been emitted yet, so the
+  // fallback wraps opening the stream rather than consuming it.
+  const response = await withFallback(options, (opts) =>
+    openStream(messages, opts)
+  );
+
+  const reader = response.body!.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
 

@@ -24,13 +24,13 @@ export const NAIL_METADATA: NailMeta[] = [
   { file: "midnight-cami", shadeName: "Midnight Cami", brand: "OPI", colorDescription: "Deep Navy Blue", seasons: ["True Winter", "Deep Winter", "Cool Summer"] },
   // ── Essie ───────────────────────────────────────────────
   { file: "ballet-slippers", shadeName: "Ballet Slippers", brand: "Essie", colorDescription: "Sheer Pale Pink", seasons: ["Cool Summer", "Light Summer", "Soft Summer", "True Winter"] },
-  { file: "mademoiselle", shadeName: "Mademoiselle", brand: "Essie", colorDescription: "Warm Sheer Nude", seasons: ["Light Spring", "Warm Spring", "True Spring", "Light Autumn"] },
+  { file: "mademoiselle", shadeName: "Mademoiselle", brand: "Essie", colorDescription: "Warm Sheer Nude", seasons: ["Light Spring", "Warm Spring", "True Spring"] },
   { file: "perennial-chic", shadeName: "Perennial Chic", brand: "Essie", colorDescription: "Muted Dusty Rose", seasons: ["Soft Summer", "Cool Summer", "Soft Autumn"] },
   { file: "mod-about-you", shadeName: "Mod About You", brand: "Essie", colorDescription: "Cool Mauve Purple", seasons: ["True Winter", "Cool Summer", "Soft Summer", "Deep Winter"] },
   { file: "lovie-dovie", shadeName: "Lovie Dovie", brand: "Essie", colorDescription: "Soft Warm Pink", seasons: ["Light Spring", "Warm Spring", "Soft Autumn"] },
   { file: "bachelorette-bash", shadeName: "Bachelorette Bash", brand: "Essie", colorDescription: "Hot Bright Pink", seasons: ["True Winter", "Warm Spring", "Light Spring"] },
-  { file: "sugar-daddy", shadeName: "Sugar Daddy", brand: "Essie", colorDescription: "Sheer Warm Peach", seasons: ["Light Spring", "Warm Spring", "True Spring", "Light Autumn", "Soft Autumn"] },
-  { file: "angel-food", shadeName: "Angel Food", brand: "Essie", colorDescription: "Pale Warm Cream", seasons: ["Light Spring", "Warm Spring", "True Spring", "Light Autumn"] },
+  { file: "sugar-daddy", shadeName: "Sugar Daddy", brand: "Essie", colorDescription: "Sheer Warm Peach", seasons: ["Light Spring", "Warm Spring", "True Spring", "Soft Autumn"] },
+  { file: "angel-food", shadeName: "Angel Food", brand: "Essie", colorDescription: "Pale Warm Cream", seasons: ["Light Spring", "Warm Spring", "True Spring"] },
   { file: "tiara", shadeName: "Tiara", brand: "Essie", colorDescription: "Soft Lavender Pink", seasons: ["Soft Summer", "Cool Summer", "True Summer", "Light Summer"] },
   { file: "passion", shadeName: "Passion", brand: "Essie", colorDescription: "Dusty Cool Mauve", seasons: ["Soft Summer", "Cool Summer", "True Summer", "Soft Autumn"] },
 ];

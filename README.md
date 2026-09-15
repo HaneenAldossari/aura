@@ -48,7 +48,7 @@ Upload a single selfie, or try one of nine AI-generated sample faces (no persona
 - All AI calls consolidated into one OpenRouter client with automatic 429 retry and optional model fallback (`OPENROUTER_FALLBACK_MODEL`).
 - Photos are validated (magic bytes), EXIF-rotated, and downscaled to 1024px JPEG before hitting the model — a 10MB upload becomes ~200KB, cutting analysis latency from minutes to seconds *and* fixing face-detection failures on large images.
 - Face-count checking is folded into the main analysis prompt (one round trip instead of two), and the prompt now forces an evidence-first undertone → depth → chroma assessment before naming a season.
-- The accuracy harness (`npm run test:accuracy`) runs against any OpenRouter model via `OPENROUTER_MODEL` for benchmarking.
+- The accuracy harness (`npm run test:accuracy`) runs against any OpenRouter model via `MODEL_CLASSIFY` for benchmarking.
 
 **Security & robustness**
 - helmet, tiered rate limiting (strict on LLM routes), strict CORS allowlist, JSON body limit, chat input caps.
@@ -78,7 +78,7 @@ Upload a single selfie, or try one of nine AI-generated sample faces (no persona
 | ------------ | --------------------------------------------------------------------------- |
 | Frontend     | React 19 · TypeScript · Vite 7 · Tailwind CSS 4 · React Router 7            |
 | Backend      | Node.js · Express 5 · TypeScript (via `tsx`) · Multer · sharp · helmet      |
-| AI / Vision  | OpenRouter (default: `nvidia/nemotron-nano-12b-v2-vl:free`)                 |
+| AI / Vision  | OpenRouter — single provider layer (default: `google/gemini-3.8-flash`)      |
 | Hosting      | Vercel (frontend) · Render (backend)                                        |
 | Persistence  | In-memory TTL session store · static JSON for demo samples                  |
 
@@ -137,7 +137,8 @@ Open http://localhost:5173.
 ### Useful scripts
 
 ```bash
-npm run test:accuracy                      # season-accuracy benchmark (uses OPENROUTER_MODEL)
+npm test                                   # unit tests (vitest)
+npm run test:accuracy                      # season-accuracy benchmark (uses MODEL_CLASSIFY)
 npx tsx scripts/probeModels.ts             # quick latency/sanity probe of candidate models
 npx tsx scripts/precomputeDemoAnalyses.ts  # regenerate the 9 demo analyses
 npx tsx scripts/convertImagesToWebp.ts     # one-time image optimization pass
@@ -152,11 +153,30 @@ Required environment variables in production:
 
 | Variable             | Where   | Value                                                |
 | -------------------- | ------- | ---------------------------------------------------- |
-| `OPENROUTER_API_KEY` | Render  | your OpenRouter key                                  |
+| `OPENROUTER_API_KEY` | Render  | your OpenRouter key (needs credit — see below)       |
 | `CORS_ORIGINS`       | Render  | comma-separated allowed frontend URLs                |
 | `VITE_API_BASE`      | Vercel  | `https://your-render-url.onrender.com/api`           |
 
-Optional: `OPENROUTER_MODEL`, `OPENROUTER_FALLBACK_MODEL`, `ENABLE_CROSS_VALIDATION`, `SESSION_TTL_HOURS`, `MAX_FILE_SIZE`.
+### Models
+
+One model per task, all through OpenRouter. Defaults in `server/utils/config.ts`.
+
+| Variable          | Default                    | Used by                       |
+| ----------------- | -------------------------- | ----------------------------- |
+| `MODEL_CLASSIFY`  | `google/gemini-3.8-flash`  | season classification (vision) |
+| `MODEL_CHAT`      | `google/gemini-3.8-flash`  | stylist chatbot                |
+| `MODEL_SHOP`      | `google/gemini-3.8-flash`  | "Before You Buy" (vision)      |
+
+`OPENROUTER_MODEL` and `OPENROUTER_CHAT_MODEL` are **deprecated** — still honored with a
+warning so an existing deployment does not silently fall back to a withdrawn model.
+
+> **These defaults are paid models and require OpenRouter credit.** The free Nemotron
+> models this app previously used were withdrawn — both now return HTTP 404 — so a
+> free-tier key can no longer run the analysis. Expect roughly **$0.01 per analysis**.
+
+Optional: `OPENROUTER_FALLBACK_MODEL` (tried when the primary call *fails*),
+`MAX_TOKENS_CLASSIFY`, `CLASSIFY_REASONING`, `ANALYSIS_MODE`, `SESSION_TTL_HOURS`,
+`MAX_FILE_SIZE`, `CORS_ORIGINS`.
 
 ## Roadmap / Recommendations
 

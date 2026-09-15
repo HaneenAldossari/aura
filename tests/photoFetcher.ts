@@ -10,7 +10,10 @@ export async function fetchCelebrityPhoto(testCase: {
     const wikiApiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${testCase.wikipediaName}`;
     const response = await fetch(wikiApiUrl);
     if (response.ok) {
-      const data = await response.json();
+      const data = (await response.json()) as {
+        originalimage?: { source?: string };
+        thumbnail?: { source?: string };
+      };
       const url = data.originalimage?.source || data.thumbnail?.source;
       if (url) {
         console.log(`  Wikipedia photo for ${testCase.name}: ${url.substring(0, 80)}...`);

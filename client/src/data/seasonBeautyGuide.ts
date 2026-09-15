@@ -721,13 +721,10 @@ const GUIDES: Record<string, SeasonBeautyGuide> = {
   "bright winter": brightWinter,
 };
 
-// Aliases — mirror server/utils/seasonPalettes.ts, plus Soft Spring
-// (mentioned by the analysis prompt but not one of the app's 12 canonical
-// palettes; mapped to Light Spring as the closest light-warm-gentle match).
+// Aliases — mirror server/utils/seasonPalettes.ts exactly.
 const ALIASES: Record<string, string> = {
   "warm spring": "true spring",
   "clear spring": "bright spring",
-  "soft spring": "light spring",
   "cool summer": "true summer",
   "muted summer": "soft summer",
   "muted autumn": "soft autumn",
@@ -741,7 +738,7 @@ const ALIASES: Record<string, string> = {
 /**
  * Tolerant, case-insensitive lookup for a season's beauty guide.
  * Accepts canonical names ("Deep Winter"), aliases ("Dark Winter",
- * "Warm Autumn", "Soft Spring"), and falls back to the family's "True"
+ * "Warm Autumn"), and falls back to the family's "True"
  * season if only the base season is recognizable. Ultimate fallback is
  * Soft Summer (the most commonly assigned/misidentified season).
  */

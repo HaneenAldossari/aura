@@ -67,6 +67,22 @@ export interface CrossValidation {
   confidence?: number;
 }
 
+/** Hue / value / chroma axes the classifier places you on. */
+export interface Axes {
+  hue: "warm" | "neutral-warm" | "neutral-cool" | "cool";
+  value: "light" | "medium" | "dark";
+  chroma: "bright" | "medium" | "soft";
+}
+
+/** Evidence-first read of the photo, recorded before a season is named. */
+export interface Assessment {
+  undertone: "warm" | "neutral" | "cool";
+  depth: "light" | "medium" | "deep";
+  chroma: "muted" | "medium" | "clear";
+  contrast: "low" | "medium" | "high";
+  evidence: string;
+}
+
 export interface AnalysisResult {
   season: string;
   seasonTagline?: string;
@@ -91,6 +107,11 @@ export interface AnalysisResult {
   celebrities: Celebrity[];
   koreanAnalysis?: { tone: string; description: string; kbeautyTips: string };
   crossValidation?: CrossValidation;
+  /** Nearest-neighbour season, one of the 12 canonical names. */
+  secondarySeason?: string;
+  axes?: Axes | null;
+  assessment?: Assessment | null;
+  rationale?: string;
   /** Set instead of the fields above when the model can't analyze the photo */
   error?: "low_confidence" | "no_face" | "multiple_faces";
   message?: string;
