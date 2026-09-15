@@ -94,7 +94,11 @@ export function sniffFormat(bytes: Uint8Array<ArrayBufferLike>): SniffedFormat {
 // Errors
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type DecodeErrorCode = "unsupported_format" | "corrupt" | "too_large";
+export type DecodeErrorCode =
+  | "unsupported_format"
+  | "corrupt"
+  | "too_large"
+  | "decoder_unavailable";
 
 /**
  * Carries a message meant for the user. quality.ts turns this into an issue
@@ -105,13 +109,32 @@ export class DecodeError extends Error {
   readonly userMessage: string;
   readonly format: SniffedFormat;
 
-  constructor(code: DecodeErrorCode, userMessage: string, format: SniffedFormat = "unknown") {
-    super(`${code}: ${userMessage}`);
+  constructor(
+    code: DecodeErrorCode,
+    userMessage: string,
+    format: SniffedFormat = "unknown",
+    options?: { cause?: unknown }
+  ) {
+    super(`${code}: ${userMessage}`, options);
     this.name = "DecodeError";
     this.code = code;
     this.userMessage = userMessage;
     this.format = format;
   }
+}
+
+/**
+ * Tell a broken image apart from a broken decoder.
+ *
+ * The codecs fetch their .wasm at first use, so a blocked or offline fetch
+ * surfaces here as a decode failure. Reporting that as "your image is damaged"
+ * sends the user off to re-export a file that was never the problem.
+ */
+export function isDecoderUnavailable(error: unknown): boolean {
+  const message = error instanceof Error ? `${error.name}: ${error.message}` : String(error);
+  return /fetch|network|WebAssembly|wasm|dynamically imported module|Failed to load/i.test(
+    message
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -235,10 +258,20 @@ export async function decodeImage(bytes: Uint8Array<ArrayBufferLike>): Promise<D
       raw = await decode(buffer);
     }
   } catch (cause) {
+    if (isDecoderUnavailable(cause)) {
+      // Our problem, not the user's photo. Say so, and keep the cause for logs.
+      throw new DecodeError(
+        "decoder_unavailable",
+        "We couldn't start the image reader. Check your connection and try again.",
+        format,
+        { cause }
+      );
+    }
     throw new DecodeError(
       "corrupt",
       "That image file looks damaged or incomplete. Try uploading it again.",
-      format
+      format,
+      { cause }
     );
   }
 

@@ -1,8 +1,13 @@
 import fs from "fs";
 import path from "path";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
+import { initCodecs } from "./helpers/initCodecs";
+import { labToLch, median, rgbToLab, type Lab, type RGB } from "../measure/color";
 import {
+  DecodeError,
   applyOrientation,
+  decodeImage,
+  isDecoderUnavailable,
   gamutFromProfileDescription,
   isSupported,
   orientationSwapsAxes,
@@ -173,22 +178,89 @@ describe("ICC profile to gamut", () => {
   });
 });
 
-describe("P3 fixture", () => {
-  const fixture = path.join(__dirname, "fixtures/color/iphone-p3-hand.jpg");
+describe("decoder availability is not blamed on the user's photo", () => {
+  it("recognises an infrastructure failure", () => {
+    expect(isDecoderUnavailable(new TypeError("fetch failed"))).toBe(true);
+    expect(isDecoderUnavailable(new Error("Failed to load dynamically imported module"))).toBe(true);
+    expect(isDecoderUnavailable(new Error("WebAssembly.instantiate failed"))).toBe(true);
+  });
 
-  it.skipIf(!fs.existsSync(fixture))(
-    "reads a Display P3 profile from a real iPhone photo",
-    async () => {
-      const { decodeImage } = await import("../measure/decode");
-      const decoded = await decodeImage(new Uint8Array(fs.readFileSync(fixture)));
-      expect(decoded.gamut).toBe("display-p3");
-      expect(decoded.width).toBeGreaterThan(0);
-    }
-  );
+  it("does not mistake a genuine decode failure for one", () => {
+    expect(isDecoderUnavailable(new Error("Decoding error"))).toBe(false);
+    expect(isDecoderUnavailable(new Error("Invalid JPEG marker"))).toBe(false);
+  });
+});
 
-  it("documents that the fixture is still missing", () => {
-    if (!fs.existsSync(fixture)) {
-      expect(fs.existsSync(path.dirname(fixture))).toBe(true);
+describe("real iPhone fixtures", () => {
+  const p3 = path.join(__dirname, "fixtures/color/iphone-p3-hand.jpg");
+  const heic = path.join(__dirname, "fixtures/color/iphone-heic-sample.heic");
+
+  beforeAll(async () => {
+    if (fs.existsSync(p3)) await initCodecs();
+  });
+
+  it.skipIf(!fs.existsSync(heic))("sniffs a straight-from-camera HEIC", () => {
+    const bytes = new Uint8Array(fs.readFileSync(heic).subarray(0, 64));
+    expect(sniffFormat(bytes)).toBe("heic");
+    expect(isSupported(sniffFormat(bytes))).toBe(false);
+  });
+
+  it.skipIf(!fs.existsSync(heic))("refuses HEIC with a message, not a crash", async () => {
+    const bytes = new Uint8Array(fs.readFileSync(heic));
+    const error = await decodeImage(bytes).catch((e) => e);
+    expect(error).toBeInstanceOf(DecodeError);
+    expect(error.code).toBe("unsupported_format");
+    expect(error.format).toBe("heic");
+    expect(error.userMessage).toMatch(/HEIC/);
+  });
+
+  it.skipIf(!fs.existsSync(p3))("reads Display P3 off a real iPhone JPEG", async () => {
+    const decoded = await decodeImage(new Uint8Array(fs.readFileSync(p3)));
+    expect(decoded.format).toBe("jpeg");
+    expect(decoded.profileDescription).toMatch(/Display P3/i);
+    expect(decoded.gamut).toBe("display-p3");
+    expect(decoded.width).toBeGreaterThan(0);
+    expect(decoded.height).toBeGreaterThan(0);
+  });
+
+  /**
+   * The measurement that justifies reading the ICC profile at all. Measuring a
+   * Display P3 photo as sRGB moves skin hue angle by ~4 degrees — with
+   * HUE.skinByBand span at 10, that is 0.4 of the entire normalised half-axis,
+   * enough to move an undertone label from neutral-warm to warm.
+   */
+  it.skipIf(!fs.existsSync(p3))("shifts skin hue angle measurably", async () => {
+    const img = await decodeImage(new Uint8Array(fs.readFileSync(p3)));
+    const { data, width, height } = img;
+    const skin: RGB[] = [];
+    for (let y = Math.floor(height * 0.25); y < height * 0.75; y += 8) {
+      for (let x = Math.floor(width * 0.25); x < width * 0.75; x += 8) {
+        const i = (y * width + x) * 4;
+        const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
+        if (r > g && g > b && r > 60 && r < 250 && r - b > 15 && r - b < 130) {
+          skin.push({ r, g, b });
+        }
+      }
     }
+    expect(skin.length).toBeGreaterThan(1000);
+
+    const hueOf = (gamut: "srgb" | "display-p3") => {
+      const labs: Lab[] = skin.map((p) => rgbToLab(p, gamut));
+      const m: Lab = {
+        L: median(labs.map((l) => l.L)),
+        a: median(labs.map((l) => l.a)),
+        b: median(labs.map((l) => l.b)),
+      };
+      return labToLch(m).h;
+    };
+
+    const asSrgb = hueOf("srgb");
+    const asP3 = hueOf("display-p3");
+    const shift = asP3 - asSrgb;
+
+    // Correct handling reads the skin COOLER than the naive sRGB assumption.
+    expect(shift).toBeLessThan(0);
+    expect(Math.abs(shift)).toBeGreaterThan(2);
+    expect(Math.abs(shift)).toBeLessThan(10);
   });
 });
