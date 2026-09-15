@@ -213,6 +213,63 @@ export function gamutFromProfileDescription(description: string | undefined): Ga
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Codec initialisation
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** WASM filenames, as published inside the @jsquash packages. */
+export const CODEC_WASM = {
+  jpeg: "mozjpeg_dec.wasm",
+  png: "squoosh_png_bg.wasm",
+  webp: "webp_dec.wasm",
+} as const;
+
+let codecsReady: Promise<void> | undefined;
+
+/**
+ * Pre-initialise the codecs from an explicit base URL.
+ *
+ * Left to itself each codec locates its .wasm relative to `import.meta.url`.
+ * That works for a plain ES-module import and nowhere else: an IIFE bundle has
+ * no import.meta at all, and a bundler that inlines or rewrites the glue breaks
+ * the relative path. The failure is quiet and confusing — the emscripten module
+ * resolves to something without a `decode` method, so the first symptom is
+ * "Cannot read properties of undefined (reading 'decode')".
+ *
+ * Call this once at startup with a URL prefix under which the three .wasm files
+ * are served (copy them out of node_modules/@jsquash/[*]/codec/...). Skipping it
+ * still works wherever relative resolution happens to work, which is why this is
+ * optional rather than required.
+ */
+export function initDecoders(wasmBase: string): Promise<void> {
+  codecsReady ??= (async () => {
+    const base = wasmBase.endsWith("/") ? wasmBase : `${wasmBase}/`;
+    const compile = async (file: string) => {
+      const response = await fetch(`${base}${file}`);
+      if (!response.ok) {
+        throw new Error(`Failed to load codec ${file}: HTTP ${response.status}`);
+      }
+      return WebAssembly.compile(await response.arrayBuffer());
+    };
+    const [jpeg, png, webp] = await Promise.all([
+      import("@jsquash/jpeg/decode"),
+      import("@jsquash/png/decode"),
+      import("@jsquash/webp/decode"),
+    ]);
+    await Promise.all([
+      jpeg.init(await compile(CODEC_WASM.jpeg)),
+      png.init(await compile(CODEC_WASM.png)),
+      webp.init(await compile(CODEC_WASM.webp)),
+    ]);
+  })();
+  return codecsReady;
+}
+
+/** Forget any initialisation. Tests and tooling. */
+export function resetDecoders(): void {
+  codecsReady = undefined;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Decode
 // ─────────────────────────────────────────────────────────────────────────────
 

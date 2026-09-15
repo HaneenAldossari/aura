@@ -341,14 +341,31 @@ export async function assessQuality(bytes: Uint8Array<ArrayBufferLike>): Promise
   if (clipped > QUALITY.maxClippedFraction) issues.push(issue("clipped", false));
 
   // ── Colour cast, read off the sclera ──
+  //
+  // Sampled between the iris and each eye corner, NOT at the eye centroid —
+  // the centroid sits on the iris, so the first version sampled iris, rejected
+  // it all on the brightness filter, and reported no cast at all on every photo.
   const scleraPixels: RGB[] = [];
-  for (const eye of [LANDMARKS.leftEye, LANDMARKS.rightEye]) {
-    const centre = centroid(landmarks, eye);
-    for (const { x, y } of discPixels(imageData, centre, scale * 0.045)) {
-      const rgb = pixelAt(imageData, x, y);
-      // Keep only the bright part of the eye patch — that is the sclera rather
-      // than the iris, lashes or lid shadow.
-      if (rgb && relativeLuminance(rgb) > 0.35) scleraPixels.push(rgb);
+  for (const [iris, corners] of [
+    [LANDMARKS.leftIris, LANDMARKS.leftEyeCorners],
+    [LANDMARKS.rightIris, LANDMARKS.rightEyeCorners],
+  ] as const) {
+    const irisCentre = centroid(landmarks, iris);
+    if (!Number.isFinite(irisCentre.x)) continue;
+    for (const cornerIndex of corners) {
+      const corner = landmarks[cornerIndex];
+      if (!corner) continue;
+      // Two thirds of the way from the iris toward the corner: clear of the
+      // iris edge, short of the lash line and the tear duct.
+      const patch = {
+        x: irisCentre.x + (corner.x - irisCentre.x) * 0.66,
+        y: irisCentre.y + (corner.y - irisCentre.y) * 0.66,
+      };
+      for (const { x, y } of discPixels(imageData, patch, scale * 0.022)) {
+        const rgb = pixelAt(imageData, x, y);
+        // Keep only the brighter pixels: sclera, not lash shadow or lid.
+        if (rgb && relativeLuminance(rgb) > 0.25) scleraPixels.push(rgb);
+      }
     }
   }
   const cast = scleraCast(scleraPixels);

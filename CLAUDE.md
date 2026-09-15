@@ -66,6 +66,27 @@ with the measured features for a reason neither side can see. Per the finding be
 validate/rotate/downscale pass as defence in depth for direct API calls, but it must not be the
 step that first defines the pixels.
 
+## Pinned MediaPipe models
+
+| model | version path | bytes | SHA-256 |
+| --- | --- | --- | --- |
+| `face_landmarker.task` | `.../float16/**1**/` | 3,758,596 | `64184e22…4e0bc9ff` |
+| `selfie_multiclass_256x256.tflite` | `.../float32/**1**/` | 16,371,837 | `c6748b12…6507e0e0` |
+
+The paths end in `/1/`, not `/latest/`. `/latest/` is a moving pointer: a silent
+model update would change every measurement the eval had recorded, and the
+calibrated thresholds would quietly stop matching the model they were calibrated
+against, with nothing in this repo having changed.
+
+Version pinning alone is not enough — these are mutable objects in a Google
+bucket — so every download is checked against the SHA-256 above and a mismatch
+**throws**. A model change becomes a loud failure rather than a drift in the
+numbers. Full values live in `MODEL_SPECS` in `measure/landmarks.ts`; update them
+only deliberately, and re-run the eval when you do.
+
+To self-host instead, call `setModelBase("/models/")` and put the two files under
+`client/public/models/`. The integrity check still applies.
+
 ## measure/ — why it is in the browser
 
 The measurement module is plain TypeScript with no framework imports, so the same code runs in
@@ -125,6 +146,28 @@ Split into a `decoder_unavailable` code with its own message, plus
 `isDecoderUnavailable()` and `cause` preservation. Anything matching
 fetch/network/WebAssembly/wasm/dynamic-import is ours, not theirs.
 
+### 2026-09-16 — the overlay tool found three region bugs
+
+`npx tsx scripts/dev/overlay.ts` runs landmarks/regions/quality for real in
+headless Chromium and writes annotated PNGs to `dev/`. First run against
+`sample-4` (lightest demo face) and `sample-1` (deepest) found:
+
+| problem | symptom | fix |
+| --- | --- | --- |
+| Exclusion zones far too large (0.45-0.55 of interocular distance) | only ~20% of considered skin pixels survived, and survivors were all at disc edges where shading differs most | radii cut to 0.26-0.34; retention went 3298 → 7458 and 2749 → 7167 pixels |
+| `forehead` landmark set centred on the glabella | sat inside both brow exclusion zones, so most of the patch was discarded | set changed to `[10, 151, 108, 337]`, mid-forehead |
+| Sclera sampled at the eye centroid | the centroid is the **iris** — every sample failed the brightness filter, so colour cast read `n/a` on every photo | sample two thirds of the way from iris to each eye corner |
+
+The landmark index sets themselves were confirmed correct — cheeks, forehead,
+irises and lips all land where intended on both faces.
+
+Still open from that run: `QUALITY.maxScleraCast = 8` fires on both demo faces
+(measured 8.40 and 11.95). Left alone for now — the threshold is an estimate and
+n=2 synthetic faces is not grounds to retune, but it is the first candidate when
+real photos arrive. Also note `sample-4` hair measures C\* 0.00 with hue 142.81:
+hue is undefined at zero chroma, which is harmless only because `HUE.weights.hair`
+is 0.
+
 ## Testing
 
 ```bash
@@ -135,7 +178,24 @@ cd client && npx tsc -b --noEmit      # client
 ```
 
 Measurement unit tests (Lab conversion, region statistics, `score()`) are pure functions and
-need no browser. Anything needing a real decode or MediaPipe belongs in the eval harness.
+need no browser.
+
+Anything needing a real decode or MediaPipe cannot run in Node — the @jsquash codecs and
+MediaPipe's WASM runtime both fetch over HTTP. Two ways to exercise those:
+
+```bash
+npx tsx scripts/dev/overlay.ts [image ...]   # headless Chromium, writes annotated PNGs to dev/
+```
+
+`dev/` is gitignored. The overlay draws the sampled discs per region, the hair and face-skin
+masks, the sclera patches and the exclusion zones, and prints per-region pixel counts, median
+Lab and the quality-gate result. It is the only way to check a landmark index set — whether
+index 116 is on a cheek or a jawline is a question you answer by looking.
+
+**Bundle as ESM, not IIFE.** The emscripten codec glue reads `import.meta.url` to find its own
+`.wasm`; an IIFE has no `import.meta`, esbuild substitutes an empty string, and emscripten
+throws `Failed to construct 'URL': Invalid URL`. Call `initDecoders(wasmBase)` to sidestep
+path resolution entirely by handing each codec a pre-compiled module.
 
 ## Eval
 

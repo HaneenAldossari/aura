@@ -141,12 +141,16 @@ export function skinExclusionZones(
   landmarks: Landmark[],
   scale: number
 ): ExclusionZone[] {
+  // Radii are deliberately snug. The first version used 0.45-0.55 of the
+  // interocular distance, which swallowed most of each cheek disc — the overlay
+  // tool showed only ~20% of considered skin pixels surviving, and the
+  // survivors were all at the disc edges, where shading differs most.
   return [
-    { centre: centroid(landmarks, LANDMARKS.leftBrow), radiusFraction: scale * 0.45 },
-    { centre: centroid(landmarks, LANDMARKS.rightBrow), radiusFraction: scale * 0.45 },
-    { centre: centroid(landmarks, LANDMARKS.leftEye), radiusFraction: scale * 0.5 },
-    { centre: centroid(landmarks, LANDMARKS.rightEye), radiusFraction: scale * 0.5 },
-    { centre: centroid(landmarks, LANDMARKS.lips), radiusFraction: scale * 0.55 },
+    { centre: centroid(landmarks, LANDMARKS.leftBrow), radiusFraction: scale * 0.26 },
+    { centre: centroid(landmarks, LANDMARKS.rightBrow), radiusFraction: scale * 0.26 },
+    { centre: centroid(landmarks, LANDMARKS.leftEye), radiusFraction: scale * 0.28 },
+    { centre: centroid(landmarks, LANDMARKS.rightEye), radiusFraction: scale * 0.28 },
+    { centre: centroid(landmarks, LANDMARKS.lips), radiusFraction: scale * 0.34 },
   ].filter((z) => Number.isFinite(z.centre.x) && Number.isFinite(z.centre.y));
 }
 

@@ -28,18 +28,79 @@ type WasmFileset = Awaited<
 // Configuration
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const MODEL_URLS = {
-  landmarker:
-    "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task",
-  segmenter:
-    "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_multiclass_256x256/float32/latest/selfie_multiclass_256x256.tflite",
+/**
+ * Pinned models.
+ *
+ * The paths end in `/1/`, not `/latest/`. `/latest/` is a moving pointer, and a
+ * silent model update would change every measurement the eval has ever recorded
+ * without anything in this repo changing — calibrated thresholds would quietly
+ * stop matching the model they were calibrated against.
+ *
+ * The version path alone is not quite enough: these are mutable objects in a
+ * Google bucket. So each download is checked against a SHA-256 recorded here,
+ * and a mismatch throws rather than proceeding. A model change becomes a loud
+ * failure instead of a silent drift in the numbers.
+ *
+ * Set MEASURE_MODEL_BASE to serve these from your own origin instead (e.g.
+ * "/models/" with the files under client/public/models/). The integrity check
+ * still applies, so a self-hosted copy has to be the same bytes.
+ */
+export const MODEL_SPECS = {
+  landmarker: {
+    path: "face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+    file: "face_landmarker.task",
+    bytes: 3_758_596,
+    sha256: "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+  },
+  segmenter: {
+    path: "image_segmenter/selfie_multiclass_256x256/float32/1/selfie_multiclass_256x256.tflite",
+    file: "selfie_multiclass_256x256.tflite",
+    bytes: 16_371_837,
+    sha256: "c6748b1253a99067ef71f7e26ca71096cd449baefa8f101900ea23016507e0e0",
+  },
 } as const;
 
-/** Approximate download sizes, for progress reporting before Content-Length. */
+const MEDIAPIPE_CDN = "https://storage.googleapis.com/mediapipe-models/";
+
+/** Override to self-host. Trailing slash required; files are looked up by name. */
+export let modelBase: string | undefined;
+
+export function setModelBase(base: string | undefined): void {
+  modelBase = base;
+  resetModels();
+}
+
+export function modelUrl(stage: LoadStage): string {
+  const spec = MODEL_SPECS[stage];
+  return modelBase ? `${modelBase}${spec.file}` : `${MEDIAPIPE_CDN}${spec.path}`;
+}
+
+/** Kept for callers that only want the byte totals. */
 export const MODEL_BYTES = {
-  landmarker: 3_758_596,
-  segmenter: 16_371_712,
+  landmarker: MODEL_SPECS.landmarker.bytes,
+  segmenter: MODEL_SPECS.segmenter.bytes,
 } as const;
+
+/** Hex SHA-256 of a buffer, via WebCrypto (present in browsers and Node 24). */
+export async function sha256Hex(buffer: ArrayBuffer): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", buffer);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+/** Throws unless the bytes match the recorded hash. */
+export async function verifyModel(stage: LoadStage, buffer: ArrayBuffer): Promise<void> {
+  const expected = MODEL_SPECS[stage].sha256;
+  const actual = await sha256Hex(buffer);
+  if (actual !== expected) {
+    throw new Error(
+      `${stage} model integrity check failed. Expected SHA-256 ${expected}, got ${actual}. ` +
+        `The pinned model has changed — measurements would no longer match the calibrated ` +
+        `thresholds. Re-verify and update MODEL_SPECS deliberately.`
+    );
+  }
+}
 
 /** WASM bundle for the tasks-vision runtime. */
 const WASM_ROOT = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision/wasm";
@@ -91,7 +152,12 @@ export const LANDMARKS = {
   leftIris: [468, 469, 470, 471, 472],
   rightIris: [473, 474, 475, 476, 477],
 
-  /** Eye contours, used for the sclera patches and for eye-region exclusion. */
+  /** Eye corners: [outer, inner]. The sclera lives between the iris and these,
+   *  not at the eye centroid — which is the iris. */
+  leftEyeCorners: [33, 133],
+  rightEyeCorners: [263, 362],
+
+  /** Eye contours, used for eye-region exclusion. */
   leftEye: [33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161, 246],
   rightEye: [362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385, 384, 398],
 
@@ -99,8 +165,10 @@ export const LANDMARKS = {
   leftCheek: [116, 117, 118, 119, 100, 126],
   rightCheek: [345, 346, 347, 348, 329, 355],
 
-  /** Lower forehead, below the hairline and above the brows. */
-  forehead: [151, 9, 107, 336, 108, 337],
+  /** Mid-forehead: below the hairline, well above the brows. The earlier set
+   *  ([151, 9, 107, 336, 108, 337]) centred on the glabella, which sits inside
+   *  both brow exclusion zones — visible in the overlay tool. */
+  forehead: [10, 151, 108, 337],
 
   /** Brows, excluded from skin. */
   leftBrow: [70, 63, 105, 66, 107, 55, 65, 52, 53, 46],
@@ -271,12 +339,13 @@ export function loadLandmarker(onProgress?: ProgressCallback): Promise<FaceLandm
     const [vision, modelAssetBuffer] = await Promise.all([
       fileset(),
       fetchWithProgress(
-        MODEL_URLS.landmarker,
+        modelUrl("landmarker"),
         "landmarker",
-        MODEL_BYTES.landmarker,
+        MODEL_SPECS.landmarker.bytes,
         onProgress
       ),
     ]);
+    await verifyModel("landmarker", modelAssetBuffer);
     return FaceLandmarker.createFromOptions(vision, {
       baseOptions: {
         modelAssetBuffer: new Uint8Array(modelAssetBuffer),
@@ -299,8 +368,14 @@ export function loadSegmenter(onProgress?: ProgressCallback): Promise<ImageSegme
     const { ImageSegmenter } = await import("@mediapipe/tasks-vision");
     const [vision, modelAssetBuffer] = await Promise.all([
       fileset(),
-      fetchWithProgress(MODEL_URLS.segmenter, "segmenter", MODEL_BYTES.segmenter, onProgress),
+      fetchWithProgress(
+        modelUrl("segmenter"),
+        "segmenter",
+        MODEL_SPECS.segmenter.bytes,
+        onProgress
+      ),
     ]);
+    await verifyModel("segmenter", modelAssetBuffer);
     return ImageSegmenter.createFromOptions(vision, {
       baseOptions: {
         modelAssetBuffer: new Uint8Array(modelAssetBuffer),

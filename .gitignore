@@ -31,3 +31,6 @@ remotion-bg/out/
 .parcel-cache/
 .next/
 .turbo/
+
+# Dev-tool output (overlays, probe reports)
+dev/
