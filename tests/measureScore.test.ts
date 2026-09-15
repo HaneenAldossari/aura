@@ -178,6 +178,60 @@ describe("ambiguity", () => {
       expect(score(skinOnly(season)).ambiguous, season).toBe(false);
     }
   });
+
+  /**
+   * ambiguousMargin is in the same 0-100 units score() reports, so it can be
+   * compared to margin directly. Pinned because a margin expressed on the raw
+   * weighted-distance scale would silently make the threshold meaningless.
+   */
+  it("keeps margin and ambiguousMargin on the same 0-100 scale", () => {
+    expect(SCORING.ambiguousMargin).toBeGreaterThan(0);
+    expect(SCORING.ambiguousMargin).toBeLessThan(100);
+    for (const season of SEASONS) {
+      const r = score(skinOnly(season));
+      expect(r.ranked[0].score, season).toBeLessThanOrEqual(100);
+      expect(r.ranked.at(-1)!.score, season).toBeGreaterThanOrEqual(0);
+      expect(r.margin, season).toBeGreaterThanOrEqual(0);
+      expect(r.margin, season).toBeLessThanOrEqual(100);
+      expect(r.ambiguous, season).toBe(r.margin < SCORING.ambiguousMargin);
+    }
+  });
+
+  /**
+   * The four classic confusion pairs are hue-mirrors: same dominant trait,
+   * opposite undertone. A face sitting exactly between one must not be reported
+   * as a confident call.
+   */
+  it.each([
+    ["Light Spring", "Light Summer"],
+    ["Bright Spring", "Bright Winter"],
+    ["Soft Autumn", "Soft Summer"],
+    ["Deep Autumn", "Deep Winter"],
+  ] as [Season, Season][])("flags the midpoint of %s / %s as ambiguous", (a, b) => {
+    const ta = SEASON_PROFILES[a].target;
+    const tb = SEASON_PROFILES[b].target;
+    const mid = {
+      hue: (ta.hue + tb.hue) / 2,
+      value: (ta.value + tb.value) / 2,
+      chroma: (ta.chroma + tb.chroma) / 2,
+    };
+    const L = VALUE.skin.neutral + mid.value * VALUE.skin.span;
+    const band = skinBandOf(L);
+    const r = score({
+      skin: skin(
+        L,
+        CHROMA.skinByBand[band].neutral + mid.chroma * CHROMA.skinByBand[band].span,
+        HUE.skinByBand[band].neutral + mid.hue * HUE.skinByBand[band].span
+      ),
+      hair: null,
+      eyes: null,
+      hairStatus: "covered",
+    });
+    expect([a, b]).toContain(r.primary);
+    expect([a, b]).toContain(r.secondary);
+    expect(r.margin).toBeLessThan(SCORING.ambiguousMargin);
+    expect(r.ambiguous).toBe(true);
+  });
 });
 
 describe("hairStatus", () => {
@@ -282,6 +336,14 @@ describe("contrast", () => {
     hairStatus: "natural",
   });
 
+  it("is the range of L*: lightest feature minus darkest", () => {
+    // skin 60, hair 20, eyes 35 -> range is 60-20, not an average of deltas.
+    expect(score(base(20)).contrast!.value).toBe(40);
+    expect(score(base(8, 20)).contrast!.value).toBe(52);
+    // An eye darker than the hair widens the range.
+    expect(score(base(30, 10)).contrast!.value).toBe(50);
+  });
+
   it("labels low, medium and high against the configured breakpoints", () => {
     expect(score(base(58, 58)).contrast!.label).toBe("low");
     expect(score(base(8, 20)).contrast!.label).toBe("high");
@@ -289,6 +351,21 @@ describe("contrast", () => {
     expect(mid.value).toBeGreaterThan(CONTRAST.labels.low);
     expect(mid.value).toBeLessThan(CONTRAST.labels.high);
     expect(mid.label).toBe("medium");
+  });
+
+  it("reaches 'high' for a realistically high-contrast face", () => {
+    // The case the weighted-mean definition got wrong: dark hair, fair skin,
+    // mid iris used to average down to 36.5 and label "medium".
+    const r = score(base(20, 30));
+    expect(r.contrast!.value).toBe(40);
+    expect(r.contrast!.label).toBe("high");
+  });
+
+  it("takes the range across skin and eyes alone when hair is covered", () => {
+    const covered: MeasuredFeatures = { ...base(20, 30), hairStatus: "covered" };
+    expect(score(covered).contrast!.value).toBe(30); // 60 - 30, hair ignored
+    const dyed: MeasuredFeatures = { ...base(5, 30), hairStatus: "dyed" };
+    expect(score(dyed).contrast!.value).toBe(30);
   });
 
   it("rewards a season whose expected contrast is present", () => {
@@ -321,7 +398,7 @@ describe("contrast", () => {
     expect(r.axes.hue.label).toBe("warm");
   });
 
-  it("is null when neither hair nor eyes are usable", () => {
+  it("is null when only one feature is usable, since a range needs two", () => {
     expect(
       score({ skin: skin(55, 18, 52), hair: null, eyes: null, hairStatus: "covered" })
         .contrast

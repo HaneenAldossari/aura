@@ -303,16 +303,28 @@ export const CHROMA = {
 } as const;
 
 /**
- * CONTRAST — absolute delta-L* between hair and skin, and between eyes and skin.
+ * CONTRAST — the RANGE of L* across the available features: the lightest minus
+ * the darkest of skin, hair and eyes.
+ *
+ * Range, not a weighted mean of pairwise deltas. The earlier weighted-mean
+ * formulation averaged the hair-skin delta with the always-smaller eyes-skin
+ * delta, which dragged every result below the hair-skin figure and made a
+ * genuinely high-contrast face (skin L*60 / hair L*20 / iris L*30) compute to
+ * 36.5 and label "medium". A range says what contrast actually means: how far
+ * apart this person's lightest and darkest features are.
+ *
+ * Needs at least two usable features. When hair is covered or dyed the range is
+ * taken across skin and eyes alone, which naturally yields a lower figure —
+ * expect the breakpoints below to need recalibrating for that case too.
  *
  * Not a fourth axis. It is a nudge applied after the three axes, because it is
  * the one measurement that reliably separates specific neighbours — Soft Summer
  * from True Summer, and the Bright and Deep seasons from their surroundings.
  */
 export const CONTRAST = {
-  /** estimate — calibrate in Phase 4 */
-  weights: { hairSkin: 0.65, eyesSkin: 0.35 },
-  /** estimate — calibrate in Phase 4 */
+  /** estimate — calibrate in Phase 4. Carried over from the weighted-mean
+   *  definition, so these are near-certain to need moving now that the metric
+   *  reports a range rather than an average. */
   labels: { low: 20.0, high: 40.0 },
   /**
    * How far a contrast match or mismatch may move a season's weighted distance.

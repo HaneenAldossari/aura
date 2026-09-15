@@ -175,21 +175,18 @@ function chromaAxis(f: MeasuredFeatures, band: SkinBand): number {
   ]);
 }
 
-/** Weighted |delta-L*| against skin. Null when nothing comparable is available. */
+/**
+ * Range of L* across the usable features: lightest minus darkest.
+ *
+ * Needs at least two features to mean anything — a single region has no range —
+ * so this returns null when hair is unusable and eyes are missing.
+ */
 function contrastValue(f: MeasuredFeatures): number | null {
-  const useHair = hairIsUsable(f);
-  const parts = [
-    {
-      value: useHair ? Math.abs(f.hair!.L - f.skin.L) : null,
-      weight: CONTRAST.weights.hairSkin,
-    },
-    {
-      value: f.eyes ? Math.abs(f.eyes.L - f.skin.L) : null,
-      weight: CONTRAST.weights.eyesSkin,
-    },
-  ];
-  if (parts.every((p) => p.value === null)) return null;
-  return weightedMean(parts);
+  const levels = [f.skin.L];
+  if (hairIsUsable(f)) levels.push(f.hair!.L);
+  if (f.eyes) levels.push(f.eyes.L);
+  if (levels.length < 2) return null;
+  return Math.max(...levels) - Math.min(...levels);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
