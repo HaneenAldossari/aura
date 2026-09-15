@@ -168,6 +168,34 @@ real photos arrive. Also note `sample-4` hair measures C\* 0.00 with hue 142.81:
 hue is undefined at zero chroma, which is harmless only because `HUE.weights.hair`
 is 0.
 
+### 2026-09-16 — the demo gallery has no deep skin tones
+
+Skin L* across all nine faces in `client/public/demo-faces/`, measured with the
+overlay tool:
+
+| sample | 1 | 5 | 3 | 9 | 7 | 2 | 6 | 8 | 4 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| skin L\* | 60.4 | 72.8 | 75.3 | 76.9 | 77.3 | 79.8 | 80.2 | 80.2 | 82.7 |
+| band | medium | light | light | light | light | light | light | light | light |
+
+Against `SKIN_BANDS` (deep < 45, light >= 65): **eight light, one medium, zero
+deep.** The deep band's hue and chroma thresholds — the ones most likely to be
+wrong, since melanin raises b\* and inflates both hue angle and C\* — are never
+exercised by any demo run. A bias affecting deep skin would be invisible here.
+
+Hair is a second gap. L\* 4.0-38.9 with C\* at or below 2.6 on seven of nine, so
+hair reads near-black and near-neutral almost everywhere; hue at that chroma is
+noise (sample-4: C\* 0.00, h 142.8). Harmless on the hue axis, where
+`HUE.weights.hair` is 0, but hair carries 0.25 of the **chroma** axis, so
+systematically low hair chroma may drag dark-haired faces toward "soft".
+
+**Actions:** `eval/real` must deliberately include deep skin tones and natural
+hair, and report accuracy per skin-lightness band. The demo gallery itself
+should be widened — it is what most users see. Both are open.
+
+Also open and deliberately untouched: `QUALITY.maxScleraCast = 8` fires on both
+demo faces measured so far (8.40, 11.95). Left alone until real photos arrive.
+
 ## Testing
 
 ```bash
