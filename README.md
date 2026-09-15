@@ -172,7 +172,12 @@ warning so an existing deployment does not silently fall back to a withdrawn mod
 
 > **These defaults are paid models and require OpenRouter credit.** The free Nemotron
 > models this app previously used were withdrawn — both now return HTTP 404 — so a
-> free-tier key can no longer run the analysis. Expect roughly **$0.01 per analysis**.
+> free-tier key can no longer run the analysis.
+>
+> Measured on `google/gemini-3.8-flash`: **~$0.0087 per analysis** (~$8.70 per 1000),
+> ~19s end to end. Roughly 4,700 prompt tokens and 1,400 completion tokens, of which
+> 470-1,380 are reasoning tokens — reasoning is mandatory on this endpoint and cannot
+> be disabled, so `CLASSIFY_REASONING=false` is a no-op here.
 
 Optional: `OPENROUTER_FALLBACK_MODEL` (tried when the primary call *fails*),
 `MAX_TOKENS_CLASSIFY`, `CLASSIFY_REASONING`, `ANALYSIS_MODE`, `SESSION_TTL_HOURS`,

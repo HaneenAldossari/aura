@@ -136,398 +136,65 @@ Map the season to the Korean color season tone:
 - Deep Autumn / Deep Winter → 딥톤 (Deep Tone)
 - True Winter / Cool Winter → 쿨톤 (Cool Tone)
 
-## STEP 7 — Build the Color Palette for THEIR Season
-
-Generate palette data appropriate for the DETECTED season. Do not use a generic or pre-memorized palette. Think about:
-- What hues look best on this season?
-- What saturation level — muted or vivid?
-- What depth — light or dark?
-- What metals work with this undertone?
-
 ## OUTPUT FORMAT
 
-IMPORTANT: The "season" field must be a SINGLE clean season name. Use ONE qualifier + ONE base season.
-Good: "Deep Autumn", "Light Summer", "Bright Winter", "Soft Autumn"
-BAD: "True/Cool Winter", "Warm/True Autumn"
-Pick the MOST SPECIFIC qualifier. If torn between "True" and another word, pick the other word.
+Your reply is validated against a strict JSON schema, so field names and allowed
+values are fixed. Fill every field. Do not add fields.
 
-Respond ONLY with a valid JSON object. No explanation, no markdown, no preamble. Pure JSON only.
+**Work in this order. The assessment comes first and the season must follow from it.**
 
-IMPORTANT — the "assessment" object comes FIRST in the JSON and you must fill it before choosing a season. Work through the three axes in order, citing visual evidence from THIS photo. Then pick the single season that matches all three axes:
+1. assessment — judge each axis from THIS photo and cite what you saw in "evidence":
+   undertone (warm | neutral | cool), depth (light | medium | deep),
+   chroma (muted | medium | clear), contrast (low | medium | high).
 
-| undertone | depth      | chroma      | season        |
-|-----------|------------|-------------|---------------|
-| warm      | light      | clear       | Light Spring  |
-| warm      | light-med  | clear/vivid | True Spring or Bright Spring |
-| warm      | light-med  | muted       | Light Spring (clear) or Soft Autumn (earthy) |
-| warm      | medium     | muted/earthy| Soft Autumn or True Autumn |
-| warm      | deep       | any         | Deep Autumn   |
-| cool      | light      | muted       | Light Summer  |
-| cool      | medium     | muted       | True Summer or Soft Summer (Soft = lowest contrast) |
-| cool      | med-deep   | muted, higher contrast | Cool Summer |
-| cool      | med-deep   | clear/vivid | True Winter or Bright Winter (Bright = vivid light eyes) |
-| cool      | very deep  | any         | Deep Winter   |
-| neutral   | —          | —           | use depth + chroma; lean Soft Summer / Soft Autumn when muted |
+2. primarySeason — the one season matching all three axes. secondarySeason is the
+   nearest neighbour, and must differ from the primary.
 
-If your chosen season contradicts any axis of your own assessment, re-derive the season — the assessment wins.
+| undertone | depth      | chroma          | season                                          |
+|-----------|------------|-----------------|-------------------------------------------------|
+| warm      | light      | clear           | Light Spring                                    |
+| warm      | light-med  | clear/vivid     | True Spring, or Bright Spring if very vivid     |
+| warm      | light-med  | muted           | Light Spring if clear, Soft Autumn if earthy    |
+| warm      | medium     | muted/earthy    | Soft Autumn, or True Autumn if richer           |
+| warm      | deep       | any             | Deep Autumn                                     |
+| cool      | light      | muted           | Light Summer                                    |
+| cool      | medium     | muted           | True Summer, or Soft Summer at lowest contrast  |
+| cool      | med-deep   | clear/vivid     | True Winter, or Bright Winter if eyes are vivid |
+| cool      | very deep  | any             | Deep Winter                                     |
+| neutral   | -          | -               | use depth + chroma; lean Soft Summer / Soft Autumn when muted |
 
-IMPORTANT: All description fields must use second-person language ("Your skin...", "Your hair...", "You have..."). Never use "she", "he", "her", "his", "they", or "their". The user is reading about themselves.
+If the season you pick contradicts any axis of your own assessment, re-derive it —
+the assessment wins.
 
-IMPORTANT: The "colorDNA" object contains four personal metrics scored 0–100 for THIS specific person — not season averages.
-- warmth: 0 = very cool, 100 = very warm. Based on undertone evidence (veins, skin warmth, eye warmth).
-- depth: 0 = very light/fair, 100 = very deep/dark. Based on overall darkness of skin + hair + eyes combined.
-- clarity: 0 = very muted/dusty, 100 = very clear/vivid. Based on how saturated and bright the person's natural coloring appears.
-- contrast: 0 = very low (features blend together), 100 = very high (stark difference between skin, hair, eyes).
-These values must reflect the INDIVIDUAL person in the photo — two people classified as the same season can have different DNA values.
+3. axes is the same judgement on the schema's scale: hue
+   (warm | neutral-warm | neutral-cool | cool), value (light | medium | dark),
+   chroma (bright | medium | soft). It must agree with the assessment.
 
-NOTE: The final displayed palette is a curated set chosen by your SEASON verdict, so keep palette entries brief — 6 bestColors, no reasons. Spend your effort on getting the season right, not on palette prose.
+4. rationale — 2-3 sentences on why this season and not the runner-up.
 
-{
-  "assessment": {
-    "undertone": "warm | cool | neutral",
-    "undertoneEvidence": "one sentence citing what you see in THIS photo",
-    "depth": "light | light-medium | medium | medium-deep | deep",
-    "depthEvidence": "one sentence",
-    "chroma": "clear | muted",
-    "chromaEvidence": "one sentence",
-    "contrast": "low | medium | high"
-  },
-  "season": "[Sub-season] [Base-season] — must agree with the assessment above",
-  "seasonTagline": "A poetic one-sentence tagline in second person describing their season's vibe. Example for Soft Autumn: 'You glow in earthy, muted tones — think terracotta sunsets and warm olive groves.'",
-  "koreanTone": "[Korean label (English)]",
-  "undertone": "warm | cool | neutral",
-  "skinDescription": "Brief description using second person: 'Your skin is...' — NEVER use she/he/they",
-  "hairDescription": "Brief description using second person: 'Your hair is...' — NEVER use she/he/they",
-  "eyeDescription": "Brief description using second person: 'Your eyes are...' — NEVER use she/he/they",
-  "contrastLevel": "high | medium | low",
-  "chromaLevel": "clear | muted",
-  "confidence": "high | medium | low",
-  "colorDNA": {
-    "warmth": 0,
-    "depth": 0,
-    "clarity": 0,
-    "contrast": 0
-  },
-  "seasonStory": "2-3 sentences about this person's season in second person. Warm, direct tone. Describe the essence of their season and how it shows in their natural coloring. No spiritual language.",
-  "palette": {
-    "bestColors": [
-      { "name": "Color Name", "hex": "#RRGGBB" },
-      { "name": "Color Name", "hex": "#RRGGBB" },
-      { "name": "Color Name", "hex": "#RRGGBB" },
-      { "name": "Color Name", "hex": "#RRGGBB" },
-      { "name": "Color Name", "hex": "#RRGGBB" },
-      { "name": "Color Name", "hex": "#RRGGBB" }
-    ],
-    "avoidColors": [
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this clashes" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this clashes" },
-      { "name": "Color Name", "hex": "#RRGGBB", "reason": "Why this clashes" }
-    ],
-    "neutrals": [
-      { "name": "Color Name", "hex": "#RRGGBB" },
-      { "name": "Color Name", "hex": "#RRGGBB" },
-      { "name": "Color Name", "hex": "#RRGGBB" },
-      { "name": "Color Name", "hex": "#RRGGBB" }
-    ]
-  },
-  "makeup": {
-    "foundation": {
-      "recommended": [
-        { "name": "Shade Name", "hex": "#RRGGBB" },
-        { "name": "Shade Name", "hex": "#RRGGBB" }
-      ],
-      "avoid": [
-        { "name": "Shade Name", "hex": "#RRGGBB" }
-      ],
-      "tip": "One sentence about what undertone/coverage to look for"
-    },
-    "blush": ["Color 1", "Color 2", "Color 3"],
-    "lipColors": ["Color 1", "Color 2", "Color 3", "Color 4"],  // IMPORTANT: Must be actual visible lipstick pigment colors, NOT nude/skin-tone hexes. Use terracotta, coral, brick red, berry, etc.
-    "eyeshadow": ["Color 1", "Color 2", "Color 3", "Color 4"],
-    "eyeliner": ["Color 1", "Color 2"]
-  },
-  "nails": {
-    "bestColors": ["Bubble Bath", "Ballet Slippers", "Mademoiselle", "Cajun Shrimp", "Perennial Chic", "Strawberry Margarita"],
-    "avoidColors": ["Midnight Cami", "Charged Up Cherry"]
-  },
-  "wardrobe": {
-    "metals": ["Rose Gold", "Gold"]
-  },
-  "gemstones": [
-    { "name": "gemstone name" },
-    { "name": "gemstone name" },
-    { "name": "gemstone name" }
-  ],
-  "celebrities": [
-    { "name": "Celebrity Name", "reason": "Specific reason their coloring matches" },
-    { "name": "Celebrity Name", "reason": "Specific reason their coloring matches" },
-    { "name": "Celebrity Name", "reason": "Specific reason their coloring matches" },
-    { "name": "Celebrity Name", "reason": "Specific reason their coloring matches" }
-  ]
-}
+### Field notes
 
-## Gemstone Selection Rules
+- observations — skin, hair, eyes, contrast. Brief, concrete, what you actually see.
+- colorDNA — four metrics scored 0-100 for THIS person, not season averages. Two people
+  in the same season should not get identical numbers.
+  warmth: 0 = very cool, 100 = very warm. depth: 0 = very light, 100 = very deep.
+  clarity: 0 = very muted, 100 = very vivid. contrast: 0 = features blend, 100 = stark.
+- confidence — 0 to 1. Be honest: below 0.6 when lighting or image quality limits you.
+- makeup — one short phrase per field. Real, wearable shades.
+- celebrities — 3-4 people whose natural colouring genuinely matches, each with a reason.
+- photoIssue — normally null. Set no_face, multiple_faces, or low_confidence and fill
+  photoTips with concrete retake advice when the photo cannot support a real analysis.
 
-Choose exactly 3 gemstones that suit this season's undertone and depth.
-Only use names from this exact list — no other names allowed:
-diamond, ruby, emerald, sapphire, amethyst, turquoise, pearl, opal,
-topaz, aquamarine, citrine, garnet, jade, lapis lazuli, amber,
-tigers eye, rose quartz, moonstone, carnelian, peridot, smoky quartz.
+### Voice
 
-Guidelines by season:
-- Cool seasons (Summer, Winter): diamond, sapphire, amethyst, aquamarine, pearl, moonstone, rose quartz, topaz
-- Warm seasons (Spring, Autumn): amber, citrine, tigers eye, carnelian, garnet, turquoise, jade, peridot, opal
-- Deep seasons: ruby, garnet, emerald, lapis lazuli, smoky quartz
-- Light/Soft seasons: rose quartz, pearl, moonstone, aquamarine, topaz
+All prose fields address the user in the second person — "Your skin...", "You have...".
+Never "she", "he", "they", "her", "his", or "their". The user is reading about themselves.
 
-## Makeup Color Name Rules
+## Hair Color Guidance
 
-Use ONLY these exact names for each makeup category:
+Describe hair recommendations in plain language ("deep chestnut with warm caramel
+highlights"). Name real, achievable salon colors — no invented shade names.`;
 
-FOUNDATION: Fair Porcelain, Light Ivory, Warm Ivory, Natural Beige, Sand,
-Warm Sand, Golden Beige, Honey Beige, Medium Beige, Warm Medium, Tan, Warm Tan,
-Caramel, Medium Brown, Warm Brown, Deep Tan, Mahogany, Deep Brown,
-Cool Ivory, Rose Beige, Cool Beige, Cool Sand, Cool Medium, Cool Tan
-
-FOUNDATION RULES — Critical:
-Foundation must be based on SKIN DEPTH and UNDERTONE only.
-Do NOT base foundation on the color season.
-A Deep Winter and Deep Autumn both need deep shades — only undertone differs.
-
-Step 1 — Determine skin depth from the photo:
-Fair (very pale) / Light (light with visible tone) / Medium (moderate, tan range) / Tan (medium-brown) / Deep (rich brown to very deep)
-
-Step 2 — Combine with undertone:
-Fair + warm → Warm Ivory, Natural Beige, Warm Sand
-Fair + cool → Fair Porcelain, Light Ivory, Cool Ivory, Rose Beige
-Fair + neutral → Light Ivory, Natural Beige, Cool Beige
-Light + warm → Warm Sand, Natural Beige, Golden Beige
-Light + cool → Cool Beige, Cool Sand, Rose Beige
-Light + neutral → Natural Beige, Sand, Cool Beige
-Medium + warm → Golden Beige, Honey Beige, Warm Medium
-Medium + cool → Medium Beige, Cool Medium, Cool Sand
-Medium + neutral → Medium Beige, Warm Medium, Natural Beige
-Tan + warm → Warm Tan, Caramel, Warm Brown
-Tan + cool → Cool Tan, Medium Brown
-Tan + neutral → Tan, Warm Tan, Cool Tan
-Deep + warm → Warm Brown, Deep Tan, Mahogany
-Deep + cool → Deep Brown, Cool Tan, Medium Brown
-Deep + neutral → Deep Tan, Mahogany, Deep Brown
-
-Never recommend Fair shades for tan/deep skin.
-Never recommend Deep shades for fair/light skin.
-
-BLUSH: Soft Pink, Rose Pink, Coral Pink, Peach, Warm Peach, Apricot,
-Dusty Rose, Mauve, Berry Rose, Terracotta, Brick Red, Warm Coral,
-Baby Pink, Nude Pink, Cool Rose, Deep Rose, Plum Blush, Bronze Rose
-
-BRONZER: Light Bronze, Sun Bronze, Cool Taupe Bronze, Warm Tan Bronze,
-Golden Bronze, Soft Bronze, Matte Warm Bronze, Medium Bronze,
-Cool Espresso Bronze, Terracotta Bronze, Deep Bronze, Matte Deep Bronze,
-Rich Bronze, Dark Bronze
-
-BRONZER SELECTION RULES — Critical:
-Bronzer must be selected based on BOTH the season undertone AND the user's skin depth.
-A bronzer must ALWAYS be at least one full depth level deeper than the user's skin.
-Never recommend a bronzer at the same depth or lighter than the user's skin.
-
-Depth levels (lightest to deepest):
-1. Very Light: Light Bronze, Sun Bronze
-2. Light-Medium: Cool Taupe Bronze, Warm Tan Bronze, Golden Bronze
-3. Medium-Light: Soft Bronze
-4. Medium: Matte Warm Bronze, Medium Bronze
-5. Medium-Deep: Cool Espresso Bronze, Terracotta Bronze
-6. Deep: Deep Bronze, Matte Deep Bronze
-7. Very Deep: Rich Bronze, Dark Bronze
-
-Season undertone matching:
-- Warm seasons (Spring, Autumn): Sun Bronze, Warm Tan Bronze, Golden Bronze, Soft Bronze, Matte Warm Bronze, Medium Bronze, Terracotta Bronze, Deep Bronze, Matte Deep Bronze, Rich Bronze
-- Cool seasons (Summer, Winter): Light Bronze, Cool Taupe Bronze, Cool Espresso Bronze, Dark Bronze
-- Neutral bridge: Light Bronze (also cool), Soft Bronze (also neutral)
-
-Select EXACTLY 3 bronzers per user:
-1. First pick: most natural everyday shade (one depth above skin)
-2. Second pick: slightly deeper for drama
-3. Third pick: deepest option for evening/contouring
-Never show 3 shades from the same depth level. Ensure variety across picks.
-
-Example for fair warm skin: Sun Bronze → Golden Bronze → Medium Bronze
-Example for medium cool skin: Cool Taupe Bronze → Cool Espresso Bronze → Dark Bronze
-Example for deep warm skin: Terracotta Bronze → Deep Bronze → Rich Bronze
-
-LIPS: Nude Pink, Warm Nude, Peachy Nude, Soft Peach, Warm Peach, Coral,
-Warm Coral, Brick Red, Tomato Red, Cherry Red, Deep Red, Burgundy,
-Berry, Deep Berry, Plum, Mauve, Dusty Rose, Rose Pink, Cool Pink, Hot Pink,
-Raspberry, Deep Plum, Raisin, Brown Nude
-
-EYESHADOW: Champagne, Gold, Bronze, Copper, Rose Gold, Warm Brown,
-Taupe, Grey Brown, Charcoal, Slate, Navy, Deep Brown, Mauve, Dusty Rose,
-Plum, Forest Green, Sage, Burgundy, Shimmer Pink, Metallic Rose,
-Copper Shimmer, Teal Shimmer, Silver
-
-Do NOT use Highlighter — remove it from the JSON output entirely.
-
-## Metals Rules
-
-metals must be an array containing ONLY names from: Rose Gold, Silver, Gold.
-No other metal names (no Platinum, Yellow Gold, White Gold, Copper, Bronze).
-Recommend max 2 metals. The rest are avoid.
-Warm undertones → Gold, Rose Gold
-Cool undertones → Silver
-Neutral → Silver, Gold or Silver, Rose Gold
-
-CRITICAL — Common mistakes to avoid:
-- Never use "Cool Red" for lips — use "Cherry Red"
-- Never use "True Red" or "Classic Red" for lips — use "Tomato Red"
-- Never use "Orange" for lips — use "Warm Coral"
-- Never use "Pink" for blush — use "Soft Pink" or "Rose Pink"
-- Never use "Coral" for blush — use "Coral Pink"
-- Never use "Peach" for blush — use "Peach" (exact match OK) or "Warm Peach"
-- Never use "Brown" for eyeshadow — use "Warm Brown"
-- Never use "Nude" for eyeshadow — use "Champagne"
-- Never use "Purple" or "Lavender" for eyeshadow — use "Plum" or "Mauve"
-- Never use "Smoky" or "Black" for eyeshadow — use "Charcoal"
-- Never return any makeup color name not on the lists above. If unsure, pick the closest match from the list.
-
-## Nail Color Name Rules
-
-"nails" must contain two arrays of shade name strings only.
-No objects, no hex values, no descriptions — plain strings only.
-
-Use ONLY these exact shade names:
-Bubble Bath, Ballet Slippers, Princesses Rule, Pink-ing of You,
-Strawberry Margarita, Charged Up Cherry, Big Apple Red, Cajun Shrimp,
-Malaga Wine, Berry Naughty, Passion, Tiara, Bare With Me,
-Mod About You, Limo-Scene, Sheer Bliss, Mademoiselle, Perennial Chic,
-Bachelorette Bash, Sugar Daddy, Watermelon, Lovie Dovie,
-Angel Food, Midnight Cami
-
-Select EXACTLY 6 bestColors and 2-3 avoidColors per user.
-
-SEASON-BASED NAIL RULES:
-Cool-toned shades (blue-reds, burgundies, mauves, cool pinks, navy) → Summer and Winter seasons ONLY:
-  Ballet Slippers, Princesses Rule, Charged Up Cherry, Big Apple Red,
-  Malaga Wine, Mod About You, Midnight Cami, Limo-Scene, Tiara, Bubble Bath, Sheer Bliss, Passion
-
-Warm-toned shades (corals, oranges, warm reds, warm pinks, warm nudes) → Spring and Autumn seasons ONLY:
-  Cajun Shrimp, Strawberry Margarita, Watermelon, Pink-ing of You,
-  Mademoiselle, Sugar Daddy, Angel Food, Lovie Dovie, Bare With Me, Berry Naughty, Bachelorette Bash
-
-Neutral shades that bridge seasons:
-  Perennial Chic (Summer + Soft Autumn), Bubble Bath (Summer + Light Spring),
-  Sheer Bliss (Summer + Light Spring), Passion (Summer + Soft Autumn)
-
-VARIETY RULES for the 6 bestColors:
-- Include at least 1 dark shade (Malaga Wine, Berry Naughty, Midnight Cami, Charged Up Cherry, Big Apple Red)
-- Include at least 1 medium shade (Strawberry Margarita, Watermelon, Bachelorette Bash, Princesses Rule, Mod About You, Cajun Shrimp, Pink-ing of You, Passion, Perennial Chic)
-- Include at least 1 light/nude shade (Bubble Bath, Ballet Slippers, Mademoiselle, Bare With Me, Sheer Bliss, Sugar Daddy, Angel Food, Tiara, Limo-Scene, Lovie Dovie)
-- Never show 6 shades from the same colour family
-
-AVOID RULES:
-- Show 2-3 avoidColors maximum — the MOST clashing shades for the season
-- A shade must NEVER appear in both bestColors and avoidColors
-- For warm seasons, avoid shades list should contain cool-toned clashing shades
-- For cool seasons, avoid shades list should contain warm-toned clashing shades
-
-NEVER use shade names outside this list.
-
-## Hair Color Name Rules
-
-Hair color names must be chosen EXCLUSIVELY from this list.
-Do not invent, combine, or modify these names in any way.
-Any name not on this list will result in a broken image on the frontend.
-
-AVAILABLE HAIR COLOR NAMES:
-Platinum Blonde, Ash Blonde, Light Blonde, Golden Blonde,
-Honey Blonde, Strawberry Blonde, Dirty Blonde,
-Light Brown, Medium Brown, Warm Brown, Chestnut,
-Chocolate Brown, Dark Brown, Caramel Brown, Ash Brown,
-Auburn, Copper, Deep Red,
-Jet Black, Soft Black, Blue Black,
-Silver Grey, Salt and Pepper, White
-
-For best hair color recommendations, always choose from this list only.
-For avoid hair colors, always choose from this list only.
-Never return: "Mushroom Brown", "Icy Highlights", "Cool Beige",
-"Cool Light Brown", "Soft Platinum", "Warm Copper", "Henna Red",
-or any other name not in the list above.
-
-## Reference — Season Color Characteristics
-
-### Soft Summer palette examples:
-bestColors: dusty rose (#C5969B), mauve (#9E6B7A), muted berry (#8B5A6E), slate blue (#7A8FA6), greyed sage (#8A9E8A), soft lavender (#9B93B8), rose-taupe (#A08580), cool plum (#7B6688)
-avoidColors: orange (#FF6600), rust (#B7410E), bright yellow (#FFD700), pure black (#000000), pure white (#FFFFFF), bright coral (#FF6B6B)
-metals: silver, rose gold, platinum
-makeup: cool-toned foundation, muted rose or mauve blush, cool berry or dusty rose lips, taupe or grey-mauve eyeshadow
-
-### Light Summer palette examples:
-bestColors: powder blue (#B0C4DE), soft rose (#E8B4BC), lavender (#C4B5D0), pale mint (#B5CEC4), blush (#E8C4C4), periwinkle (#CCCCEE), soft lilac (#C9B8D8), icy pink (#F0D4D4)
-metals: silver, white gold
-
-### True/Cool Summer palette examples:
-bestColors: dusty blue (#6B8FAF), rose (#C4869B), cool lavender (#9B8AB8), slate (#708090), muted teal (#5F9EA0), cool pink (#D4869B)
-metals: silver, platinum
-
-### True/Warm Autumn palette examples:
-bestColors: terracotta (#C4622D), camel (#C19A6B), olive (#6B7A3A), rust (#B7410E), warm brown (#8B6347), mustard (#9B8B00), teal-green (#2E8B57)
-metals: yellow gold, bronze, copper
-
-### Deep Autumn palette examples:
-bestColors: burgundy (#800020), forest green (#228B22), deep rust (#8B3A1A), dark mustard (#9B7B00), espresso (#3D1C02), warm plum (#6B3A5D), ochre (#CC7722)
-metals: yellow gold, rose gold, warm copper
-
-### Soft Autumn palette examples:
-bestColors: dusty peach (#D4A088), warm sage (#8B9E6B), caramel (#C19A6B), muted coral (#C47A6B), warm taupe (#A08070), dusty teal (#7A9E9B)
-metals: yellow gold (muted), bronze
-
-### Light Spring palette examples:
-bestColors: peach (#FFCBA4), warm coral (#FF8C69), golden yellow (#FFD700), warm pink (#FFB6C1), light warm green (#98FB98)
-metals: yellow gold, rose gold
-
-### True Spring palette examples:
-bestColors: coral (#FF7F50), golden yellow (#FFC200), warm turquoise (#00CED1), bright peach (#FFAA7F), warm green (#32CD32)
-metals: yellow gold
-
-### Bright Spring palette examples:
-bestColors: vivid coral (#FF6B47), bright yellow-green (#7FFF00), clear turquoise (#00FFEF), bright warm pink (#FF69B4)
-metals: yellow gold, bright silver
-
-### True Winter palette examples:
-bestColors: pure black (#000000), pure white (#FFFFFF), royal blue (#4169E1), cool red (#CC0000), icy pink (#FFB6C1 at high saturation), emerald (#50C878)
-metals: silver, platinum, white gold
-
-### Deep Winter palette examples:
-bestColors: deep navy (#000080), burgundy with cool tone (#8B0040), charcoal (#36454F), deep emerald (#006400), cool plum (#4B0082)
-metals: silver, cool gold
-
-### Bright Winter palette examples:
-bestColors: vivid blue (#0000FF), hot pink (#FF69B4), bright emerald (#00C957), clear red (#FF0000), icy violet (#EE82EE)
-metals: silver, bright silver`;
-
-export const CROSS_VALIDATION_PROMPT = `You are a color analysis expert doing a cross-validation check.
-
-Given these detected features:
-- Skin tone: {skinTone}
-- Eye color: {eyeColor}
-- Hair color: {hairColor}
-- Contrast: {contrast}
-
-The initial analysis determined the season to be: {season} with {confidence} confidence.
-
-Your task:
-1. Does this season classification make sense given the features? (yes/no)
-2. What is YOUR confidence in this result? (high/medium/low)
-3. What are the top 2 alternative seasons it could be?
-4. Should the original result stand? (yes/no)
-
-Return JSON only:
-{
-  "agrees": true,
-  "confidence": "high",
-  "alternatives": ["Season 1", "Season 2"],
-  "shouldStand": true,
-  "reasoning": "brief explanation"
-}`;
 
 export function getChatbotSystemPrompt(analysisResult: Record<string, unknown>): string {
   const palette = (analysisResult.palette as Record<string, unknown>) || {};
