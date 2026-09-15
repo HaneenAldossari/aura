@@ -131,7 +131,7 @@ describe("thresholds are internally coherent", () => {
       ["chroma", CHROMA.weights],
       ["contrast", CONTRAST.weights],
     ] as const) {
-      const sum = Object.values(w).reduce((a, b) => a + b, 0);
+      const sum = (Object.values(w) as number[]).reduce((a, b) => a + b, 0);
       expect(sum, name).toBeCloseTo(1, 5);
     }
   });

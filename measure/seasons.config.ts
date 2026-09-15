@@ -11,33 +11,30 @@
  * Each season has a DOMINANT trait (the one it is named for) and a SECONDARY
  * trait. The four "True" seasons are dominant in hue; the eight "tonal" seasons
  * (Light/Deep/Soft/Bright) are dominant in value or chroma and take their hue as
- * the secondary. That structure is what makes the classic confusion pairs
- * adjacent here — Soft Autumn/Soft Summer, Deep Autumn/Deep Winter,
- * Bright Spring/Bright Winter, Light Spring/Light Summer differ only in hue.
+ * the secondary.
  *
  * All axes are normalised to [-1, +1]:
  *   hue     -1 = coolest,  +1 = warmest
  *   value   -1 = darkest,  +1 = lightest
  *   chroma  -1 = softest,  +1 = brightest
  *
- * ── Status of the numbers ────────────────────────────────────────────────────
- * The SEASON TARGETS are structural: they come from the 12-season system itself
- * and should only change if the theory is being reinterpreted.
+ * ── The file is in two halves ────────────────────────────────────────────────
+ * SECTION 1 — STRUCTURE. Season targets, the flow circle, axis weights. These
+ * come from the 12-season system itself and should only change if the theory is
+ * being reinterpreted.
  *
- * The MEASUREMENT THRESHOLDS below them are not. They are informed starting
- * estimates for where a measured L* / C* / h° sits on each axis, and they are the
- * thing the eval harness exists to calibrate. Skin hue angle in particular
- * varies with melanin level, so a single global breakpoint will fit some skin
- * tones better than others — expect to revisit HUE once there is a labelled
- * real-photo set. Treat every number in the THRESHOLDS section as a hypothesis.
+ * SECTION 2 — THRESHOLDS. Where a measured L* / C* / h-angle sits on each axis.
+ * Every one of these is an estimate. Each is marked "estimate — calibrate in
+ * Phase 4", and calibrating them against labelled real photos is precisely what
+ * the eval harness is for. Nothing here is sourced or validated yet.
  */
 
 /**
  * The 12 canonical seasons. Deliberately redeclared here rather than imported
  * from server/prompts/colorAnalysis.ts: measure/ must stay framework-free and
  * standalone so it can run in the browser and under headless Chromium without
- * pulling the server's prompt text into the bundle. A unit test asserts this
- * list stays identical to the server's CANONICAL_SEASONS.
+ * pulling the server's prompt text into the bundle. A unit test pins this list
+ * to the server's CANONICAL_SEASONS.
  */
 export const SEASONS = [
   "Light Spring",
@@ -57,6 +54,20 @@ export const SEASONS = [
 export type Season = (typeof SEASONS)[number];
 export type Axis = "hue" | "value" | "chroma";
 
+/** Skin lightness band. Melanin confounds both hue angle and chroma, so those
+ *  two thresholds are stored per band and calibrated independently. */
+export type SkinBand = "light" | "medium" | "deep";
+
+/**
+ * Whether the hair we can see is the hair we can reason about.
+ *
+ * Dyed hair carries no information about natural colouring, and covered hair
+ * (hijab, hat, wig, tight crop) carries none at all. Both drop hair from the
+ * value, chroma and contrast calculations and redistribute its weight, rather
+ * than contributing a misleading number. The client asks with a one-tap toggle.
+ */
+export type HairStatus = "natural" | "dyed" | "covered";
+
 /** Where a season sits on each axis, plus which axes define it. */
 export interface SeasonProfile {
   /** Target position on each axis, in [-1, +1]. */
@@ -67,9 +78,9 @@ export interface SeasonProfile {
   secondary: Axis;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SEASON TARGETS — structural, from the 12-season system
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+// SECTION 1 — STRUCTURE (from the 12-season system; not tuning knobs)
+// ═════════════════════════════════════════════════════════════════════════════
 
 export const SEASON_PROFILES: Record<Season, SeasonProfile> = {
   // ── Dominant VALUE: light ──
@@ -146,6 +157,37 @@ export const SEASON_PROFILES: Record<Season, SeasonProfile> = {
 };
 
 /**
+ * The 12-season flow circle, in order. Adjacent seasons share a dominant trait
+ * and shade into one another; the circle wraps from the last entry to the first.
+ *
+ * The secondary season is NOT a fixed property of a season — it depends on which
+ * way this particular face leans. score() returns whichever of a season's two
+ * circle neighbours scores higher, and the margin is measured against that
+ * neighbour rather than against the runner-up globally.
+ */
+export const FLOW_CIRCLE = [
+  "Bright Winter",
+  "Bright Spring",
+  "True Spring",
+  "Light Spring",
+  "Light Summer",
+  "True Summer",
+  "Soft Summer",
+  "Soft Autumn",
+  "True Autumn",
+  "Deep Autumn",
+  "Deep Winter",
+  "True Winter",
+] as const satisfies readonly Season[];
+
+/** The two seasons adjacent to `season` on the flow circle. */
+export function flowNeighbours(season: Season): [Season, Season] {
+  const i = FLOW_CIRCLE.indexOf(season as (typeof FLOW_CIRCLE)[number]);
+  const n = FLOW_CIRCLE.length;
+  return [FLOW_CIRCLE[(i - 1 + n) % n], FLOW_CIRCLE[(i + 1) % n]];
+}
+
+/**
  * How heavily each axis counts when scoring a season. A season is judged mostly
  * on the trait it is named for — a Soft Autumn who reads slightly light is still
  * Soft Autumn, but one who reads bright is not.
@@ -156,30 +198,59 @@ export const AXIS_WEIGHTS = {
   remaining: 1.0,
 } as const;
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MEASUREMENT THRESHOLDS — hypotheses, to be calibrated by the eval
-// ─────────────────────────────────────────────────────────────────────────────
+// ═════════════════════════════════════════════════════════════════════════════
+// SECTION 2 — THRESHOLDS
+//
+// Every number below is an estimate awaiting calibration against labelled real
+// photos. None is sourced. Treat all of them as hypotheses.
+// ═════════════════════════════════════════════════════════════════════════════
 
 /**
- * HUE — from CIELCh hue angle h° of the skin, with eyes and hair as support.
+ * Skin lightness bands, split on skin L*.
  *
- * Skin sits roughly between 40° (pink/red, cool) and 75° (yellow/gold, warm).
- * `neutral` is the midpoint; `span` is the half-width that maps to ±1, so
+ * Melanin confounds both hue angle and chroma — deeper skin carries higher b*,
+ * which raises hue angle and C* independently of undertone. Banding lets the
+ * eval calibrate those two axes separately per band instead of forcing one
+ * global midpoint that fits mid-tone skin and misreads the ends. The eval must
+ * report accuracy per band, otherwise a bias on one band hides inside the mean.
+ */
+export const SKIN_BANDS = {
+  /** L* below this is "deep". estimate — calibrate in Phase 4 */
+  deepBelow: 45.0,
+  /** L* at or above this is "light". estimate — calibrate in Phase 4 */
+  lightAtOrAbove: 65.0,
+} as const;
+
+/**
+ * HUE — from skin only.
+ *
  *   axis = clamp((h - neutral) / span, -1, +1)
  *
- * CAVEAT: this is the weakest assumption in the file. Hue angle drifts with
- * melanin level — deeply pigmented skin trends to higher b* regardless of
- * undertone — so a single global midpoint will systematically read deep skin as
- * warm. Calibrating this per value-band is the first thing to try if the eval
- * shows a warm bias on darker faces.
+ * Hair and eyes are deliberately weighted 0. Hue angle is CIRCULAR, and a linear
+ * map along it is simply wrong for them: auburn hair sits near 35 degrees and
+ * would read cool, while green eyes near 130 degrees would read maximally warm.
+ * Both are backwards.
+ *
+ * FUTURE EVAL EXPERIMENT: reintroduce hair and eyes through a CATEGORICAL
+ * temperature mapping instead — classify the region into a named colour
+ * (auburn / ash brown / blue / green / hazel ...) and attach a warm-cool score
+ * to the category, rather than projecting a circular angle onto a line. Only
+ * worth doing if the eval shows skin-only hue underperforming.
  */
 export const HUE = {
-  skin: { neutral: 52.5, span: 10.0 },
-  eyes: { neutral: 55.0, span: 20.0 },
-  hair: { neutral: 55.0, span: 20.0 },
-  /** Skin dominates: the undertone lives there, hair and eyes only corroborate. */
-  weights: { skin: 0.6, eyes: 0.25, hair: 0.15 },
-  /** Label breakpoints on the normalised axis. */
+  /** Per skin-lightness band. All three start identical so the eval can move
+   *  them independently and the split itself costs nothing until it is used. */
+  skinByBand: {
+    /** estimate — calibrate in Phase 4 */
+    light: { neutral: 52.5, span: 10.0 },
+    /** estimate — calibrate in Phase 4 */
+    medium: { neutral: 52.5, span: 10.0 },
+    /** estimate — calibrate in Phase 4 */
+    deep: { neutral: 52.5, span: 10.0 },
+  } satisfies Record<SkinBand, { neutral: number; span: number }>,
+  /** Skin only. See the note above before changing eyes or hair off zero. */
+  weights: { skin: 1.0, eyes: 0.0, hair: 0.0 },
+  /** Label breakpoints on the normalised axis. estimate — calibrate in Phase 4 */
   labels: { cool: -0.45, neutralCool: 0.0, neutralWarm: +0.45 },
 } as const;
 
@@ -189,12 +260,17 @@ export const HUE = {
  *   axis = clamp((L - neutral) / span, -1, +1)
  *
  * Hair carries real weight: dark hair against fair skin is what separates Deep
- * Winter from Light Summer, and skin L* alone cannot see that.
+ * Winter from Light Summer, and skin L* alone cannot see that. Dropped entirely
+ * when hairStatus is "dyed" or "covered".
  */
 export const VALUE = {
+  /** estimate — calibrate in Phase 4 */
   skin: { neutral: 50.0, span: 25.0 },
+  /** estimate — calibrate in Phase 4 */
   hair: { neutral: 40.0, span: 30.0 },
+  /** estimate — calibrate in Phase 4 */
   weights: { skin: 0.6, hair: 0.4 },
+  /** estimate — calibrate in Phase 4 */
   labels: { dark: -0.35, light: +0.35 },
 } as const;
 
@@ -203,32 +279,45 @@ export const VALUE = {
  *
  *   axis = clamp((C - neutral) / span, -1, +1)
  *
- * Eyes matter more here than anywhere else: a clear, saturated iris is the
- * strongest single signal separating Bright from Soft.
+ * Skin chroma is banded for the same melanin reason as hue. Eyes matter more
+ * here than anywhere else: a clear, saturated iris is the strongest single
+ * signal separating Bright from Soft.
  */
 export const CHROMA = {
-  skin: { neutral: 18.0, span: 10.0 },
+  skinByBand: {
+    /** estimate — calibrate in Phase 4 */
+    light: { neutral: 18.0, span: 10.0 },
+    /** estimate — calibrate in Phase 4 */
+    medium: { neutral: 18.0, span: 10.0 },
+    /** estimate — calibrate in Phase 4 */
+    deep: { neutral: 18.0, span: 10.0 },
+  } satisfies Record<SkinBand, { neutral: number; span: number }>,
+  /** estimate — calibrate in Phase 4 */
   eyes: { neutral: 25.0, span: 18.0 },
+  /** estimate — calibrate in Phase 4 */
   hair: { neutral: 20.0, span: 15.0 },
+  /** estimate — calibrate in Phase 4 */
   weights: { skin: 0.4, eyes: 0.35, hair: 0.25 },
+  /** estimate — calibrate in Phase 4 */
   labels: { soft: -0.35, bright: +0.35 },
 } as const;
 
 /**
- * CONTRAST — |ΔL*| between hair and skin, and between eyes and skin.
+ * CONTRAST — absolute delta-L* between hair and skin, and between eyes and skin.
  *
  * Not a fourth axis. It is a nudge applied after the three axes, because it is
- * the one measurement that reliably separates two specific pairs:
- *   · Soft Summer (lowest contrast of the cool seasons) from True Summer
- *   · Bright Winter / Bright Spring (high contrast) from their neighbours
+ * the one measurement that reliably separates specific neighbours — Soft Summer
+ * from True Summer, and the Bright and Deep seasons from their surroundings.
  */
 export const CONTRAST = {
+  /** estimate — calibrate in Phase 4 */
   weights: { hairSkin: 0.65, eyesSkin: 0.35 },
+  /** estimate — calibrate in Phase 4 */
   labels: { low: 20.0, high: 40.0 },
   /**
-   * How far a contrast mismatch may move a season's score, in the same units as
-   * the weighted distance. Kept deliberately small — contrast is a tiebreaker,
-   * never a primary signal.
+   * How far a contrast match or mismatch may move a season's weighted distance.
+   * Kept small on purpose — contrast is a tiebreaker, never a primary signal.
+   * estimate — calibrate in Phase 4
    */
   adjustmentStrength: 0.15,
   /** Seasons whose identity depends on unusually low or high contrast. */
@@ -238,25 +327,26 @@ export const CONTRAST = {
     "Bright Winter": "high",
     "Bright Spring": "high",
     "Deep Winter": "high",
+    "True Winter": "high",
   } as Partial<Record<Season, "low" | "high">>,
 } as const;
 
-/**
- * Confidence and fallbacks.
- */
+/** Confidence, fallbacks and region trust. */
 export const SCORING = {
   /**
-   * Gap between the best and second-best season, on the weighted-distance
-   * scale, below which the call is treated as genuinely ambiguous. Phase 2 uses
-   * this to decide whether to ask for a second photo.
+   * Scores are reported 0-100, higher is better. Margin is the primary's score
+   * minus the better of its two flow-circle neighbours. Below this the call is
+   * genuinely ambiguous, and Phase 2 uses it to decide whether to ask for a
+   * second photo. estimate — calibrate in Phase 4
    */
-  ambiguousMargin: 0.35,
+  ambiguousMargin: 6.0,
   /**
-   * When hair is unavailable (hijab, hat, tight crop, bad segmentation), its
-   * weight is redistributed across the remaining regions rather than treated as
-   * zero — a zero would read as black hair and drag every result toward Deep.
+   * When hair is unusable — covered, dyed, or badly segmented — its weight is
+   * redistributed across the remaining regions rather than treated as zero. A
+   * zero would read as black hair and drag every result toward Deep.
    */
   redistributeOnMissingRegion: true,
-  /** Minimum pixels in a region before its statistics are trusted. */
+  /** Minimum pixels in a region before its statistics are trusted.
+   *  estimate — calibrate in Phase 4 */
   minRegionPixels: { skin: 1500, hair: 800, eyes: 120, lips: 200 },
 } as const;
