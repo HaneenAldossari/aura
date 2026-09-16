@@ -18,7 +18,9 @@
     "test:accuracy": "tsx tests/runAccuracyTest.ts",
     "precompute:demos": "tsx scripts/precomputeDemoAnalyses.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "e2e": "tsx scripts/dev/e2e.ts",
+    "check:wasm": "tsx scripts/dev/checkWasm.ts"
   },
   "keywords": [
     "color-analysis",

@@ -216,11 +216,20 @@ export function gamutFromProfileDescription(description: string | undefined): Ga
 // Codec initialisation
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** WASM filenames, as published inside the @jsquash packages. */
+/**
+ * WASM filenames, as published inside the @jsquash packages.
+ *
+ * The JPEG *encoder* is here too. encode.ts produces the canonical upload, so
+ * the encoder runs on every successful analysis — and it needs initialising
+ * exactly like the decoders. Leaving it out is silent until the very last step,
+ * where emscripten falls back to resolving its own path, gets index.html from
+ * the SPA rewrite, and reports a CompileError about a missing magic word.
+ */
 export const CODEC_WASM = {
   jpeg: "mozjpeg_dec.wasm",
   png: "squoosh_png_bg.wasm",
   webp: "webp_dec.wasm",
+  jpegEncode: "mozjpeg_enc.wasm",
 } as const;
 
 let codecsReady: Promise<void> | undefined;
@@ -250,15 +259,17 @@ export function initDecoders(wasmBase: string): Promise<void> {
       }
       return WebAssembly.compile(await response.arrayBuffer());
     };
-    const [jpeg, png, webp] = await Promise.all([
+    const [jpeg, png, webp, jpegEncode] = await Promise.all([
       import("@jsquash/jpeg/decode"),
       import("@jsquash/png/decode"),
       import("@jsquash/webp/decode"),
+      import("@jsquash/jpeg/encode"),
     ]);
     await Promise.all([
       jpeg.init(await compile(CODEC_WASM.jpeg)),
       png.init(await compile(CODEC_WASM.png)),
       webp.init(await compile(CODEC_WASM.webp)),
+      jpegEncode.init(await compile(CODEC_WASM.jpegEncode)),
     ]);
   })();
   return codecsReady;

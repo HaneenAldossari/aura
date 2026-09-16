@@ -89,6 +89,19 @@ async function requestOnce(
   });
 }
 
+/**
+ * Some models refuse to have reasoning disabled and reject the request outright.
+ *
+ * google/gemini-3.8-flash is one, and it is the default for every task, so a
+ * caller asking for disableReasoning got a hard 400. Chat did exactly that —
+ * a leftover from when the chat model was a free text-only model — and returned
+ * 503 to every user until the e2e caught it. Retrying without the field is
+ * better than making every call site know which models allow it.
+ */
+function rejectsDisabledReasoning(message: string): boolean {
+  return /reasoning is mandatory|cannot be disabled/i.test(message);
+}
+
 /** One model attempt: build, send, retry once on 429, throw on any other error. */
 async function sendOnce(
   messages: ChatMessage[],
@@ -108,6 +121,9 @@ async function sendOnce(
 
   if (!response.ok) {
     const errText = await response.text();
+    if (options.disableReasoning && rejectsDisabledReasoning(errText)) {
+      return sendOnce(messages, { ...options, disableReasoning: false });
+    }
     throw new Error(`OpenRouter API error: ${response.status} ${errText}`);
   }
 
@@ -195,6 +211,9 @@ async function openStream(
 
   if (!response.ok || !response.body) {
     const errText = await response.text();
+    if (options.disableReasoning && rejectsDisabledReasoning(errText)) {
+      return openStream(messages, { ...options, disableReasoning: false });
+    }
     throw new Error(`OpenRouter API error: ${response.status} ${errText}`);
   }
   return response;

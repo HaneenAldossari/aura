@@ -27,6 +27,8 @@ const CODEC_WASM: Record<string, string> = {
   "mozjpeg_dec.wasm": "@jsquash/jpeg/codec/dec/mozjpeg_dec.wasm",
   "squoosh_png_bg.wasm": "@jsquash/png/codec/pkg/squoosh_png_bg.wasm",
   "webp_dec.wasm": "@jsquash/webp/codec/dec/webp_dec.wasm",
+  // The encoder runs on every successful analysis (encode.ts).
+  "mozjpeg_enc.wasm": "@jsquash/jpeg/codec/enc/mozjpeg_enc.wasm",
 };
 
 /** WebAssembly magic word: \0asm. Every file we serve must start with it. */
