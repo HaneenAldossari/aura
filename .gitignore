@@ -35,5 +35,3 @@ remotion-bg/out/
 # Dev-tool output (overlays, probe reports)
 dev/
 
-# Codec wasm copied in by the Vite build
-client/public/wasm/

@@ -9,7 +9,12 @@
  * occurring.
  */
 
-import { decodeImage, initDecoders, DecodeError, type DecodedImage } from "./decode";
+import {
+  decodeImage,
+  initDecoders,
+  DecodeError,
+  type DecodedImage,
+} from "./decode";
 import { toCanonicalJpeg, type CanonicalImage } from "./encode";
 import { buildFeatures, type Features } from "./features";
 import {
@@ -72,7 +77,32 @@ export interface QualityFailure {
   quality: QualityResult;
 }
 
-export type PipelineResult = MeasurementResult | QualityFailure;
+/**
+ * Our fault, not the photo's.
+ *
+ * A decoder that will not load, a model download that failed, a WASM compile
+ * error — none of these say anything about the user's picture, and showing them
+ * in a "better photo needed" panel sends someone off to re-shoot a photo that
+ * was fine. The raw error is carried for the console; `message` is what a person
+ * should read.
+ */
+export interface SystemFailure {
+  kind: "system";
+  message: string;
+  error: unknown;
+}
+
+export type PipelineResult = MeasurementResult | QualityFailure | SystemFailure;
+
+const SYSTEM_MESSAGE =
+  "Something went wrong on our side — this isn't a problem with your photo. Please try again.";
+
+/** Quality codes that are actually infrastructure failures wearing a gate's clothes. */
+const SYSTEM_ISSUE_CODES = new Set(["decoder_unavailable"]);
+
+function systemFailure(error: unknown): SystemFailure {
+  return { kind: "system", message: SYSTEM_MESSAGE, error };
+}
 
 export interface PipelineOptions {
   hairStatus?: HairStatus;
@@ -129,96 +159,124 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T | null> {
  */
 export async function runMeasurement(
   bytes: Uint8Array<ArrayBufferLike>,
-  options: PipelineOptions = {}
+  options: PipelineOptions = {},
 ): Promise<PipelineResult> {
   const stage = options.onStage ?? (() => {});
   const hairStatus: HairStatus = options.hairStatus ?? "natural";
-  const segmenterTimeout = options.segmenterTimeoutMs ?? DEFAULT_SEGMENTER_TIMEOUT_MS;
+  const segmenterTimeout =
+    options.segmenterTimeoutMs ?? DEFAULT_SEGMENTER_TIMEOUT_MS;
 
-  if (options.wasmBase) await initDecoders(options.wasmBase);
+  // Decoders and the landmarker are infrastructure: if either cannot start,
+  // that is our failure and must not be reported as a photo problem.
+  try {
+    if (options.wasmBase) await initDecoders(options.wasmBase);
 
-  // ── Quality gate. Runs on the landmarker alone, so it answers after 3.7 MB. ──
-  stage({ stage: "loading-face-model" });
-  await loadLandmarker((p) =>
-    stage({
-      stage: "loading-face-model",
-      progress: p.fraction,
-      loadedBytes: p.loadedBytes,
-      totalBytes: p.totalBytes,
-    })
-  );
+    stage({ stage: "loading-face-model" });
+    await loadLandmarker((p) =>
+      stage({
+        stage: "loading-face-model",
+        progress: p.fraction,
+        loadedBytes: p.loadedBytes,
+        totalBytes: p.totalBytes,
+      }),
+    );
+  } catch (error) {
+    return systemFailure(error);
+  }
 
   stage({ stage: "checking" });
-  const quality = await assessQuality(bytes);
+  let quality: QualityResult;
+  try {
+    quality = await assessQuality(bytes);
+  } catch (error) {
+    return systemFailure(error);
+  }
+
   if (!quality.ok || !quality.image || !quality.landmarks) {
+    // assessQuality reports a decoder that would not start as a quality issue,
+    // because that is the shape it returns. It is still our fault.
+    if (quality.issues.some((issue) => SYSTEM_ISSUE_CODES.has(issue.code))) {
+      return systemFailure(
+        new Error(
+          quality.issues.map((i) => `${i.code}: ${i.message}`).join("; "),
+        ),
+      );
+    }
     return { kind: "quality", quality };
   }
 
-  stage({ stage: "decoding" });
-  const image = quality.image;
-  const landmarks = quality.landmarks;
-  const imageData = new ImageData(
-    new Uint8ClampedArray(image.data) as Uint8ClampedArray<ArrayBuffer>,
-    image.width,
-    image.height
-  );
-
-  // ── Hair. Skipped entirely when the user says it is dyed or covered. ──
-  let segmentation: Uint8Array | null = null;
-  let hairNote: string | undefined;
-
-  if (hairStatus === "natural") {
-    stage({ stage: "loading-detail-model" });
-    const segmenter = await withTimeout(
-      loadSegmenter((p) =>
-        stage({
-          stage: "loading-detail-model",
-          progress: p.fraction,
-          loadedBytes: p.loadedBytes,
-          totalBytes: p.totalBytes,
-        })
-      ),
-      segmenterTimeout
+  try {
+    stage({ stage: "decoding" });
+    const image = quality.image;
+    const landmarks = quality.landmarks;
+    const imageData = new ImageData(
+      new Uint8ClampedArray(image.data) as Uint8ClampedArray<ArrayBuffer>,
+      image.width,
+      image.height,
     );
-    if (segmenter) {
-      segmentation = await withTimeout(segmentImage(imageData), segmenterTimeout);
+
+    // ── Hair. Skipped entirely when the user says it is dyed or covered. ──
+    let segmentation: Uint8Array | null = null;
+    let hairNote: string | undefined;
+
+    if (hairStatus === "natural") {
+      stage({ stage: "loading-detail-model" });
+      const segmenter = await withTimeout(
+        loadSegmenter((p) =>
+          stage({
+            stage: "loading-detail-model",
+            progress: p.fraction,
+            loadedBytes: p.loadedBytes,
+            totalBytes: p.totalBytes,
+          }),
+        ),
+        segmenterTimeout,
+      );
+      if (segmenter) {
+        segmentation = await withTimeout(
+          segmentImage(imageData),
+          segmenterTimeout,
+        );
+      }
+      if (!segmentation) hairNote = HAIR_UNAVAILABLE_NOTE;
     }
-    if (!segmentation) hairNote = HAIR_UNAVAILABLE_NOTE;
+
+    // ── Measure ──
+    stage({ stage: "measuring" });
+    const regions = extractRegions({ ...image }, landmarks, segmentation, {
+      gamut: image.gamut,
+    });
+
+    // Without a mask there is no hair region, so tell buildFeatures the truth
+    // rather than letting it read an empty region as a measurement.
+    const effectiveHairStatus: HairStatus =
+      hairStatus === "natural" && !segmentation ? "covered" : hairStatus;
+
+    const features = buildFeatures(regions, {
+      hairStatus: effectiveHairStatus,
+      gamut: image.gamut,
+    });
+
+    // ── The image that gets uploaded ──
+    stage({ stage: "preparing-upload" });
+    const upload = await toCanonicalJpeg(image);
+
+    return {
+      kind: "measured",
+      features,
+      quality,
+      image,
+      upload,
+      landmarks,
+      hairAvailable: features.forScoring.hair !== null,
+      hairNote:
+        features.forScoring.hair === null
+          ? (hairNote ?? HAIR_UNAVAILABLE_NOTE)
+          : undefined,
+    };
+  } catch (error) {
+    return systemFailure(error);
   }
-
-  // ── Measure ──
-  stage({ stage: "measuring" });
-  const regions = extractRegions({ ...image }, landmarks, segmentation, {
-    gamut: image.gamut,
-  });
-
-  // Without a mask there is no hair region, so tell buildFeatures the truth
-  // rather than letting it read an empty region as a measurement.
-  const effectiveHairStatus: HairStatus =
-    hairStatus === "natural" && !segmentation ? "covered" : hairStatus;
-
-  const features = buildFeatures(regions, {
-    hairStatus: effectiveHairStatus,
-    gamut: image.gamut,
-  });
-
-  // ── The image that gets uploaded ──
-  stage({ stage: "preparing-upload" });
-  const upload = await toCanonicalJpeg(image);
-
-  return {
-    kind: "measured",
-    features,
-    quality,
-    image,
-    upload,
-    landmarks,
-    hairAvailable: features.forScoring.hair !== null,
-    hairNote:
-      features.forScoring.hair === null
-        ? (hairNote ?? HAIR_UNAVAILABLE_NOTE)
-        : undefined,
-  };
 }
 
 /** Re-export so callers need only this module. */
