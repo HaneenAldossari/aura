@@ -23,6 +23,7 @@
 import "dotenv/config";
 import { createServer, type IncomingMessage, type ServerResponse } from "http";
 import { handleAnalyze } from "./handlers/analyze";
+import { handleCelebrityImage } from "./handlers/celebrityImage";
 import { handleChat } from "./handlers/chat";
 import { handleHealth } from "./handlers/health";
 import {
@@ -113,7 +114,10 @@ const server = createServer(async (req, res) => {
   }
 
   const pathname = (req.url ?? "/").split("?")[0].replace(/\/$/, "") || "/";
-  const handler = ROUTES[pathname];
+  // One dynamic route; everything else is an exact match.
+  const handler = pathname.startsWith("/api/celebrity-image/")
+    ? handleCelebrityImage
+    : ROUTES[pathname];
   if (!handler) {
     res.statusCode = 404;
     res.setHeader("content-type", "application/json");
