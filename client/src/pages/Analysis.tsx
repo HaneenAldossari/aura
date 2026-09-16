@@ -8,6 +8,7 @@ import HairStatusToggle from "./analysis/HairStatusToggle";
 import QualityPanel from "./analysis/QualityPanel";
 import SystemErrorPanel from "./analysis/SystemErrorPanel";
 import { createStageQueue } from "../../../measure/stageQueue";
+import { newResultId, saveResult } from "../lib/resultStore";
 import type { LoadingStageKey } from "./analysis/LoadingScreen";
 import UploadZone from "./analysis/UploadZone";
 import SampleGallery from "./analysis/SampleGallery";
@@ -83,9 +84,11 @@ export default function Analysis() {
     try {
       // Brief pause so the loading choreography reads once, without feeling fake
       const minDelay = new Promise<void>((r) => setTimeout(r, 2500));
-      const { sessionId } = await loadDemoSample(sampleId);
+      const { result } = await loadDemoSample(sampleId);
       await minDelay;
-      navigate(`/results/${sessionId}`);
+      const id = newResultId();
+      saveResult(id, result);
+      navigate(`/results/${id}`);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to load sample.";
       setError(message);
@@ -137,7 +140,7 @@ export default function Analysis() {
       stages.push("analyzing");
       setStageProgress(undefined);
 
-      const { sessionId, result } = await analyzeMeasured(
+      const { result } = await analyzeMeasured(
         outcome.upload.bytes,
         outcome.features.forScoring
       );
@@ -151,9 +154,10 @@ export default function Analysis() {
       }
 
       stages.push("building");
-      navigate(`/results/${sessionId}`, {
-        state: { hairNote: outcome.hairNote, hairAvailable: outcome.hairAvailable },
-      });
+      // Stateless API: keep the result here and put a local key in the URL.
+      const id = newResultId();
+      saveResult(id, result);
+      navigate(`/results/${id}`);
     } catch (err) {
       // Reaching here means the upload or the API failed. Still not the user's
       // photo — the gate already passed it — so this is a system error too.

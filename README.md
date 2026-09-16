@@ -79,7 +79,7 @@ Upload a single selfie, or try one of nine AI-generated sample faces (no persona
 | Frontend     | React 19 · TypeScript · Vite 7 · Tailwind CSS 4 · React Router 7            |
 | Backend      | Node.js · Express 5 · TypeScript (via `tsx`) · Multer · sharp · helmet      |
 | AI / Vision  | OpenRouter — single provider layer (default: `google/gemini-3.8-flash`)      |
-| Hosting      | Vercel (frontend) · Render (backend)                                        |
+| Hosting      | Vercel (frontend + serverless API in `api/`)                                 |
 | Persistence  | In-memory TTL session store · static JSON for demo samples                  |
 
 ## Architecture
@@ -146,16 +146,27 @@ npx tsx scripts/convertImagesToWebp.ts     # one-time image optimization pass
 
 ## Deployment
 
-- **Frontend** → Vercel (root directory: `client/`)
-- **Backend** → Render (build: `npm install`, start: `npx tsx server/index.ts`)
+Frontend and API deploy together to **one Vercel project**. The API lives in
+`api/` as Vercel Functions; `server/handlers/` holds the shared implementation, and
+`server/index.ts` is a local-dev adapter over the very same handlers.
+
+The API is **stateless** — `/api/analyze` returns everything (~6 KB) and the browser
+keeps it. Chat and the shop check take the analysis in the request body.
+
+| Vercel project setting | Value |
+| --- | --- |
+| Root Directory | repository root (**not** `client/`) |
+| Build Command | from `vercel.json` |
+| Output Directory | `client/dist` |
 
 Required environment variables in production:
 
 | Variable             | Where   | Value                                                |
 | -------------------- | ------- | ---------------------------------------------------- |
-| `OPENROUTER_API_KEY` | Render  | your OpenRouter key (needs credit — see below)       |
-| `CORS_ORIGINS`       | Render  | comma-separated allowed frontend URLs                |
-| `VITE_API_BASE`      | Vercel  | `https://your-render-url.onrender.com/api`           |
+| `OPENROUTER_API_KEY` | Vercel  | your OpenRouter key (needs credit — see below)       |
+
+`VITE_API_BASE` and `CORS_ORIGINS` are **not** set in production: the API is
+same-origin under `/api`. `CORS_ORIGINS` only affects the local dev server.
 
 ### Models
 

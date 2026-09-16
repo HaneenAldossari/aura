@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { MessageCircle, Send, Sparkles, X } from "lucide-react";
 import { streamChatMessage } from "../../lib/api";
+import type { AnalysisResult } from "../../lib/types";
 import type { ChatMessage } from "../../lib/types";
 import IconButton from "../../components/ui/IconButton";
 
@@ -27,9 +28,13 @@ function loadHistory(sessionId: string | undefined): ChatMessage[] {
  * Renders as a bottom sheet on small screens. */
 export default function ChatWidget({
   sessionId,
+  analysis,
   seasonName,
 }: {
+  /** Local key for chat history only — the API is stateless. */
   sessionId: string | undefined;
+  /** Sent with every turn, since there is no session for the server to look up. */
+  analysis: AnalysisResult;
   seasonName: string;
 }) {
   const [chatOpen, setChatOpen] = useState(false);
@@ -100,7 +105,7 @@ export default function ChatWidget({
     let streamed = false;
 
     try {
-      const response = await streamChatMessage(sessionId, newMessages, (partial) => {
+      const response = await streamChatMessage(analysis, newMessages, (partial) => {
         // First delta: replace the typing indicator with a live message bubble
         streamed = true;
         clearTimeout(searchTimer);

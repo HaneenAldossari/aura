@@ -1,127 +1,140 @@
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import rateLimit from "express-rate-limit";
-import path from "path";
-import dotenv from "dotenv";
+/**
+ * Local development server.
+ *
+ * Production runs the handlers in server/handlers/ as Vercel Functions under
+ * api/. This is a thin Node http adapter over the *same* handlers so `npm run
+ * dev` and the e2e exercise the real code rather than a parallel Express
+ * implementation that could drift.
+ *
+ * Express, multer, helmet, cors and express-rate-limit are gone with the
+ * migration. What each provided, and what replaces it:
+ *
+ *   express + multer   — the handlers are web-standard; request.formData()
+ *                        parses multipart natively.
+ *   helmet             — security headers are set by vercel.json in production.
+ *   cors               — the API is same-origin under /api; this dev server
+ *                        allows the Vite origin only, and nothing else.
+ *   express-rate-limit — process-local counters are meaningless on serverless.
+ *                        See the note in CLAUDE.md: the LLM routes are
+ *                        currently unthrottled and that is a known gap.
+ *
+ * Image bytes are never written to disk and never logged.
+ */
+import "dotenv/config";
+import { createServer, type IncomingMessage, type ServerResponse } from "http";
+import { handleAnalyze } from "./handlers/analyze";
+import { handleChat } from "./handlers/chat";
+import { handleHealth } from "./handlers/health";
+import {
+  handleDemoList,
+  handleDemoLoad,
+  handleLinkCheckImage,
+  handleLinkCheckManual,
+} from "./handlers/tools";
 
-dotenv.config({ path: path.join(__dirname, "../.env") });
+type Handler = (request: Request) => Promise<Response>;
 
-import analysisRoutes from "./routes/analysis";
-import chatRoutes from "./routes/chat";
-import imageRoutes from "./routes/images";
-import toolRoutes from "./routes/tools";
-import { isDemo } from "./services/openrouter";
-import { modelChat, modelClassify, modelShop } from "./utils/config";
-import { sessions } from "./utils/sessionStore";
+const ROUTES: Record<string, Handler> = {
+  "/api/health": handleHealth,
+  "/api/analyze": handleAnalyze,
+  "/api/chat": handleChat,
+  "/api/demo-list": handleDemoList,
+  "/api/demo-load": handleDemoLoad,
+  "/api/link-check-image": handleLinkCheckImage,
+  "/api/link-check-manual": handleLinkCheckManual,
+};
 
-const app = express();
-const PORT = process.env.PORT || 3001;
-const startedAt = Date.now();
+const PORT = Number(process.env.PORT) || 3001;
 
-// Render terminates TLS behind a proxy — needed for correct client IPs
-app.set("trust proxy", 1);
+/** Origins allowed to call this dev server. Production is same-origin. */
+function allowedOrigin(origin: string | undefined): string | null {
+  if (!origin) return null;
+  const extra = (process.env.CORS_ORIGINS ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const ok =
+    /^http:\/\/localhost:\d+$/.test(origin) ||
+    /^http:\/\/127\.0\.0\.1:\d+$/.test(origin) ||
+    extra.includes(origin);
+  return ok ? origin : null;
+}
 
-app.use(helmet());
-
-// CORS — local dev + the deployed frontend + anything in CORS_ORIGINS.
-// (No wildcard *.vercel.app: any Vercel user could host a hostile frontend.)
-const corsOrigins = (process.env.CORS_ORIGINS || "")
-  .split(",")
-  .map((s) => s.trim())
-  .filter(Boolean);
-const allowedOrigins = new Set([
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://127.0.0.1:5173",
-  "http://127.0.0.1:5174",
-  "https://aura-azure-six.vercel.app",
-  ...corsOrigins,
-]);
-app.use(
-  cors({
-    origin: (origin, cb) => {
-      if (!origin) return cb(null, true); // server-to-server / curl / health checks
-      if (allowedOrigins.has(origin)) return cb(null, true);
-      cb(new Error(`Origin not allowed: ${origin}`));
-    },
-  })
-);
-
-// JSON bodies are small (chat, demo-load); uploads go through multer
-app.use(express.json({ limit: "100kb" }));
-
-// Rate limits — the LLM routes burn shared free-tier quota, so they get a
-// much tighter budget than cheap reads.
-const llmLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000,
-  limit: 10,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: "rate_limited", message: "Too many analyses — please wait a few minutes and try again." },
-});
-const chatLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000,
-  limit: 30,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: "rate_limited", message: "Too many messages — please slow down a little." },
-});
-const generalLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  limit: 120,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: "rate_limited", message: "Too many requests." },
-});
-
-app.use("/api/analyze", llmLimiter);
-app.use("/api/chat", chatLimiter);
-app.use("/api/link-check-image", chatLimiter);
-app.use("/api/link-check-manual", chatLimiter);
-app.use("/api", generalLimiter);
-
-// API routes
-app.use("/api", analysisRoutes);
-app.use("/api", chatRoutes);
-app.use("/api", imageRoutes);
-app.use("/api", toolRoutes);
-
-// Health check
-app.get("/api/health", (_req, res) => {
-  res.json({
-    status: "ok",
-    timestamp: new Date().toISOString(),
-    provider: "openrouter",
-    providerConfigured: !isDemo(),
-    models: { classify: modelClassify(), chat: modelChat(), shop: modelShop() },
-    sessions: sessions.size,
-    uptimeSeconds: Math.round((Date.now() - startedAt) / 1000),
-  });
-});
-
-// Error handler — multer size/type failures and CORS rejections land here;
-// return clean JSON instead of the default HTML 500 page.
-app.use(
-  (err: Error, _req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (res.headersSent) return next(err);
-    if (err.message?.startsWith("Origin not allowed")) {
-      res.status(403).json({ error: "cors_denied", message: "Origin not allowed" });
-      return;
-    }
-    if (err.message?.includes("File too large")) {
-      res.status(400).json({ error: "file_too_large", message: "Photo is too large. Please upload an image under the size limit." });
-      return;
-    }
-    if (err.message?.includes("images are allowed")) {
-      res.status(400).json({ error: "invalid_file_type", message: err.message });
-      return;
-    }
-    console.error("Unhandled error:", err);
-    res.status(500).json({ error: "internal_error", message: "Something went wrong." });
+async function toRequest(req: IncomingMessage): Promise<Request> {
+  const url = `http://localhost:${PORT}${req.url ?? "/"}`;
+  const headers = new Headers();
+  for (const [key, value] of Object.entries(req.headers)) {
+    if (typeof value === "string") headers.set(key, value);
+    else if (Array.isArray(value)) headers.set(key, value.join(", "));
   }
-);
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  if (req.method === "GET" || req.method === "HEAD") {
+    return new Request(url, { method: req.method, headers });
+  }
+
+  const chunks: Buffer[] = [];
+  for await (const chunk of req) chunks.push(chunk as Buffer);
+  const body = Buffer.concat(chunks);
+  return new Request(url, { method: req.method, headers, body });
+}
+
+async function send(res: ServerResponse, response: Response): Promise<void> {
+  res.statusCode = response.status;
+  response.headers.forEach((value, key) => res.setHeader(key, value));
+
+  if (!response.body) {
+    res.end();
+    return;
+  }
+  // Stream, so SSE chat arrives token by token rather than all at once.
+  const reader = response.body.getReader();
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    res.write(Buffer.from(value));
+    // @ts-expect-error flush exists when compression middleware is absent
+    res.flush?.();
+  }
+  res.end();
+}
+
+const server = createServer(async (req, res) => {
+  const origin = allowedOrigin(req.headers.origin as string | undefined);
+  if (origin) {
+    res.setHeader("access-control-allow-origin", origin);
+    res.setHeader("vary", "origin");
+    res.setHeader("access-control-allow-headers", "content-type, accept");
+    res.setHeader("access-control-allow-methods", "GET, POST, OPTIONS");
+  }
+  if (req.method === "OPTIONS") {
+    res.statusCode = origin ? 204 : 403;
+    res.end();
+    return;
+  }
+
+  const pathname = (req.url ?? "/").split("?")[0].replace(/\/$/, "") || "/";
+  const handler = ROUTES[pathname];
+  if (!handler) {
+    res.statusCode = 404;
+    res.setHeader("content-type", "application/json");
+    res.end(JSON.stringify({ error: "not_found", message: `No route for ${pathname}` }));
+    return;
+  }
+
+  try {
+    send(res, await handler(await toRequest(req)));
+  } catch (err) {
+    // Never log the request body: it can contain a photo.
+    console.error(`${pathname} failed:`, err instanceof Error ? err.message : err);
+    if (!res.headersSent) {
+      res.statusCode = 500;
+      res.setHeader("content-type", "application/json");
+      res.end(JSON.stringify({ error: "internal_error", message: "Something went wrong." }));
+    }
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`  aura dev API on http://localhost:${PORT}/api`);
+  console.log(`  routes: ${Object.keys(ROUTES).join(", ")}`);
 });

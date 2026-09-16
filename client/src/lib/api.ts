@@ -46,6 +46,11 @@ export async function analyzeMeasured(
   return data as AnalyzeResponse;
 }
 
+/**
+ * Note on every call below: the API is stateless, so anything that needs the
+ * analysis is handed the analysis. There is no session to look up.
+ */
+
 export async function analyzePhotos(files: File[]): Promise<AnalyzeResponse> {
   const formData = new FormData();
   files.forEach((f) => formData.append("photos", f));
@@ -81,29 +86,19 @@ export async function loadDemoSample(sampleId: string): Promise<AnalyzeResponse>
   return data;
 }
 
-export async function getResults(sessionId: string): Promise<AnalysisResult> {
-  const res = await fetch(`${BASE}/results/${sessionId}`);
-  const data = await safeJson(res);
-  if (!res.ok) throw new Error(data.error || "Results not found");
-  return data;
-}
 
 export async function sendChatMessage(
-  sessionId: string,
+  analysis: AnalysisResult,
   messages: ChatMessage[]
 ): Promise<string> {
   const res = await fetch(`${BASE}/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sessionId, messages }),
+    body: JSON.stringify({ analysis, messages }),
   });
-
   const data = await safeJson(res);
-  if (!res.ok) {
-    throw new Error(data.error || "Chat failed");
-  }
-
-  return data.response;
+  if (!res.ok) throw new Error(data.message || data.error || "Chat failed");
+  return data.response as string;
 }
 
 /**
@@ -112,7 +107,7 @@ export async function sendChatMessage(
  * server doesn't stream (or errors before the stream starts).
  */
 export async function streamChatMessage(
-  sessionId: string,
+  analysis: AnalysisResult,
   messages: ChatMessage[],
   onDelta: (fullText: string) => void
 ): Promise<string> {
@@ -122,7 +117,7 @@ export async function streamChatMessage(
       "Content-Type": "application/json",
       Accept: "text/event-stream",
     },
-    body: JSON.stringify({ sessionId, messages }),
+    body: JSON.stringify({ analysis, messages }),
   });
 
   const contentType = res.headers.get("content-type") || "";
@@ -173,21 +168,16 @@ export async function streamChatMessage(
 
 export async function checkLinkImage(
   file: File,
-  sessionId: string
+  analysis: AnalysisResult
 ): Promise<LinkCheckResultData> {
   const formData = new FormData();
   formData.append("photo", file);
-  formData.append("sessionId", sessionId);
+  formData.append("analysis", JSON.stringify(analysis));
 
-  const res = await fetch(`${BASE}/link-check-image`, {
-    method: "POST",
-    body: formData,
-  });
+  const res = await fetch(`${BASE}/link-check-image`, { method: "POST", body: formData });
   const data = await safeJson(res);
-  if (!res.ok) {
-    throw new Error(data.error || data.message || "Image check failed");
-  }
-  return data;
+  if (!res.ok) throw new Error(data.message || data.error || "Check failed");
+  return data as LinkCheckResultData;
 }
 
 export async function getCelebrityImage(name: string): Promise<string | null> {
@@ -205,17 +195,15 @@ export async function checkLinkManual(
   colorDesc: string,
   category: string,
   brand: string,
-  sessionId: string
+  analysis: AnalysisResult
 ): Promise<LinkCheckResultData> {
   const res = await fetch(`${BASE}/link-check-manual`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ colorDesc, category, brand, sessionId }),
+    body: JSON.stringify({ colorDesc, category, brand, analysis }),
   });
-  const mdata = await safeJson(res);
-  if (!res.ok) {
-    throw new Error(mdata.message ?? "Manual check failed");
-  }
-  return mdata;
+  const data = await safeJson(res);
+  if (!res.ok) throw new Error(data.message || data.error || "Manual check failed");
+  return data as LinkCheckResultData;
 }
 

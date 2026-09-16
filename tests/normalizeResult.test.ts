@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { describe, expect, it } from "vitest";
-import { normalizeResult } from "../server/routes/analysis";
+import { normalizeResult } from "../server/normalizeResult";
 import { getCanonicalPalette } from "../server/utils/seasonPalettes";
 
 /** A response in the new strict-schema shape. */

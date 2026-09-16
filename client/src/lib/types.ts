@@ -157,8 +157,12 @@ export interface AnalysisResult {
   photoTips?: string[];
 }
 
+/**
+ * The API is stateless — the response is everything. There is no session id:
+ * the client keeps the result (see lib/resultStore.ts) and sends it back when
+ * chat or the shop check needs it.
+ */
 export interface AnalyzeResponse {
-  sessionId: string;
   result: AnalysisResult;
 }
 

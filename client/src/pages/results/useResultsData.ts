@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
-import { getResults, getCelebrityImage } from "../../lib/api";
+import { getCelebrityImage } from "../../lib/api";
+import { loadResult } from "../../lib/resultStore";
 import type { AnalysisResult } from "../../lib/types";
 
 /**
- * Loads the analysis result for a session and (in the background) resolves
- * celebrity photos for the returned celebrity list.
+ * Reads the analysis the browser is holding and, in the background, resolves
+ * celebrity photos.
+ *
+ * The API is stateless: nothing is fetched back. The id in the URL is a local
+ * key into resultStore, which is why a link to a results page only opens on the
+ * device that produced it.
  */
 export function useResultsData(sessionId: string | undefined) {
   const [data, setData] = useState<AnalysisResult | null>(null);
@@ -16,9 +21,8 @@ export function useResultsData(sessionId: string | undefined) {
     // Reset to avoid flashing the previous sample's data while the new one loads
     setData(null);
     setLoading(true);
-    getResults(sessionId)
-      .then((r) => { setData(r); setLoading(false); })
-      .catch(() => { setLoading(false); });
+    setData(loadResult(sessionId));
+    setLoading(false);
   }, [sessionId]);
 
   useEffect(() => {

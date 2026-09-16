@@ -7,7 +7,8 @@ makeup, hair and shopping recommendations.
 
 ```
 client/      React 19 + Vite 7 + Tailwind 4 SPA        → Vercel
-server/      Express 5 + TypeScript, run via tsx        → Render
+api/         Vercel Functions, one file per route      → Vercel
+server/      handlers/ (shared) + index.ts (dev only)
 measure/     Framework-free TS colour measurement       → runs in the BROWSER (and headless for eval)
 eval/        Accuracy harness (Phase 4)
 tests/       vitest unit tests for server/ and measure/
@@ -68,11 +69,21 @@ ranking sets confidence and offers alternatives, nothing more.
 `needsSecondPhoto` is a **suggestion, never a gate**, until Phase 4 calibrates the
 thresholds behind it.
 
-**Session state:** the API is still stateful — `sessionStore.ts` is an in-memory Map
-on a long-running Express process, and chat/shop look results up by `sessionId`. The
-stateless Vercel migration has **not** happened. The analyze response is nonetheless
-self-sufficient (everything the UI needs is inside `result`, ~6 KB), so that migration
-becomes "stop calling `getResults`" rather than a reshape.
+**The API is stateless.** There is no session store. `/api/analyze` returns everything
+inside `result` (~6 KB); the browser keeps it in `client/src/lib/resultStore.ts`
+(localStorage, with an in-memory fallback) and sends it back with chat and shop
+requests, where it is validated like any other untrusted input. The id in a
+`/results/:id` URL is a **local key, not a server handle** — a results link only opens
+on the device that produced it.
+
+**One implementation, two runtimes.** Routes are web-standard
+`(request: Request) => Promise<Response>` handlers in `server/handlers/`. `api/*.ts`
+wraps each as a Vercel Function; `server/index.ts` is a ~60-line Node adapter for local
+dev. Express, multer, helmet, cors and express-rate-limit are gone.
+
+**Known gap: the LLM routes are unthrottled.** `express-rate-limit` counted per process,
+which is meaningless on serverless, and nothing replaced it. `/api/analyze` costs about
+$0.01 per call. Vercel Firewall rate limiting or a durable counter is the fix.
 
 `ANALYSIS_MODE=llm_only|hybrid` selects whether the measured features and rule-based ranking
 participate. Chat and shop checks read from the stored session.

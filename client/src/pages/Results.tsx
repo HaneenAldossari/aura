@@ -17,7 +17,7 @@ export default function Results() {
   const [tab, setTab] = useState<Tab>("overview");
   const { data, loading } = useResultsData(sessionId);
   // Lives here (not in ShopTab) so the check result survives tab switches
-  const linkChecker = useLinkChecker(sessionId);
+  const linkChecker = useLinkChecker(data);
 
   if (loading) {
     // Skeleton of the overview: season hero + palette fan area
@@ -75,7 +75,7 @@ export default function Results() {
       </main>
 
       {/* ==================== FLOATING CHATBOT ==================== */}
-      <ChatWidget sessionId={sessionId} seasonName={seasonName} />
+      <ChatWidget sessionId={sessionId} analysis={data} seasonName={seasonName} />
     </div>
   );
 }

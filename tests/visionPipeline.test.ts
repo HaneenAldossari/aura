@@ -9,7 +9,7 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { analyzePhotos } from "../server/services/vision";
-import { normalizeResult } from "../server/routes/analysis";
+import { normalizeResult } from "../server/normalizeResult";
 import { CANONICAL_SEASONS } from "../server/prompts/colorAnalysis";
 
 const MODEL_REPLY = {

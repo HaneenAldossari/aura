@@ -4,12 +4,13 @@ import { checkLinkImage } from "../../lib/api";
 import type { ColorSwatch, Palette } from "../../lib/types";
 import { LinkCheckResult } from "../../components/LinkCheckResult";
 import SplitText from "../../components/SplitText";
+import type { AnalysisResult } from "../../lib/types";
 
 /**
  * Image-checker state. Lives at the Results level (not inside ShopTab) so
  * the result survives switching tabs — exactly as in the original page.
  */
-export function useLinkChecker(sessionId: string | undefined) {
+export function useLinkChecker(analysis: AnalysisResult | null) {
   const [linkResult, setLinkResult] = useState<Record<string, any> | null>(null);
   const [linkLoading, setLinkLoading] = useState(false);
   const [linkError, setLinkError] = useState<string | null>(null);
@@ -24,7 +25,8 @@ export function useLinkChecker(sessionId: string | undefined) {
     setLinkError(null);
     setLinkResult(null);
     try {
-      const res = await checkLinkImage(file, sessionId!);
+      if (!analysis) throw new Error('No analysis loaded');
+      const res = await checkLinkImage(file, analysis);
       setLinkResult(res);
     } catch (err: any) {
       setLinkError(err.message || 'Image check failed');
