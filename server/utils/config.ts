@@ -101,13 +101,19 @@ export function fallbackModel(): string | undefined {
 export type AnalysisMode = "llm_only" | "hybrid";
 
 /**
- * "llm_only" is the pre-measurement pipeline. "hybrid" adds the Python
- * measurement service and rule-based ranking; it becomes the default at the
- * end of Phase 2, and the flag is kept so the eval can compare the two.
+ * "hybrid" is the default: the browser measures, the server ranks the seasons
+ * from those measurements, and the model is given the measured colour values as
+ * ground truth. The model's verdict is still the final season — the ranking only
+ * sets confidence and offers alternatives, and the model never sees it, so the
+ * agreement check is not measuring its own suggestion.
+ *
+ * "llm_only" is the pre-measurement pipeline, kept so the eval can compare the
+ * two. Hybrid also degrades to it automatically whenever a request arrives
+ * without measured features.
  */
 export function analysisMode(): AnalysisMode {
-  const raw = (process.env.ANALYSIS_MODE || "llm_only").trim().toLowerCase();
-  return raw === "hybrid" ? "hybrid" : "llm_only";
+  const raw = (process.env.ANALYSIS_MODE || "hybrid").trim().toLowerCase();
+  return raw === "llm_only" ? "llm_only" : "hybrid";
 }
 
 /**

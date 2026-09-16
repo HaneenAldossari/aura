@@ -74,6 +74,31 @@ export interface Axes {
   chroma: "bright" | "medium" | "soft";
 }
 
+/** What the user told us about their hair before analysis. */
+export type HairStatus = "natural" | "dyed" | "covered";
+
+/** One region's CIE LCh reading. */
+export interface RegionReading {
+  L: number;
+  C: number;
+  h: number;
+}
+
+/** What the browser measured, echoed back so the UI can show its working. */
+export interface MeasuredSummary {
+  skin: RegionReading;
+  hair: RegionReading | null;
+  eyes: RegionReading | null;
+  hairStatus: HairStatus;
+  axes: {
+    hue: { value: number; label: string };
+    value: { value: number; label: string };
+    chroma: { value: number; label: string };
+  };
+  contrast: { value: number; label: string } | null;
+  skinBand: "light" | "medium" | "deep";
+}
+
 /** Evidence-first read of the photo, recorded before a season is named. */
 export interface Assessment {
   undertone: "warm" | "neutral" | "cool";
@@ -112,6 +137,20 @@ export interface AnalysisResult {
   axes?: Axes | null;
   assessment?: Assessment | null;
   rationale?: string;
+
+  // ── Hybrid measurement (Phase 2). All optional: a request without measured
+  // features degrades to the LLM-only path and none of these appear.
+  measured?: MeasuredSummary;
+  /** False when hair could not be read, or the user said it is dyed/covered. */
+  hairAvailable?: boolean;
+  /** Shown on the results page when hairAvailable is false. */
+  hairNote?: string;
+  /** The rule-based verdict. The season above is still the model's. */
+  rules?: { primary: string; secondary: string; margin: number; ambiguous: boolean };
+  agreement?: { level: "primary" | "secondary" | "none"; agrees: boolean };
+  /** A suggestion, never a gate, until Phase 4 calibrates the thresholds. */
+  needsSecondPhoto?: boolean;
+  alternatives?: { season: string; score: number }[];
   /** Set instead of the fields above when the model can't analyze the photo */
   error?: "low_confidence" | "no_face" | "multiple_faces";
   message?: string;

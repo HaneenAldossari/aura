@@ -10,45 +10,34 @@ import {
 } from "lucide-react";
 
 const ANALYSIS_STAGES = [
-  {
-    icon: <Scan className="w-5 h-5" />,
-    title: "Uploading photos",
-    description: "Sending your images securely to our AI...",
-    duration: 3000,
-  },
-  {
-    icon: <Eye className="w-5 h-5" />,
-    title: "Detecting features",
-    description: "Identifying your skin tone, eye color, and hair color...",
-    duration: 5000,
-  },
-  {
-    icon: <Palette className="w-5 h-5" />,
-    title: "Analyzing undertone",
-    description: "Examining warm vs. cool signals from skin and eyes...",
-    duration: 6000,
-  },
-  {
-    icon: <Sparkles className="w-5 h-5" />,
-    title: "Determining your season",
-    description: "Mapping depth, chroma, and undertone to your color season...",
-    duration: 7000,
-  },
-  {
-    icon: <ShieldCheck className="w-5 h-5" />,
-    title: "Cross-validating results",
-    description: "Running a second check to ensure accuracy...",
-    duration: 8000,
-  },
-  {
-    icon: <CheckCircle2 className="w-5 h-5" />,
-    title: "Building your profile",
-    description: "Generating your palette, makeup guide, and recommendations...",
-    duration: 5000,
-  },
-];
+  { icon: <Scan />, key: "loading-face-model", title: "Getting ready", description: "Downloading the face model — this happens once.", duration: 4000 },
+  { icon: <Eye />, key: "checking", title: "Checking your photo", description: "Focus, lighting and framing, right here on your device...", duration: 3000 },
+  { icon: <Palette />, key: "loading-detail-model", title: "Loading detail model", description: "One more download so we can read your hair...", duration: 6000 },
+  { icon: <Sparkles />, key: "measuring", title: "Measuring your colouring", description: "Reading skin, hair and eye colour in CIE Lab...", duration: 4000 },
+  { icon: <ShieldCheck />, key: "analyzing", title: "Determining your season", description: "Matching your measurements against the 12 seasons...", duration: 12000 },
+  { icon: <CheckCircle2 />, key: "building", title: "Building your profile", description: "Generating your palette, makeup guide, and recommendations...", duration: 5000 },
+] as const;
 
-export default function LoadingScreen({ uploadedPhotos, totalDuration: overrideTotal }: { uploadedPhotos: string[]; totalDuration?: number }) {
+/** Stage keys the pipeline and the upload step emit. */
+export type LoadingStageKey = (typeof ANALYSIS_STAGES)[number]["key"];
+
+export default function LoadingScreen({
+  uploadedPhotos,
+  totalDuration: overrideTotal,
+  stage,
+  stageProgress,
+}: {
+  uploadedPhotos: string[];
+  totalDuration?: number;
+  /**
+   * The stage actually running. When given, the display follows real pipeline
+   * events; the timer below is only a fallback for demo-sample playback, where
+   * there is no local work to report.
+   */
+  stage?: LoadingStageKey;
+  /** 0-1 within the current stage, for the two model downloads. */
+  stageProgress?: number;
+}) {
   const [activeStage, setActiveStage] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [funFact, setFunFact] = useState(0);
@@ -77,7 +66,15 @@ export default function LoadingScreen({ uploadedPhotos, totalDuration: overrideT
   const stageDurations = ANALYSIS_STAGES.map((s) => s.duration * scale);
   const totalDuration = overrideTotal || baseTotal;
 
+  const drivenIndex = stage
+    ? ANALYSIS_STAGES.findIndex((s) => s.key === stage)
+    : -1;
+
   useEffect(() => {
+    if (drivenIndex >= 0) {
+      setActiveStage(drivenIndex);
+      return;
+    }
     let totalTime = 0;
     for (let i = 0; i < stageDurations.length; i++) {
       totalTime += stageDurations[i];
@@ -87,7 +84,7 @@ export default function LoadingScreen({ uploadedPhotos, totalDuration: overrideT
       }
     }
     setActiveStage(ANALYSIS_STAGES.length - 1);
-  }, [elapsed, stageDurations]);
+  }, [elapsed, stageDurations, drivenIndex]);
 
   // Cycle fun facts every 8 seconds (or proportionally faster in compressed mode)
   useEffect(() => {
@@ -97,7 +94,16 @@ export default function LoadingScreen({ uploadedPhotos, totalDuration: overrideT
     return () => clearInterval(interval);
   }, [scale]);
 
-  const progressPercent = Math.min(95, (elapsed / totalDuration) * 100);
+  // Real stages: each completed stage is worth an equal share, plus whatever
+  // fraction of the current one we know about. Still capped below 100 so the
+  // ring never completes before navigation.
+  const progressPercent =
+    drivenIndex >= 0
+      ? Math.min(
+          97,
+          ((drivenIndex + (stageProgress ?? 0)) / ANALYSIS_STAGES.length) * 100
+        )
+      : Math.min(95, (elapsed / totalDuration) * 100);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[75vh] animate-fade-in">

@@ -45,15 +45,34 @@ throw if absent: `palette` (`StyleTab.tsx`) and `palette.avoid` (`AvoidSection.t
 ## Analysis pipeline
 
 ```
-browser: decode → quality gate → landmarks → regions → features
-   │ (if quality fails, show issues + retake)
+browser: decode → quality gate → landmarks → regions → features → canonical JPEG
+   │ (quality failure never uploads — issues + retake, photo stays on device)
    ▼
-POST /api/analyze  (downscaled image + measured features)
+POST /api/analyze  (canonical sRGB JPEG + measured features)
    ▼
-server: sharp validate/rotate/downscale → OpenRouter vision call (strict JSON schema)
+server: validate features (400 on implausible) → score() ranks the 12 seasons
    ▼
-normalizeResult() → canonical palette injected → TTL session store → client
+        OpenRouter vision call: image + measured values, NEVER the ranking
+   ▼
+        agreement check (model vs rules) → confidence cap, alternatives
+   ▼
+normalizeResult() → canonical palette injected → session → client
 ```
+
+**The model never sees the rule-based ranking.** Shown the rules' answer it would
+anchor on it, and the agreement check computed afterwards would be measuring its own
+suggestion. It gets the image and the measured colour values only; agreement is
+computed once it has committed. The model's verdict is still the final season — the
+ranking sets confidence and offers alternatives, nothing more.
+
+`needsSecondPhoto` is a **suggestion, never a gate**, until Phase 4 calibrates the
+thresholds behind it.
+
+**Session state:** the API is still stateful — `sessionStore.ts` is an in-memory Map
+on a long-running Express process, and chat/shop look results up by `sessionId`. The
+stateless Vercel migration has **not** happened. The analyze response is nonetheless
+self-sufficient (everything the UI needs is inside `result`, ~6 KB), so that migration
+becomes "stop calling `getResults`" rather than a reshape.
 
 `ANALYSIS_MODE=llm_only|hybrid` selects whether the measured features and rule-based ranking
 participate. Chat and shop checks read from the stored session.

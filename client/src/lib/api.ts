@@ -19,6 +19,33 @@ async function safeJson(res: Response) {
   }
 }
 
+/**
+ * Upload for analysis.
+ *
+ * `imageBytes` is the canonical JPEG produced by measure/encode.ts — ICC
+ * converted to sRGB, EXIF-uprighted, downscaled. The raw file is never sent:
+ * the model has to see the same colours the measurement did, and on a Display P3
+ * photo that difference is a 4-degree hue shift, enough to flip the undertone.
+ */
+export async function analyzeMeasured(
+  imageBytes: Uint8Array,
+  features: unknown
+): Promise<AnalyzeResponse> {
+  const formData = new FormData();
+  formData.append(
+    "photos",
+    new File([new Blob([imageBytes as BlobPart])], "photo.jpg", { type: "image/jpeg" })
+  );
+  formData.append("features", JSON.stringify(features));
+
+  const res = await fetch(`${BASE}/analyze`, { method: "POST", body: formData });
+  const data = await safeJson(res);
+  if (!res.ok) {
+    throw new Error(data.message || data.error || "Analysis failed");
+  }
+  return data as AnalyzeResponse;
+}
+
 export async function analyzePhotos(files: File[]): Promise<AnalyzeResponse> {
   const formData = new FormData();
   files.forEach((f) => formData.append("photos", f));

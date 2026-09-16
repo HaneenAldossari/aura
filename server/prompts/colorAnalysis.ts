@@ -196,6 +196,57 @@ Describe hair recommendations in plain language ("deep chestnut with warm carame
 highlights"). Name real, achievable salon colors — no invented shade names.`;
 
 
+/**
+ * Measured colour values for the chatbot.
+ *
+ * Lets it answer "why am I a Soft Autumn" with the actual numbers instead of
+ * restating the verdict. Empty string when the analysis predates measurement or
+ * ran without it, so the prompt degrades rather than printing "undefined".
+ */
+function measuredGrounding(analysisResult: Record<string, unknown>): string {
+  const m = analysisResult.measured as
+    | {
+        skin?: { L: number; C: number; h: number };
+        hair?: { L: number; C: number; h: number } | null;
+        eyes?: { L: number; C: number; h: number } | null;
+        hairStatus?: string;
+        axes?: Record<string, { label: string }>;
+        contrast?: { label: string } | null;
+      }
+    | undefined;
+  if (!m?.skin) return "";
+
+  const region = (name: string, r?: { L: number; C: number; h: number } | null) =>
+    r ? `${name} L* ${r.L.toFixed(0)}, C* ${r.C.toFixed(0)}, hue ${r.h.toFixed(0)}deg` : "";
+
+  const parts = [
+    region("skin", m.skin),
+    region("hair", m.hair),
+    region("eyes", m.eyes),
+  ].filter(Boolean);
+
+  const lines = [
+    "",
+    "Measured from their photo (real instrument readings, not guesses):",
+    parts.join(" · "),
+  ];
+  if (m.axes) {
+    lines.push(
+      `Axes: ${m.axes.hue?.label} undertone, ${m.axes.value?.label} depth, ${m.axes.chroma?.label} chroma` +
+        (m.contrast ? `, ${m.contrast.label} contrast` : "")
+    );
+  }
+  if (m.hairStatus && m.hairStatus !== "natural") {
+    lines.push(`Their hair is ${m.hairStatus}, so it was excluded from the analysis.`);
+  } else if (m.hair === null) {
+    lines.push("Their hair could not be measured, so it was excluded.");
+  }
+  lines.push(
+    "You may cite these numbers plainly if asked why they got their season. Never invent others."
+  );
+  return lines.join("\n");
+}
+
 export function getChatbotSystemPrompt(analysisResult: Record<string, unknown>): string {
   const palette = (analysisResult.palette as Record<string, unknown>) || {};
   const bestColors = (palette.best as Array<{ name: string }>) || (palette.bestColors as Array<{ name: string }>) || [];
@@ -210,6 +261,7 @@ Skin: ${keyFeatures.skinTone || ""}
 Hair: ${keyFeatures.hairColor || ""}
 Eyes: ${keyFeatures.eyeColor || ""}
 Undertone: ${analysisResult.undertone || ""}
+${measuredGrounding(analysisResult)}
 Best colors: ${paletteColors}
 
 BRAND KNOWLEDGE — Moonglaze:

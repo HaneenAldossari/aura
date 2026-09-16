@@ -18,7 +18,14 @@ import { isDemo } from "../services/openrouter";
 import { getCanonicalPalette } from "../utils/seasonPalettes";
 import { prepareImage } from "../utils/prepareImage";
 import { sessions } from "../utils/sessionStore";
-import { maxFileSizeBytes } from "../utils/config";
+import { analysisMode, maxFileSizeBytes } from "../utils/config";
+import { validateImage } from "../utils/prepareImage";
+import {
+  computeAgreement,
+  describeFeatures,
+  rankSeasons,
+  validateFeatures,
+} from "../services/hybrid";
 
 const router = Router();
 
@@ -253,6 +260,33 @@ router.post(
         return;
       }
 
+      // Measured features from the browser, when the client ran measure/.
+      // Untrusted input steering a paid model call, so ranges are checked.
+      let measured: ReturnType<typeof validateFeatures> | null = null;
+      const rawFeatures = (req.body as Record<string, unknown> | undefined)?.features;
+      if (typeof rawFeatures === "string" && rawFeatures.length > 0) {
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(rawFeatures);
+        } catch {
+          res.status(400).json({
+            error: "invalid_features",
+            message: "Measured features were not valid JSON.",
+          });
+          return;
+        }
+        measured = validateFeatures(parsed);
+        if (!measured.ok) {
+          res.status(400).json({
+            error: "invalid_features",
+            message: `Measured features were rejected: ${measured.reason}`,
+          });
+          return;
+        }
+      }
+
+      const hybrid = analysisMode() === "hybrid" && measured?.ok === true;
+
       let result: Record<string, unknown>;
 
       if (isDemo()) {
@@ -261,11 +295,26 @@ router.post(
         result = { ...DEMO_RESULT };
         console.log("Demo mode — returning sample Deep Autumn analysis");
       } else {
-        // Validate + downscale once; the same prepared image feeds face
-        // validation and the analysis call.
+        // When the browser already produced the canonical image — ICC-converted,
+        // uprighted and downscaled by measure/encode.ts — re-encoding it here
+        // would be a second lossy pass over the exact pixels that were measured,
+        // and the model must see those pixels. So validate without re-encoding,
+        // and fall back to the full sharp pass for anything else.
         let prepared;
         try {
-          prepared = await prepareImage(files[0].buffer);
+          if (hybrid) {
+            const checked = await validateImage(files[0].buffer);
+            prepared = checked.withinCap
+              ? {
+                  base64: files[0].buffer.toString("base64"),
+                  mimeType: `image/${checked.format}` as "image/jpeg",
+                  width: checked.width,
+                  height: checked.height,
+                }
+              : await prepareImage(files[0].buffer);
+          } else {
+            prepared = await prepareImage(files[0].buffer);
+          }
         } catch {
           res.status(400).json({
             error: "invalid_image",
@@ -274,18 +323,30 @@ router.post(
           return;
         }
 
-        console.log("Live mode — analyzing with OpenRouter");
-        let raw = await analyzePhotos([
-          { base64: prepared.base64, mimeType: prepared.mimeType },
-        ]);
+        // Rank the seasons from the measurements. The model never sees this —
+        // it is compared against the model's verdict afterwards.
+        const rules = hybrid && measured?.ok ? rankSeasons(measured.features) : null;
+        const analyzeOptions =
+          rules && measured?.ok
+            ? { measurements: describeFeatures(measured.features, rules.axes) }
+            : {};
+
+        console.log(
+          `Live mode — analyzing with OpenRouter (${rules ? "hybrid" : "llm_only"})`
+        );
+        let raw = await analyzePhotos(
+          [{ base64: prepared.base64, mimeType: prepared.mimeType }],
+          analyzeOptions
+        );
 
         // The small free model occasionally misfires the face gate on a
         // valid photo — one retry recovers most false negatives cheaply.
         if (raw.error === "no_face") {
           console.log("no_face on first pass — retrying once");
-          raw = await analyzePhotos([
-            { base64: prepared.base64, mimeType: prepared.mimeType },
-          ]);
+          raw = await analyzePhotos(
+            [{ base64: prepared.base64, mimeType: prepared.mimeType }],
+            analyzeOptions
+          );
         }
 
         // Face-count and photo-quality gates come back from the model itself
@@ -309,6 +370,44 @@ router.post(
 
         // Normalize new prompt schema to frontend-compatible shape
         result = normalizeResult(raw);
+
+        // Agreement is computed only now, after the model has committed.
+        if (rules && measured?.ok) {
+          const agreement = computeAgreement(rules, result.season);
+          const confidence = result.confidence as number;
+          result = {
+            ...result,
+            confidence: Math.min(confidence, agreement.confidenceCap * 100),
+            measured: {
+              skin: measured.features.skin,
+              hair: measured.features.hair,
+              eyes: measured.features.eyes,
+              hairStatus: measured.features.hairStatus,
+              axes: rules.axes,
+              contrast: rules.contrast,
+              skinBand: rules.skinBand,
+            },
+            hairAvailable: measured.features.hair !== null,
+            rules: {
+              primary: agreement.rulesPrimary,
+              secondary: agreement.rulesSecondary,
+              margin: agreement.rulesMargin,
+              ambiguous: rules.ambiguous,
+            },
+            agreement: {
+              level: agreement.level,
+              agrees: agreement.agrees,
+            },
+            // A suggestion, never a gate: the thresholds behind it are
+            // uncalibrated estimates until Phase 4.
+            needsSecondPhoto: agreement.needsSecondPhoto,
+            alternatives: agreement.alternatives,
+            crossValidation: {
+              agrees: agreement.agrees,
+              confidence: Math.min(confidence, agreement.confidenceCap * 100),
+            },
+          };
+        }
       }
 
       // Store result with a session ID

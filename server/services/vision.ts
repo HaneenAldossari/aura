@@ -25,8 +25,20 @@ export interface AnalysisImage {
   mimeType: string;
 }
 
+export interface AnalyzeOptions {
+  /**
+   * Measured colour values to hand the model as ground truth.
+   *
+   * Never contains a season name or a ranking: a model shown the rule-based
+   * answer would anchor on it, and the agreement check computed afterwards
+   * would be measuring its own suggestion.
+   */
+  measurements?: string;
+}
+
 export async function analyzePhotos(
-  images: AnalysisImage[]
+  images: AnalysisImage[],
+  analyzeOptions: AnalyzeOptions = {}
 ): Promise<Record<string, unknown>> {
   const labels = ["PHOTO — Face in natural light:"];
 
@@ -40,6 +52,18 @@ export async function analyzePhotos(
     content.push({ type: "text", text: labels[i] || `PHOTO ${i + 1}:` });
     content.push(imageBlock(img.base64, img.mimeType));
   });
+
+  if (analyzeOptions.measurements) {
+    content.push({
+      type: "text",
+      text:
+        `${analyzeOptions.measurements}\n\n` +
+        "Use these numbers rather than judging colour values by eye. Do not " +
+        "restate them, and do not invent hex or Lab values of your own. Your " +
+        "job is to decide which season they describe, and to explain why in " +
+        "the rationale.",
+    });
+  }
 
   content.push({
     type: "text",

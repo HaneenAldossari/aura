@@ -85,12 +85,14 @@ describe("model selection", () => {
 });
 
 describe("pipeline flags", () => {
-  it("defaults to llm_only and accepts hybrid", () => {
-    expect(analysisMode()).toBe("llm_only");
-    process.env.ANALYSIS_MODE = "hybrid";
+  it("defaults to hybrid and accepts llm_only", () => {
     expect(analysisMode()).toBe("hybrid");
-    process.env.ANALYSIS_MODE = "nonsense";
+    process.env.ANALYSIS_MODE = "llm_only";
     expect(analysisMode()).toBe("llm_only");
+    // Anything unrecognised falls back to the default rather than disabling
+    // measurement silently.
+    process.env.ANALYSIS_MODE = "nonsense";
+    expect(analysisMode()).toBe("hybrid");
   });
 
   it("keeps classification reasoning on unless explicitly disabled", () => {

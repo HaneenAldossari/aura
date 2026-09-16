@@ -1,7 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { analyzePhotos, loadDemoSample, listDemoSamples } from "../lib/api";
+import { analyzeMeasured, analyzePhotos, loadDemoSample, listDemoSamples } from "../lib/api";
+import { measureFile, warmUpModels, type QualityIssue } from "../lib/measure";
+import type { HairStatus } from "../lib/types";
+import HairStatusToggle from "./analysis/HairStatusToggle";
+import QualityPanel from "./analysis/QualityPanel";
+import type { LoadingStageKey } from "./analysis/LoadingScreen";
 import UploadZone from "./analysis/UploadZone";
 import SampleGallery from "./analysis/SampleGallery";
 import LoadingScreen from "./analysis/LoadingScreen";
@@ -9,7 +14,11 @@ import ErrorPanel from "./analysis/ErrorPanel";
 
 export default function Analysis() {
   const navigate = useNavigate();
-  const [step, setStep] = useState<"upload" | "analyzing" | "error">("upload");
+  const [step, setStep] = useState<"upload" | "analyzing" | "error" | "quality">("upload");
+  const [hairStatus, setHairStatus] = useState<HairStatus>("natural");
+  const [qualityIssues, setQualityIssues] = useState<QualityIssue[]>([]);
+  const [stage, setStage] = useState<LoadingStageKey | undefined>(undefined);
+  const [stageProgress, setStageProgress] = useState<number | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [errorKind, setErrorKind] = useState<"photo" | "sample">("photo");
   const [photoTips, setPhotoTips] = useState<string[]>([]);
@@ -18,6 +27,12 @@ export default function Analysis() {
   // (fall back to the static list if the API fails — keeps the gallery visible).
   const STATIC_SAMPLES = Array.from({ length: 9 }, (_, i) => `sample-${i + 1}`);
   const [availableSamples, setAvailableSamples] = useState<string[]>(STATIC_SAMPLES);
+
+  // 20 MB of models, on versioned immutable URLs. Starting now overlaps the
+  // download with the user choosing a photo instead of stacking on top of it.
+  useEffect(() => {
+    warmUpModels();
+  }, []);
 
   useEffect(() => {
     listDemoSamples()
@@ -79,11 +94,31 @@ export default function Analysis() {
 
     setStep("analyzing");
     setError(null);
+    setStage("loading-face-model");
+    setStageProgress(undefined);
 
     try {
-      const { sessionId, result } = await analyzePhotos([photo.file]);
+      // Measure on-device first. A photo that fails the gate never leaves the
+      // browser, so nothing is spent on it and the advice is specific.
+      const outcome = await measureFile(photo.file, hairStatus, (event) => {
+        setStage(event.stage as LoadingStageKey);
+        setStageProgress(event.progress);
+      });
 
-      // Check for low confidence error
+      if (outcome.kind === "quality") {
+        setQualityIssues(outcome.quality.issues);
+        setStep("quality");
+        return;
+      }
+
+      setStage("analyzing");
+      setStageProgress(undefined);
+
+      const { sessionId, result } = await analyzeMeasured(
+        outcome.upload.bytes,
+        outcome.features.forScoring
+      );
+
       if (result.error === "low_confidence") {
         setError(result.message as string || "The AI needs better photos for an accurate analysis.");
         setPhotoTips((result.photoTips as string[]) || []);
@@ -92,13 +127,22 @@ export default function Analysis() {
         return;
       }
 
-      navigate(`/results/${sessionId}`);
+      setStage("building");
+      navigate(`/results/${sessionId}`, {
+        state: { hairNote: outcome.hairNote, hairAvailable: outcome.hairAvailable },
+      });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
       setError(message);
       setErrorKind("photo");
       setStep("error");
     }
+  };
+
+  const handleRetake = () => {
+    setQualityIssues([]);
+    setPhoto({ file: null, preview: null });
+    setStep("upload");
   };
 
   return (
@@ -148,6 +192,14 @@ export default function Analysis() {
               )}
             </div>
 
+            {/* Hair status — asked before analysis because dyed or covered hair
+                carries no information about natural colouring. */}
+            {hasPhoto && (
+              <div className="mb-8">
+                <HairStatusToggle value={hairStatus} onChange={setHairStatus} />
+              </div>
+            )}
+
             {/* Tip */}
             <div className="p-4 rounded-xl bg-gold/5 border border-gold/10 text-sm text-cream-muted mb-8">
               <strong className="text-gold">Tip:</strong> Remove makeup if
@@ -171,7 +223,16 @@ export default function Analysis() {
           <LoadingScreen
             uploadedPhotos={samplePreview ? [samplePreview] : photo.preview ? [photo.preview] : []}
             totalDuration={samplePreview ? 2500 : undefined}
+            stage={samplePreview ? undefined : stage}
+            stageProgress={samplePreview ? undefined : stageProgress}
           />
+        )}
+
+        {/* ─── Quality gate — nothing was uploaded ─ */}
+        {step === "quality" && (
+          <div className="animate-fade-in-up">
+            <QualityPanel issues={qualityIssues} onRetake={handleRetake} />
+          </div>
         )}
 
         {/* ─── Error / Retry ───────────────── */}

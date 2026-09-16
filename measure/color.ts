@@ -115,6 +115,45 @@ export function linearToXyz(linear: LinearRGB, gamut: Gamut = "srgb"): XYZ {
   return matrixApply(gamut === "display-p3" ? P3_TO_XYZ : SRGB_TO_XYZ, linear);
 }
 
+/** XYZ (D65) back to linear sRGB. Inverse of SRGB_TO_XYZ. */
+const XYZ_TO_SRGB = [
+  [3.2404542, -1.5371385, -0.4985314],
+  [-0.969266, 1.8760108, 0.041556],
+  [0.0556434, -0.2040259, 1.0572252],
+] as const;
+
+export function xyzToLinearSrgb(xyz: XYZ): LinearRGB {
+  const m = XYZ_TO_SRGB;
+  return {
+    r: m[0][0] * xyz.x + m[0][1] * xyz.y + m[0][2] * xyz.z,
+    g: m[1][0] * xyz.x + m[1][1] * xyz.y + m[1][2] * xyz.z,
+    b: m[2][0] * xyz.x + m[2][1] * xyz.y + m[2][2] * xyz.z,
+  };
+}
+
+/**
+ * Re-encode a pixel from its source gamut into sRGB.
+ *
+ * Needed because the image handed to the model must be the same colours the
+ * measurement saw. decode.ts only *records* the gamut — the pixels stay in their
+ * native encoding, which is right for Lab conversion and wrong for anything that
+ * will be looked at as sRGB.
+ *
+ * Out-of-gamut colours clip. Skin sits well inside sRGB, so this is safe for
+ * faces; a neon product photo would lose saturation, which is why the shop path
+ * measures in the source gamut rather than converting first.
+ */
+export function convertToSrgb(rgb: RGB, from: Gamut): RGB {
+  if (from !== "display-p3") return rgb;
+  const linear = xyzToLinearSrgb(linearToXyz(toLinear(rgb), "display-p3"));
+  const clamp = (v: number) => (v < 0 ? 0 : v > 255 ? 255 : v);
+  return {
+    r: clamp(linearToSrgb(linear.r)),
+    g: clamp(linearToSrgb(linear.g)),
+    b: clamp(linearToSrgb(linear.b)),
+  };
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Lab
 // ─────────────────────────────────────────────────────────────────────────────

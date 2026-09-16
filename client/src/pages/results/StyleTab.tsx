@@ -167,6 +167,29 @@ export default function StyleTab({
             </div>
           </EditorialSection>
 
+          {/* What we assumed about their hair. Shown always when measurement
+              ran, because a reader has no other way to tell whether hair was
+              part of the verdict. */}
+          {data.measured && (
+            <div
+              className="rounded-xl p-4 text-sm"
+              style={{
+                background: "var(--bg-card)",
+                border: "1px solid var(--border-color)",
+                color: "var(--text-muted)",
+              }}
+            >
+              {data.hairAvailable === false
+                ? (data.hairNote ??
+                  "We couldn't read your hair, so this uses your skin and eyes only.")
+                : data.measured.hairStatus === "natural"
+                  ? "You told us your hair is its natural colour, so we included it."
+                  : `You told us your hair is ${
+                      data.measured.hairStatus === "dyed" ? "coloured" : "not visible"
+                    }, so we left it out and used your skin and eyes.`}
+            </div>
+          )}
+
           {/* Additional tips from AI analysis */}
           {hairColor && hairColor.bestHighlights && (
             <div
