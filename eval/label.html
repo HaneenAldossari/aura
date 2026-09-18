@@ -1,0 +1,150 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Aura — label photos</title>
+<style>
+  :root { color-scheme: dark; --bg:#12110f; --card:#1b1917; --line:#2e2a26; --text:#efe9e0; --muted:#a8a097; --gold:#c9a961; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.5 ui-sans-serif, system-ui, sans-serif; }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; gap:16px; align-items:baseline; }
+  h1 { font-size:16px; margin:0; font-weight:600; }
+  .muted { color:var(--muted); font-size:13px; }
+  main { display:grid; grid-template-columns: minmax(0,1fr) 360px; gap:20px; padding:20px; align-items:start; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  img { width:100%; border-radius:12px; border:1px solid var(--line); display:block; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin:12px 0; }
+  button { font:inherit; cursor:pointer; border-radius:9px; border:1px solid var(--line); background:#221f1c; color:var(--text); padding:10px; text-align:left; }
+  button:hover { border-color:var(--gold); }
+  button.on { border-color:var(--gold); color:var(--gold); }
+  .row { display:flex; gap:8px; margin-top:12px; }
+  .row button { flex:1; text-align:center; }
+  .primary { background:var(--gold); color:#141210; border-color:var(--gold); font-weight:600; }
+  label { display:block; font-size:13px; color:var(--muted); margin-top:12px; }
+  input, select { width:100%; margin-top:4px; padding:9px; border-radius:8px; border:1px solid var(--line); background:#221f1c; color:var(--text); font:inherit; }
+  .queue { max-height:190px; overflow:auto; margin-top:12px; font-size:13px; }
+  .queue div { padding:4px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:10px; }
+  .done { color:var(--gold); }
+  kbd { background:#2a2623; border:1px solid var(--line); border-radius:4px; padding:1px 5px; font-size:12px; }
+</style>
+
+<header>
+  <h1>Label photos</h1>
+  <span class="muted" id="progress">loading…</span>
+  <span class="muted" style="margin-left:auto">
+    <kbd>1</kbd>–<kbd>9</kbd>,<kbd>0</kbd>,<kbd>-</kbd>,<kbd>=</kbd> pick season · <kbd>→</kbd> skip
+  </span>
+</header>
+
+<main>
+  <div><img id="photo" alt="" /></div>
+
+  <div class="panel">
+    <div class="muted" id="filename">—</div>
+    <div class="grid" id="seasons"></div>
+
+    <label>Dataset
+      <select id="dataset">
+        <option value="real">real — counts toward accuracy</option>
+        <option value="synthetic">synthetic — smoke test only</option>
+      </select>
+    </label>
+
+    <label>Notes
+      <input id="notes" placeholder="lighting, makeup, anything odd" />
+    </label>
+
+    <div class="row">
+      <button id="skip">Skip</button>
+      <button id="save" class="primary">Save &amp; next</button>
+    </div>
+
+    <div class="queue" id="queue"></div>
+  </div>
+</main>
+
+<script type="module">
+  const SEASONS = [
+    "Light Spring","True Spring","Bright Spring","Light Summer",
+    "True Summer","Soft Summer","Soft Autumn","True Autumn",
+    "Deep Autumn","Deep Winter","True Winter","Bright Winter",
+  ];
+  const KEYS = ["1","2","3","4","5","6","7","8","9","0","-","="];
+
+  let rows = [];
+  let index = 0;
+  let chosen = null;
+
+  const $ = (id) => document.getElementById(id);
+
+  function renderSeasons() {
+    $("seasons").innerHTML = "";
+    SEASONS.forEach((season, i) => {
+      const b = document.createElement("button");
+      b.textContent = `${KEYS[i]}  ${season}`;
+      b.className = chosen === season ? "on" : "";
+      b.onclick = () => { chosen = season; renderSeasons(); };
+      $("seasons").appendChild(b);
+    });
+  }
+
+  function renderQueue() {
+    $("queue").innerHTML = rows
+      .map((r, i) => `<div class="${r.season ? "done" : ""}">
+          <span>${i === index ? "▸ " : ""}${r.file}</span><span>${r.season || "—"}</span>
+        </div>`)
+      .join("");
+    $("progress").textContent =
+      `${rows.filter((r) => r.season).length} of ${rows.length} labelled`;
+  }
+
+  function show() {
+    const row = rows[index];
+    if (!row) {
+      $("filename").textContent = "All done.";
+      $("photo").removeAttribute("src");
+      return;
+    }
+    $("photo").src = `/image?file=${encodeURIComponent(row.file)}`;
+    $("filename").textContent = row.file;
+    $("dataset").value = row.dataset || "real";
+    $("notes").value = row.notes || "";
+    chosen = row.season || null;
+    renderSeasons();
+    renderQueue();
+  }
+
+  async function save() {
+    const row = rows[index];
+    if (!row || !chosen) return;
+    await fetch("/label", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        file: row.file,
+        season: chosen,
+        dataset: $("dataset").value,
+        // Hand-labelled: this is the only source that counts toward accuracy.
+        source: "manual",
+        notes: $("notes").value,
+      }),
+    });
+    Object.assign(row, { season: chosen, dataset: $("dataset").value, notes: $("notes").value });
+    index = Math.min(index + 1, rows.length);
+    show();
+  }
+
+  $("save").onclick = save;
+  $("skip").onclick = () => { index = Math.min(index + 1, rows.length); show(); };
+
+  addEventListener("keydown", (e) => {
+    if (e.target.tagName === "INPUT") return;
+    const k = KEYS.indexOf(e.key);
+    if (k >= 0) { chosen = SEASONS[k]; renderSeasons(); e.preventDefault(); }
+    else if (e.key === "ArrowRight") { index = Math.min(index + 1, rows.length); show(); }
+    else if (e.key === "Enter") save();
+  });
+
+  rows = await (await fetch("/rows")).json();
+  index = Math.max(0, rows.findIndex((r) => !r.season));
+  show();
+</script>

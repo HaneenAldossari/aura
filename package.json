@@ -20,7 +20,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "tsx scripts/dev/e2e.ts",
-    "check:wasm": "tsx scripts/dev/checkWasm.ts"
+    "check:wasm": "tsx scripts/dev/checkWasm.ts",
+    "eval": "tsx eval/run.ts",
+    "eval:label": "tsx eval/serveLabeller.ts"
   },
   "keywords": [
     "color-analysis",

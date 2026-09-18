@@ -1,0 +1,7 @@
+# Photos are never committed — only labels.csv is.
+real/*
+synthetic/*
+inbox/*
+!*/.gitkeep
+results/
+review.csv
