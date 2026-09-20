@@ -1,17 +1,13 @@
 import { useT, type Key } from "../../i18n";
-import { readableOn } from "../../lib/contrast";
 import type { AnalysisResult, LookSlot, MakeupShade } from "../../lib/types";
 
 /**
- * Makeup, in the flat bar language of the palette.
+ * Beauty, built from the Beauty frame.
  *
- * Circular swatches and dabs are gone: two colour vocabularies on one screen
- * read as two products, and the design's vocabulary is the bar. The single
- * figurative element is the nail silhouette, used where a bar genuinely fails
- * to say what the colour is for.
- *
- * Every hex here came from the canonical per-season list server-side. The model
- * supplied look names, vibe lines and shade *names* only.
+ * One rule decides every element: a colour is a flat rectangle, a product is a
+ * render. A flat rectangle is an honest statement of a colour; a rendered dab
+ * is a guess at a texture nobody supplied. Nails are the exception because a
+ * polish has a finish you can actually see, and there are photographs of them.
  */
 
 const SLOT_LABEL: Record<LookSlot, Key> = {
@@ -30,30 +26,30 @@ const INDEX_ROWS = [
   { key: "liner", labelKey: "results.makeupSection.catLiner" },
 ] as const satisfies ReadonlyArray<{ key: string; labelKey: Key }>;
 
-/** A look's shade: a full-width bar, because the look is the point. */
-function ShadeBar({ shade, slotKey }: { shade: MakeupShade; slotKey: Key }) {
-  const t = useT();
+/** A colour, stated flat. */
+function Tile({
+  shade,
+  marked,
+  sub,
+}: {
+  shade: { name: string; hex: string; finish?: string };
+  marked?: boolean;
+  sub?: string;
+}) {
   return (
-    <div className="ed-bar">
-      <span className="ed-bar__slot">{t(slotKey)}</span>
+    <span className="ed-tile">
       <span
-        className="ed-bar__swatch"
-        style={{ background: shade.hex, color: readableOn(shade.hex) }}
+        className={`ed-tile__chip${marked ? " ed-tile__chip--on" : ""}`}
+        style={{ background: shade.hex }}
       >
-        <span className="ed-bar__name">{shade.name}</span>
-        <span className="ed-bar__finish">{shade.finish}</span>
+        {marked && (
+          <span className="ed-ladder__caret" aria-hidden>
+            ▼
+          </span>
+        )}
       </span>
-    </div>
-  );
-}
-
-/** An index entry: a chip, so a whole category fits on one line. */
-function ShadeChip({ shade }: { shade: MakeupShade }) {
-  return (
-    <span className="ed-chip">
-      <span className="ed-chip__swatch" style={{ background: shade.hex }} aria-hidden />
-      <span className="ed-chip__name">{shade.name}</span>
-      <span className="ed-chip__finish">{shade.finish}</span>
+      <span className="ed-tile__name">{shade.name}</span>
+      {(sub ?? shade.finish) && <span className="ed-tile__sub">{sub ?? shade.finish}</span>}
     </span>
   );
 }
@@ -66,9 +62,6 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
   const looks = data.looks ?? [];
   const depth = data.colorDNA?.depth;
 
-  // Which rung of the ladder the measured depth falls on. The caption names
-  // that swatch, because "your depth is 22 of 100" is not something anyone can
-  // take to a counter — "look for shades named like Light Ivory" is.
   const step =
     typeof depth === "number"
       ? Math.min(
@@ -77,77 +70,62 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
         )
       : null;
 
-  const depthWord = (data.measured?.axes?.value?.label ?? data.depth ?? "")
-    .split("/")[0]
-    .trim()
-    .toLowerCase();
-  const undertoneWord = (data.measured?.axes?.hue?.label ?? data.undertone ?? "")
-    .split("/")[0]
-    .trim()
-    .toLowerCase();
-
-  // Two names either side of the marked rung: a counter has more than one
-  // shade at any depth, and naming only one reads as a prescription.
-  const examples =
-    step === null
-      ? ""
-      : [makeup.foundation[step], makeup.foundation[step + 1] ?? makeup.foundation[step - 1]]
-          .filter(Boolean)
-          .map((f) => f.name.toLowerCase())
-          .join(" or ");
+  const matched = step === null ? null : makeup.foundation[step];
 
   return (
-    <section className="ed-section" aria-labelledby="makeup-label">
-      <h2 className="ed-section__label" id="makeup-label">
-        {t("results.makeupSection.title")}
-      </h2>
-      <hr className="ed-rule" />
-
-      {/* ── Base: the depth ladder, with the measured depth marked ── */}
-      <div style={{ marginBlockEnd: "var(--space-6)" }}>
-        <p className="ed-section__label">{t("results.makeupSection.baseLabel")}</p>
-        <div
-          className="ed-ladder"
-          role="img"
-          aria-label={t("results.makeupSection.ladderLabel", {
-            depth: Math.round(depth ?? 50),
-          })}
-        >
-          {makeup.foundation.map((shade, i) => (
-            <span className="ed-rung" key={shade.name}>
-              <span
-                className={`ed-ladder__step${step === i ? " ed-ladder__step--on" : ""}`}
-                style={{ background: shade.hex }}
-              >
-                {step === i && (
-                  <span className="ed-ladder__mark" style={{ insetInlineStart: "50%" }} aria-hidden />
-                )}
-              </span>
-              <span className={`ed-rung__name${step === i ? " ed-rung__name--on" : ""}`}>
-                {shade.name}
-              </span>
+    <div>
+      {/* ── Base ── */}
+      <section className="ed-section">
+        <div className="ed-head">
+          <h2 className="ed-head__title">{t("results.makeupSection.baseLabel")}</h2>
+          {matched && (
+            <span className="ed-head__meta">
+              {t("results.makeupSection.yourDepthMeta", { shade: matched.name })}
             </span>
-          ))}
+          )}
         </div>
+        <hr className="ed-rule" />
 
-        {step !== null && depthWord && (
-          <p className="ed-depthline">
-            {t("results.makeupSection.yourDepth", {
-              depth: depthWord,
-              undertone: undertoneWord,
-              examples,
+        <div className="ed-base">
+          <div
+            className="ed-ladder"
+            role="img"
+            aria-label={t("results.makeupSection.ladderLabel", {
+              depth: Math.round(depth ?? 50),
             })}
-          </p>
-        )}
-        <p className="ed-skip" style={{ marginBlockStart: "var(--space-2)" }}>
-          {makeup.undertoneGuide}
-        </p>
-      </div>
+          >
+            {makeup.foundation.map((shade, i) => (
+              <Tile key={shade.name} shade={{ ...shade, finish: undefined }} marked={step === i} />
+            ))}
+          </div>
+
+          <div>
+            {matched && (
+              <p className="ed-base__title">
+                {t("results.makeupSection.baseHeading", {
+                  shade: matched.name.toLowerCase(),
+                })}
+              </p>
+            )}
+            <p className="ed-base__body">{makeup.undertoneGuide}</p>
+          </div>
+        </div>
+      </section>
 
       {/* ── Looks ── */}
       {looks.length > 0 && (
-        <div style={{ marginBlockEnd: "var(--space-6)" }}>
-          <p className="ed-section__label">{t("results.makeupSection.looksLabel")}</p>
+        <section className="ed-section">
+          <div className="ed-head">
+            <h2 className="ed-head__title">{t("results.makeupSection.looksLabel")}</h2>
+            <span className="ed-head__meta">
+              {t("results.makeupSection.looksMeta", {
+                count: looks.length,
+                season: data.season,
+              })}
+            </span>
+          </div>
+          <hr className="ed-rule" />
+
           <div className="ed-looks">
             {looks.map((look) => (
               <article className="ed-look" key={look.name}>
@@ -162,53 +140,74 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
                   </span>
                 </div>
                 {look.vibe && <p className="ed-look__vibe">{look.vibe}</p>}
-                <div className="ed-bars">
+                <div className="ed-look__shades">
                   {look.shades.map((shade) => (
-                    <ShadeBar key={shade.slot} shade={shade} slotKey={SLOT_LABEL[shade.slot]} />
+                    <span key={shade.slot}>
+                      <span className="ed-slot" style={{ display: "block" }}>
+                        {t(SLOT_LABEL[shade.slot])}
+                      </span>
+                      <Tile shade={shade} />
+                    </span>
                   ))}
                 </div>
               </article>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* ── Shade index ── */}
-      <div>
-        <p className="ed-section__label">{t("results.makeupSection.indexLabel")}</p>
+      <section className="ed-section">
+        <div className="ed-head">
+          <h2 className="ed-head__title">{t("results.makeupSection.indexLabel")}</h2>
+          <span className="ed-head__meta">{t("results.makeupSection.indexMeta")}</span>
+        </div>
+        <hr className="ed-rule" />
+
         <div className="ed-index">
           {INDEX_ROWS.map((row) => {
             const shades = makeup[row.key as keyof typeof makeup] as MakeupShade[];
             if (!Array.isArray(shades) || shades.length === 0) return null;
             return (
-              <div className="ed-index__row" key={row.key}>
-                <span className="ed-index__cat">{t(row.labelKey)}</span>
-                <div className="ed-index__shades">
+              <div key={row.key}>
+                <p className="ed-index__cat">{t(row.labelKey)}</p>
+                <div className="ed-index__grid">
                   {shades.map((shade) => (
-                    <ShadeChip key={shade.name} shade={shade} />
+                    <Tile key={shade.name} shade={shade} />
                   ))}
                 </div>
               </div>
             );
           })}
-
-          {/* Nails: the one figurative element in the section. */}
-          {makeup.nails.length > 0 && (
-            <div className="ed-index__row">
-              <span className="ed-index__cat">{t("results.makeupSection.catNails")}</span>
-              <div className="ed-index__nails">
-                {makeup.nails.map((shade) => (
-                  <span className="ed-nailitem" key={shade.name}>
-                    <span className="ed-nail" style={{ background: shade.hex }} aria-hidden />
-                    <span className="ed-nailitem__name">{shade.name}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
+
+        {makeup.nails.length > 0 && (
+          <div style={{ marginBlockStart: "var(--space-5)" }}>
+            <p className="ed-index__cat">{t("results.makeupSection.catNails")}</p>
+            <div className="ed-index__nails">
+              {makeup.nails.map((shade) => (
+                <span className="ed-tile" key={shade.name}>
+                  {shade.asset ? (
+                    <img
+                      className="ed-nailshot"
+                      src={`/makeup/nails/${shade.asset}.webp`}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <span className="ed-tile__chip" style={{ background: shade.hex }} />
+                  )}
+                  <span className="ed-tile__name">{shade.name}</span>
+                  <span className="ed-tile__sub">{shade.finish}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         <p className="ed-skip">{makeup.skip}</p>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

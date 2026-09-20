@@ -186,8 +186,8 @@ describe("banned decorative effects stay gone", () => {
     // is content from the canonical list, not decoration, and the ban above
     // must not take it with it.
     const makeup = fs.readFileSync(path.join(srcDir, "pages/results/MakeupSection.tsx"), "utf8");
-    expect(makeup).toMatch(/ed-bar__finish/);
-    expect(makeup).toMatch(/\{shade\.finish\}/);
+    expect(makeup).toMatch(/ed-tile__sub/);
+    expect(makeup).toMatch(/shade\.finish/);
     const data = fs.readFileSync(
       path.join(__dirname, "../server/utils/seasonMakeup.ts"),
       "utf8"

@@ -12,6 +12,12 @@
  *   npx tsx scripts/precomputeDemoAnalyses.ts --force  # all nine again
  *
  * Costs roughly $0.01 per face.
+ *
+ * ADDING A FACE: drop it in client/public/demo-faces/ named sample-N.webp
+ * (the id pattern the demo-load handler pins is /^sample-[0-9]+$/, so the
+ * number may be any length), then run this without --force. Nothing else
+ * needs editing: the gallery lists whatever the API reports and labels each
+ * face with the season its own analysis returned.
  */
 
 import path from "path";

@@ -1,22 +1,32 @@
 import { useT } from "../../i18n";
-import { readableOn } from "../../lib/contrast";
 import type { AnalysisResult, StoneShade } from "../../lib/types";
 
 /**
- * Style, shown rather than described.
+ * Style, built from the Style frame.
  *
- * This used to be rows of prose — "deep chestnut with warm caramel
- * highlights" — which is the one thing a colour page should never do. Metals,
- * stones and hair are all colour, so all three are rendered as colour. The
- * values are canonical (seasonStyle.ts, seasonPalettes.ts), so two people with
- * the same season see the same swatches.
+ * Jewellery is one block: metals and stones are the same decision made in two
+ * materials, and splitting them made the page ask it twice. Both are rendered
+ * rather than flat — a metal is a finish, not a colour, and a gem is a cut.
+ * Everything else on the page stays a flat rectangle.
+ *
+ * Avoided metals sit after a rule and carry the same diagonal strike as an
+ * avoided colour, so one mark means one thing everywhere.
  */
+
+/** Metals with photography. Anything else falls back to a flat two-tone disc. */
+const METAL_ASSET: Record<string, string> = {
+  gold: "gold",
+  "yellow gold": "gold",
+  "rose gold": "rose-gold",
+  silver: "silver",
+};
 
 const METAL_HEX: Record<string, { hex: string; accent: string }> = {
   "yellow gold": { hex: "#C9A567", accent: "#EBD9A8" },
   gold: { hex: "#C9A567", accent: "#EBD9A8" },
   "rose gold": { hex: "#C68A76", accent: "#E8BCA8" },
   "antique gold": { hex: "#A8884A", accent: "#CDB075" },
+  "champagne gold": { hex: "#C8B68A", accent: "#E8DCBC" },
   bronze: { hex: "#8C5A2B", accent: "#BC8A50" },
   "brushed bronze": { hex: "#8A6540", accent: "#B8946A" },
   copper: { hex: "#A85A38", accent: "#D28A62" },
@@ -26,20 +36,58 @@ const METAL_HEX: Record<string, { hex: string; accent: string }> = {
   pewter: { hex: "#8E8E94", accent: "#B6B6BC" },
 };
 
-/** Unknown metal names still get a swatch rather than vanishing. */
 function metalColours(name: string) {
   return METAL_HEX[name.trim().toLowerCase()] ?? { hex: "#8C8378", accent: "#B6AFA4" };
 }
 
-function TwoTone({ shade, round }: { shade: StoneShade; round?: boolean }) {
+function Metal({ name, struck }: { name: string; struck?: boolean }) {
+  const asset = METAL_ASSET[name.trim().toLowerCase()];
+  const { hex, accent } = metalColours(name);
   return (
-    <span className="ed-stone">
+    <span className={`ed-metal${struck ? " ed-metal--avoid" : ""}`}>
+      <span className={`ed-metal__wrap${struck ? " ed-metal__wrap--struck" : ""}`}>
+        {asset ? (
+          <img className="ed-metal__disc" src={`/makeup/metals/${asset}.webp`} alt="" loading="lazy" />
+        ) : (
+          <span
+            className="ed-metal__disc"
+            style={{ background: `radial-gradient(circle at 34% 30%, ${accent}, ${hex} 72%)` }}
+          />
+        )}
+      </span>
+      <span className="ed-metal__name">{name}</span>
+    </span>
+  );
+}
+
+function Gem({ stone }: { stone: StoneShade }) {
+  return (
+    <span className="ed-gem">
+      {stone.asset ? (
+        <img className="ed-gem__shot" src={`/makeup/gems/${stone.asset}.webp`} alt="" loading="lazy" />
+      ) : (
+        <span
+          className="ed-gem__shot"
+          style={{
+            background: `linear-gradient(140deg, ${stone.accent} 0%, ${stone.hex} 58%)`,
+            clipPath: "polygon(50% 0, 100% 26%, 100% 74%, 50% 100%, 0 74%, 0 26%)",
+          }}
+        />
+      )}
+      <span className="ed-gem__name">{stone.name}</span>
+    </span>
+  );
+}
+
+function Swatch({ shade, sub, struck }: { shade: StoneShade; sub?: string; struck?: boolean }) {
+  return (
+    <span className="ed-tile">
       <span
-        className={`ed-stone__swatch${round ? " ed-stone__swatch--round" : ""}`}
-        style={{ background: `linear-gradient(140deg, ${shade.accent} 0%, ${shade.hex} 58%)` }}
-        aria-hidden
+        className={`ed-tile__chip${struck ? " ed-tile__chip--struck" : ""}`}
+        style={{ background: `linear-gradient(180deg, ${shade.hex} 0%, ${shade.accent} 100%)` }}
       />
-      <span className="ed-stone__name">{shade.name}</span>
+      <span className="ed-tile__name">{shade.name}</span>
+      {sub && <span className="ed-tile__sub">{sub}</span>}
     </span>
   );
 }
@@ -48,83 +96,94 @@ export default function StyleSection({ data }: { data: AnalysisResult }) {
   const t = useT();
   const style = data.styleShades;
   const metals = data.palette?.metals;
+  const family = data.season.split(" ").slice(-1)[0].toLowerCase();
 
   return (
     <div>
-      {metals?.best && metals.best.length > 0 && (
-        <section className="ed-section">
-          <h2 className="ed-section__label">{t("results.styleSection.metals")}</h2>
-          <hr className="ed-rule" />
-          <div className="ed-stones">
-            {metals.best.map((metal) => (
-              <TwoTone key={metal} round shade={{ name: metal, ...metalColours(metal) }} />
-            ))}
-          </div>
+      {/* ── Jewellery: metals and stones, one block ── */}
+      <section className="ed-section">
+        <div className="ed-head">
+          <h2 className="ed-head__title">{t("results.styleSection.jewellery")}</h2>
+          <span className="ed-head__meta">{t("results.styleSection.jewelleryMeta")}</span>
+        </div>
+        <hr className="ed-rule" />
 
-          {metals.avoid && metals.avoid.length > 0 && (
-            <>
-              <p className="ed-section__label" style={{ marginBlockStart: "var(--space-4)" }}>
-                {t("results.styleSection.avoidMetals")}
-              </p>
-              <div className="ed-stones ed-stones--muted">
+        <div className="ed-jewellery">
+          <div className="ed-metals">
+            {metals?.best?.map((metal) => (
+              <Metal key={metal} name={metal} />
+            ))}
+            {metals?.avoid && metals.avoid.length > 0 && (
+              <>
+                <span className="ed-metals__divider" aria-hidden />
                 {metals.avoid.map((metal) => (
-                  <TwoTone key={metal} round shade={{ name: metal, ...metalColours(metal) }} />
+                  <Metal key={metal} name={metal} struck />
                 ))}
-              </div>
-            </>
+              </>
+            )}
+          </div>
+
+          {style?.gemstones && style.gemstones.length > 0 && (
+            <div className="ed-gems">
+              {style.gemstones.map((stone) => (
+                <Gem key={stone.name} stone={stone} />
+              ))}
+            </div>
           )}
-          {style?.metalNote && <p className="ed-skip">{style.metalNote}</p>}
-        </section>
-      )}
+        </div>
 
-      {style?.gemstones && style.gemstones.length > 0 && (
-        <section className="ed-section">
-          <h2 className="ed-section__label">{t("results.styleSection.gemstones")}</h2>
-          <hr className="ed-rule" />
-          <div className="ed-stones">
-            {style.gemstones.map((stone) => (
-              <TwoTone key={stone.name} shade={stone} />
-            ))}
-          </div>
-        </section>
-      )}
+        {style?.metalNote && <p className="ed-skip">{style.metalNote}</p>}
+      </section>
 
-      {style?.hair && style.hair.length > 0 && (
-        <section className="ed-section">
-          <h2 className="ed-section__label">{t("results.styleSection.hair")}</h2>
-          <hr className="ed-rule" />
-          <div className="ed-hairs">
-            {style.hair.map((shade) => (
-              <span
-                className="ed-hair"
-                key={shade.name}
-                style={{
-                  background: `linear-gradient(180deg, ${shade.hex} 0%, ${shade.accent} 100%)`,
-                  color: readableOn(shade.hex),
-                }}
-              >
-                <span className="ed-hair__name">{shade.name}</span>
-              </span>
-            ))}
-          </div>
-          {data.hairColor?.bestOverall && <p className="ed-skip">{data.hairColor.bestOverall}</p>}
-        </section>
-      )}
+      {/* ── Hair and Avoid, side by side ── */}
+      <div className="ed-twoup">
+        {style?.hair && style.hair.length > 0 && (
+          <section>
+            <div className="ed-head">
+              <h2 className="ed-head__title">{t("results.styleSection.hair")}</h2>
+              {data.hairColor?.bestOverall && (
+                <span className="ed-head__meta">{data.hairColor.bestOverall.slice(0, 54)}</span>
+              )}
+            </div>
+            <hr className="ed-rule" />
+            <div className="ed-swatchgrid">
+              {style.hair.map((shade, i) => (
+                <Swatch
+                  key={shade.name}
+                  shade={shade}
+                  sub={
+                    i === 0
+                      ? t("results.styleSection.exactMatch")
+                      : t("results.styleSection.familyMatch", { family })
+                  }
+                />
+              ))}
+              {style.hairAvoid?.map((shade) => (
+                <Swatch key={shade.name} shade={shade} struck />
+              ))}
+            </div>
+          </section>
+        )}
 
-      {data.palette?.avoid && data.palette.avoid.length > 0 && (
-        <section className="ed-section">
-          <h2 className="ed-section__label">{t("results.styleSection.avoid")}</h2>
-          <hr className="ed-rule" />
-          <div className="ed-index__shades">
-            {data.palette.avoid.slice(0, 6).map((colour) => (
-              <span className="ed-chip" key={colour.hex}>
-                <span className="ed-chip__swatch" style={{ background: colour.hex }} aria-hidden />
-                <span className="ed-chip__name">{colour.name}</span>
-              </span>
-            ))}
-          </div>
-        </section>
-      )}
+        {data.palette?.avoid && data.palette.avoid.length > 0 && (
+          <section>
+            <div className="ed-head">
+              <h2 className="ed-head__title">{t("results.styleSection.avoid")}</h2>
+              <span className="ed-head__meta">{t("results.styleSection.avoidMeta")}</span>
+            </div>
+            <hr className="ed-rule" />
+            <div className="ed-swatchgrid">
+              {data.palette.avoid.slice(0, 6).map((colour) => (
+                <Swatch
+                  key={colour.hex}
+                  shade={{ name: colour.name, hex: colour.hex, accent: colour.hex }}
+                  struck
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 }

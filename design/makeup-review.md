@@ -48,10 +48,12 @@ _Undertone guide:_ Clearly golden undertone — warm every base, and skip anythi
 | liner | Copper Pencil | ![](https://placehold.co/28x18/8E5227/8E5227.png) `#8E5227` | metallic |
 | highlight | Liquid Gold | ![](https://placehold.co/28x18/DDBB74/DDBB74.png) `#DDBB74` | metallic |
 | highlight | Warm Apricot | ![](https://placehold.co/28x18/EFC9A2/EFC9A2.png) `#EFC9A2` | shimmer |
-| nails | Pumpkin | ![](https://placehold.co/28x18/C4652F/C4652F.png) `#C4652F` | cream |
-| nails | Moss Green | ![](https://placehold.co/28x18/5B6233/5B6233.png) `#5B6233` | cream |
-| nails | Warm Brick | ![](https://placehold.co/28x18/A5402C/A5402C.png) `#A5402C` | cream |
-| nails | Golden Camel | ![](https://placehold.co/28x18/B8834A/B8834A.png) `#B8834A` | cream |
+| nails | Cajun Shrimp | ![](https://placehold.co/28x18/E14A46/E14A46.png) `#E14A46` | gloss |
+| nails | Malaga Wine | ![](https://placehold.co/28x18/6A3A43/6A3A43.png) `#6A3A43` | gloss |
+| nails | Big Apple Red | ![](https://placehold.co/28x18/B01B1E/B01B1E.png) `#B01B1E` | gloss |
+| nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
+| nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
+| nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
 
 _Skip line:_ Skip cool berry, fuchsia and blue-based reds — they fight the gold in your skin.
 
@@ -68,10 +70,10 @@ _Metal note:_ Yellow gold and copper. Silver goes grey against this much warmth.
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Carnelian | ![](https://placehold.co/28x18/A5402C/A5402C.png) `#A5402C` | ![](https://placehold.co/28x18/D2764A/D2764A.png) `#D2764A` |
-| gemstone | Topaz | ![](https://placehold.co/28x18/B8834A/B8834A.png) `#B8834A` | ![](https://placehold.co/28x18/E0B46E/E0B46E.png) `#E0B46E` |
-| gemstone | Jade | ![](https://placehold.co/28x18/5B6233/5B6233.png) `#5B6233` | ![](https://placehold.co/28x18/8CA054/8CA054.png) `#8CA054` |
-| gemstone | Bronze Pearl | ![](https://placehold.co/28x18/8E6136/8E6136.png) `#8E6136` | ![](https://placehold.co/28x18/C49A62/C49A62.png) `#C49A62` |
+| gemstone | Carnelian | ![](https://placehold.co/28x18/9D2913/9D2913.png) `#9D2913` | ![](https://placehold.co/28x18/C68376/C68376.png) `#C68376` |
+| gemstone | Topaz | ![](https://placehold.co/28x18/BB862D/BB862D.png) `#BB862D` | ![](https://placehold.co/28x18/D8B985/D8B985.png) `#D8B985` |
+| gemstone | Jade | ![](https://placehold.co/28x18/468254/468254.png) `#468254` | ![](https://placehold.co/28x18/94B69C/94B69C.png) `#94B69C` |
+| gemstone | Tiger's Eye | ![](https://placehold.co/28x18/825A1D/825A1D.png) `#825A1D` | ![](https://placehold.co/28x18/B69F7C/B69F7C.png) `#B69F7C` |
 
 ### Hair colours
 
@@ -118,10 +120,12 @@ _Undertone guide:_ Golden-olive undertone — go one depth deeper than feels obv
 | liner | Bronze Pencil | ![](https://placehold.co/28x18/7A4A25/7A4A25.png) `#7A4A25` | metallic |
 | highlight | Warm Champagne | ![](https://placehold.co/28x18/E9CFA3/E9CFA3.png) `#E9CFA3` | shimmer |
 | highlight | Soft Gold | ![](https://placehold.co/28x18/D8B473/D8B473.png) `#D8B473` | metallic |
-| nails | Burnt Brick | ![](https://placehold.co/28x18/8A3324/8A3324.png) `#8A3324` | cream |
-| nails | Deep Olive | ![](https://placehold.co/28x18/3F4A24/3F4A24.png) `#3F4A24` | cream |
-| nails | Warm Burgundy | ![](https://placehold.co/28x18/6E1F2B/6E1F2B.png) `#6E1F2B` | cream |
-| nails | Camel | ![](https://placehold.co/28x18/B7834F/B7834F.png) `#B7834F` | cream |
+| nails | Berry Naughty | ![](https://placehold.co/28x18/74303E/74303E.png) `#74303E` | gloss |
+| nails | Malaga Wine | ![](https://placehold.co/28x18/6A3A43/6A3A43.png) `#6A3A43` | gloss |
+| nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
+| nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
+| nails | Midnight Cami | ![](https://placehold.co/28x18/344360/344360.png) `#344360` | gloss |
+| nails | Big Apple Red | ![](https://placehold.co/28x18/B01B1E/B01B1E.png) `#B01B1E` | gloss |
 
 _Skip line:_ Skip icy pink, pure white and anything silver-based — they flatten your depth and cool the skin.
 
@@ -138,10 +142,10 @@ _Metal note:_ Warm, darkened metals — the deeper the finish, the better it sit
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Tiger's Eye | ![](https://placehold.co/28x18/8A5A2B/8A5A2B.png) `#8A5A2B` | ![](https://placehold.co/28x18/C89B4A/C89B4A.png) `#C89B4A` |
-| gemstone | Garnet | ![](https://placehold.co/28x18/6E1F2B/6E1F2B.png) `#6E1F2B` | ![](https://placehold.co/28x18/A8384A/A8384A.png) `#A8384A` |
-| gemstone | Malachite | ![](https://placehold.co/28x18/1F4D3A/1F4D3A.png) `#1F4D3A` | ![](https://placehold.co/28x18/3F8A64/3F8A64.png) `#3F8A64` |
-| gemstone | Amber | ![](https://placehold.co/28x18/B06A1E/B06A1E.png) `#B06A1E` | ![](https://placehold.co/28x18/E0A84A/E0A84A.png) `#E0A84A` |
+| gemstone | Tiger's Eye | ![](https://placehold.co/28x18/825A1D/825A1D.png) `#825A1D` | ![](https://placehold.co/28x18/B69F7C/B69F7C.png) `#B69F7C` |
+| gemstone | Garnet | ![](https://placehold.co/28x18/693032/693032.png) `#693032` | ![](https://placehold.co/28x18/A88788/A88788.png) `#A88788` |
+| gemstone | Emerald | ![](https://placehold.co/28x18/12724B/12724B.png) `#12724B` | ![](https://placehold.co/28x18/76AD97/76AD97.png) `#76AD97` |
+| gemstone | Amber | ![](https://placehold.co/28x18/C89523/C89523.png) `#C89523` | ![](https://placehold.co/28x18/DFC27F/DFC27F.png) `#DFC27F` |
 
 ### Hair colours
 
@@ -188,10 +192,12 @@ _Undertone guide:_ Neutral-warm and low contrast — keep the base soft, and let
 | liner | Muted Bronze | ![](https://placehold.co/28x18/7E6242/7E6242.png) `#7E6242` | shimmer |
 | highlight | Soft Champagne | ![](https://placehold.co/28x18/E4CDB0/E4CDB0.png) `#E4CDB0` | satin |
 | highlight | Muted Pearl | ![](https://placehold.co/28x18/E0D3C0/E0D3C0.png) `#E0D3C0` | shimmer |
-| nails | Rosewood | ![](https://placehold.co/28x18/9C5F58/9C5F58.png) `#9C5F58` | cream |
-| nails | Sage Olive | ![](https://placehold.co/28x18/77804F/77804F.png) `#77804F` | cream |
-| nails | Warm Taupe | ![](https://placehold.co/28x18/8A7561/8A7561.png) `#8A7561` | cream |
-| nails | Soft Clay | ![](https://placehold.co/28x18/B58572/B58572.png) `#B58572` | cream |
+| nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
+| nails | Bare With Me | ![](https://placehold.co/28x18/D8B7A0/D8B7A0.png) `#D8B7A0` | satin |
+| nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
+| nails | Passion | ![](https://placehold.co/28x18/D08F89/D08F89.png) `#D08F89` | satin |
+| nails | Princesses Rule | ![](https://placehold.co/28x18/C37E8B/C37E8B.png) `#C37E8B` | satin |
+| nails | Berry Naughty | ![](https://placehold.co/28x18/74303E/74303E.png) `#74303E` | gloss |
 
 _Skip line:_ Skip anything vivid or icy — bright coral, true red and stark white all overpower your softness.
 
@@ -208,10 +214,10 @@ _Metal note:_ Antique and brushed finishes. Anything highly polished is too brig
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Smoky Quartz | ![](https://placehold.co/28x18/7A6A5A/7A6A5A.png) `#7A6A5A` | ![](https://placehold.co/28x18/A8968A/A8968A.png) `#A8968A` |
-| gemstone | Moss Agate | ![](https://placehold.co/28x18/77804F/77804F.png) `#77804F` | ![](https://placehold.co/28x18/A0A878/A0A878.png) `#A0A878` |
-| gemstone | Rose Bronze | ![](https://placehold.co/28x18/9C6A58/9C6A58.png) `#9C6A58` | ![](https://placehold.co/28x18/C49080/C49080.png) `#C49080` |
-| gemstone | Champagne Pearl | ![](https://placehold.co/28x18/C4AE92/C4AE92.png) `#C4AE92` | ![](https://placehold.co/28x18/E4D4BC/E4D4BC.png) `#E4D4BC` |
+| gemstone | Smoky Quartz | ![](https://placehold.co/28x18/6B5B4B/6B5B4B.png) `#6B5B4B` | ![](https://placehold.co/28x18/A9A097/A9A097.png) `#A9A097` |
+| gemstone | Peridot | ![](https://placehold.co/28x18/7A863C/7A863C.png) `#7A863C` | ![](https://placehold.co/28x18/B2B98E/B2B98E.png) `#B2B98E` |
+| gemstone | Rose Quartz | ![](https://placehold.co/28x18/C89B9D/C89B9D.png) `#C89B9D` | ![](https://placehold.co/28x18/DFC5C6/DFC5C6.png) `#DFC5C6` |
+| gemstone | Pearl | ![](https://placehold.co/28x18/C3C1B9/C3C1B9.png) `#C3C1B9` | ![](https://placehold.co/28x18/DCDBD6/DCDBD6.png) `#DCDBD6` |
 
 ### Hair colours
 
@@ -258,10 +264,12 @@ _Undertone guide:_ Cool to neutral-cool undertone at depth — match exactly, an
 | liner | Gunmetal | ![](https://placehold.co/28x18/4A4D55/4A4D55.png) `#4A4D55` | metallic |
 | highlight | Icy Pearl | ![](https://placehold.co/28x18/E7E9EE/E7E9EE.png) `#E7E9EE` | shimmer |
 | highlight | Cool Platinum | ![](https://placehold.co/28x18/D6D9DE/D6D9DE.png) `#D6D9DE` | metallic |
-| nails | True Red | ![](https://placehold.co/28x18/C0142E/C0142E.png) `#C0142E` | cream |
-| nails | Black Cherry | ![](https://placehold.co/28x18/5A1024/5A1024.png) `#5A1024` | cream |
-| nails | Deep Emerald | ![](https://placehold.co/28x18/0E4F3C/0E4F3C.png) `#0E4F3C` | cream |
-| nails | Cool Charcoal | ![](https://placehold.co/28x18/36353B/36353B.png) `#36353B` | cream |
+| nails | Big Apple Red | ![](https://placehold.co/28x18/B01B1E/B01B1E.png) `#B01B1E` | gloss |
+| nails | Berry Naughty | ![](https://placehold.co/28x18/74303E/74303E.png) `#74303E` | gloss |
+| nails | Midnight Cami | ![](https://placehold.co/28x18/344360/344360.png) `#344360` | gloss |
+| nails | Malaga Wine | ![](https://placehold.co/28x18/6A3A43/6A3A43.png) `#6A3A43` | gloss |
+| nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
+| nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
 
 _Skip line:_ Skip warm orange, camel and muted earth tones — they dull the clarity your colouring depends on.
 
@@ -278,10 +286,10 @@ _Metal note:_ Silver, platinum and white gold. Yellow gold muddies the contrast.
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Onyx | ![](https://placehold.co/28x18/1A1A1E/1A1A1E.png) `#1A1A1E` | ![](https://placehold.co/28x18/4A4A54/4A4A54.png) `#4A4A54` |
-| gemstone | Ruby | ![](https://placehold.co/28x18/8E1024/8E1024.png) `#8E1024` | ![](https://placehold.co/28x18/C8304A/C8304A.png) `#C8304A` |
-| gemstone | Emerald | ![](https://placehold.co/28x18/0E4F3C/0E4F3C.png) `#0E4F3C` | ![](https://placehold.co/28x18/2A8A66/2A8A66.png) `#2A8A66` |
-| gemstone | Amethyst | ![](https://placehold.co/28x18/4E1D38/4E1D38.png) `#4E1D38` | ![](https://placehold.co/28x18/8A4A78/8A4A78.png) `#8A4A78` |
+| gemstone | Garnet | ![](https://placehold.co/28x18/693032/693032.png) `#693032` | ![](https://placehold.co/28x18/A88788/A88788.png) `#A88788` |
+| gemstone | Ruby | ![](https://placehold.co/28x18/822635/822635.png) `#822635` | ![](https://placehold.co/28x18/B6818A/B6818A.png) `#B6818A` |
+| gemstone | Emerald | ![](https://placehold.co/28x18/12724B/12724B.png) `#12724B` | ![](https://placehold.co/28x18/76AD97/76AD97.png) `#76AD97` |
+| gemstone | Amethyst | ![](https://placehold.co/28x18/563776/563776.png) `#563776` | ![](https://placehold.co/28x18/9D8BB0/9D8BB0.png) `#9D8BB0` |
 
 ### Hair colours
 
@@ -328,10 +336,12 @@ _Undertone guide:_ Distinctly cool, blue-based undertone — a rosy base reads c
 | liner | Silver Pencil | ![](https://placehold.co/28x18/B4BAC3/B4BAC3.png) `#B4BAC3` | metallic |
 | highlight | Snow Pearl | ![](https://placehold.co/28x18/EDEFF3/EDEFF3.png) `#EDEFF3` | shimmer |
 | highlight | Cool Silver | ![](https://placehold.co/28x18/D2D7DE/D2D7DE.png) `#D2D7DE` | metallic |
-| nails | Blue Red | ![](https://placehold.co/28x18/C11235/C11235.png) `#C11235` | cream |
-| nails | Fuchsia | ![](https://placehold.co/28x18/B62A78/B62A78.png) `#B62A78` | cream |
-| nails | Royal Blue | ![](https://placehold.co/28x18/1F4FA8/1F4FA8.png) `#1F4FA8` | cream |
-| nails | Pure White | ![](https://placehold.co/28x18/F3F5F8/F3F5F8.png) `#F3F5F8` | cream |
+| nails | Big Apple Red | ![](https://placehold.co/28x18/B01B1E/B01B1E.png) `#B01B1E` | gloss |
+| nails | Charged Up Cherry | ![](https://placehold.co/28x18/BE2073/BE2073.png) `#BE2073` | gloss |
+| nails | Midnight Cami | ![](https://placehold.co/28x18/344360/344360.png) `#344360` | gloss |
+| nails | Sheer Bliss | ![](https://placehold.co/28x18/DFD4C5/DFD4C5.png) `#DFD4C5` | satin |
+| nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
+| nails | Strawberry Margarita | ![](https://placehold.co/28x18/D03364/D03364.png) `#D03364` | gloss |
 
 _Skip line:_ Skip orange-red, gold and anything beige-warm — they muddy a palette that wants blue underneath.
 
@@ -348,10 +358,10 @@ _Metal note:_ Cool metals only. Silver and platinum read as clean; gold reads as
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Sapphire | ![](https://placehold.co/28x18/1B3A6B/1B3A6B.png) `#1B3A6B` | ![](https://placehold.co/28x18/3A6AA8/3A6AA8.png) `#3A6AA8` |
-| gemstone | Diamond | ![](https://placehold.co/28x18/D8DDE4/D8DDE4.png) `#D8DDE4` | ![](https://placehold.co/28x18/FFFFFF/FFFFFF.png) `#FFFFFF` |
-| gemstone | Ruby | ![](https://placehold.co/28x18/A81340/A81340.png) `#A81340` | ![](https://placehold.co/28x18/D8365E/D8365E.png) `#D8365E` |
-| gemstone | Black Pearl | ![](https://placehold.co/28x18/2A2A32/2A2A32.png) `#2A2A32` | ![](https://placehold.co/28x18/6A6A78/6A6A78.png) `#6A6A78` |
+| gemstone | Sapphire | ![](https://placehold.co/28x18/204081/204081.png) `#204081` | ![](https://placehold.co/28x18/7E90B6/7E90B6.png) `#7E90B6` |
+| gemstone | Diamond | ![](https://placehold.co/28x18/8892A0/8892A0.png) `#8892A0` | ![](https://placehold.co/28x18/BAC0C8/BAC0C8.png) `#BAC0C8` |
+| gemstone | Ruby | ![](https://placehold.co/28x18/822635/822635.png) `#822635` | ![](https://placehold.co/28x18/B6818A/B6818A.png) `#B6818A` |
+| gemstone | Smoky Quartz | ![](https://placehold.co/28x18/6B5B4B/6B5B4B.png) `#6B5B4B` | ![](https://placehold.co/28x18/A9A097/A9A097.png) `#A9A097` |
 
 ### Hair colours
 
@@ -398,10 +408,12 @@ _Undertone guide:_ Cool-neutral with high clarity — keep the base clean and li
 | liner | Bright Violet | ![](https://placehold.co/28x18/5E34A0/5E34A0.png) `#5E34A0` | satin |
 | highlight | Crystal Pearl | ![](https://placehold.co/28x18/F0F3F7/F0F3F7.png) `#F0F3F7` | shimmer |
 | highlight | Bright Platinum | ![](https://placehold.co/28x18/D8DDE4/D8DDE4.png) `#D8DDE4` | metallic |
-| nails | Bright Cherry | ![](https://placehold.co/28x18/D2113C/D2113C.png) `#D2113C` | cream |
-| nails | Electric Fuchsia | ![](https://placehold.co/28x18/C92184/C92184.png) `#C92184` | cream |
-| nails | Icy White | ![](https://placehold.co/28x18/EDF1F5/EDF1F5.png) `#EDF1F5` | cream |
-| nails | Clear Black | ![](https://placehold.co/28x18/141419/141419.png) `#141419` | cream |
+| nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
+| nails | Charged Up Cherry | ![](https://placehold.co/28x18/BE2073/BE2073.png) `#BE2073` | gloss |
+| nails | Sheer Bliss | ![](https://placehold.co/28x18/DFD4C5/DFD4C5.png) `#DFD4C5` | satin |
+| nails | Midnight Cami | ![](https://placehold.co/28x18/344360/344360.png) `#344360` | gloss |
+| nails | Cajun Shrimp | ![](https://placehold.co/28x18/E14A46/E14A46.png) `#E14A46` | gloss |
+| nails | Strawberry Margarita | ![](https://placehold.co/28x18/D03364/D03364.png) `#D03364` | gloss |
 
 _Skip line:_ Skip dusty, greyed and earthy shades — anything muted reads as dirt against your clarity.
 
@@ -418,10 +430,10 @@ _Metal note:_ High-polish silver and platinum. Matte finishes dull the clarity y
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Clear Diamond | ![](https://placehold.co/28x18/E2E6EC/E2E6EC.png) `#E2E6EC` | ![](https://placehold.co/28x18/FFFFFF/FFFFFF.png) `#FFFFFF` |
-| gemstone | Emerald | ![](https://placehold.co/28x18/0F6B4F/0F6B4F.png) `#0F6B4F` | ![](https://placehold.co/28x18/2FA87A/2FA87A.png) `#2FA87A` |
-| gemstone | Fuchsia Sapphire | ![](https://placehold.co/28x18/8A1A6E/8A1A6E.png) `#8A1A6E` | ![](https://placehold.co/28x18/C24AA0/C24AA0.png) `#C24AA0` |
-| gemstone | Jet | ![](https://placehold.co/28x18/141419/141419.png) `#141419` | ![](https://placehold.co/28x18/44444E/44444E.png) `#44444E` |
+| gemstone | Moonstone | ![](https://placehold.co/28x18/B4BFCB/B4BFCB.png) `#B4BFCB` | ![](https://placehold.co/28x18/D4DAE1/D4DAE1.png) `#D4DAE1` |
+| gemstone | Emerald | ![](https://placehold.co/28x18/12724B/12724B.png) `#12724B` | ![](https://placehold.co/28x18/76AD97/76AD97.png) `#76AD97` |
+| gemstone | Amethyst | ![](https://placehold.co/28x18/563776/563776.png) `#563776` | ![](https://placehold.co/28x18/9D8BB0/9D8BB0.png) `#9D8BB0` |
+| gemstone | Garnet | ![](https://placehold.co/28x18/693032/693032.png) `#693032` | ![](https://placehold.co/28x18/A88788/A88788.png) `#A88788` |
 
 ### Hair colours
 
@@ -468,10 +480,12 @@ _Undertone guide:_ Light and warm — the commonest mistake is going too deep, w
 | liner | Light Chocolate | ![](https://placehold.co/28x18/7A5539/7A5539.png) `#7A5539` | matte |
 | highlight | Pearl Peach | ![](https://placehold.co/28x18/FBE0CB/FBE0CB.png) `#FBE0CB` | shimmer |
 | highlight | Light Gold | ![](https://placehold.co/28x18/F2DCA8/F2DCA8.png) `#F2DCA8` | metallic |
-| nails | Coral Pink | ![](https://placehold.co/28x18/F58C7A/F58C7A.png) `#F58C7A` | cream |
-| nails | Light Peach | ![](https://placehold.co/28x18/FFD6B5/FFD6B5.png) `#FFD6B5` | cream |
-| nails | Warm Rose | ![](https://placehold.co/28x18/F58CA8/F58CA8.png) `#F58CA8` | cream |
-| nails | Light Aqua | ![](https://placehold.co/28x18/8EDDE3/8EDDE3.png) `#8EDDE3` | cream |
+| nails | Passion | ![](https://placehold.co/28x18/D08F89/D08F89.png) `#D08F89` | satin |
+| nails | Bare With Me | ![](https://placehold.co/28x18/D8B7A0/D8B7A0.png) `#D8B7A0` | satin |
+| nails | Bachelorette Bash | ![](https://placehold.co/28x18/E36085/E36085.png) `#E36085` | gloss |
+| nails | Sheer Bliss | ![](https://placehold.co/28x18/DFD4C5/DFD4C5.png) `#DFD4C5` | satin |
+| nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
+| nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
 
 _Skip line:_ Skip black, burgundy and charcoal — depth of that order swamps a light, delicate face.
 
@@ -488,10 +502,10 @@ _Metal note:_ Light, bright gold. Heavy antique finishes sit too dark on you.
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Aquamarine | ![](https://placehold.co/28x18/8EDDE3/8EDDE3.png) `#8EDDE3` | ![](https://placehold.co/28x18/C2F0F2/C2F0F2.png) `#C2F0F2` |
-| gemstone | Coral | ![](https://placehold.co/28x18/F58C7A/F58C7A.png) `#F58C7A` | ![](https://placehold.co/28x18/FFB8A8/FFB8A8.png) `#FFB8A8` |
-| gemstone | Citrine | ![](https://placehold.co/28x18/F0CE7A/F0CE7A.png) `#F0CE7A` | ![](https://placehold.co/28x18/FBE8B4/FBE8B4.png) `#FBE8B4` |
-| gemstone | Peach Moonstone | ![](https://placehold.co/28x18/F3C2A1/F3C2A1.png) `#F3C2A1` | ![](https://placehold.co/28x18/FBE2CE/FBE2CE.png) `#FBE2CE` |
+| gemstone | Aquamarine | ![](https://placehold.co/28x18/8AB1C3/8AB1C3.png) `#8AB1C3` | ![](https://placehold.co/28x18/BBD2DC/BBD2DC.png) `#BBD2DC` |
+| gemstone | Rose Quartz | ![](https://placehold.co/28x18/C89B9D/C89B9D.png) `#C89B9D` | ![](https://placehold.co/28x18/DFC5C6/DFC5C6.png) `#DFC5C6` |
+| gemstone | Citrine | ![](https://placehold.co/28x18/CB9F1E/CB9F1E.png) `#CB9F1E` | ![](https://placehold.co/28x18/E1C77C/E1C77C.png) `#E1C77C` |
+| gemstone | Pearl | ![](https://placehold.co/28x18/C3C1B9/C3C1B9.png) `#C3C1B9` | ![](https://placehold.co/28x18/DCDBD6/DCDBD6.png) `#DCDBD6` |
 
 ### Hair colours
 
@@ -538,10 +552,12 @@ _Undertone guide:_ Clear golden warmth — the base should look sunlit rather th
 | liner | Clear Teal | ![](https://placehold.co/28x18/1B8C8C/1B8C8C.png) `#1B8C8C` | satin |
 | highlight | Bright Gold | ![](https://placehold.co/28x18/EFD095/EFD095.png) `#EFD095` | metallic |
 | highlight | Warm Pearl | ![](https://placehold.co/28x18/F7E3C6/F7E3C6.png) `#F7E3C6` | shimmer |
-| nails | Clear Coral | ![](https://placehold.co/28x18/F26B4F/F26B4F.png) `#F26B4F` | cream |
-| nails | Bright Gold | ![](https://placehold.co/28x18/E3B94F/E3B94F.png) `#E3B94F` | cream |
-| nails | Fresh Green | ![](https://placehold.co/28x18/6FA83C/6FA83C.png) `#6FA83C` | cream |
-| nails | Golden Nude | ![](https://placehold.co/28x18/D69A6B/D69A6B.png) `#D69A6B` | cream |
+| nails | Cajun Shrimp | ![](https://placehold.co/28x18/E14A46/E14A46.png) `#E14A46` | gloss |
+| nails | Bare With Me | ![](https://placehold.co/28x18/D8B7A0/D8B7A0.png) `#D8B7A0` | satin |
+| nails | Sheer Bliss | ![](https://placehold.co/28x18/DFD4C5/DFD4C5.png) `#DFD4C5` | satin |
+| nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
+| nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
+| nails | Big Apple Red | ![](https://placehold.co/28x18/B01B1E/B01B1E.png) `#B01B1E` | gloss |
 
 _Skip line:_ Skip mauve, dusty rose and anything greyed — muting is what takes the life out of this palette.
 
@@ -558,10 +574,10 @@ _Metal note:_ Clear yellow gold. Warmth is the point — do not tone it down.
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Turquoise | ![](https://placehold.co/28x18/22A8A8/22A8A8.png) `#22A8A8` | ![](https://placehold.co/28x18/5ED2D2/5ED2D2.png) `#5ED2D2` |
-| gemstone | Coral | ![](https://placehold.co/28x18/F26B4F/F26B4F.png) `#F26B4F` | ![](https://placehold.co/28x18/FF9A7A/FF9A7A.png) `#FF9A7A` |
-| gemstone | Golden Beryl | ![](https://placehold.co/28x18/E3B94F/E3B94F.png) `#E3B94F` | ![](https://placehold.co/28x18/F4DC96/F4DC96.png) `#F4DC96` |
-| gemstone | Peridot | ![](https://placehold.co/28x18/6FA83C/6FA83C.png) `#6FA83C` | ![](https://placehold.co/28x18/A2CE72/A2CE72.png) `#A2CE72` |
+| gemstone | Turquoise | ![](https://placehold.co/28x18/1B9CB4/1B9CB4.png) `#1B9CB4` | ![](https://placehold.co/28x18/7BC6D4/7BC6D4.png) `#7BC6D4` |
+| gemstone | Carnelian | ![](https://placehold.co/28x18/9D2913/9D2913.png) `#9D2913` | ![](https://placehold.co/28x18/C68376/C68376.png) `#C68376` |
+| gemstone | Citrine | ![](https://placehold.co/28x18/CB9F1E/CB9F1E.png) `#CB9F1E` | ![](https://placehold.co/28x18/E1C77C/E1C77C.png) `#E1C77C` |
+| gemstone | Peridot | ![](https://placehold.co/28x18/7A863C/7A863C.png) `#7A863C` | ![](https://placehold.co/28x18/B2B98E/B2B98E.png) `#B2B98E` |
 
 ### Hair colours
 
@@ -608,10 +624,12 @@ _Undertone guide:_ Warm with real clarity — a clean, luminous base; anything p
 | liner | Gold Pencil | ![](https://placehold.co/28x18/CFA13A/CFA13A.png) `#CFA13A` | metallic |
 | highlight | Clear Gold | ![](https://placehold.co/28x18/F6DA9C/F6DA9C.png) `#F6DA9C` | metallic |
 | highlight | Bright Pearl | ![](https://placehold.co/28x18/FDF0DC/FDF0DC.png) `#FDF0DC` | shimmer |
-| nails | Vivid Coral | ![](https://placehold.co/28x18/FB5A44/FB5A44.png) `#FB5A44` | cream |
-| nails | Clear Turquoise | ![](https://placehold.co/28x18/00B3B3/00B3B3.png) `#00B3B3` | cream |
-| nails | Vivid Gold | ![](https://placehold.co/28x18/EDBE3F/EDBE3F.png) `#EDBE3F` | cream |
-| nails | Bright Warm Pink | ![](https://placehold.co/28x18/F55C7E/F55C7E.png) `#F55C7E` | cream |
+| nails | Cajun Shrimp | ![](https://placehold.co/28x18/E14A46/E14A46.png) `#E14A46` | gloss |
+| nails | Sheer Bliss | ![](https://placehold.co/28x18/DFD4C5/DFD4C5.png) `#DFD4C5` | satin |
+| nails | Bare With Me | ![](https://placehold.co/28x18/D8B7A0/D8B7A0.png) `#D8B7A0` | satin |
+| nails | Bachelorette Bash | ![](https://placehold.co/28x18/E36085/E36085.png) `#E36085` | gloss |
+| nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
+| nails | Big Apple Red | ![](https://placehold.co/28x18/B01B1E/B01B1E.png) `#B01B1E` | gloss |
 
 _Skip line:_ Skip dusty, smoky and earthy shades — they read as grime beside colours this clear.
 
@@ -628,10 +646,10 @@ _Metal note:_ Bright polished gold. Anything oxidised or brushed kills the clari
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Clear Turquoise | ![](https://placehold.co/28x18/00B3B3/00B3B3.png) `#00B3B3` | ![](https://placehold.co/28x18/4EDCDC/4EDCDC.png) `#4EDCDC` |
-| gemstone | Vivid Coral | ![](https://placehold.co/28x18/FB5A44/FB5A44.png) `#FB5A44` | ![](https://placehold.co/28x18/FF9276/FF9276.png) `#FF9276` |
-| gemstone | Bright Citrine | ![](https://placehold.co/28x18/EDBE3F/EDBE3F.png) `#EDBE3F` | ![](https://placehold.co/28x18/FAE08E/FAE08E.png) `#FAE08E` |
-| gemstone | Chrysoprase | ![](https://placehold.co/28x18/6FBE3A/6FBE3A.png) `#6FBE3A` | ![](https://placehold.co/28x18/A4DC78/A4DC78.png) `#A4DC78` |
+| gemstone | Opal Fire | ![](https://placehold.co/28x18/429587/429587.png) `#429587` | ![](https://placehold.co/28x18/91C2B9/91C2B9.png) `#91C2B9` |
+| gemstone | Carnelian | ![](https://placehold.co/28x18/9D2913/9D2913.png) `#9D2913` | ![](https://placehold.co/28x18/C68376/C68376.png) `#C68376` |
+| gemstone | Citrine | ![](https://placehold.co/28x18/CB9F1E/CB9F1E.png) `#CB9F1E` | ![](https://placehold.co/28x18/E1C77C/E1C77C.png) `#E1C77C` |
+| gemstone | Peridot | ![](https://placehold.co/28x18/7A863C/7A863C.png) `#7A863C` | ![](https://placehold.co/28x18/B2B98E/B2B98E.png) `#B2B98E` |
 
 ### Hair colours
 
@@ -678,10 +696,12 @@ _Undertone guide:_ Light and cool with a rosy cast — a golden base turns sallo
 | liner | Muted Plum Liner | ![](https://placehold.co/28x18/6E566A/6E566A.png) `#6E566A` | matte |
 | highlight | Cool Pearl | ![](https://placehold.co/28x18/F3E9EC/F3E9EC.png) `#F3E9EC` | shimmer |
 | highlight | Soft Rose Pearl | ![](https://placehold.co/28x18/F6DDE2/F6DDE2.png) `#F6DDE2` | shimmer |
-| nails | Soft Rose | ![](https://placehold.co/28x18/EBA3B4/EBA3B4.png) `#EBA3B4` | cream |
-| nails | Powder Blue | ![](https://placehold.co/28x18/A8C4DE/A8C4DE.png) `#A8C4DE` | cream |
-| nails | Cool Lilac | ![](https://placehold.co/28x18/C0AED0/C0AED0.png) `#C0AED0` | cream |
-| nails | Rosy Nude | ![](https://placehold.co/28x18/D3969B/D3969B.png) `#D3969B` | cream |
+| nails | Sugar Daddy | ![](https://placehold.co/28x18/DC9EAA/DC9EAA.png) `#DC9EAA` | satin |
+| nails | Angel Food | ![](https://placehold.co/28x18/E3C9CB/E3C9CB.png) `#E3C9CB` | satin |
+| nails | Tiara | ![](https://placehold.co/28x18/DAA9C5/DAA9C5.png) `#DAA9C5` | satin |
+| nails | Mod About You | ![](https://placehold.co/28x18/E2A7B0/E2A7B0.png) `#E2A7B0` | satin |
+| nails | Princesses Rule | ![](https://placehold.co/28x18/C37E8B/C37E8B.png) `#C37E8B` | satin |
+| nails | Lovie Dovie | ![](https://placehold.co/28x18/EAAEBE/EAAEBE.png) `#EAAEBE` | satin |
 
 _Skip line:_ Skip black, orange and deep browns — the weight and the warmth both work against a light cool face.
 
@@ -698,10 +718,10 @@ _Metal note:_ Silver and white gold, kept light. Heavy metals overwhelm a delica
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Rose Quartz | ![](https://placehold.co/28x18/E8AFBC/E8AFBC.png) `#E8AFBC` | ![](https://placehold.co/28x18/F8DCE2/F8DCE2.png) `#F8DCE2` |
-| gemstone | Moonstone | ![](https://placehold.co/28x18/D8D4DE/D8D4DE.png) `#D8D4DE` | ![](https://placehold.co/28x18/F2F0F6/F2F0F6.png) `#F2F0F6` |
-| gemstone | Blue Topaz | ![](https://placehold.co/28x18/A8C4DE/A8C4DE.png) `#A8C4DE` | ![](https://placehold.co/28x18/D4E4F2/D4E4F2.png) `#D4E4F2` |
-| gemstone | Amethyst | ![](https://placehold.co/28x18/B49CD0/B49CD0.png) `#B49CD0` | ![](https://placehold.co/28x18/DCCEEC/DCCEEC.png) `#DCCEEC` |
+| gemstone | Rose Quartz | ![](https://placehold.co/28x18/C89B9D/C89B9D.png) `#C89B9D` | ![](https://placehold.co/28x18/DFC5C6/DFC5C6.png) `#DFC5C6` |
+| gemstone | Moonstone | ![](https://placehold.co/28x18/B4BFCB/B4BFCB.png) `#B4BFCB` | ![](https://placehold.co/28x18/D4DAE1/D4DAE1.png) `#D4DAE1` |
+| gemstone | Aquamarine | ![](https://placehold.co/28x18/8AB1C3/8AB1C3.png) `#8AB1C3` | ![](https://placehold.co/28x18/BBD2DC/BBD2DC.png) `#BBD2DC` |
+| gemstone | Amethyst | ![](https://placehold.co/28x18/563776/563776.png) `#563776` | ![](https://placehold.co/28x18/9D8BB0/9D8BB0.png) `#9D8BB0` |
 
 ### Hair colours
 
@@ -748,10 +768,12 @@ _Undertone guide:_ Cool and rose-based throughout — match to the pink in your 
 | liner | Slate Liner | ![](https://placehold.co/28x18/556076/556076.png) `#556076` | matte |
 | highlight | Rose Pearl | ![](https://placehold.co/28x18/F2DFE2/F2DFE2.png) `#F2DFE2` | shimmer |
 | highlight | Cool Moonstone | ![](https://placehold.co/28x18/E7E4EA/E7E4EA.png) `#E7E4EA` | shimmer |
-| nails | Cool Rose | ![](https://placehold.co/28x18/D2637E/D2637E.png) `#D2637E` | cream |
-| nails | Slate Blue | ![](https://placehold.co/28x18/6B7E9C/6B7E9C.png) `#6B7E9C` | cream |
-| nails | Dusty Plum | ![](https://placehold.co/28x18/8E4E68/8E4E68.png) `#8E4E68` | cream |
-| nails | Soft Mauve | ![](https://placehold.co/28x18/A98BA0/A98BA0.png) `#A98BA0` | cream |
+| nails | Bachelorette Bash | ![](https://placehold.co/28x18/E36085/E36085.png) `#E36085` | gloss |
+| nails | Midnight Cami | ![](https://placehold.co/28x18/344360/344360.png) `#344360` | gloss |
+| nails | Berry Naughty | ![](https://placehold.co/28x18/74303E/74303E.png) `#74303E` | gloss |
+| nails | Tiara | ![](https://placehold.co/28x18/DAA9C5/DAA9C5.png) `#DAA9C5` | satin |
+| nails | Princesses Rule | ![](https://placehold.co/28x18/C37E8B/C37E8B.png) `#C37E8B` | satin |
+| nails | Strawberry Margarita | ![](https://placehold.co/28x18/D03364/D03364.png) `#D03364` | gloss |
 
 _Skip line:_ Skip orange, gold and warm camel — warmth of any kind is what pulls this face off-key.
 
@@ -768,10 +790,10 @@ _Metal note:_ Silver, white gold and rose gold with a cool cast. Yellow gold rea
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Sapphire | ![](https://placehold.co/28x18/3A5A8A/3A5A8A.png) `#3A5A8A` | ![](https://placehold.co/28x18/6E8EBE/6E8EBE.png) `#6E8EBE` |
-| gemstone | Rose Quartz | ![](https://placehold.co/28x18/DE9EAC/DE9EAC.png) `#DE9EAC` | ![](https://placehold.co/28x18/F4D2DA/F4D2DA.png) `#F4D2DA` |
-| gemstone | Pearl | ![](https://placehold.co/28x18/E4DEDC/E4DEDC.png) `#E4DEDC` | ![](https://placehold.co/28x18/F8F4F2/F8F4F2.png) `#F8F4F2` |
-| gemstone | Amethyst | ![](https://placehold.co/28x18/7A5A82/7A5A82.png) `#7A5A82` | ![](https://placehold.co/28x18/AE8EB4/AE8EB4.png) `#AE8EB4` |
+| gemstone | Sapphire | ![](https://placehold.co/28x18/204081/204081.png) `#204081` | ![](https://placehold.co/28x18/7E90B6/7E90B6.png) `#7E90B6` |
+| gemstone | Rose Quartz | ![](https://placehold.co/28x18/C89B9D/C89B9D.png) `#C89B9D` | ![](https://placehold.co/28x18/DFC5C6/DFC5C6.png) `#DFC5C6` |
+| gemstone | Pearl | ![](https://placehold.co/28x18/C3C1B9/C3C1B9.png) `#C3C1B9` | ![](https://placehold.co/28x18/DCDBD6/DCDBD6.png) `#DCDBD6` |
+| gemstone | Amethyst | ![](https://placehold.co/28x18/563776/563776.png) `#563776` | ![](https://placehold.co/28x18/9D8BB0/9D8BB0.png) `#9D8BB0` |
 
 ### Hair colours
 
@@ -818,10 +840,12 @@ _Undertone guide:_ Neutral-cool and low contrast — keep everything soft and cl
 | liner | Sage Liner | ![](https://placehold.co/28x18/5E6A5E/5E6A5E.png) `#5E6A5E` | matte |
 | highlight | Soft Pearl | ![](https://placehold.co/28x18/EEE4E2/EEE4E2.png) `#EEE4E2` | satin |
 | highlight | Muted Rose Pearl | ![](https://placehold.co/28x18/F0DFDE/F0DFDE.png) `#F0DFDE` | shimmer |
-| nails | Dusty Rose | ![](https://placehold.co/28x18/C88B94/C88B94.png) `#C88B94` | cream |
-| nails | Muted Plum | ![](https://placehold.co/28x18/74596A/74596A.png) `#74596A` | cream |
-| nails | Sage Grey | ![](https://placehold.co/28x18/8A958C/8A958C.png) `#8A958C` | cream |
-| nails | Soft Taupe | ![](https://placehold.co/28x18/9A8C8A/9A8C8A.png) `#9A8C8A` | cream |
+| nails | Princesses Rule | ![](https://placehold.co/28x18/C37E8B/C37E8B.png) `#C37E8B` | satin |
+| nails | Malaga Wine | ![](https://placehold.co/28x18/6A3A43/6A3A43.png) `#6A3A43` | gloss |
+| nails | Bare With Me | ![](https://placehold.co/28x18/D8B7A0/D8B7A0.png) `#D8B7A0` | satin |
+| nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
+| nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
+| nails | Passion | ![](https://placehold.co/28x18/D08F89/D08F89.png) `#D08F89` | satin |
 
 _Skip line:_ Skip black, pure white and anything vivid — high contrast and high chroma both overwhelm you.
 
@@ -838,10 +862,10 @@ _Metal note:_ Brushed silver and pewter. Polished metal is brighter than anythin
 
 | category | stone name | body hex | facet hex |
 | --- | --- | --- | --- |
-| gemstone | Grey Moonstone | ![](https://placehold.co/28x18/C4C0C4/C4C0C4.png) `#C4C0C4` | ![](https://placehold.co/28x18/E4E2E4/E4E2E4.png) `#E4E2E4` |
-| gemstone | Dusty Rose Quartz | ![](https://placehold.co/28x18/C69AA2/C69AA2.png) `#C69AA2` | ![](https://placehold.co/28x18/E4C8CE/E4C8CE.png) `#E4C8CE` |
-| gemstone | Sage Jade | ![](https://placehold.co/28x18/8A958C/8A958C.png) `#8A958C` | ![](https://placehold.co/28x18/B8C0B8/B8C0B8.png) `#B8C0B8` |
-| gemstone | Smoky Amethyst | ![](https://placehold.co/28x18/74596A/74596A.png) `#74596A` | ![](https://placehold.co/28x18/A48A9C/A48A9C.png) `#A48A9C` |
+| gemstone | Pearl | ![](https://placehold.co/28x18/C3C1B9/C3C1B9.png) `#C3C1B9` | ![](https://placehold.co/28x18/DCDBD6/DCDBD6.png) `#DCDBD6` |
+| gemstone | Rose Quartz | ![](https://placehold.co/28x18/C89B9D/C89B9D.png) `#C89B9D` | ![](https://placehold.co/28x18/DFC5C6/DFC5C6.png) `#DFC5C6` |
+| gemstone | Opal | ![](https://placehold.co/28x18/889A85/889A85.png) `#889A85` | ![](https://placehold.co/28x18/BAC4B8/BAC4B8.png) `#BAC4B8` |
+| gemstone | Smoky Quartz | ![](https://placehold.co/28x18/6B5B4B/6B5B4B.png) `#6B5B4B` | ![](https://placehold.co/28x18/A9A097/A9A097.png) `#A9A097` |
 
 ### Hair colours
 

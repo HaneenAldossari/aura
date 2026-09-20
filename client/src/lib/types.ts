@@ -61,6 +61,8 @@ export interface MakeupShade {
   hex: string;
   category: ShadeCategory;
   finish: ShadeFinish;
+  /** Slug of a photographed render; nails only. */
+  asset?: string;
 }
 
 /** The canonical shade list for the classified season. */
@@ -82,11 +84,14 @@ export interface StoneShade {
   name: string;
   hex: string;
   accent: string;
+  /** Slug of a photographed render, where one exists. */
+  asset?: string;
 }
 
 export interface SeasonStyle {
   gemstones: StoneShade[];
   hair: StoneShade[];
+  hairAvoid: StoneShade[];
   metalNote: string;
 }
 

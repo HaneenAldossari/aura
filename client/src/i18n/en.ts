@@ -103,7 +103,10 @@ export const en = {
       title: "Makeup",
       baseLabel: "Base",
       ladderLabel: "Foundation depth, light to deep. Your depth is marked at {depth} of 100.",
-      yourDepth: "Your depth: {depth}, {undertone} — look for shades named like {examples}.",
+      yourDepthMeta: "your depth · {shade}",
+      baseHeading: "{shade}, matched to your depth",
+      looksMeta: "{count}, adapted to {season}",
+      indexMeta: "every shade in your season",
       looksLabel: "Looks",
       indexLabel: "Shade index",
       day: "Day",
@@ -123,6 +126,11 @@ export const en = {
 
     styleSection: {
       title: "Style",
+      jewellery: "Jewellery",
+      jewelleryMeta: "metals and stones that agree with your skin",
+      exactMatch: "exact match",
+      familyMatch: "{family} family",
+      avoidMeta: "in clothing",
       metals: "Metals",
       neutrals: "Neutrals",
       avoidMetals: "Avoid metals",
