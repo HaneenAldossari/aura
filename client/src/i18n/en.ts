@@ -397,8 +397,6 @@ export const en = {
       heading: "Or try a sample face",
       note: "AI-generated — explore without sharing your photo",
       itemLabel: "Analyse sample face {n}",
-      itemLabelled: "Analyse a {season} sample face",
-      measured: "measured",
     },
 
     hair: {

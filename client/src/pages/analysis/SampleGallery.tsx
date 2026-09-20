@@ -1,17 +1,21 @@
 import { useT } from "../../i18n";
-import { formatSeasonName } from "../../utils/formatSeason";
 import type { DemoSample } from "../../lib/api";
 
 /**
- * Generated faces, labelled only where the label can be stood behind.
+ * Generated faces to try the analysis on, numbered rather than labelled.
  *
- * A season is shown plainly when the measurement and the model reached it
- * independently. Where they disagree the rules take the label — they are the
- * half with numbers behind them — and it carries a "measured" tag so nobody
- * reads a provisional answer as a settled one. A model-only label is never
- * shown: that is how two deep-skinned faces came to be captioned "Light
- * Summer" and "Light Spring", which cannot be true of either, since the light
- * seasons are light by definition.
+ * The season is deliberately not shown here. These faces are AI-generated and
+ * every one of them trips the quality gate's colour-cast check, so none has a
+ * label that could be stood behind — and a caption on a card is read as a fact
+ * about the face rather than as one system's provisional guess. The season
+ * belongs on the results page, after an analysis the reader asked for.
+ *
+ * The data behind the labels still arrives (`season`, `agrees`, `needsReview`)
+ * and the rule that governs them is intact in the demo-list handler: show a
+ * season only where the measurement and the model agree at primary level with
+ * a clean gate, otherwise the measured ranking with a tag, and never a
+ * model-only label. It switches back on the moment vetted faces land — see
+ * scripts/vetDemoFaces.ts.
  *
  * Quiet by design. It sits under the dropzone on a screen whose job is to get
  * one photo uploaded, so the thumbnails are small and the whole block reads as
@@ -34,21 +38,13 @@ export default function SampleGallery({
         {t("analysis.samples.note")}
       </p>
       <ul className="an-samples">
-        {samples.map((sample) => (
+        {samples.map((sample, i) => (
           <li key={sample.id}>
             <button
               type="button"
               className="an-sample"
               onClick={() => onSampleClick(sample.id)}
-              aria-label={
-                sample.season
-                  ? t("analysis.samples.itemLabelled", {
-                      season: formatSeasonName(sample.season),
-                    })
-                  : t("analysis.samples.itemLabel", {
-                      n: sample.id.replace("sample-", ""),
-                    })
-              }
+              aria-label={t("analysis.samples.itemLabel", { n: i + 1 })}
             >
               <img
                 className="an-sample__img"
@@ -57,16 +53,9 @@ export default function SampleGallery({
                 loading="lazy"
                 decoding="async"
               />
-              {sample.season && (
-                <span
-                  className={`an-sample__season${sample.needsReview ? " an-sample__season--provisional" : ""}`}
-                >
-                  {formatSeasonName(sample.season)}
-                  {sample.needsReview && (
-                    <span className="an-sample__tag">{t("analysis.samples.measured")}</span>
-                  )}
-                </span>
-              )}
+              <span className="an-sample__season ltr-run">
+                {String(i + 1).padStart(2, "0")}
+              </span>
             </button>
           </li>
         ))}
