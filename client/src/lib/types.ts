@@ -66,9 +66,19 @@ export interface MakeupShade {
 }
 
 /** The canonical shade list for the classified season. */
+/** One or two sentences opening each Beauty section, above the swatches. */
+export interface MakeupGuidance {
+  base: string;
+  blush: string;
+  lip: string;
+  eye: string;
+  liner: string;
+  nails: string;
+}
+
 export interface SeasonMakeup {
   foundation: MakeupShade[];
-  undertoneGuide: string;
+  guidance: MakeupGuidance;
   blush: MakeupShade[];
   bronzer: MakeupShade[];
   lip: MakeupShade[];
@@ -88,11 +98,33 @@ export interface StoneShade {
   asset?: string;
 }
 
+export interface MetalVerdict {
+  name: string;
+  verdict: "best" | "works" | "skip";
+  reason: string;
+}
+
+/** Three palette colours and when to wear them. Resolved server-side. */
+export interface Pairing {
+  colours: NamedHex[];
+  when: string;
+}
+
+export interface StyleGuidance {
+  jewellery: string;
+  hair: string;
+  pairings: string;
+}
+
 export interface SeasonStyle {
+  guidance: StyleGuidance;
+  story: string;
+  metals: MetalVerdict[];
+  extraMetals: string | null;
+  pairings: Pairing[];
   gemstones: StoneShade[];
   hair: StoneShade[];
   hairAvoid: StoneShade[];
-  metalNote: string;
 }
 
 export type LookSlot = "eye" | "liner" | "cheek" | "lip" | "bronzer" | "highlight";

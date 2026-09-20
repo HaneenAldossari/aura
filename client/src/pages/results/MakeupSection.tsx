@@ -2,12 +2,19 @@ import { useT, type Key } from "../../i18n";
 import type { AnalysisResult, LookSlot, MakeupShade } from "../../lib/types";
 
 /**
- * Beauty, built from the Beauty frame.
+ * Beauty: every section opens with guidance, then colour.
  *
- * One rule decides every element: a colour is a flat rectangle, a product is a
- * render. A flat rectangle is an honest statement of a colour; a rendered dab
- * is a guess at a texture nobody supplied. Nails are the exception because a
- * polish has a finish you can actually see, and there are photographs of them.
+ * A row of swatches cannot say "go one depth deeper", "never black", or "if it
+ * is visible from across a room it is too bright" — and those are the sentences
+ * that make the swatches usable. Someone who does not already know what
+ * "muted" means gets nothing from a muted swatch on its own.
+ *
+ * The guidance is canonical, not model-written, so two people with the same
+ * season read the same advice.
+ *
+ * One rule decides the colour elements: a colour is a flat rectangle, a product
+ * is a render. Only nails are rendered here, because a polish has a finish you
+ * can see and there are photographs of them.
  */
 
 const SLOT_LABEL: Record<LookSlot, Key> = {
@@ -19,14 +26,14 @@ const SLOT_LABEL: Record<LookSlot, Key> = {
   highlight: "results.makeupSection.slotHighlight",
 };
 
-const INDEX_ROWS = [
-  { key: "blush", labelKey: "results.makeupSection.catBlush" },
-  { key: "lip", labelKey: "results.makeupSection.catLip" },
-  { key: "eye", labelKey: "results.makeupSection.catEye" },
-  { key: "liner", labelKey: "results.makeupSection.catLiner" },
-] as const satisfies ReadonlyArray<{ key: string; labelKey: Key }>;
+/** Each shade category, in the order the tab reads them. */
+const CATEGORIES = [
+  { key: "blush", labelKey: "results.makeupSection.catBlush", guide: "blush" },
+  { key: "lip", labelKey: "results.makeupSection.catLip", guide: "lip" },
+  { key: "eye", labelKey: "results.makeupSection.catEye", guide: "eye" },
+  { key: "liner", labelKey: "results.makeupSection.catLiner", guide: "liner" },
+] as const satisfies ReadonlyArray<{ key: string; labelKey: Key; guide: string }>;
 
-/** A colour, stated flat. */
 function Tile({
   shade,
   marked,
@@ -54,6 +61,28 @@ function Tile({
   );
 }
 
+/** Heading, then the sentence, then the colour. Always that order. */
+function SectionHead({
+  title,
+  meta,
+  guidance,
+}: {
+  title: string;
+  meta?: string;
+  guidance: string;
+}) {
+  return (
+    <>
+      <div className="ed-head">
+        <h2 className="ed-head__title">{title}</h2>
+        {meta && <span className="ed-head__meta">{meta}</span>}
+      </div>
+      <hr className="ed-rule" />
+      <p className="ed-guide">{guidance}</p>
+    </>
+  );
+}
+
 export default function MakeupSection({ data }: { data: AnalysisResult }) {
   const t = useT();
   const makeup = data.makeupShades;
@@ -61,6 +90,7 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
 
   const looks = data.looks ?? [];
   const depth = data.colorDNA?.depth;
+  const guidance = makeup.guidance;
 
   const step =
     typeof depth === "number"
@@ -69,46 +99,27 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
           Math.max(0, Math.floor((depth / 100) * makeup.foundation.length))
         )
       : null;
-
   const matched = step === null ? null : makeup.foundation[step];
 
   return (
     <div>
       {/* ── Base ── */}
       <section className="ed-section">
-        <div className="ed-head">
-          <h2 className="ed-head__title">{t("results.makeupSection.baseLabel")}</h2>
-          {matched && (
-            <span className="ed-head__meta">
-              {t("results.makeupSection.yourDepthMeta", { shade: matched.name })}
-            </span>
-          )}
-        </div>
-        <hr className="ed-rule" />
-
-        <div className="ed-base">
-          <div
-            className="ed-ladder"
-            role="img"
-            aria-label={t("results.makeupSection.ladderLabel", {
-              depth: Math.round(depth ?? 50),
-            })}
-          >
-            {makeup.foundation.map((shade, i) => (
-              <Tile key={shade.name} shade={{ ...shade, finish: undefined }} marked={step === i} />
-            ))}
-          </div>
-
-          <div>
-            {matched && (
-              <p className="ed-base__title">
-                {t("results.makeupSection.baseHeading", {
-                  shade: matched.name.toLowerCase(),
-                })}
-              </p>
-            )}
-            <p className="ed-base__body">{makeup.undertoneGuide}</p>
-          </div>
+        <SectionHead
+          title={t("results.makeupSection.baseLabel")}
+          meta={
+            matched ? t("results.makeupSection.yourDepthMeta", { shade: matched.name }) : undefined
+          }
+          guidance={guidance.base}
+        />
+        <div
+          className="ed-ladder"
+          role="img"
+          aria-label={t("results.makeupSection.ladderLabel", { depth: Math.round(depth ?? 50) })}
+        >
+          {makeup.foundation.map((shade, i) => (
+            <Tile key={shade.name} shade={{ ...shade, finish: undefined }} marked={step === i} />
+          ))}
         </div>
       </section>
 
@@ -118,14 +129,10 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
           <div className="ed-head">
             <h2 className="ed-head__title">{t("results.makeupSection.looksLabel")}</h2>
             <span className="ed-head__meta">
-              {t("results.makeupSection.looksMeta", {
-                count: looks.length,
-                season: data.season,
-              })}
+              {t("results.makeupSection.looksMeta", { count: looks.length, season: data.season })}
             </span>
           </div>
           <hr className="ed-rule" />
-
           <div className="ed-looks">
             {looks.map((look) => (
               <article className="ed-look" key={look.name}>
@@ -156,58 +163,53 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
         </section>
       )}
 
-      {/* ── Shade index ── */}
-      <section className="ed-section">
-        <div className="ed-head">
-          <h2 className="ed-head__title">{t("results.makeupSection.indexLabel")}</h2>
-          <span className="ed-head__meta">{t("results.makeupSection.indexMeta")}</span>
-        </div>
-        <hr className="ed-rule" />
-
-        <div className="ed-index">
-          {INDEX_ROWS.map((row) => {
-            const shades = makeup[row.key as keyof typeof makeup] as MakeupShade[];
-            if (!Array.isArray(shades) || shades.length === 0) return null;
-            return (
-              <div key={row.key}>
-                <p className="ed-index__cat">{t(row.labelKey)}</p>
-                <div className="ed-index__grid">
-                  {shades.map((shade) => (
-                    <Tile key={shade.name} shade={shade} />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {makeup.nails.length > 0 && (
-          <div style={{ marginBlockStart: "var(--space-5)" }}>
-            <p className="ed-index__cat">{t("results.makeupSection.catNails")}</p>
-            <div className="ed-index__nails">
-              {makeup.nails.map((shade) => (
-                <span className="ed-tile" key={shade.name}>
-                  {shade.asset ? (
-                    <img
-                      className="ed-nailshot"
-                      src={`/makeup/nails/${shade.asset}.webp`}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <span className="ed-tile__chip" style={{ background: shade.hex }} />
-                  )}
-                  <span className="ed-tile__name">{shade.name}</span>
-                  <span className="ed-tile__sub">{shade.finish}</span>
-                </span>
+      {/* ── One section per category, each led by its guidance ── */}
+      {CATEGORIES.map((cat) => {
+        const shades = makeup[cat.key as keyof typeof makeup] as MakeupShade[];
+        if (!Array.isArray(shades) || shades.length === 0) return null;
+        return (
+          <section className="ed-section" key={cat.key}>
+            <SectionHead
+              title={t(cat.labelKey)}
+              guidance={guidance[cat.guide as keyof typeof guidance]}
+            />
+            <div className="ed-shaderow">
+              {shades.map((shade) => (
+                <Tile key={shade.name} shade={shade} />
               ))}
             </div>
-          </div>
-        )}
+          </section>
+        );
+      })}
 
-        <p className="ed-skip">{makeup.skip}</p>
-      </section>
+      {/* ── Nails: the one rendered category ── */}
+      {makeup.nails.length > 0 && (
+        <section className="ed-section">
+          <SectionHead
+            title={t("results.makeupSection.catNails")}
+            guidance={guidance.nails}
+          />
+          <div className="ed-index__nails">
+            {makeup.nails.map((shade) => (
+              <span className="ed-tile" key={shade.name}>
+                {shade.asset ? (
+                  <img
+                    className="ed-nailshot"
+                    src={`/makeup/nails/${shade.asset}.webp`}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <span className="ed-tile__chip" style={{ background: shade.hex }} />
+                )}
+                <span className="ed-tile__name">{shade.name}</span>
+                <span className="ed-tile__sub">{shade.finish}</span>
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

@@ -1,30 +1,46 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import StarField from "../components/StarField";
 import { useT } from "../i18n";
-import SeasonRibbon from "./home/SeasonRibbon";
+import ColourField from "./home/ColourField";
 import "../pages/results/results-editorial.css";
 import "./home/home-editorial.css";
 
 /**
- * The landing page, rebuilt to the editorial direction.
+ * The landing page.
  *
- * Two claims carry the page and both are literal: the measurement runs in the
- * browser, and the twelve palettes drifting along the bottom are the same ones
- * an analysis returns. Everything that used to sit between — the mock result
- * card, the carousel, the poetry section — went, because none of it was true
- * of a specific person and all of it delayed the only button that matters.
+ * Centred hero in the first viewport, the twelve palettes under it, and how it
+ * works below the fold. The claim and the evidence sit in one screen: "measured,
+ * not guessed" is above a hundred and forty-four real palette colours read from
+ * the same module an analysis injects from.
  */
 export default function Home() {
   const t = useT();
-  const [narrow, setNarrow] = useState(
-    typeof window !== "undefined" && window.innerWidth < 768
-  );
+  const fieldRef = useRef<HTMLDivElement>(null);
+  const [fade, setFade] = useState(0);
 
+  /**
+   * The field fades over the first 40% of the viewport as how-it-works arrives.
+   *
+   * Driven by scroll position rather than IntersectionObserver because it is a
+   * continuous value, not a threshold. Written straight to a ref's style — one
+   * opacity write per frame, no React render in a scroll handler.
+   */
   useEffect(() => {
-    const onResize = () => setNarrow(window.innerWidth < 768);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let frame = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const limit = window.innerHeight * 0.4;
+        setFade(Math.min(1, window.scrollY / limit));
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   const steps = [
@@ -35,7 +51,7 @@ export default function Home() {
 
   return (
     <div className="ed-page">
-      {/* Low density, as the design specifies for ambient pages. */}
+      {/* Low density, and the only other motion on this page. */}
       <StarField maxOpacity={0.45} minDuration={4} durationRange={5} />
 
       <div style={{ position: "relative", zIndex: 1 }}>
@@ -46,44 +62,52 @@ export default function Home() {
           </header>
 
           <div className="home-hero">
-            <div>
-              <p className="home-eyebrow">{t("home.eyebrow2")}</p>
-              <h1 className="home-title">
-                <span className="home-title__line">{t("home.heroLine1")}</span>
-                <span className="home-title__line">{t("home.heroLine2")}</span>
-                <span className="home-title__line">{t("home.heroLine3")}</span>
-                <span className="home-title__accent">{t("home.heroAccent")}</span>
-              </h1>
-              <p className="home-lede">{t("home.lede2")}</p>
-              <div className="home-cta">
-                <Link className="ed-button" to="/analyze">
-                  {t("home.ctaPrimary2")}
-                </Link>
-                {/* Opens the upload screen with the sample gallery revealed. */}
-                <Link className="ed-link" to="/analyze?samples=1">
-                  {t("home.ctaSample")}
-                </Link>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="ed-section__label">{t("home.howItWorks.title")}</h2>
-              <div className="home-steps">
-                {steps.map((step) => (
-                  <div className="home-step" key={step.n}>
-                    <span className="home-step__n ltr-run">{step.n}</span>
-                    <div>
-                      <p className="home-step__title">{step.title}</p>
-                      <p className="home-step__body">{step.body}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <p className="home-eyebrow">{t("home.eyebrow2")}</p>
+            <h1 className="home-title">
+              <span className="home-title__line">{t("home.heroLine1")}</span>
+              <span className="home-title__line">{t("home.heroLine2")}</span>
+              <span className="home-title__line">{t("home.heroLine3")}</span>
+              <span className="home-title__accent">{t("home.heroAccent")}</span>
+            </h1>
+            <p className="home-lede">{t("home.lede2")}</p>
+            <div className="home-cta">
+              <Link className="ed-button" to="/analyze">
+                {t("home.ctaPrimary2")}
+              </Link>
+              <Link className="ed-link" to="/analyze?samples=1">
+                {t("home.ctaSample")}
+              </Link>
             </div>
           </div>
         </div>
 
-        <SeasonRibbon narrow={narrow} />
+        <div
+          ref={fieldRef}
+          style={{ opacity: 1 - fade, transition: "opacity 120ms linear" }}
+          aria-hidden={fade > 0.9}
+        >
+          <ColourField />
+        </div>
+
+        <div className="ed-shell home-how">
+          <h2 className="ed-section__label">{t("home.howItWorks.title")}</h2>
+          <div className="home-steps">
+            {steps.map((step) => (
+              <div className="home-step" key={step.n}>
+                <span className="home-step__n ltr-run">{step.n}</span>
+                <div>
+                  <p className="home-step__title">{step.title}</p>
+                  <p className="home-step__body">{step.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="home-foot" style={{ marginBlockStart: "var(--space-6)" }}>
+            <p className="home-foot__privacy">{t("home.privacy")}</p>
+            <span className="home-foot__source">{t("home.field.source")}</span>
+          </div>
+        </div>
       </div>
     </div>
   );

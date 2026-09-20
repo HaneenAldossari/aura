@@ -44,7 +44,15 @@ function seasonSection(season: string): string {
     out.push(
       "### Makeup",
       "",
-      `_Undertone guide:_ ${m.undertoneGuide}`,
+      "**Guidance** — one or two sentences opening each section, above the swatches.",
+      "",
+      table(
+        (["base", "blush", "lip", "eye", "liner", "nails"] as const).map((k) => [
+          k,
+          m.guidance[k],
+        ]),
+        ["section", "guidance"]
+      ),
       "",
       table(
         [
@@ -78,11 +86,37 @@ function seasonSection(season: string): string {
       ),
       ""
     );
-    if (st) out.push(`_Metal note:_ ${st.metalNote}`, "");
+
   }
 
   if (st) {
     out.push(
+      "### Story",
+      "",
+      st.story,
+      "",
+      "### Style guidance",
+      "",
+      table(
+        (["jewellery", "hair", "pairings"] as const).map((k) => [k, st.guidance[k]]),
+        ["section", "guidance"]
+      ),
+      "",
+      "### Metals",
+      "",
+      table(
+        st.metals.map((m) => [m.name, m.verdict, m.reason]),
+        ["metal", "verdict", "reason (five words)"]
+      ),
+      st.extraMetals ? `\n_Also:_ ${st.extraMetals}\n` : "",
+      "",
+      "### Pairings",
+      "",
+      table(
+        st.pairings.map((p) => [p.colours.join(" · "), p.when]),
+        ["three colours", "when to wear"]
+      ),
+      "",
       "### Gemstones",
       "",
       table(

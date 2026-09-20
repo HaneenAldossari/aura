@@ -45,11 +45,29 @@ export interface MakeupShade {
   asset?: string;
 }
 
+/**
+ * One or two plain sentences that open a section, before any colour is shown.
+ *
+ * Every section leads with these: a reader who does not know what "muted"
+ * means cannot use a row of swatches, and a swatch cannot say "go one depth
+ * deeper" or "never black". Written in the second person, and canonical — the
+ * model does not produce them, so two people with the same season read the
+ * same advice.
+ */
+export interface MakeupGuidance {
+  base: string;
+  blush: string;
+  lip: string;
+  eye: string;
+  liner: string;
+  nails: string;
+}
+
 export interface SeasonMakeup {
   /** Light → deep. Rendered as the base ladder, not as matchable shades. */
   foundation: MakeupShade[];
-  /** One line under the ladder. */
-  undertoneGuide: string;
+  /** Opens each section, above the swatches. */
+  guidance: MakeupGuidance;
   blush: MakeupShade[];
   bronzer: MakeupShade[];
   lip: MakeupShade[];
@@ -85,7 +103,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Warm Porcelain", "#F2D9C0"), f("Golden Beige", "#E0BB96"),
       f("Warm Honey", "#C79A6E"), f("Chestnut", "#9E6F49"), f("Deep Umber", "#6B4530"),
     ],
-    undertoneGuide: "Golden-olive undertone — go one depth deeper than feels obvious, and never pink.",
+    guidance: {
+      base:
+        "Match your base one depth deeper than feels obvious, and keep it golden. A pink or neutral-cool foundation will grey you out within an hour.",
+      blush:
+        "Reach for earth, not sugar. Terracotta, brick and bronzed rose sit into your skin; cool pinks sit on top of it.",
+      lip:
+        "Your lips can carry real depth. Raisin, deep brick and warm burgundy look intentional on you where a nude reads washed out.",
+      eye:
+        "Metals belong on your lids — bronze, copper, burnished gold — with forest and chocolate for depth. Silver and icy shades will look borrowed.",
+      liner:
+        "Skip black. Espresso, deep olive and bronze define your eye without cutting a hard line across a warm face.",
+      nails:
+        "Deep and warm: brick, burgundy, olive, camel. Pale pinks and icy pastels disappear against your hands.",
+    },
     blush: [
       bl("Terracotta", "#C0664A", "matte"), bl("Brick Rose", "#A84C42", "satin"),
       bl("Bronze Rose", "#B07158", "shimmer"), bl("Burnt Sienna", "#96452F", "matte"),
@@ -122,7 +153,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Warm Ivory", "#F5DFC6"), f("Golden Sand", "#E5C29C"),
       f("Warm Amber", "#CBA074"), f("Toasted Almond", "#A97A52"), f("Warm Walnut", "#7B5436"),
     ],
-    undertoneGuide: "Clearly golden undertone — warm every base, and skip anything described as rosy or neutral-cool.",
+    guidance: {
+      base:
+        "Warm every layer of your base. Your skin is clearly golden, so anything described as rosy or neutral-cool will fight it.",
+      blush:
+        "Apricot, warm coral and russet read as a flush on you. Anything blue-based reads as a bruise.",
+      lip:
+        "Pumpkin, terracotta and warm brick are your register. A caramel nude works for every day; cool berry never will.",
+      eye:
+        "Copper, olive-bronze and cinnamon are yours. Moss and antique gold give you depth without going cold.",
+      liner:
+        "Warm espresso or moss rather than black — your colouring has no true black in it, so black liner always looks added.",
+      nails:
+        "Pumpkin, warm brick, moss and golden camel. Fuchsia and blue-reds will look like someone else's hands.",
+    },
     blush: [
       bl("Apricot Glow", "#DE9068", "satin"), bl("Warm Coral", "#D2705A", "matte"),
       bl("Golden Peach", "#E0A272", "shimmer"), bl("Russet", "#A85A38", "matte"),
@@ -159,7 +203,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Neutral Ivory", "#F3DECB"), f("Soft Beige", "#E2C4A6"),
       f("Warm Sand", "#C8A382"), f("Muted Tan", "#A88663"), f("Soft Walnut", "#7F6046"),
     ],
-    undertoneGuide: "Neutral-warm and low contrast — keep the base soft, and let nothing on the face read as bright.",
+    guidance: {
+      base:
+        "Keep the base soft and neutral-warm. Your contrast is low, so a heavy or high-coverage finish reads as a mask.",
+      blush:
+        "Dusty apricot and muted rose. The rule for you is quiet — if a blush is visible from across a room it is too bright.",
+      lip:
+        "Rosewood, muted brick and soft cocoa. Your lip should look like a slightly better version of your own colour.",
+      eye:
+        "Soft bronze, warm taupe and sage. Everything stays within a few steps of each other; sharp contrast ages your eye.",
+      liner:
+        "Soft brown or olive-grey, smudged rather than drawn. A crisp black line is the fastest way to make you look tired.",
+      nails:
+        "Rosewood, sage olive and warm taupe. Bright coral and true red overpower the softness that defines you.",
+    },
     blush: [
       bl("Dusty Apricot", "#D19A7E", "matte"), bl("Muted Rose", "#BE8074", "satin"),
       bl("Soft Terracotta", "#C08466", "matte"), bl("Warm Clay", "#AE7561", "matte"),
@@ -196,7 +253,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Cool Porcelain", "#F1DAD0"), f("Neutral Beige", "#DDBCA4"),
       f("Cool Honey", "#BE9573"), f("Cool Chestnut", "#8F6549"), f("Deep Espresso", "#5C3B2C"),
     ],
-    undertoneGuide: "Cool to neutral-cool undertone at depth — match exactly, and avoid golden or peachy bases.",
+    guidance: {
+      base:
+        "Match exactly at depth, and keep it cool to neutral-cool. A golden or peachy base turns orange against your undertone.",
+      blush:
+        "Cool plum and deep berry. Warm corals and peaches will look like a stripe rather than a flush.",
+      lip:
+        "This is your strongest feature. True red, black cherry and deep plum all belong to you — nude lips waste the contrast you have.",
+      eye:
+        "Charcoal, deep emerald and blackened plum, with icy silver to lift. Warm browns and bronzes muddy you.",
+      liner:
+        "True black, and you can draw it properly. You are one of the few seasons black liner genuinely belongs to.",
+      nails:
+        "True red, black cherry, deep emerald. Nude and beige polish make your hands look unfinished.",
+    },
     blush: [
       bl("Cool Plum", "#8E4A5E", "matte"), bl("Deep Berry", "#94374F", "satin"),
       bl("Blackened Rose", "#7E3A47", "matte"), bl("Cool Wine", "#7A2E42", "matte"),
@@ -233,7 +303,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Cool Ivory", "#F4DFD8"), f("Rose Beige", "#E3C0AE"),
       f("Neutral Tan", "#C09478"), f("Cool Walnut", "#8E6650"), f("Cool Mahogany", "#603E31"),
     ],
-    undertoneGuide: "Distinctly cool, blue-based undertone — a rosy base reads correct on you where a golden one greys.",
+    guidance: {
+      base:
+        "Cool and blue-based throughout. A rosy base reads correct on you where a golden one immediately greys.",
+      blush:
+        "Cool pink and raspberry. Keep it clear — a muted or dusty blush goes flat against your clarity.",
+      lip:
+        "Blue-red, fuchsia and cool ruby. These are loud colours that look ordinary on you, which is the point.",
+      eye:
+        "Pure silver, royal blue, emerald, cool charcoal. Anything warm or golden reads as dirt against your skin.",
+      liner:
+        "Jet black or royal navy. Brown liner will always look slightly muddy on you.",
+      nails:
+        "Blue-red, fuchsia, royal blue, pure white. Orange, gold and beige are the three to leave.",
+    },
     blush: [
       bl("Cool Pink", "#D4667F", "matte"), bl("Raspberry", "#B8385C", "satin"),
       bl("Icy Rose", "#DE8AA0", "shimmer"), bl("Blue Berry", "#9C2F55", "matte"),
@@ -270,7 +353,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Bright Ivory", "#F6E1D6"), f("Clear Beige", "#E5C3AC"),
       f("Neutral Honey", "#C69A7C"), f("Clear Tan", "#A0755A"), f("Deep Cool Cocoa", "#674436"),
     ],
-    undertoneGuide: "Cool-neutral with high clarity — keep the base clean and light-reflecting, never muted or matte-flat.",
+    guidance: {
+      base:
+        "Cool-neutral and clean. Keep the finish light-reflecting; a flat matte base kills the clarity your whole palette depends on.",
+      blush:
+        "Hot pink and clear raspberry. Muted and dusty shades read as grime on you rather than as softness.",
+      lip:
+        "Bright cherry, electric fuchsia, clear red. If a lipstick looks alarming in the tube it is probably yours.",
+      eye:
+        "Bright silver, electric teal and vivid violet, with clear black to anchor. Nothing greyed, nothing earthy.",
+      liner:
+        "Jet black, or a saturated teal or violet if you want colour. Softened liner wastes your contrast.",
+      nails:
+        "Bright cherry, electric fuchsia, icy white, clear black. Dusty and earthy polish look dirty against you.",
+    },
     blush: [
       bl("Hot Pink", "#E2477F", "matte"), bl("Bright Coral Pink", "#F0637C", "satin"),
       bl("Clear Raspberry", "#CC2D63", "matte"), bl("Bright Rose", "#E86A92", "shimmer"),
@@ -308,7 +404,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Porcelain Warm", "#FBEADA"), f("Light Ivory", "#F4DCC2"),
       f("Warm Cream", "#EACAA6"), f("Light Golden", "#DDB289"), f("Soft Honey", "#C79B72"),
     ],
-    undertoneGuide: "Light and warm — the commonest mistake is going too deep, which drops a veil over the whole face.",
+    guidance: {
+      base:
+        "Light and warm. The commonest mistake is going one shade too deep, which drops a veil over your whole face.",
+      blush:
+        "Light peach and soft coral, applied with a light hand. Your face flushes easily, so you need less than you think.",
+      lip:
+        "Peach nude, coral pink and warm rose. Your lip should look fresh rather than dressed.",
+      eye:
+        "Warm champagne, light peach shimmer and soft aqua. Keep everything luminous; matte darks flatten you.",
+      liner:
+        "Warm taupe or soft bronze, never black. Black liner on a light warm face reads as a line drawn on top of it.",
+      nails:
+        "Coral pink, light peach and warm rose. Black, burgundy and charcoal swamp a light, delicate hand.",
+    },
     blush: [
       bl("Light Peach", "#F5B191", "satin"), bl("Soft Coral", "#F79A87", "matte"),
       bl("Warm Petal Pink", "#F7A8B4", "shimmer"), bl("Apricot Cream", "#F3B487", "cream"),
@@ -345,7 +454,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Warm Porcelain", "#F9E4CE"), f("Golden Ivory", "#F0D0AC"),
       f("Warm Beige", "#DFB287"), f("Golden Tan", "#C7986B"), f("Warm Caramel", "#AC7B52"),
     ],
-    undertoneGuide: "Clear golden warmth — the base should look sunlit rather than neutral, and never ashy.",
+    guidance: {
+      base:
+        "Clearly golden, and let it look sunlit rather than neutral. Ashy bases are the one thing that consistently fails on you.",
+      blush:
+        "Warm coral and golden peach. You can take more brightness than you expect, as long as it stays warm.",
+      lip:
+        "Clear coral, poppy and warm watermelon. Mauve and dusty rose drain you on sight.",
+      eye:
+        "Bright gold, warm copper and clear turquoise. Your eye colour should look lit, not smoked.",
+      liner:
+        "Warm brown or bronze-gold. Teal is your one adventurous option and it works.",
+      nails:
+        "Clear coral, bright gold and fresh green. Anything greyed takes the life out of your hands.",
+    },
     blush: [
       bl("Warm Coral", "#F3785F", "matte"), bl("Golden Peach", "#F0A268", "satin"),
       bl("Bright Apricot", "#F58F55", "matte"), bl("Coral Rose", "#EF8377", "shimmer"),
@@ -382,7 +504,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Bright Ivory", "#FAE6D4"), f("Warm Clear Beige", "#EFCEAB"),
       f("Clear Golden", "#DDAF85"), f("Bright Tan", "#C59468"), f("Warm Amber Deep", "#A87450"),
     ],
-    undertoneGuide: "Warm with real clarity — a clean, luminous base; anything powdery flattens the contrast you carry.",
+    guidance: {
+      base:
+        "Warm with real clarity. Keep it clean and luminous — powdery finishes flatten the contrast you carry.",
+      blush:
+        "Bright coral and vivid peach. Your blush can be properly bright; muting it is what makes you look ill.",
+      lip:
+        "Vivid coral, clear poppy and hot peach. These are the colours other people find too much.",
+      eye:
+        "Vivid gold, clear turquoise and bright copper. Smoky eyes are the one look that never works on you.",
+      liner:
+        "Warm espresso for every day, bright teal when you want it. Grey and taupe go dull on you.",
+      nails:
+        "Vivid coral, clear turquoise, vivid gold. Dusty, smoky and earthy shades read as grime beside you.",
+    },
     blush: [
       bl("Bright Coral", "#FA6A55", "matte"), bl("Vivid Peach", "#FB8A5C", "satin"),
       bl("Clear Watermelon", "#F4657A", "matte"), bl("Bright Rose Coral", "#F5788A", "shimmer"),
@@ -420,7 +555,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Cool Porcelain", "#FBE8E0"), f("Rose Ivory", "#F3D8CB"),
       f("Cool Light Beige", "#E6C3AE"), f("Soft Rose Beige", "#D4A990"), f("Cool Sand", "#BE9276"),
     ],
-    undertoneGuide: "Light and cool with a rosy cast — a golden base turns sallow on you almost immediately.",
+    guidance: {
+      base:
+        "Light and cool with a rosy cast. A golden base turns sallow on you almost immediately.",
+      blush:
+        "Soft rose and cool petal pink. Yours is the softest blush of any season — build it slowly.",
+      lip:
+        "Soft rose pink and cool petal. Your lip works best barely deeper than your own colour.",
+      eye:
+        "Soft pearl grey, cool lilac and powder blue. Keep everything light; dark shadow overwhelms your eye.",
+      liner:
+        "Soft grey or cool slate, smudged. Black is far too heavy for a face this light and cool.",
+      nails:
+        "Soft rose, powder blue and cool lilac. Black, orange and deep brown all fight a light cool hand.",
+    },
     blush: [
       bl("Soft Rose", "#EBA3B4", "satin"), bl("Cool Petal Pink", "#F0AFC0", "matte"),
       bl("Dusty Pink", "#DB94A3", "matte"), bl("Light Berry", "#D77F9C", "shimmer"),
@@ -457,7 +605,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Rose Porcelain", "#F8E2DA"), f("Cool Ivory", "#EFD1C2"),
       f("Rose Beige", "#DBB39D"), f("Cool Tan", "#C19A80"), f("Cool Cocoa", "#9E7660"),
     ],
-    undertoneGuide: "Cool and rose-based throughout — match to the pink in your skin, not the depth of your hair.",
+    guidance: {
+      base:
+        "Cool and rose-based. Match to the pink in your skin rather than to the depth of your hair.",
+      blush:
+        "Cool rose and soft raspberry. Warmth is the single thing that pulls your face off-key.",
+      lip:
+        "Cool rose, soft raspberry and mauve. Your lip should look cool even when it is strong.",
+      eye:
+        "Cool taupe, soft plum and slate blue. Grey-based shadows do the work that browns do on warm seasons.",
+      liner:
+        "Soft charcoal or cool plum. Warm brown liner reads slightly orange against you.",
+      nails:
+        "Cool rose, slate blue and dusty plum. Orange, gold and warm camel are the ones to skip.",
+    },
     blush: [
       bl("Cool Rose", "#DE8296", "matte"), bl("Soft Raspberry", "#C86285", "satin"),
       bl("Mauve Pink", "#C98CA0", "matte"), bl("Dusty Berry", "#B45F7C", "matte"),
@@ -494,7 +655,20 @@ const MAKEUP: Record<string, SeasonMakeup> = {
       f("Neutral Rose Ivory", "#F5E0D6"), f("Soft Cool Beige", "#E6C9B6"),
       f("Muted Rose Beige", "#D0AC96", ), f("Soft Cool Tan", "#B8927B"), f("Muted Cocoa", "#96735E"),
     ],
-    undertoneGuide: "Neutral-cool and low contrast — keep everything soft and close in depth; edges are what age this face.",
+    guidance: {
+      base:
+        "Neutral-cool and soft. Your contrast is the lowest of any season, so a heavy base immediately looks applied.",
+      blush:
+        "Dusty rose and muted mauve. If it announces itself, it is wrong for you.",
+      lip:
+        "Soft mauve and dusty rose. Yours is the most forgiving lip register — nothing needs to be strong.",
+      eye:
+        "Soft taupe, muted plum and sage grey. Everything close in value; edges are what age this face.",
+      liner:
+        "Soft grey-brown or muted plum, always blended. A crisp line cuts across your softness.",
+      nails:
+        "Dusty rose, muted plum and sage grey. Black, pure white and anything vivid overwhelm you.",
+    },
     blush: [
       bl("Dusty Rose", "#C88B94", "matte"), bl("Muted Mauve", "#B8828F", "matte"),
       bl("Soft Berry", "#AC6C80", "satin"), bl("Rose Taupe", "#BC9099", "matte"),

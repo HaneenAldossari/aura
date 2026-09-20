@@ -1,8 +1,14 @@
 import { useT } from "../../i18n";
+import { formatSeasonName } from "../../utils/formatSeason";
 import type { DemoSample } from "../../lib/api";
 
 /**
- * Generated faces to try the analysis on, numbered rather than labelled.
+ * Generated faces to try the analysis on.
+ *
+ * A card carries a season only where the measurement and the model reached it
+ * independently, at primary level. Anything short of that shows the face and a
+ * number: a caption on a card is read as a fact about the face, and there is no
+ * room there to explain that one half of the system disagreed.
  *
  * The season is deliberately not shown here. These faces are AI-generated and
  * every one of them trips the quality gate's colour-cast check, so none has a
@@ -53,8 +59,12 @@ export default function SampleGallery({
                 loading="lazy"
                 decoding="async"
               />
-              <span className="an-sample__season ltr-run">
-                {String(i + 1).padStart(2, "0")}
+              <span className="an-sample__season">
+                {sample.agrees && sample.season ? (
+                  formatSeasonName(sample.season)
+                ) : (
+                  <span className="ltr-run">{String(i + 1).padStart(2, "0")}</span>
+                )}
               </span>
             </button>
           </li>

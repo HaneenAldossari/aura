@@ -16,6 +16,8 @@ import ResultsTabs, { type ResultsTab } from "./results/ResultsTabs";
 import SeasonIdentity from "./results/SeasonIdentity";
 import SecondPhotoNudge from "./results/SecondPhotoNudge";
 import ColourDNA from "./results/ColourDNA";
+import TraitLine from "./results/TraitLine";
+import PreviewCards from "./results/PreviewCards";
 import HairNote from "./results/HairNote";
 import PaletteGrid from "./results/PaletteGrid";
 import MakeupSection from "./results/MakeupSection";
@@ -150,6 +152,17 @@ export default function Results() {
                   tagline={data.seasonTagline}
                   sessionId={sessionId}
                 />
+
+                {/* The measurement in words, above the table that evidences it.
+                    Most people cannot read "skin 37.5 / 26.6 / 44.9" — but
+                    anyone can check "warm, golden" against a mirror, which is
+                    the only external test this app has. */}
+                <TraitLine data={data} />
+
+                {/* Canonical, not model-written: two people with the same
+                    season read the same description of it. */}
+                {data.styleShades?.story && <p className="ed-story">{data.styleShades.story}</p>}
+
                 <ColourDNA data={data} />
                 {(data.photoCount ?? 1) >= 2 && (
                   <p className="ed-twophoto">{t("results.twoPhotos")}</p>
@@ -174,6 +187,30 @@ export default function Results() {
                   </div>
                   <hr className="ed-rule" />
                   <PaletteGrid colours={data.palette?.best ?? []} />
+
+                  {/* Clothing avoids as one compact row rather than a section
+                      of their own. It is a footnote to the palette and reads
+                      as one here; on the Style tab it read as a category. */}
+                  {(data.palette?.avoid?.length ?? 0) > 0 && (
+                    <div className="ed-avoidrow">
+                      <div
+                        className="ed-avoidrow__swatches"
+                        role="img"
+                        aria-label={t("results.avoidRow")}
+                      >
+                        {data.palette.avoid.slice(0, 6).map((colour) => (
+                          <span
+                            className="ed-avoidrow__swatch"
+                            key={colour.hex}
+                            style={{ background: colour.hex }}
+                            title={colour.name}
+                          />
+                        ))}
+                      </div>
+                      <p className="ed-avoidrow__note">{t("results.avoidRow")}</p>
+                    </div>
+                  )}
+
                   <div className="ed-actions" style={{ marginBlockStart: "var(--space-3)" }}>
                     <button
                       type="button"
@@ -185,6 +222,11 @@ export default function Results() {
                     </button>
                   </div>
                 </section>
+
+                {/* What is behind the other tabs, sampled from this season's
+                    own data — a tab bar says a tab exists, not whether it is
+                    worth opening. */}
+                <PreviewCards data={data} onOpen={setTab} />
 
                 {/* Balances the column, and puts the thing people come back
                     for in front of them rather than behind a tab. */}

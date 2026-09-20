@@ -14,7 +14,8 @@ import { normalizeResult } from "../normalizeResult";
 import { validateAnalysisResult } from "./analysisResult";
 import { fail, json, methodNotAllowed, providerErrorResponse, readUpload } from "./http";
 import { getSeasonMakeup } from "../utils/seasonMakeup";
-import { getSeasonStyle } from "../utils/seasonStyle";
+import { getSeasonStyle, resolvePairings } from "../utils/seasonStyle";
+import { getCanonicalPalette } from "../utils/seasonPalettes";
 
 const DEMO_DIR = path.join(__dirname, "../demo-analyses");
 
@@ -115,23 +116,24 @@ export async function handleDemoList(request: Request): Promise<Response> {
             qualityIssues?: string[];
           };
 
-          // A label is only a claim we can stand behind when the measurement
-          // and the model reached it independently. Where they disagree the
-          // rules win the label — they are the half with numbers behind them —
-          // and it is tagged so nobody reads it as a settled verdict. An
-          // LLM-only label is never shown: that is how two deep-skinned faces
-          // came to be captioned "Light Summer" and "Light Spring".
-          // A colour cast changes what every measurement below it means, so a
-          // photo carrying one cannot produce a settled label however well the
-          // two halves agree. This is the gate's own existing finding, not a
-          // new threshold.
-          const cast = (raw.qualityIssues ?? []).includes("colour_cast");
-          // `agrees` is also true when the model lands on the rules' SECOND
-          // choice, which is a near miss rather than agreement on a season.
-          // A caption is a flat assertion, so it needs the stricter test.
-          const agrees = raw.agreement?.level === "primary" && !cast;
-          const rulesPrimary = raw.rules?.primary ?? "";
-          const season = agrees ? (raw.season ?? "") : rulesPrimary;
+          // A card carries a season only where the measurement and the model
+          // reached it independently, at PRIMARY level. `agreement.agrees` is
+          // also true when the model lands on the rules' second choice, which
+          // is a near miss rather than agreement, and a caption is a flat
+          // assertion with no room to explain the difference.
+          //
+          // Anything short of that shows the face and a number. A model-only
+          // label is never shown: that is how two deep-skinned faces came to be
+          // captioned "Light Summer" and "Light Spring", which cannot be true
+          // of either, since the light seasons are light by definition.
+          //
+          // Colour cast is deliberately not part of this test. It decides which
+          // faces are fit to ship at all (scripts/vetDemoFaces.ts), not whether
+          // a shipped face may be captioned — applying it here suppressed every
+          // label on every face, which is a way of saying nothing rather than a
+          // way of being careful.
+          const agrees = raw.agreement?.level === "primary";
+          const season = agrees ? (raw.season ?? "") : "";
 
           return {
             id,
@@ -189,7 +191,10 @@ export async function handleDemoLoad(request: Request): Promise<Response> {
     // instead of after a $0.09 regeneration run.
     const season = (result.season as string) ?? "";
     result.makeupShades = getSeasonMakeup(season);
-    result.styleShades = getSeasonStyle(season);
+    const style = getSeasonStyle(season);
+    result.styleShades = style
+      ? { ...style, pairings: resolvePairings(season, getCanonicalPalette(season)) }
+      : null;
 
     return json({ result });
   } catch (err) {

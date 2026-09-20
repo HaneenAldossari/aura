@@ -30,7 +30,9 @@ describe("canonical makeup shades", () => {
   it.each(seasons)("%s has every category the UI renders", (season) => {
     const m = getSeasonMakeup(season)!;
     expect(m.foundation.length).toBeGreaterThanOrEqual(5);
-    expect(m.undertoneGuide.length).toBeGreaterThan(20);
+    for (const section of Object.values(m.guidance)) {
+      expect(section.length).toBeGreaterThan(40);
+    }
     expect(m.skip.length).toBeGreaterThan(20);
     for (const c of INDEX_CATEGORIES) {
       const shades = m[c as keyof typeof m] as { name: string }[];

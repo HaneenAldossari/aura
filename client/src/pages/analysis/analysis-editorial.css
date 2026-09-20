@@ -334,7 +334,7 @@
   display: block;
   padding: 6px var(--space-1);
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: var(--type-micro);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-muted);
@@ -351,7 +351,7 @@
 
 .an-sample__tag {
   display: block;
-  font-size: 8px;
+  font-size: var(--type-micro);
   letter-spacing: 0.14em;
   color: var(--accent);
   margin-block-start: 1px;

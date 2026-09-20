@@ -51,7 +51,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-family: Inter, sans-serif;
-  font-size: 9px;
+  font-size: var(--type-micro);
   letter-spacing: 0.08em;
   padding: 2px 7px;
   border-radius: 8px;

@@ -7,7 +7,7 @@
  * type is not.
  */
 import { getCanonicalPalette } from "./utils/seasonPalettes";
-import { getSeasonStyle } from "./utils/seasonStyle";
+import { getSeasonStyle, resolvePairings } from "./utils/seasonStyle";
 import {
   getSeasonMakeup,
   resolveShade,
@@ -286,7 +286,13 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
     makeupShades: getSeasonMakeup(season),
     // Canonical gemstones and hair colours, so the Style tab can render colour
     // rather than the model's prose about colour.
-    styleShades: getSeasonStyle(season),
+    styleShades: (() => {
+      const style = getSeasonStyle(season);
+      if (!style) return null;
+      // Pairings store colour NAMES; the hexes come from the same canonical
+      // palette the page renders, so a palette correction reaches both.
+      return { ...style, pairings: resolvePairings(season, canonical) };
+    })(),
     looks: resolvedLooks,
 
     secondarySeason: (raw.secondarySeason as string) || "",

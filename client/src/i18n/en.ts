@@ -50,6 +50,16 @@ export const en = {
     /* ── Editorial Results (the single scrolling page) ─────────────────── */
     analysisMeta: "Your analysis — {date}",
     twoPhotos: "Measured from two photos, averaged.",
+    traits: {
+      undertone: "Skin undertone",
+      hair: "Hair",
+      eyes: "Eyes",
+      contrast: "Contrast",
+    },
+    previews: {
+      shop: "Score anything before you buy",
+    },
+    avoidRow: "Worth avoiding near your face — these dull your skin and take the light off it.",
     confidence: "{percent}% confidence",
     nextClosest: "next closest · {season}",
 
@@ -128,6 +138,12 @@ export const en = {
     styleSection: {
       title: "Style",
       jewellery: "Jewellery",
+      verdictBest: "best",
+      verdictWorks: "works",
+      verdictSkip: "skip",
+      alsoMetals: "Also: {metals}.",
+      pairings: "Pairings",
+      pairingsMeta: "four outfits from your twelve",
       jewelleryMeta: "metals and stones that agree with your skin",
       exactMatch: "exact match",
       familyMatch: "{family} family",
@@ -528,9 +544,11 @@ export const en = {
         "Twelve colours, makeup and metals, and a score for anything you are about to buy.",
     },
 
-    ribbon: {
+    field: {
       title: "All twelve seasons",
       source: "canonical palettes",
+      open: "See the {season} palette",
+      cta: "Find your season",
     },
 
     drape: {

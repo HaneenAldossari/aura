@@ -1,19 +1,18 @@
 /**
  * Home — editorial direction.
  *
- * Two ambient motions exist in the whole app and both are here: the starfield
- * and this ribbon. Everything else holds still.
+ * Two ambient motions exist in the whole app: the starfield, and the colour
+ * field's drift. Everything else holds still.
  */
 
-.home-hero {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-6);
-  padding-block: var(--space-5) var(--space-7);
-}
+/* ── Hero: centred, and the whole first viewport ──────────────────────── */
 
-@media (min-width: 1024px) {
-  .home-hero { grid-template-columns: 7fr 5fr; gap: var(--space-7); align-items: start; }
+.home-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-block: var(--space-6) var(--space-5);
 }
 
 .home-eyebrow {
@@ -27,11 +26,10 @@
 .home-title {
   font-family: var(--font-display);
   font-weight: 400;
-  /* Capped at 84 rather than the design system's 96 display size: Bodoni
-     italic is wide, and "Made for You" wrapped to a second line in a 7-column
-     measure at 96px, which breaks the four-line shape the hero is built on. */
+  /* Capped below the design's 96 display size: Bodoni italic is wide, and
+     "Made for You" wrapped to a second line at 96 in a centred measure. */
   font-size: clamp(44px, 7.4vw, 84px);
-  line-height: 1.0;
+  line-height: 1.02;
   letter-spacing: -0.02em;
   color: var(--ink);
   margin: 0 0 var(--space-4);
@@ -49,21 +47,144 @@
   font-size: var(--type-lede);
   line-height: 1.55;
   color: var(--ink-secondary);
-  max-inline-size: 46ch;
+  max-inline-size: 54ch;
   margin: 0 0 var(--space-5);
 }
 
-.home-cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); }
+.home-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
 
-/* ── How it works ─────────────────────────────────────────────────────── */
+/* ── Colour field ─────────────────────────────────────────────────────── */
 
-.home-steps { display: flex; flex-direction: column; }
+.field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  /* Runs off both edges by design, and must never widen the page. */
+  overflow-x: clip;
+  margin-block-start: var(--space-5);
+}
+
+.field__band {
+  position: relative;
+  /* Drift and hover scale compose in one transform, so neither triggers
+     layout. --drift is written by rAF; the scale is CSS. */
+  transform: translate3d(var(--drift, 0px), 0, 0) scale(var(--scale, 1));
+  transition: transform var(--dur-slow) var(--ease-ui),
+              opacity var(--dur-slow) var(--ease-ui);
+  will-change: transform, opacity;
+}
+
+/* Everything else recedes while one band is held. */
+.field--focusing .field__band { opacity: 0.7; }
+.field__band--on { --scale: 1.06; opacity: 1 !important; z-index: 2; }
+
+.field__hit {
+  display: flex;
+  inline-size: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.field__swatch { flex: 1; block-size: 30px; }
+
+@media (max-width: 767px) { .field__swatch { block-size: 22px; } }
+
+/* The name appears at the reading edge of the band it belongs to. */
+.field__name {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: var(--space-4);
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-shadow: 0 1px 6px rgba(12, 10, 9, 0.9);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-ui) var(--ease-ui);
+}
+
+.field__band--on .field__name { opacity: 1; }
+
+.field__panel {
+  position: absolute;
+  inset-block-end: var(--space-4);
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  inline-size: min(420px, calc(100vw - var(--space-5)));
+  background: var(--surface);
+  border: 1px solid var(--rule-strong);
+  padding: var(--space-4);
+  z-index: 5;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+}
+
+.field__panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-block-end: var(--space-3);
+}
+
+.field__panel-title {
+  font-family: var(--font-display);
+  font-size: var(--type-stat);
+  color: var(--ink);
+  margin: 0;
+}
+
+.field__panel-close {
+  background: none;
+  border: 0;
+  color: var(--ink-muted);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.field__panel-swatches {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  margin-block-end: var(--space-4);
+}
+
+.field__panel-swatches span { block-size: 38px; display: block; }
+
+/* Reduced motion keeps the hover and tap behaviour and drops only the drift —
+   the interaction is how the field is read, the movement is decoration. */
+@media (prefers-reduced-motion: reduce) {
+  .field__band { transform: scale(var(--scale, 1)); transition: none; }
+}
+
+/* ── How it works, below the fold ─────────────────────────────────────── */
+
+.home-how { padding-block: var(--space-7); }
+
+.home-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 768px) { .home-steps { grid-template-columns: repeat(3, 1fr); } }
 
 .home-step {
   display: grid;
   grid-template-columns: 2.4rem 1fr;
   gap: var(--space-3);
-  padding-block: var(--space-4);
+  padding-block-start: var(--space-4);
   border-block-start: 1px solid var(--rule);
 }
 
@@ -71,7 +192,7 @@
   font-family: var(--font-mono);
   font-size: var(--type-micro);
   color: var(--ink-muted);
-  padding-block-start: 4px;
+  padding-block-start: 3px;
 }
 
 .home-step__title {
@@ -88,81 +209,7 @@
   margin: 0;
 }
 
-/* ── Ribbon ───────────────────────────────────────────────────────────── */
-
-.ribbon { padding-block: var(--space-5) var(--space-4); }
-
-/* The only element allowed to overflow the shell — it is meant to run off both
-   edges, so it is clipped rather than scrolled and never widens the page. */
-.ribbon__viewport { overflow-x: clip; padding-block: var(--space-3); }
-
-.ribbon__track {
-  display: flex;
-  inline-size: max-content;
-  animation: ribbon-drift var(--ribbon-duration, 720s) linear infinite;
-}
-
-/* Direction-independent: under RTL the track still travels toward the start
-   edge, which is the direction the reader's eye leaves from either way. */
-@keyframes ribbon-drift {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(var(--ribbon-distance, -5760px), 0, 0); }
-}
-
-.ribbon__season {
-  flex: none;
-  padding-inline-end: var(--space-6);
-  animation: ribbon-focus var(--ribbon-duration, 720s) linear infinite;
-  animation-delay: var(--ribbon-delay, 0s);
-}
-
-.ribbon__name {
-  display: block;
-  font-size: var(--type-label);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-block-end: var(--space-2);
-  /* Colour, not opacity: 13px type at 45% measures about 3:1 and fails AA.
-     The name carries focus in hue so it stays legible throughout. */
-  color: var(--ink-muted);
-  animation: ribbon-name var(--ribbon-duration, 720s) linear infinite;
-  animation-delay: var(--ribbon-delay, 0s);
-}
-
-.ribbon__bars { display: flex; block-size: 34px; }
-.ribbon__bar { inline-size: 30px; }
-
-@media (max-width: 767px) {
-  .ribbon__bar { inline-size: 24px; }
-  .ribbon__bars { block-size: 28px; }
-}
-
-/* The bars dim, because a block of colour at 45% is still a block of colour. */
-@keyframes ribbon-focus {
-  0%, 42% { opacity: 0.45; }
-  50% { opacity: 1; }
-  58%, 100% { opacity: 0.45; }
-}
-
-@keyframes ribbon-name {
-  0%, 42% { color: var(--ink-muted); }
-  50% { color: var(--accent); }
-  58%, 100% { color: var(--ink-muted); }
-}
-
-/* Reduced motion: the ribbon stops and everything sits at full strength, so
-   nothing is left permanently dimmed at 45%. */
-@media (prefers-reduced-motion: reduce) {
-  .ribbon__track,
-  .ribbon__season,
-  .ribbon__name {
-    animation: none !important;
-  }
-  .ribbon__season { opacity: 1; }
-  .ribbon__name { color: var(--ink-secondary); }
-}
-
-.ribbon__foot {
+.home-foot {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -170,18 +217,14 @@
   gap: var(--space-3);
   padding-block-start: var(--space-4);
   border-block-start: 1px solid var(--rule);
-  margin-block-start: var(--space-4);
 }
 
-.ribbon__privacy {
+.home-foot__privacy,
+.home-foot__source {
   font-family: var(--font-mono);
   font-size: var(--type-micro);
   color: var(--ink-trust);
   margin: 0;
 }
 
-.ribbon__source {
-  font-family: var(--font-mono);
-  font-size: var(--type-micro);
-  color: var(--ink-muted);
-}
+.home-foot__source { color: var(--ink-muted); }

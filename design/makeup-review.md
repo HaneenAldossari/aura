@@ -18,7 +18,16 @@ assigns a colour, so correcting a value here corrects it everywhere.
 
 ### Makeup
 
-_Undertone guide:_ Clearly golden undertone — warm every base, and skip anything described as rosy or neutral-cool.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Warm every layer of your base. Your skin is clearly golden, so anything described as rosy or neutral-cool will fight it. |
+| blush | Apricot, warm coral and russet read as a flush on you. Anything blue-based reads as a bruise. |
+| lip | Pumpkin, terracotta and warm brick are your register. A caramel nude works for every day; cool berry never will. |
+| eye | Copper, olive-bronze and cinnamon are yours. Moss and antique gold give you depth without going cold. |
+| liner | Warm espresso or moss rather than black — your colouring has no true black in it, so black liner always looks added. |
+| nails | Pumpkin, warm brick, moss and golden camel. Fuchsia and blue-reds will look like someone else's hands. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -64,7 +73,37 @@ _Skip line:_ Skip cool berry, fuchsia and blue-based reds — they fight the gol
 | best | Yellow Gold, Bronze, Copper, Antique Gold | — | — |
 | avoid | Silver, Platinum, White Gold | — | — |
 
-_Metal note:_ Yellow gold and copper. Silver goes grey against this much warmth.
+### Story
+
+You are the most purely warm of the twelve — golden, earthy and unmistakably autumn. Rust, olive and bronze look like your natural colouring rather than a choice, and the cooler a colour gets the harder your face has to work. Your best outfits look as though they were dyed with plants.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Yellow gold and copper. Warmth is the point, so do not tone it down. |
+| hair | Keep your hair golden-warm. Chestnut, copper and rich auburn suit you; avoid ash and blue-black, which flatten your colouring. |
+| pairings | Earth tones layered on earth tones, with one clear warm accent. Nothing here should look cool. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | best | The warmest metal, your default |
+| Rose gold | works | Warm enough, slightly softer edge |
+| Silver | skip | Goes grey against your gold |
+
+_Also:_ copper, bronze
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Rust · Olive Green · Warm Cream | Everyday, and the easiest place to start |
+| Chocolate Brown · Mustard · Warm Cream | Daytime, tailoring, anything structured |
+| Forest Olive · Golden Yellow · Warm Cream | Evening, dinners, warm lighting |
+| Pumpkin · Olive Green · Chocolate Brown | Weekends and outdoors |
 
 ### Gemstones
 
@@ -90,7 +129,16 @@ _Metal note:_ Yellow gold and copper. Silver goes grey against this much warmth.
 
 ### Makeup
 
-_Undertone guide:_ Golden-olive undertone — go one depth deeper than feels obvious, and never pink.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Match your base one depth deeper than feels obvious, and keep it golden. A pink or neutral-cool foundation will grey you out within an hour. |
+| blush | Reach for earth, not sugar. Terracotta, brick and bronzed rose sit into your skin; cool pinks sit on top of it. |
+| lip | Your lips can carry real depth. Raisin, deep brick and warm burgundy look intentional on you where a nude reads washed out. |
+| eye | Metals belong on your lids — bronze, copper, burnished gold — with forest and chocolate for depth. Silver and icy shades will look borrowed. |
+| liner | Skip black. Espresso, deep olive and bronze define your eye without cutting a hard line across a warm face. |
+| nails | Deep and warm: brick, burgundy, olive, camel. Pale pinks and icy pastels disappear against your hands. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -136,7 +184,37 @@ _Skip line:_ Skip icy pink, pure white and anything silver-based — they flatte
 | best | Yellow Gold, Bronze, Copper, Antique Gold | — | — |
 | avoid | Silver, Platinum, White Gold | — | — |
 
-_Metal note:_ Warm, darkened metals — the deeper the finish, the better it sits against you.
+### Story
+
+Yours is the deepest and warmest of the autumns — rich before it is bright. Saturated earth tones read as natural on you, where pale or cool shades drain the face and leave the eyes doing all the work. You can wear more depth than almost anyone, provided it stays warm.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Warm metals, and the deeper the finish the better. Polished silver sits on your skin like a cold spot. |
+| hair | Keep your hair warm and deep. Chestnut, auburn and warm espresso suit you; avoid ash tones and platinum, which grey you instantly. |
+| pairings | Build outfits from your darks and let one warm colour do the talking. Pale, cool shades belong away from your face. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | best | Warm and deep, like you |
+| Rose gold | works | Softer, but still reads warm |
+| Silver | skip | Cold against a deep warmth |
+
+_Also:_ copper, bronze
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Espresso · Burnt Brick · Deep Cream | Everyday, when you want depth without effort |
+| Deep Olive · Camel · Bronze | Daytime, offices, anything that needs to look considered |
+| Warm Burgundy · Dark Chocolate · Deep Cream | Evening, and anywhere you want to look expensive |
+| Pine Green · Bronze · Camel | Autumn and winter layers, coats and knitwear |
 
 ### Gemstones
 
@@ -162,7 +240,16 @@ _Metal note:_ Warm, darkened metals — the deeper the finish, the better it sit
 
 ### Makeup
 
-_Undertone guide:_ Neutral-warm and low contrast — keep the base soft, and let nothing on the face read as bright.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Keep the base soft and neutral-warm. Your contrast is low, so a heavy or high-coverage finish reads as a mask. |
+| blush | Dusty apricot and muted rose. The rule for you is quiet — if a blush is visible from across a room it is too bright. |
+| lip | Rosewood, muted brick and soft cocoa. Your lip should look like a slightly better version of your own colour. |
+| eye | Soft bronze, warm taupe and sage. Everything stays within a few steps of each other; sharp contrast ages your eye. |
+| liner | Soft brown or olive-grey, smudged rather than drawn. A crisp black line is the fastest way to make you look tired. |
+| nails | Rosewood, sage olive and warm taupe. Bright coral and true red overpower the softness that defines you. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -208,7 +295,37 @@ _Skip line:_ Skip anything vivid or icy — bright coral, true red and stark whi
 | best | Yellow Gold, Rose Gold, Antique Gold, Brushed Bronze | — | — |
 | avoid | Silver, Platinum, White Gold | — | — |
 
-_Metal note:_ Antique and brushed finishes. Anything highly polished is too bright here.
+### Story
+
+Yours is the gentlest of the autumns — warm, but so muted that brightness reads as noise on you. Dusty, blended colours let your face be the most interesting thing in the outfit, which is exactly the effect you want. The moment an outfit has a sharp edge in it, the edge is all anyone sees.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Antique and brushed finishes. Anything highly polished is brighter than your face and takes attention from it. |
+| hair | Keep your hair soft and warm. Mocha, muted chestnut and dusty caramel suit you; avoid jet black and platinum, which are both too strong for your contrast. |
+| pairings | Keep every piece close in depth. Your outfits work through blending, not contrast. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | best | Warm, best in brushed finishes |
+| Rose gold | best | Soft warmth, made for you |
+| Silver | skip | Too cool and too bright |
+
+_Also:_ antique gold, bronze
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Camel · Dusty Coral · Warm Beige | Everyday, the easiest outfit you own |
+| Olive · Cream · Soft Terracotta | Daytime, anything that needs to look calm |
+| Warm Teal · Warm Beige · Camel | Evening, kept quiet |
+| Muted Salmon · Cream · Olive | Weekends and layers |
 
 ### Gemstones
 
@@ -234,7 +351,16 @@ _Metal note:_ Antique and brushed finishes. Anything highly polished is too brig
 
 ### Makeup
 
-_Undertone guide:_ Cool to neutral-cool undertone at depth — match exactly, and avoid golden or peachy bases.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Match exactly at depth, and keep it cool to neutral-cool. A golden or peachy base turns orange against your undertone. |
+| blush | Cool plum and deep berry. Warm corals and peaches will look like a stripe rather than a flush. |
+| lip | This is your strongest feature. True red, black cherry and deep plum all belong to you — nude lips waste the contrast you have. |
+| eye | Charcoal, deep emerald and blackened plum, with icy silver to lift. Warm browns and bronzes muddy you. |
+| liner | True black, and you can draw it properly. You are one of the few seasons black liner genuinely belongs to. |
+| nails | True red, black cherry, deep emerald. Nude and beige polish make your hands look unfinished. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -280,7 +406,35 @@ _Skip line:_ Skip warm orange, camel and muted earth tones — they dull the cla
 | best | Silver, Platinum, White Gold, Pewter | — | — |
 | avoid | Yellow Gold, Bronze, Copper | — | — |
 
-_Metal note:_ Silver, platinum and white gold. Yellow gold muddies the contrast.
+### Story
+
+You carry the most contrast of any season — deep, cool and clear all at once. Black and true white are genuinely yours, and a jewel tone beside them looks deliberate rather than loud. Muted and earthy colours are the ones that let you down; they blur an outline that should stay sharp.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Silver, platinum and white gold. Yellow gold muddies the contrast that makes your colouring work. |
+| hair | Keep your hair deep and cool. Blue-black, cool espresso and dark ash suit you; avoid golden and copper tones, which turn brassy against your skin. |
+| pairings | Work from black and true white, with one saturated jewel colour. Your palette is built for contrast. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | skip | Turns brassy against your skin |
+| Rose gold | skip | Warmth muddies your cool depth |
+| Silver | best | Cool and clear, like you |
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Black · Pure White · Cranberry | Everyday, and the outfit that always works |
+| Deep Navy · Charcoal · Emerald | Daytime and offices |
+| Black · Emerald · Pure White | Evening, and anywhere you want presence |
+| Burgundy · Charcoal · Pure White | Winter layers and coats |
 
 ### Gemstones
 
@@ -306,7 +460,16 @@ _Metal note:_ Silver, platinum and white gold. Yellow gold muddies the contrast.
 
 ### Makeup
 
-_Undertone guide:_ Distinctly cool, blue-based undertone — a rosy base reads correct on you where a golden one greys.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Cool and blue-based throughout. A rosy base reads correct on you where a golden one immediately greys. |
+| blush | Cool pink and raspberry. Keep it clear — a muted or dusty blush goes flat against your clarity. |
+| lip | Blue-red, fuchsia and cool ruby. These are loud colours that look ordinary on you, which is the point. |
+| eye | Pure silver, royal blue, emerald, cool charcoal. Anything warm or golden reads as dirt against your skin. |
+| liner | Jet black or royal navy. Brown liner will always look slightly muddy on you. |
+| nails | Blue-red, fuchsia, royal blue, pure white. Orange, gold and beige are the three to leave. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -352,7 +515,35 @@ _Skip line:_ Skip orange-red, gold and anything beige-warm — they muddy a pale
 | best | Silver, Platinum, White Gold | — | — |
 | avoid | Yellow Gold, Bronze, Copper | — | — |
 
-_Metal note:_ Cool metals only. Silver and platinum read as clean; gold reads as dirty.
+### Story
+
+You are cool right through — blue-based, clear and high in contrast. Icy brights and true jewel tones look effortless on you, and the stark combinations other people avoid are the ones that suit you best. Anything warm, dusty or beige takes your clarity away and gives nothing back.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Cool metals only. Silver reads clean on you; gold reads dirty, every time. |
+| hair | Keep your hair cool and dark. True black and cool dark brown suit you; avoid honey, caramel and warm auburn, which go orange against your undertone. |
+| pairings | Pure colour against pure neutral. You are the one season that can wear true white and true black without adjustment. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | skip | Reads dirty on cool skin |
+| Rose gold | skip | Warm cast fights your cool |
+| Silver | best | Blue-based, matches your undertone |
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Pure White · Black · Blue-Red | Everyday, and the sharpest thing you own |
+| Royal Blue · Icy Gray · Pure White | Daytime and offices |
+| Black · Fuchsia · Pure White | Evening, when you want to be seen |
+| Emerald Green · Black · Icy Gray | Winter layers |
 
 ### Gemstones
 
@@ -378,7 +569,16 @@ _Metal note:_ Cool metals only. Silver and platinum read as clean; gold reads as
 
 ### Makeup
 
-_Undertone guide:_ Cool-neutral with high clarity — keep the base clean and light-reflecting, never muted or matte-flat.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Cool-neutral and clean. Keep the finish light-reflecting; a flat matte base kills the clarity your whole palette depends on. |
+| blush | Hot pink and clear raspberry. Muted and dusty shades read as grime on you rather than as softness. |
+| lip | Bright cherry, electric fuchsia, clear red. If a lipstick looks alarming in the tube it is probably yours. |
+| eye | Bright silver, electric teal and vivid violet, with clear black to anchor. Nothing greyed, nothing earthy. |
+| liner | Jet black, or a saturated teal or violet if you want colour. Softened liner wastes your contrast. |
+| nails | Bright cherry, electric fuchsia, icy white, clear black. Dusty and earthy polish look dirty against you. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -424,7 +624,35 @@ _Skip line:_ Skip dusty, greyed and earthy shades — anything muted reads as di
 | best | Silver, Platinum, White Gold | — | — |
 | avoid | Bronze, Copper, Antique Gold | — | — |
 
-_Metal note:_ High-polish silver and platinum. Matte finishes dull the clarity you carry.
+### Story
+
+You are winter at its clearest — cool, bright and built for saturated colour. Vivid shades against a crisp neutral look considered on you, where anything dusty or greyed reads as a mistake. Your face can hold more brightness than almost any other season, and it looks wrong without it.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | High-polish silver and platinum. Matte and brushed finishes dull the clarity you carry. |
+| hair | Keep your hair cool and clear. Jet black and cool chocolate suit you; avoid mousy and golden tones, which go flat against your brightness. |
+| pairings | One vivid colour, one crisp neutral. Your outfits should look switched on. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | skip | Warm and dull against you |
+| Rose gold | skip | Softens what should stay sharp |
+| Silver | best | Bright and clean, like you |
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Pure White · Black · Magenta | Everyday, and hard to get wrong |
+| Electric Blue · Pure White · Black | Daytime, anything that needs energy |
+| Black · Emerald · Pure White | Evening, and anywhere you want presence |
+| Fuchsia · Black · Icy Blue | When you want the room to notice |
 
 ### Gemstones
 
@@ -450,7 +678,16 @@ _Metal note:_ High-polish silver and platinum. Matte finishes dull the clarity y
 
 ### Makeup
 
-_Undertone guide:_ Light and warm — the commonest mistake is going too deep, which drops a veil over the whole face.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Light and warm. The commonest mistake is going one shade too deep, which drops a veil over your whole face. |
+| blush | Light peach and soft coral, applied with a light hand. Your face flushes easily, so you need less than you think. |
+| lip | Peach nude, coral pink and warm rose. Your lip should look fresh rather than dressed. |
+| eye | Warm champagne, light peach shimmer and soft aqua. Keep everything luminous; matte darks flatten you. |
+| liner | Warm taupe or soft bronze, never black. Black liner on a light warm face reads as a line drawn on top of it. |
+| nails | Coral pink, light peach and warm rose. Black, burgundy and charcoal swamp a light, delicate hand. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -496,7 +733,37 @@ _Skip line:_ Skip black, burgundy and charcoal — depth of that order swamps a 
 | best | Yellow Gold, Rose Gold, Champagne Gold | — | — |
 | avoid | Silver, Platinum | — | — |
 
-_Metal note:_ Light, bright gold. Heavy antique finishes sit too dark on you.
+### Story
+
+Yours is the lightest and freshest of the springs — warm, delicate and easily overwhelmed. Peach, coral and clear warm pastels look like they belong to you, while anything dark or heavy takes over the outfit and leaves your face behind it. The trick with your colouring is never adding weight.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Light, bright gold. Heavy antique finishes sit too dark against a delicate face. |
+| hair | Keep your hair light and warm. Honey, golden blonde and light chestnut suit you; avoid ash tones and anything near black, which overwhelm you. |
+| pairings | Light colours together, warm throughout. Depth is what costs you, not brightness. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | best | Light, warm, made for you |
+| Rose gold | best | Peachy warmth suits you perfectly |
+| Silver | skip | Cool and hard beside you |
+
+_Also:_ light copper
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Light Peach · Ivory · Coral Pink | Everyday, and your easiest outfit |
+| Sky Blue · Ivory · Camel Beige | Daytime, offices, anything light |
+| Coral Pink · Butter Yellow · Ivory | Summer, holidays, warm days |
+| Light Warm Teal · Camel Beige · Light Peach | Weekends and warm days |
 
 ### Gemstones
 
@@ -522,7 +789,16 @@ _Metal note:_ Light, bright gold. Heavy antique finishes sit too dark on you.
 
 ### Makeup
 
-_Undertone guide:_ Clear golden warmth — the base should look sunlit rather than neutral, and never ashy.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Clearly golden, and let it look sunlit rather than neutral. Ashy bases are the one thing that consistently fails on you. |
+| blush | Warm coral and golden peach. You can take more brightness than you expect, as long as it stays warm. |
+| lip | Clear coral, poppy and warm watermelon. Mauve and dusty rose drain you on sight. |
+| eye | Bright gold, warm copper and clear turquoise. Your eye colour should look lit, not smoked. |
+| liner | Warm brown or bronze-gold. Teal is your one adventurous option and it works. |
+| nails | Clear coral, bright gold and fresh green. Anything greyed takes the life out of your hands. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -568,7 +844,37 @@ _Skip line:_ Skip mauve, dusty rose and anything greyed — muting is what takes
 | best | Yellow Gold, Rose Gold, Bronze | — | — |
 | avoid | Silver, Platinum, White Gold | — | — |
 
-_Metal note:_ Clear yellow gold. Warmth is the point — do not tone it down.
+### Story
+
+You are warm and clear in equal measure — the brightest of the warm seasons. Coral, turquoise and golden tones look lit from inside on you, and muting them is what makes you look tired. Your colouring wants colour, and it wants it undiluted.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Clear yellow gold. Warmth is the point on you, so do not tone it down. |
+| hair | Keep your hair golden. Honey, golden brown and light auburn suit you; avoid ash and blue-black, which drain the warmth from your skin. |
+| pairings | Warm and clear together. Your outfits should look sunlit. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | best | Clear warm gold, your metal |
+| Rose gold | works | Warm enough, a softer option |
+| Silver | skip | Cools down what should glow |
+
+_Also:_ copper, bronze
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Coral · Warm Ivory · Turquoise | Everyday, and the most you-ish outfit |
+| Golden Yellow · Warm Ivory · Grass Green | Daytime and warm weather |
+| Turquoise · Golden Brown · Coral | Holidays and evenings out |
+| Apple Green · Golden Brown · Warm Ivory | Weekends and outdoors |
 
 ### Gemstones
 
@@ -594,7 +900,16 @@ _Metal note:_ Clear yellow gold. Warmth is the point — do not tone it down.
 
 ### Makeup
 
-_Undertone guide:_ Warm with real clarity — a clean, luminous base; anything powdery flattens the contrast you carry.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Warm with real clarity. Keep it clean and luminous — powdery finishes flatten the contrast you carry. |
+| blush | Bright coral and vivid peach. Your blush can be properly bright; muting it is what makes you look ill. |
+| lip | Vivid coral, clear poppy and hot peach. These are the colours other people find too much. |
+| eye | Vivid gold, clear turquoise and bright copper. Smoky eyes are the one look that never works on you. |
+| liner | Warm espresso for every day, bright teal when you want it. Grey and taupe go dull on you. |
+| nails | Vivid coral, clear turquoise, vivid gold. Dusty, smoky and earthy shades read as grime beside you. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -640,7 +955,37 @@ _Skip line:_ Skip dusty, smoky and earthy shades — they read as grime beside c
 | best | Yellow Gold, Rose Gold | — | — |
 | avoid | Silver, Platinum, Pewter | — | — |
 
-_Metal note:_ Bright polished gold. Anything oxidised or brushed kills the clarity.
+### Story
+
+You are the brightest of the springs — warm, clear and high in contrast. Vivid coral, turquoise and clear gold look ordinary on you rather than loud, which is what makes your palette hard for other people to borrow. Softened, dusty versions of your colours are the ones that fail.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Bright polished gold. Anything oxidised or brushed kills the clarity you carry. |
+| hair | Keep your hair warm and bright. Golden blonde, vivid copper and clear chestnut suit you; avoid mousy and ashy tones, which go dull against you. |
+| pairings | Vivid warm colour against a clean light neutral. You can take more brightness than you think. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | best | Bright warm gold, your default |
+| Rose gold | works | Warm and clear enough |
+| Silver | skip | Too cool for your warmth |
+
+_Also:_ copper
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Bright Coral · Clear Ivory · Clear Turquoise | Everyday, and hard to overdo |
+| Clear Turquoise · Clear Ivory · Lemon Yellow | Daytime, anything that needs energy |
+| Bright Coral · Lemon Yellow · Clear Ivory | Evening and warm weather |
+| Lime Green · Clear Ivory · Bright Teal | Weekends and warm days |
 
 ### Gemstones
 
@@ -666,7 +1011,16 @@ _Metal note:_ Bright polished gold. Anything oxidised or brushed kills the clari
 
 ### Makeup
 
-_Undertone guide:_ Light and cool with a rosy cast — a golden base turns sallow on you almost immediately.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Light and cool with a rosy cast. A golden base turns sallow on you almost immediately. |
+| blush | Soft rose and cool petal pink. Yours is the softest blush of any season — build it slowly. |
+| lip | Soft rose pink and cool petal. Your lip works best barely deeper than your own colour. |
+| eye | Soft pearl grey, cool lilac and powder blue. Keep everything light; dark shadow overwhelms your eye. |
+| liner | Soft grey or cool slate, smudged. Black is far too heavy for a face this light and cool. |
+| nails | Soft rose, powder blue and cool lilac. Black, orange and deep brown all fight a light cool hand. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -712,7 +1066,35 @@ _Skip line:_ Skip black, orange and deep browns — the weight and the warmth bo
 | best | Silver, White Gold, Rose Gold, Platinum | — | — |
 | avoid | Yellow Gold, Bronze, Copper | — | — |
 
-_Metal note:_ Silver and white gold, kept light. Heavy metals overwhelm a delicate face.
+### Story
+
+Yours is the lightest and coolest of the summers — soft, cool and easily overpowered. Powder blue, soft rose and cool pastels sit on you like they were chosen, while black and strong colour swallow you whole. The lighter and cooler the outfit, the more of your face shows through it.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Silver and white gold, kept light. Heavy metal overwhelms a delicate face. |
+| hair | Keep your hair cool and light. Ash blonde and cool light brown suit you; avoid golden and copper tones, which turn brassy on you. |
+| pairings | Soft cool colours layered together. Contrast is what costs you. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | skip | Warm and heavy against you |
+| Rose gold | works | Cool enough if kept pale |
+| Silver | best | Cool and light, like you |
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Powder Blue · Soft White · Soft Rose | Everyday, and your easiest outfit |
+| Soft Rose · Dove Gray · Soft White | Daytime and offices |
+| Lavender · Soft White · Powder Blue | Warm weather and evenings |
+| Dove Gray · Soft Rose · Lavender | Weekends and layers |
 
 ### Gemstones
 
@@ -738,7 +1120,16 @@ _Metal note:_ Silver and white gold, kept light. Heavy metals overwhelm a delica
 
 ### Makeup
 
-_Undertone guide:_ Cool and rose-based throughout — match to the pink in your skin, not the depth of your hair.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Cool and rose-based. Match to the pink in your skin rather than to the depth of your hair. |
+| blush | Cool rose and soft raspberry. Warmth is the single thing that pulls your face off-key. |
+| lip | Cool rose, soft raspberry and mauve. Your lip should look cool even when it is strong. |
+| eye | Cool taupe, soft plum and slate blue. Grey-based shadows do the work that browns do on warm seasons. |
+| liner | Soft charcoal or cool plum. Warm brown liner reads slightly orange against you. |
+| nails | Cool rose, slate blue and dusty plum. Orange, gold and warm camel are the ones to skip. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -784,7 +1175,35 @@ _Skip line:_ Skip orange, gold and warm camel — warmth of any kind is what pul
 | best | Silver, White Gold, Platinum | — | — |
 | avoid | Yellow Gold, Bronze, Copper | — | — |
 
-_Metal note:_ Silver, white gold and rose gold with a cool cast. Yellow gold reads brassy.
+### Story
+
+You are cool and soft in equal measure — the most classically summer of the three. Dusty blues, cool roses and soft greys look composed on you, and warmth of any kind is what pulls your face off-key. Your outfits work best when nothing in them is trying very hard.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Silver, white gold and cool-cast rose gold. Yellow gold reads brassy on your skin. |
+| hair | Keep your hair cool. Ash brown and cool mushroom tones suit you; avoid golden, copper and warm caramel, which go orange against your undertone. |
+| pairings | Cool colour against cool neutral, kept soft. Nothing here needs to be bright to work. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | skip | Reads brassy on cool skin |
+| Rose gold | works | Only in its cooler shades |
+| Silver | best | Cool-toned, matches your skin |
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Slate Blue · Soft White · Rose | Everyday, and always correct |
+| Cool Pink · Blue Gray · Soft White | Daytime and offices |
+| Mauve · Slate Blue · Blue Gray | Evening, kept understated |
+| Blue Gray · Soft White · Periwinkle | Weekends and layers |
 
 ### Gemstones
 
@@ -810,7 +1229,16 @@ _Metal note:_ Silver, white gold and rose gold with a cool cast. Yellow gold rea
 
 ### Makeup
 
-_Undertone guide:_ Neutral-cool and low contrast — keep everything soft and close in depth; edges are what age this face.
+**Guidance** — one or two sentences opening each section, above the swatches.
+
+| section | guidance |
+| --- | --- |
+| base | Neutral-cool and soft. Your contrast is the lowest of any season, so a heavy base immediately looks applied. |
+| blush | Dusty rose and muted mauve. If it announces itself, it is wrong for you. |
+| lip | Soft mauve and dusty rose. Yours is the most forgiving lip register — nothing needs to be strong. |
+| eye | Soft taupe, muted plum and sage grey. Everything close in value; edges are what age this face. |
+| liner | Soft grey-brown or muted plum, always blended. A crisp line cuts across your softness. |
+| nails | Dusty rose, muted plum and sage grey. Black, pure white and anything vivid overwhelm you. |
 
 | category | shade name | hex | finish |
 | --- | --- | --- | --- |
@@ -856,7 +1284,37 @@ _Skip line:_ Skip black, pure white and anything vivid — high contrast and hig
 | best | Silver, White Gold, Brushed Pewter | — | — |
 | avoid | Yellow Gold, Bronze, Copper | — | — |
 
-_Metal note:_ Brushed silver and pewter. Polished metal is brighter than anything on your face.
+### Story
+
+Yours is the softest colouring of the twelve — cool, muted and very low in contrast. Dusty roses, sage and soft greys let your features read clearly, while anything vivid or stark takes the attention for itself. The best compliment your outfits can get is that someone noticed you rather than what you were wearing.
+
+### Style guidance
+
+| section | guidance |
+| --- | --- |
+| jewellery | Brushed silver and pewter. Polished metal is brighter than anything on your face. |
+| hair | Keep your hair soft and cool. Ash brown and cool mushroom suit you; avoid platinum and jet black, which are both too strong for your contrast. |
+| pairings | Everything close in depth and slightly greyed. Blending, not contrast, is what works. |
+
+### Metals
+
+| metal | verdict | reason (five words) |
+| --- | --- | --- |
+| Yellow gold | skip | Too warm and too bright |
+| Rose gold | works | Muted rose gold only |
+| Silver | best | Cool and soft, brushed finishes |
+
+_Also:_ pewter
+
+
+### Pairings
+
+| three colours | when to wear |
+| --- | --- |
+| Dusty Pink · Mushroom Taupe · Eucalyptus | Everyday, and your quietest outfit |
+| Eucalyptus · Oyster White · Mauve Pink | Daytime and offices |
+| Mauve Pink · Mushroom Taupe · Dusty Pink | Evening, kept soft |
+| Mushroom Taupe · Oyster White · Smoky Blue | Weekends and layers |
 
 ### Gemstones
 

@@ -237,6 +237,42 @@ export const SPECULAR = {
   diffuseBand: { lo: 0.25, hi: 0.6 },
 } as const;
 
+/**
+ * Turning a measured region into a word.
+ *
+ * Presentation, not classification: nothing here feeds score(). The trait line
+ * on Results says "Deep brown" where the table says "18.2 / 9.6 / 41.3", and
+ * both describe the same measurement — one of them can be checked in a mirror.
+ *
+ * In config because it is a set of numeric cut-offs, and those live in config.
+ *
+ * estimate — these are descriptive bands, not calibrated ones.
+ */
+export const DESCRIPTORS = {
+  /** Hair and eye depth by L*, darkest first. */
+  depth: [
+    { below: 18, word: "Black" },
+    { below: 30, word: "Deep brown" },
+    { below: 45, word: "Brown" },
+    { below: 60, word: "Light brown" },
+    { below: 75, word: "Dark blonde" },
+    { below: 101, word: "Blonde" },
+  ],
+  /** Eyes are named on the same depth scale but with their own vocabulary. */
+  eyeDepth: [
+    { below: 18, word: "Very dark" },
+    { below: 30, word: "Dark" },
+    { below: 45, word: "Medium" },
+    { below: 101, word: "Light" },
+  ],
+  /**
+   * Warmth prefix, by hue angle. Only applied above a minimum chroma: hue is
+   * undefined at zero chroma, and calling a neutral-black hair "warm" because
+   * its hue landed at 61 degrees would be reading noise aloud.
+   */
+  warmth: { minChroma: 6, warmBelow: 70, coolAbove: 200 },
+} as const;
+
 export const SKIN_BANDS = {
   /** L* below this is "deep". estimate — calibrate in Phase 4 */
   deepBelow: 45.0,

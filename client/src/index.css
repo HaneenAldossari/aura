@@ -49,9 +49,15 @@
   --type-title:    40px;
   --type-stat:     26px;
   --type-lede:     21px;
-  --type-body:     17px;
-  --type-label:    13px;
-  --type-micro:    11px;   /* nothing below 11px anywhere */
+  /* Body is 16 on desktop and 17 on phone — a phone is held closer but read
+     in worse conditions, and the extra point is worth more there than the
+     extra words per line. */
+  --type-body:     16px;
+  --type-label:    14px;   /* shade and swatch names: never below 14 */
+  --type-micro:    13px;   /* finishes and captions: never below 13 */
+  /* Section guidance leads a section and is read before anything is looked at,
+     so it holds 17 at both sizes. */
+  --type-guide:    17px;
 
   --track-label: 0.16em;
   --track-micro: 0.1em;
@@ -90,8 +96,10 @@
     --type-title:    28px;
     --type-stat:     22px;
     --type-lede:     18px;
-    --type-body:     16px;
-    --type-label:    12px;
+    --type-body:     17px;
+    --type-label:    14px;
+    --type-micro:    13px;
+    --type-guide:    17px;
     --grid-margin:   24px;
     --grid-gutter:   16px;
   }
