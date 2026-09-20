@@ -379,14 +379,16 @@
 
 .ed-index { display: flex; flex-direction: column; gap: var(--space-4); }
 
+.ed-index { gap: var(--space-3); }
+
 .ed-index__row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
 @media (min-width: 768px) {
-  .ed-index__row { grid-template-columns: 6rem 1fr; align-items: start; }
+  .ed-index__row { grid-template-columns: 6rem 1fr; align-items: center; }
 }
 
 .ed-index__cat {
@@ -394,10 +396,39 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-muted);
-  padding-block-start: 4px;
 }
 
-.ed-index__shades { display: flex; flex-direction: column; gap: 2px; }
+/* One row of chips per category. The index is a reference table — it should
+   scan in a glance, not occupy the page the way the looks above it do, where
+   a full-width bar is the point. */
+.ed-index__shades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  align-items: center;
+}
+
+.ed-chip { display: flex; align-items: center; gap: 7px; min-inline-size: 0; }
+
+.ed-chip__swatch {
+  inline-size: 28px;
+  block-size: 20px;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ed-chip__name {
+  font-size: 12px;
+  color: var(--ink-secondary);
+  white-space: nowrap;
+}
+
+.ed-chip__finish {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
 
 /* A nail shade gets the one figurative element in the section. */
 .ed-nail {

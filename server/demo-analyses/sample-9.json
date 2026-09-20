@@ -1,209 +1,574 @@
 {
-  "season": "True Autumn",
-  "seasonTagline": "You radiate warmth and depth with rich, earthy colors that enhance your natural intensity.",
-  "koreanTone": "\ub525\ud1a4 (Deep Tone)",
+  "season": "Soft Autumn",
+  "seasonTagline": "Earthy, gentle warmth wrapped in diffused autumn light",
+  "confidence": 50,
   "undertone": "warm",
-  "skinDescription": "Your skin has a medium-deep depth with warm, golden undertones that look beautifully sun-kissed.",
-  "hairDescription": "Your hair is a very dark, rich brown with subtle warm undertones, almost black.",
-  "eyeDescription": "Your eyes are a deep, warm brown, adding to the overall richness of your coloring.",
-  "contrastLevel": "high",
-  "chromaLevel": "clear",
-  "confidence": "high",
+  "depth": "Medium",
+  "chroma": "Muted",
+  "koreanTone": "뮤트톤 (Mute Tone)",
+  "contrastLevel": "medium",
+  "chromaLevel": "muted",
   "colorDNA": {
-    "warmth": 85,
-    "depth": 80,
-    "clarity": 70,
-    "contrast": 75
+    "warmth": 62,
+    "depth": 48,
+    "clarity": 40,
+    "contrast": 56
   },
-  "seasonStory": "Your natural coloring is characterized by depth and warmth, making rich, saturated colors your best allies. The deep tones in your skin, hair, and eyes allow you to carry intense hues beautifully, creating a striking and harmonious look.",
+  "reasoning": "Smooth golden-olive undertone with an even, neutral-warm glow and delicate softness. Currently dyed dark, framing your features with noticeable outline contrast while leaving skin undertone dominant. Deep warm espresso brown with a soft, velvet-like depth.",
+  "seasonStory": "Soft Autumn sits at the tranquil crossroads where summer softness meets autumn warmth. Your colouring is characterised by a gentle, sun-warmed duskiness rather than blazing fiery heat. You look most radiant in colours that seem gently brushed with sand or taupe—shades like sage olive, dusty terracotta, and muted rosewood—which bring out the luminous golden undertones of your skin.",
+  "lightingQuality": "Natural daylight",
+  "keyFeatures": {
+    "skinTone": "Smooth golden-olive undertone with an even, neutral-warm glow and delicate softness.",
+    "eyeColor": "Deep warm espresso brown with a soft, velvet-like depth.",
+    "hairColor": "Currently dyed dark, framing your features with noticeable outline contrast while leaving skin undertone dominant.",
+    "veinColor": "",
+    "contrast": "medium contrast"
+  },
   "palette": {
-    "bestColors": [
+    "best": [
       {
-        "name": "Deep Olive Green",
-        "hex": "#556B2F",
-        "reason": "Complements your warm undertones and deep coloring."
+        "name": "Cream",
+        "hex": "#F3E4C8",
+        "note": "Warm soft white."
       },
       {
-        "name": "Warm Burgundy",
-        "hex": "#800020",
-        "reason": "Rich and deep, it harmonizes with your skin and eye depth."
+        "name": "Warm Beige",
+        "hex": "#D7B98E",
+        "note": "Quiet warm neutral."
       },
       {
-        "name": "Terracotta",
-        "hex": "#C4622D",
-        "reason": "An earthy, warm tone that highlights your skin's golden quality."
-      },
-      {
-        "name": "Mustard Yellow",
-        "hex": "#FFDB58",
-        "reason": "A deep, warm yellow that contrasts beautifully with your dark features."
-      },
-      {
-        "name": "Espresso Brown",
-        "hex": "#3D1C02",
-        "reason": "A deep, rich neutral that echoes your natural hair color."
-      },
-      {
-        "name": "Forest Green",
-        "hex": "#228B22",
-        "reason": "A deep, earthy green that looks natural and vibrant on you."
-      },
-      {
-        "name": "Deep Teal",
-        "hex": "#008080",
-        "reason": "A rich, saturated jewel tone that complements your depth."
-      },
-      {
-        "name": "Warm Plum",
-        "hex": "#6B3A5D",
-        "reason": "A deep, warm version of purple that enhances your eyes."
-      },
-      {
-        "name": "Caramel",
+        "name": "Camel",
         "hex": "#C19A6B",
-        "reason": "A warm, inviting neutral that brightens your complexion."
+        "note": "Soft Autumn classic."
       },
       {
-        "name": "Deep Rust",
-        "hex": "#8B3A1A",
-        "reason": "An intense, earthy color that matches your natural warmth."
+        "name": "Soft Peach",
+        "hex": "#E8A77C",
+        "note": "Warm dusty peach."
       },
       {
-        "name": "Golden Ochre",
-        "hex": "#CC7722",
-        "reason": "A warm, earthy yellow that brings out the golden tones in your skin."
+        "name": "Dusty Coral",
+        "hex": "#C97868",
+        "note": "Sun-warmed soft coral."
       },
       {
-        "name": "Warm Cream",
-        "hex": "#FFFDD0",
-        "reason": "A soft, warm neutral that is lighter than pure white but still harmonizes."
+        "name": "Muted Salmon",
+        "hex": "#D98B75",
+        "note": "Gentle warm pink."
+      },
+      {
+        "name": "Soft Terracotta",
+        "hex": "#B7664B",
+        "note": "Earthy warm clay."
+      },
+      {
+        "name": "Olive",
+        "hex": "#7F8A4A",
+        "note": "Muted earthy green."
+      },
+      {
+        "name": "Moss Green",
+        "hex": "#6F7D45",
+        "note": "Earthy warm green."
+      },
+      {
+        "name": "Warm Teal",
+        "hex": "#4F8A83",
+        "note": "Muted blue-green accent."
+      },
+      {
+        "name": "Muted Turquoise",
+        "hex": "#6EA7A1",
+        "note": "Soft warm aqua."
+      },
+      {
+        "name": "Soft Chocolate",
+        "hex": "#6B4A35",
+        "note": "Warm sophisticated brown."
       }
     ],
-    "avoidColors": [
+    "avoid": [
       {
-        "name": "Pastel Pink",
-        "hex": "#FFB6C1",
-        "reason": "Too light and cool; washes out your deep, warm coloring."
-      },
-      {
-        "name": "Bright Electric Blue",
-        "hex": "#0000FF",
-        "reason": "Too cool and saturated; clashes with your warm undertones."
-      },
-      {
-        "name": "Pure White",
+        "name": "Bright White",
         "hex": "#FFFFFF",
-        "reason": "Too stark and cool; creates a harsh contrast against your natural depth."
+        "reason": "Too stark — choose cream."
+      },
+      {
+        "name": "Hot Pink",
+        "hex": "#FF69B4",
+        "reason": "Brightness overwhelms your softness."
+      },
+      {
+        "name": "Black",
+        "hex": "#000000",
+        "reason": "Too harsh — chocolate is gentler."
+      },
+      {
+        "name": "Electric Blue",
+        "hex": "#0080FF",
+        "reason": "Saturation fights muted palette."
+      },
+      {
+        "name": "Neon Yellow",
+        "hex": "#F4FF00",
+        "reason": "Vibrancy clashes with subtle warmth."
+      },
+      {
+        "name": "Royal Purple",
+        "hex": "#663399",
+        "reason": "Too saturated for Soft Autumn."
       }
     ],
     "neutrals": [
+      "Cream",
+      "Warm Beige",
+      "Camel",
+      "Soft Chocolate"
+    ],
+    "neutralsWithHex": [
       {
-        "name": "Espresso Brown",
-        "hex": "#3B2A1A"
+        "name": "Cream",
+        "hex": "#F3E4C8"
       },
       {
-        "name": "Deep Olive Green",
-        "hex": "#556B2F"
+        "name": "Warm Beige",
+        "hex": "#D7B98E"
       },
       {
-        "name": "Warm Cream",
-        "hex": "#FFFDD0"
+        "name": "Camel",
+        "hex": "#C19A6B"
       },
       {
-        "name": "Charcoal Grey",
-        "hex": "#36454F"
+        "name": "Soft Chocolate",
+        "hex": "#6B4A35"
       }
-    ]
+    ],
+    "metals": {
+      "best": [
+        "Yellow Gold",
+        "Rose Gold",
+        "Antique Gold",
+        "Brushed Bronze"
+      ],
+      "avoid": [
+        "Silver",
+        "Platinum",
+        "White Gold"
+      ]
+    }
   },
   "makeup": {
     "foundation": {
-      "recommended": [
-        {
-          "name": "Warm Medium",
-          "hex": "#CD853F"
-        },
-        {
-          "name": "Caramel",
-          "hex": "#C38370"
-        }
-      ],
-      "avoid": [
-        {
-          "name": "Fair Porcelain",
-          "hex": "#FFEBCD"
-        }
-      ],
-      "tip": "Look for foundations with warm, golden, or olive undertones that match your medium-deep skin."
+      "recommended": [],
+      "avoid": [],
+      "tip": "A lightweight satin-finish foundation with neutral-warm golden or olive undertones."
     },
-    "blush": [
-      "Terracotta",
-      "Warm Coral",
-      "Deep Rose"
-    ],
-    "lipColors": [
-      "Warm Burgundy",
-      "Brick Red",
-      "Deep Plum",
-      "Caramel Nude"
-    ],
-    "eyeshadow": [
-      "Warm Brown",
-      "Deep Olive Green",
-      "Bronze",
-      "Gold"
-    ],
-    "eyeliner": [
-      "Espresso Brown",
-      "Deep Teal"
-    ]
-  },
-  "nails": {
-    "bestColors": [
-      "Malaga Wine",
-      "Cajun Shrimp",
-      "Caramel",
-      "Deep Olive Green",
-      "Warm Cream",
-      "Espresso Brown"
-    ],
-    "avoidColors": [
-      "Ballet Slippers",
-      "Midnight Cami"
-    ]
+    "blush": "Soft dusty apricot or muted warm rose swept across the cheekbones.",
+    "bronzer": "Muted golden-taupe or soft amber bronzer with no orange cast.",
+    "lips": "Warm rosewood, dusty brick, or soft cocoa satin shades.",
+    "eyes": "Warm taupe and soft bronze washes with smudged espresso liner.",
+    "nails": {
+      "bestColors": [],
+      "avoidColors": []
+    }
   },
   "wardrobe": {
-    "metals": [
-      "Gold",
-      "Rose Gold"
-    ]
+    "bestColors": "Cream, Warm Beige, Camel, Soft Peach, Dusty Coral, Muted Salmon, Soft Terracotta, Olive, Moss Green, Warm Teal, Muted Turquoise, Soft Chocolate",
+    "neutralAnchors": "Cream, Warm Beige, Camel, Soft Chocolate",
+    "avoid": "Bright White, Hot Pink, Black, Electric Blue, Neon Yellow, Royal Purple"
   },
-  "gemstones": [
-    {
-      "name": "garnet"
-    },
-    {
-      "name": "amber"
-    },
-    {
-      "name": "tigers eye"
-    }
-  ],
+  "gemstones": [],
+  "jewelry": {
+    "metals": "Yellow Gold, Rose Gold, Antique Gold, Brushed Bronze",
+    "stones": "",
+    "avoid": "Silver, Platinum, White Gold",
+    "style": "Brushed yellow gold, soft rose gold, and antique warm bronze jewellery that softly harmonise with your olive warmth."
+  },
+  "hairColor": {
+    "bestHighlights": "Delicate warm caramel or soft amber balayage diffused through the mid-lengths.",
+    "bestOverall": "Rich golden hazelnut or soft chestnut brown.",
+    "avoid": "Harsh blue-black, stark platinum, or cool ash tones that wash out your golden undertones."
+  },
   "celebrities": [
     {
-      "name": "Priyanka Chopra",
-      "reason": "Shares a similar deep autumn coloring with rich skin, dark hair, and warm brown eyes."
+      "name": "Jessica Alba",
+      "why": "Shares your luminous neutral-warm golden-olive skin and velvet brown eyes, looking her absolute best in soft, desert-toned neutrals."
+    },
+    {
+      "name": "Chrissy Teigen",
+      "why": "Possesses a similar warm-olive glow that flourishes in muted, bronzed earth tones rather than stark winter contrast."
     },
     {
       "name": "Freida Pinto",
-      "reason": "Embodies the warmth and depth of Deep Autumn with her gorgeous complexion and dark features."
+      "why": "Features warm olive undertones and deep expressive eyes that harmonise beautifully with the softened, rich palette of the autumn family."
+    }
+  ],
+  "koreanAnalysis": {
+    "tone": "뮤트톤 (Mute Tone)",
+    "description": "Your coloring falls into the 뮤트톤 (Mute Tone) category in the Korean system.",
+    "kbeautyTips": ""
+  },
+  "crossValidation": {
+    "agrees": false,
+    "confidence": 50
+  },
+  "makeupShades": {
+    "foundation": [
+      {
+        "name": "Neutral Ivory",
+        "hex": "#F3DECB",
+        "category": "foundation",
+        "finish": "satin"
+      },
+      {
+        "name": "Soft Beige",
+        "hex": "#E2C4A6",
+        "category": "foundation",
+        "finish": "satin"
+      },
+      {
+        "name": "Warm Sand",
+        "hex": "#C8A382",
+        "category": "foundation",
+        "finish": "satin"
+      },
+      {
+        "name": "Muted Tan",
+        "hex": "#A88663",
+        "category": "foundation",
+        "finish": "satin"
+      },
+      {
+        "name": "Soft Walnut",
+        "hex": "#7F6046",
+        "category": "foundation",
+        "finish": "satin"
+      }
+    ],
+    "undertoneGuide": "Neutral-warm and low contrast — keep the base soft, and let nothing on the face read as bright.",
+    "blush": [
+      {
+        "name": "Dusty Apricot",
+        "hex": "#D19A7E",
+        "category": "blush",
+        "finish": "matte"
+      },
+      {
+        "name": "Muted Rose",
+        "hex": "#BE8074",
+        "category": "blush",
+        "finish": "satin"
+      },
+      {
+        "name": "Soft Terracotta",
+        "hex": "#C08466",
+        "category": "blush",
+        "finish": "matte"
+      },
+      {
+        "name": "Warm Clay",
+        "hex": "#AE7561",
+        "category": "blush",
+        "finish": "matte"
+      }
+    ],
+    "bronzer": [
+      {
+        "name": "Soft Taupe Bronze",
+        "hex": "#9C7A56",
+        "category": "bronzer",
+        "finish": "matte"
+      },
+      {
+        "name": "Muted Amber",
+        "hex": "#A8804F",
+        "category": "bronzer",
+        "finish": "satin"
+      }
+    ],
+    "lip": [
+      {
+        "name": "Rosewood",
+        "hex": "#9C5F58",
+        "category": "lip",
+        "finish": "satin"
+      },
+      {
+        "name": "Muted Brick",
+        "hex": "#A0604A",
+        "category": "lip",
+        "finish": "matte"
+      },
+      {
+        "name": "Soft Cocoa",
+        "hex": "#8E6253",
+        "category": "lip",
+        "finish": "cream"
+      },
+      {
+        "name": "Dusty Rose",
+        "hex": "#B27D77",
+        "category": "lip",
+        "finish": "cream"
+      },
+      {
+        "name": "Warm Nude Gloss",
+        "hex": "#C2907C",
+        "category": "lip",
+        "finish": "gloss"
+      }
+    ],
+    "eye": [
+      {
+        "name": "Soft Bronze",
+        "hex": "#9A7448",
+        "category": "eye",
+        "finish": "shimmer"
+      },
+      {
+        "name": "Warm Taupe",
+        "hex": "#8A7561",
+        "category": "eye",
+        "finish": "matte"
+      },
+      {
+        "name": "Sage Olive",
+        "hex": "#77804F",
+        "category": "eye",
+        "finish": "matte"
+      },
+      {
+        "name": "Muted Plum",
+        "hex": "#6E4F53",
+        "category": "eye",
+        "finish": "matte"
+      },
+      {
+        "name": "Antique Pewter",
+        "hex": "#8B7F6B",
+        "category": "eye",
+        "finish": "shimmer"
+      }
+    ],
+    "liner": [
+      {
+        "name": "Soft Brown",
+        "hex": "#5A4433",
+        "category": "liner",
+        "finish": "matte"
+      },
+      {
+        "name": "Olive Grey",
+        "hex": "#565A46",
+        "category": "liner",
+        "finish": "matte"
+      },
+      {
+        "name": "Muted Bronze",
+        "hex": "#7E6242",
+        "category": "liner",
+        "finish": "shimmer"
+      }
+    ],
+    "highlight": [
+      {
+        "name": "Soft Champagne",
+        "hex": "#E4CDB0",
+        "category": "highlight",
+        "finish": "satin"
+      },
+      {
+        "name": "Muted Pearl",
+        "hex": "#E0D3C0",
+        "category": "highlight",
+        "finish": "shimmer"
+      }
+    ],
+    "nails": [
+      {
+        "name": "Rosewood",
+        "hex": "#9C5F58",
+        "category": "nails",
+        "finish": "cream"
+      },
+      {
+        "name": "Sage Olive",
+        "hex": "#77804F",
+        "category": "nails",
+        "finish": "cream"
+      },
+      {
+        "name": "Warm Taupe",
+        "hex": "#8A7561",
+        "category": "nails",
+        "finish": "cream"
+      },
+      {
+        "name": "Soft Clay",
+        "hex": "#B58572",
+        "category": "nails",
+        "finish": "cream"
+      }
+    ],
+    "skip": "Skip anything vivid or icy — bright coral, true red and stark white all overpower your softness."
+  },
+  "looks": [
+    {
+      "name": "Velvet Taupe Radiance",
+      "vibe": "An effortless daytime wash of subtle earthy definition and luminous skin.",
+      "timeOfDay": "day",
+      "shades": [
+        {
+          "name": "Warm Taupe",
+          "hex": "#8A7561",
+          "category": "eye",
+          "finish": "matte",
+          "slot": "eye"
+        },
+        {
+          "name": "Soft Brown",
+          "hex": "#5A4433",
+          "category": "liner",
+          "finish": "matte",
+          "slot": "liner"
+        },
+        {
+          "name": "Dusty Apricot",
+          "hex": "#D19A7E",
+          "category": "blush",
+          "finish": "matte",
+          "slot": "cheek"
+        },
+        {
+          "name": "Rosewood",
+          "hex": "#9C5F58",
+          "category": "lip",
+          "finish": "satin",
+          "slot": "lip"
+        },
+        {
+          "name": "Soft Champagne",
+          "hex": "#E4CDB0",
+          "category": "highlight",
+          "finish": "satin",
+          "slot": "highlight"
+        }
+      ]
     },
     {
-      "name": "Aishwarya Rai",
-      "reason": "Her deep, warm coloring and striking features align perfectly with the Deep Autumn palette."
+      "name": "Smouldering Olive Dusk",
+      "vibe": "Moody diffused definition with rich earthy warmth for evening drama.",
+      "timeOfDay": "evening",
+      "shades": [
+        {
+          "name": "Sage Olive",
+          "hex": "#77804F",
+          "category": "eye",
+          "finish": "matte",
+          "slot": "eye"
+        },
+        {
+          "name": "Muted Bronze",
+          "hex": "#7E6242",
+          "category": "liner",
+          "finish": "shimmer",
+          "slot": "liner"
+        },
+        {
+          "name": "Warm Clay",
+          "hex": "#AE7561",
+          "category": "blush",
+          "finish": "matte",
+          "slot": "cheek"
+        },
+        {
+          "name": "Muted Brick",
+          "hex": "#A0604A",
+          "category": "lip",
+          "finish": "matte",
+          "slot": "lip"
+        },
+        {
+          "name": "Soft Taupe Bronze",
+          "hex": "#9C7A56",
+          "category": "bronzer",
+          "finish": "matte",
+          "slot": "bronzer"
+        }
+      ]
+    }
+  ],
+  "secondarySeason": "True Autumn",
+  "axes": {
+    "hue": "neutral-warm",
+    "value": "light",
+    "chroma": "soft"
+  },
+  "assessment": {
+    "undertone": "warm",
+    "depth": "light",
+    "chroma": "muted",
+    "contrast": "medium",
+    "evidence": "Your skin possesses a gentle golden-olive warmth with a light overall value, balanced by rich deep brown eyes and soft, earthy clarity rather than stark saturation."
+  },
+  "rationale": "Your complexion is grounded in a delicate neutral-warm golden undertone paired with soft, earthy chroma. While your dark eyes might initially tempt a classification into Deep Autumn, your skin value is lighter and requires nuanced, diffused warmth rather than heavy dark intensity. Soft Autumn perfectly respects your need for gentle, muted shades that harmonise with your golden-olive warmth without overwhelming you.",
+  "measured": {
+    "skin": {
+      "L": 76.9090511530925,
+      "C": 28.659645297944166,
+      "h": 56.446499316011014
+    },
+    "hair": null,
+    "eyes": {
+      "L": 23.253196954893987,
+      "C": 11.380731765897325,
+      "h": 45.45692270286234
+    },
+    "hairStatus": "dyed",
+    "axes": {
+      "hue": {
+        "value": 0.3946499316011014,
+        "label": "neutral-warm"
+      },
+      "value": {
+        "value": 1,
+        "label": "light"
+      },
+      "chroma": {
+        "value": 0.1802411939306714,
+        "label": "medium"
+      }
+    },
+    "contrast": {
+      "value": 53.65585419819852,
+      "label": "high"
+    },
+    "skinBand": "light"
+  },
+  "hairAvailable": false,
+  "rules": {
+    "primary": "Light Spring",
+    "secondary": "True Spring",
+    "margin": 18.2,
+    "ambiguous": false
+  },
+  "agreement": {
+    "level": "none",
+    "agrees": false
+  },
+  "needsSecondPhoto": true,
+  "alternatives": [
+    {
+      "season": "Light Spring",
+      "score": 93.5
     },
     {
-      "name": "Shakira",
-      "reason": "While her hair can vary, her natural deep, warm skin tone and eye color are classic Deep Autumn."
+      "season": "True Spring",
+      "score": 75.3
+    },
+    {
+      "season": "Light Summer",
+      "score": 73.2
     }
   ]
 }

@@ -226,6 +226,48 @@ should be widened — it is what most users see. Both are open.
 Also open and deliberately untouched: `QUALITY.maxScleraCast = 8` fires on both
 demo faces measured so far (8.40, 11.95). Left alone until real photos arrive.
 
+### 2026-09-20 — the demo faces' hair was inverting their season
+
+Regenerating the nine demo analyses through the real hybrid path showed six of
+nine capped at **50% confidence** with the model and the rules disagreeing
+outright. The cause is the hair gap recorded above, now measured end to end.
+
+`sample-2`, the same pixels, analysed twice:
+
+| hair | model | rules | agree | confidence |
+| --- | --- | --- | --- | --- |
+| counted (`natural`) | Deep Autumn | True Autumn | no | **50** |
+| excluded (`dyed`) | Light Spring | Light Spring | yes | **88** |
+
+Not a cosmetic difference — Deep Autumn and Light Spring are opposite corners of
+the system. These faces measure skin in the **light** band while their hair
+reads near-black at C\* under 2.6 (hue undefined at C\* 0 on `sample-4`). Hair
+carries 0.25 of the chroma axis, so that combination drags the ranking toward
+deep, muted seasons and the model — which is looking at the actual picture —
+disagrees. The disagreement was real; the input causing it was an artefact of
+generated imagery.
+
+`scripts/precomputeDemoAnalyses.ts` therefore runs the demo faces with
+`--hair=dyed`, which is also the honest answer: these are AI-generated faces and
+their hair says nothing about anyone's natural colouring. The results page says
+so, in the hair note, exactly as it would for a real user who answered the same
+way.
+
+**This does not retune anything.** No threshold moved. It is one more reason
+`eval/real` needs real photos with natural hair before any threshold is
+calibrated — and a reminder that the demo gallery is not a substitute.
+
+### 2026-09-20 — `looks` pushed classification past its token budget
+
+Adding `looks` to the classification schema made the longest responses truncate
+mid-JSON, surfacing as `Expected ',' or '}' after property value` — a parse
+error that reads like a bad model rather than a budget that ran out. Found on
+`sample-1`, the deepest-skinned demo face, which produces the longest prose.
+
+Reasoning tokens count against `max_tokens` on `google/gemini-3.8-flash`, so the
+8192 default had less headroom than it appeared to. `MAX_TOKENS_CLASSIFY` now
+defaults to **12288**. Worth re-checking whenever the schema grows again.
+
 ## Interface strings
 
 Every user-facing string lives in `client/src/i18n/en.ts`, in **British English**

@@ -413,6 +413,29 @@ PALETTES["dark winter"]   = PALETTES["deep winter"];
 PALETTES["cool winter"]   = PALETTES["true winter"];
 PALETTES["clear winter"]  = PALETTES["bright winter"];
 
+/**
+ * Every season with its palette, in the order the design's ribbon runs them:
+ * the four families in sequence, so the ribbon reads as a progression rather
+ * than a shuffle.
+ *
+ * Exported for the Home ribbon, which is the one place the client reads this
+ * module directly — the file is pure data and pure functions, so bundling it
+ * costs nothing and keeps a second copy of the palettes from existing.
+ */
+export const RIBBON_ORDER = [
+  "True Autumn", "Deep Autumn", "Soft Autumn",
+  "Deep Winter", "True Winter", "Bright Winter",
+  "Light Spring", "True Spring", "Bright Spring",
+  "Light Summer", "True Summer", "Soft Summer",
+] as const;
+
+export function allSeasonPalettes(): { season: string; palette: SeasonPalette }[] {
+  return RIBBON_ORDER.map((season) => ({
+    season,
+    palette: PALETTES[season.toLowerCase()],
+  })).filter((entry) => Boolean(entry.palette));
+}
+
 export function getCanonicalPalette(season: string | undefined): SeasonPalette | null {
   if (!season) return null;
   const key = season.toLowerCase().trim();

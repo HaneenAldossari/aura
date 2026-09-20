@@ -425,6 +425,40 @@ export const en = {
     ctaPrimary: "Discover Your Palette",
     ctaSecondary: "How It Works",
 
+    /* ── Editorial Home ───────────────────────────────────────────────── */
+    kicker: "Personal colour analysis",
+    eyebrow2: "Measured, not guessed",
+    heroLine1: "Discover the",
+    heroLine2: "Colours",
+    heroLine3: "That Were",
+    heroAccent: "Made for You",
+    lede2:
+      "Upload one photo. Skin, hair and eyes are measured in your browser and " +
+      "matched against the twelve seasons. You get your palette, your makeup " +
+      "shades, and a score for anything you're about to buy.",
+    ctaPrimary2: "Discover your palette",
+    ctaSample: "Try a sample face",
+    privacy: "Your photo is checked on your device; nothing uploads until it passes.",
+
+    howItWorks: {
+      title: "How it works",
+      step1Title: "Add one photo",
+      step1Body:
+        "Daylight, bare face, no filters. The quality check runs in your browser " +
+        "— nothing uploads until the photo passes.",
+      step2Title: "Your colouring is measured",
+      step2Body:
+        "Skin, hair and eyes are read in CIE Lab and matched against the twelve seasons.",
+      step3Title: "Dress from your palette",
+      step3Body:
+        "Twelve colours, makeup and metals, and a score for anything you are about to buy.",
+    },
+
+    ribbon: {
+      title: "All twelve seasons",
+      source: "canonical palettes",
+    },
+
     drape: {
       prompt: "Which one wakes up your face?",
       spring: "Spring freshens you.",

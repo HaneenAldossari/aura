@@ -106,6 +106,50 @@ describe("call sites", () => {
   });
 });
 
+describe("locale switching is off", () => {
+  /**
+   * The scaffold stays; selecting a locale does not.
+   *
+   * A half-translated Arabic UI laid out right-to-left is worse than an English
+   * one — the English strings that fall back get rendered RTL, so punctuation
+   * lands at the start of the line and the page reads as broken rather than as
+   * untranslated. This pins that nothing at runtime can reach Arabic until the
+   * copy and a visible toggle land together.
+   */
+  const source = fs.readFileSync(path.join(SRC, "i18n/index.tsx"), "utf8");
+
+  it("has the flag off", () => {
+    expect(source).toMatch(/LOCALE_SWITCHING_ENABLED = false/);
+  });
+
+  it("returns English without consulting storage, navigator or the query", () => {
+    const detect = source.slice(source.indexOf("export function detectLocale"));
+    const guard = detect.slice(0, detect.indexOf("\n}"));
+    // The early return must come before any of the three inputs is read.
+    const earlyReturn = guard.indexOf('return "en"');
+    for (const input of ["localStorage.getItem", "navigator", "URLSearchParams"]) {
+      const at = guard.indexOf(input);
+      if (at !== -1) expect(at, input).toBeGreaterThan(earlyReturn);
+    }
+  });
+
+  it("clears a locale stored before the toggle was hidden", () => {
+    expect(source).toMatch(/forgetStoredLocale/);
+    expect(source).toMatch(/localStorage\.removeItem\(STORAGE_KEY\)/);
+  });
+
+  it("makes setLocale inert", () => {
+    expect(source).toMatch(/if \(!LOCALE_SWITCHING_ENABLED\) return;/);
+  });
+
+  it("keeps the Arabic catalogue and the RTL rules in place", () => {
+    // Hidden, not deleted: the work already done must survive to step 8.
+    expect(fs.existsSync(path.join(SRC, "i18n/ar.ts"))).toBe(true);
+    const css = fs.readFileSync(path.join(SRC, "index.css"), "utf8");
+    expect(css).toMatch(/\[dir="rtl"\]/);
+  });
+});
+
 describe("RTL", () => {
   const css = fs.readFileSync(path.join(SRC, "index.css"), "utf8");
 

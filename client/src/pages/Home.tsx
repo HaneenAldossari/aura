@@ -1,110 +1,90 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import StarField from "../components/StarField";
-import HeroSection from "./home/HeroSection";
-import PoetrySection from "./home/PoetrySection";
-import JourneySection from "./home/JourneySection";
-import WhatYouGetSection from "./home/WhatYouGetSection";
-import SeasonCarousel from "./home/SeasonCarousel";
-import CTASection from "./home/CTASection";
 import { useT } from "../i18n";
+import SeasonRibbon from "./home/SeasonRibbon";
+import "../pages/results/results-editorial.css";
+import "./home/home-editorial.css";
 
-/* ─── Section Divider ───────────────────────────── */
-// NOTE: intentionally NOT the shared ui/GoldDivider — that one renders a
-// centered diamond hairline; Home uses a plain full-width rule.
-function GoldDivider() {
-  return (
-    <div style={{
-      width: "100%",
-      height: "1px",
-      background: "rgba(200,150,60,0.2)",
-      position: "relative",
-      zIndex: 10,
-    }} />
-  );
-}
-
-/* ─── Main Component ────────────────────────────── */
+/**
+ * The landing page, rebuilt to the editorial direction.
+ *
+ * Two claims carry the page and both are literal: the measurement runs in the
+ * browser, and the twelve palettes drifting along the bottom are the same ones
+ * an analysis returns. Everything that used to sit between — the mock result
+ * card, the carousel, the poetry section — went, because none of it was true
+ * of a specific person and all of it delayed the only button that matters.
+ */
 export default function Home() {
-  const navigate = useNavigate();
   const t = useT();
+  const [narrow, setNarrow] = useState(
+    typeof window !== "undefined" && window.innerWidth < 768
+  );
+
+  useEffect(() => {
+    const onResize = () => setNarrow(window.innerWidth < 768);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const steps = [
+    { n: "01", title: t("home.howItWorks.step1Title"), body: t("home.howItWorks.step1Body") },
+    { n: "02", title: t("home.howItWorks.step2Title"), body: t("home.howItWorks.step2Body") },
+    { n: "03", title: t("home.howItWorks.step3Title"), body: t("home.howItWorks.step3Body") },
+  ];
 
   return (
-    <div className="animate-fade-in" style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)", fontFamily: "'Inter', system-ui, sans-serif" }}>
-      <StarField />
+    <div className="ed-page">
+      {/* Low density, as the design specifies for ambient pages. */}
+      <StarField maxOpacity={0.45} minDuration={4} durationRange={5} />
 
-      {/* ─── Navbar ─────────────────────── */}
-      <nav style={{ position: "relative", zIndex: 50, padding: "32px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ display: "flex", flexDirection: "row", alignItems: "baseline", gap: "10px" }}>
-          <span style={{ fontFamily: "Cormorant Garamond, serif", fontWeight: 300, fontSize: "16px", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--accent-gold)", lineHeight: 1 }}>
-            {t("common.brandPrefix")}
-          </span>
-          <span style={{ fontFamily: "Cormorant Garamond, serif", fontWeight: 500, fontSize: "38px", letterSpacing: "0.08em", color: "var(--text-primary)", lineHeight: 1 }}>
-            {t("common.brandName")}
-          </span>
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div className="ed-shell">
+          <header className="ed-masthead">
+            <span className="ed-wordmark">{t("common.brandName")}</span>
+            <span className="ed-masthead__meta">{t("home.kicker")}</span>
+          </header>
+
+          <div className="home-hero">
+            <div>
+              <p className="home-eyebrow">{t("home.eyebrow2")}</p>
+              <h1 className="home-title">
+                <span className="home-title__line">{t("home.heroLine1")}</span>
+                <span className="home-title__line">{t("home.heroLine2")}</span>
+                <span className="home-title__line">{t("home.heroLine3")}</span>
+                <span className="home-title__accent">{t("home.heroAccent")}</span>
+              </h1>
+              <p className="home-lede">{t("home.lede2")}</p>
+              <div className="home-cta">
+                <Link className="ed-button" to="/analyze">
+                  {t("home.ctaPrimary2")}
+                </Link>
+                {/* Opens the upload screen with the sample gallery revealed. */}
+                <Link className="ed-link" to="/analyze?samples=1">
+                  {t("home.ctaSample")}
+                </Link>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="ed-section__label">{t("home.howItWorks.title")}</h2>
+              <div className="home-steps">
+                {steps.map((step) => (
+                  <div className="home-step" key={step.n}>
+                    <span className="home-step__n ltr-run">{step.n}</span>
+                    <div>
+                      <p className="home-step__title">{step.title}</p>
+                      <p className="home-step__body">{step.body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-        <button
-          onClick={() => navigate("/analyze")}
-          style={{ padding: "10px 24px", borderRadius: "9999px", fontSize: "14px", fontWeight: 600, background: "var(--accent-gold)", color: "var(--bg-primary)", border: "none", cursor: "pointer", transition: "transform 0.2s" }}
-        >
-          {t("common.getStarted")}
-        </button>
-      </nav>
 
-      <HeroSection />
-
-      <GoldDivider />
-
-      <PoetrySection />
-
-      <GoldDivider />
-
-      <JourneySection />
-
-      <GoldDivider />
-
-      <WhatYouGetSection />
-
-      <GoldDivider />
-
-      <SeasonCarousel />
-
-      <GoldDivider />
-
-      <CTASection />
-
-      {/* ─── Footer ─────────────────────── */}
-      {/* NOTE: intentionally NOT the shared Footer — its default variant uses a
-          different brand line (20px "your Aura" with gold accent), border color
-          and padding than Home's uppercase 14px footer. */}
-      <footer style={{
-        padding: "48px 0",
-        borderTop: "1px solid rgba(200,150,60,0.2)",
-        textAlign: "center",
-        position: "relative",
-        zIndex: 10,
-      }}>
-        <div style={{ marginBottom: "8px" }}>
-          <span style={{
-            fontFamily: "Cormorant Garamond, serif",
-            fontSize: "14px",
-            letterSpacing: "0.15em",
-            color: "var(--text-muted)",
-            textTransform: "uppercase",
-          }}>
-            {t("common.brandFull")}
-          </span>
-        </div>
-        <p style={{
-          fontSize: "11px",
-          letterSpacing: "0.2em",
-          color: "var(--text-muted)",
-          textTransform: "uppercase",
-          margin: 0,
-          opacity: 0.7,
-        }}>
-          {t("common.createdBy")} · {t("common.tagline")} · {new Date().getFullYear()}
-        </p>
-      </footer>
+        <SeasonRibbon narrow={narrow} />
+      </div>
     </div>
   );
 }

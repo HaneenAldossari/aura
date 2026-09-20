@@ -30,11 +30,12 @@ const INDEX_ROWS = [
   { key: "liner", labelKey: "results.makeupSection.catLiner" },
 ] as const satisfies ReadonlyArray<{ key: string; labelKey: Key }>;
 
-function ShadeBar({ shade, slotKey }: { shade: MakeupShade; slotKey?: Key }) {
+/** A look's shade: a full-width bar, because the look is the point. */
+function ShadeBar({ shade, slotKey }: { shade: MakeupShade; slotKey: Key }) {
   const t = useT();
   return (
     <div className="ed-bar">
-      <span className="ed-bar__slot">{slotKey ? t(slotKey) : ""}</span>
+      <span className="ed-bar__slot">{t(slotKey)}</span>
       <span
         className="ed-bar__swatch"
         style={{ background: shade.hex, color: readableOn(shade.hex) }}
@@ -43,6 +44,17 @@ function ShadeBar({ shade, slotKey }: { shade: MakeupShade; slotKey?: Key }) {
         <span className="ed-bar__finish">{shade.finish}</span>
       </span>
     </div>
+  );
+}
+
+/** An index entry: a chip, so a whole category fits on one line. */
+function ShadeChip({ shade }: { shade: MakeupShade }) {
+  return (
+    <span className="ed-chip">
+      <span className="ed-chip__swatch" style={{ background: shade.hex }} aria-hidden />
+      <span className="ed-chip__name">{shade.name}</span>
+      <span className="ed-chip__finish">{shade.finish}</span>
+    </span>
   );
 }
 
@@ -139,7 +151,7 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
                 <span className="ed-index__cat">{t(row.labelKey)}</span>
                 <div className="ed-index__shades">
                   {shades.map((shade) => (
-                    <ShadeBar key={shade.name} shade={shade} />
+                    <ShadeChip key={shade.name} shade={shade} />
                   ))}
                 </div>
               </div>

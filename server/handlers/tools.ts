@@ -125,8 +125,17 @@ export async function handleDemoLoad(request: Request): Promise<Response> {
   try {
     const file = path.join(DEMO_DIR, `${sampleId}.json`);
     if (!fs.existsSync(file)) return fail(404, "not_found", "Sample not found.");
-    const raw = JSON.parse(fs.readFileSync(file, "utf8"));
-    return json({ result: normalizeResult(raw) });
+    const raw = JSON.parse(fs.readFileSync(file, "utf8")) as Record<string, unknown>;
+
+    // Files written by scripts/precomputeDemoAnalyses.ts are already the client
+    // contract — they came out of normalizeResult on the way in. Running them
+    // through it again silently strips the fields it *produces* rather than
+    // copies: `looks` arrives resolved ({slot, name, hex}) and no longer
+    // matches the raw shape validateLooks reads ({slot, shade}), so every look
+    // is dropped, and `measured` is attached after normalisation so it is lost
+    // outright. Older fixtures predate the pipeline and still need the pass.
+    const alreadyNormalised = "palette" in raw && "colorDNA" in raw;
+    return json({ result: alreadyNormalised ? raw : normalizeResult(raw) });
   } catch (err) {
     console.error("Demo load failed:", err instanceof Error ? err.message : err);
     return fail(500, "demo_load_failed", "Could not load that sample.");

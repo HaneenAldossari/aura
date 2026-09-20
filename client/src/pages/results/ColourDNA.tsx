@@ -17,6 +17,20 @@ const AXES = [
   { key: "contrast", nameKey: "results.dna.contrastAxis" },
 ] as const satisfies ReadonlyArray<{ key: string; nameKey: Key }>;
 
+/**
+ * One word, lower case.
+ *
+ * Two sources feed these: the measured axis labels, which are already terse and
+ * lower case ("neutral-warm", "soft"), and the model's own assessment, which is
+ * free text and arrives as "Medium" or "Deep / high contrast". Printed side by
+ * side they look like two different readouts, so everything is flattened to the
+ * measured form — first clause only, lower case.
+ */
+function axisLabel(raw: string | undefined): string {
+  if (!raw) return "";
+  return raw.split("/")[0].trim().toLowerCase();
+}
+
 export default function ColourDNA({ data }: { data: AnalysisResult }) {
   const t = useT();
   const dna = data.colorDNA ?? {};
@@ -61,7 +75,7 @@ export default function ColourDNA({ data }: { data: AnalysisResult }) {
               </span>
               <span className="ed-dna__value ltr-run">
                 {Math.round(pct)}
-                {row.label ? ` · ${row.label}` : ""}
+                {axisLabel(row.label) ? ` · ${axisLabel(row.label)}` : ""}
               </span>
             </div>
           );
