@@ -1,58 +1,140 @@
 @import "tailwindcss";
 
-/* ============================================
-   AURA DESIGN TOKENS — Charcoal + Champagne
-   Edit here to retheme the entire app.
-   ============================================ */
+/* ============================================================================
+   AURA DESIGN TOKENS — Direction A, Editorial (design/aura-editorial)
+   Source of truth: "Aura Design System.dc.html".
+
+   Gold is a signal, never a surface: it marks the single most important state
+   on a screen — confidence, the active stage, the primary action — and nothing
+   else. Season palette colours are content, not chrome; they never become UI.
+   ============================================================================ */
 :root {
-  /* Backgrounds — deep charcoal, not brown */
-  --bg-primary:       #0D0D0F;
-  --bg-card:          #16161A;
-  --bg-card-subtle:   #1C1C22;
-  --bg-elevated:      #222228;
+  /* ── Colour roles ──────────────────────────────────────────────────────── */
+  --ground:           #0C0A09;  /* page */
+  --surface:          #131110;  /* inset panels */
+  --surface-raised:   #1C1815;  /* grid cells, product plate */
+  --rule:             #26211C;  /* hairlines */
+  --rule-strong:      #3A322B;  /* secondary button + note borders */
+  --accent:           #C9A567;  /* one per screen */
+  --accent-bright:    #E3C48C;  /* link hover only */
+  --ink:              #F3EDE4;  /* display, headings */
+  --ink-secondary:    #C8C0B6;  /* body copy */
+  --ink-trust:        #B9B0A5;  /* privacy, caveats */
+  --ink-muted:        #8C8378;  /* labels — floor 4.5:1 on --ground */
+  --on-accent:        #161210;  /* text on a gold fill */
 
-  /* Text — cooler white, not warm beige */
-  --text-primary:     #F2EEE8;
-  --text-secondary:   #B8B0A4;
-  --text-muted:       #847B70; /* ≥4.5:1 on --bg-primary while staying visibly muted */
-  --text-on-accent:   #0D0D0F;
+  /* Aliases kept so components not yet migrated keep rendering. */
+  --bg-primary:       var(--ground);
+  --bg-card:          var(--surface);
+  --bg-card-subtle:   var(--surface-raised);
+  --bg-elevated:      var(--surface-raised);
+  --text-primary:     var(--ink);
+  --text-secondary:   var(--ink-secondary);
+  --text-muted:       var(--ink-muted);
+  --text-on-accent:   var(--on-accent);
+  --accent-gold:      var(--accent);
+  --accent-gold-light:var(--accent-bright);
+  --border-color:     var(--rule);
+  --border-subtle:    var(--rule);
 
-  /* Accent — Champagne Gold */
-  --accent-gold:      #D4AF7A;
-  --accent-gold-light:#EAD09A;
-  --accent-gold-dim:  #A8895A;
+  /* ── Type ──────────────────────────────────────────────────────────────── */
+  --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
+  --font-body:    Archivo, "IBM Plex Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Borders — cooler grey, not brown */
-  --border-color:     #2C2C34;
-  --border-subtle:    #222228;
-  --border-accent:    #D4AF7A30;
+  /* Desktop scale. The phone reduction is in the media query below. */
+  --type-display:  96px;
+  --type-display-lg: 132px;
+  --type-title:    40px;
+  --type-stat:     26px;
+  --type-lede:     21px;
+  --type-body:     17px;
+  --type-label:    13px;
+  --type-micro:    11px;   /* nothing below 11px anywhere */
 
-  /* States */
-  --color-success:    #4CAF50;
-  --color-warning:    #E8A838;
-  --color-error:      #E05555;
+  --track-label: 0.16em;
+  --track-micro: 0.1em;
+  --track-eyebrow: 0.2em;
 
-  /* Shadows */
-  --shadow-card:      0 4px 24px rgba(0,0,0,0.5);
-  --shadow-elevated:  0 8px 32px rgba(0,0,0,0.6);
-  --shadow-glow:      0 0 24px rgba(212,175,122,0.12);
+  /* ── Spacing ───────────────────────────────────────────────────────────── */
+  --space-1: 4px;   --space-2: 8px;   --space-3: 16px;  --space-4: 24px;
+  --space-5: 32px;  --space-6: 48px;  --space-7: 64px;  --space-8: 96px;
+  --space-9: 128px;
+
+  /* ── Grid ──────────────────────────────────────────────────────────────── */
+  --grid-margin: 110px;
+  --grid-gutter: 24px;
+  --content-max: 1220px;
+
+  /* ── Motion ────────────────────────────────────────────────────────────── */
+  /* Micro-interactions only: tap and hover feedback, 150-250ms. Ambient
+     motion exists in exactly two places, both on Home — StarField and the
+     season ribbon. */
+  --ease-ui: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 150ms;   /* swatch borders, links */
+  --dur-ui:   180ms;   /* buttons */
+  --dur-slow: 250ms;   /* stage progress width */
+
+  /* iOS installed-PWA insets. Zero in a browser tab. */
+  --safe-top:    env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left:   env(safe-area-inset-left, 0px);
+  --safe-right:  env(safe-area-inset-right, 0px);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --type-display-lg: 56px;
+    --type-display:  44px;
+    --type-title:    28px;
+    --type-stat:     22px;
+    --type-lede:     18px;
+    --type-body:     16px;
+    --type-label:    12px;
+    --grid-margin:   24px;
+    --grid-gutter:   16px;
+  }
 }
 
 @theme {
-  --color-espresso:        #0D0D0F;
-  --color-espresso-light:  #16161A;
-  --color-espresso-lighter:#1C1C22;
-  --color-gold:            #D4AF7A;
-  --color-gold-light:      #EAD09A;
+  --color-espresso:        #0C0A09;
+  --color-espresso-light:  #131110;
+  --color-espresso-lighter:#1C1815;
+  --color-gold:            #C9A567;
+  --color-gold-light:      #E3C48C;
   --color-gold-dark:       #A8895A;
-  --color-cream:           #F2EEE8;
-  --color-cream-dark:      #B8B0A4;
-  --color-cream-muted:     #847B70;
+  --color-cream:           #F3EDE4;
+  --color-cream-dark:      #C8C0B6;
+  --color-cream-muted:     #8C8378;
   --color-warm-red:        #C85A4A;
   --color-warm-green:      #6B8E4E;
-  --color-bg-primary:      #0D0D0F;
-  --color-bg-card:         #16161A;
+  --color-bg-primary:      #0C0A09;
+  --color-bg-card:         #131110;
 }
+
+/* ── Type primitives ───────────────────────────────────────────────────────
+   Used directly by markup so a screen never re-declares the scale.        */
+.t-display { font-family: var(--font-display); font-size: var(--type-display); line-height: 0.9; color: var(--ink); }
+.t-title   { font-family: var(--font-display); font-size: var(--type-title); line-height: 1.1; color: var(--ink); }
+.t-stat    { font-family: var(--font-display); font-size: var(--type-stat); line-height: 1.2; color: var(--ink); }
+.t-lede    { font-family: var(--font-body); font-size: var(--type-lede); line-height: 1.6; color: var(--ink-secondary); }
+.t-body    { font-family: var(--font-body); font-size: var(--type-body); line-height: 1.7; color: var(--ink-secondary); }
+.t-label   { font-family: var(--font-body); font-size: var(--type-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--ink-muted); }
+.t-micro   { font-family: var(--font-mono); font-size: var(--type-micro); letter-spacing: var(--track-micro); color: var(--ink-trust); }
+
+/* A section rule + label, the most repeated object in the system. */
+.section-rule {
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding-block-end: 12px;
+  border-block-end: 1px solid var(--rule);
+}
+
+/* Numbers, hex codes and IDs stay LTR inside an isolated run, even in Arabic. */
+.ltr-run { unicode-bidi: isolate; direction: ltr; }
 
 * {
   box-sizing: border-box;
@@ -98,7 +180,7 @@ body {
   margin: 0;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -379,7 +461,7 @@ body {
 
 /* ShinyText hero — inherit font from parent h1 */
 .shiny-hero {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-display);
   font-size: inherit;
   line-height: inherit;
   letter-spacing: inherit;
