@@ -149,6 +149,38 @@ describe("banned decorative effects stay gone", () => {
     expect(offenders.map((f) => path.relative(srcDir, f))).toEqual([]);
   });
 
+  /**
+   * The season name on Results is the one sanctioned entrance. Pinned rather
+   * than banned, because an exception with no boundary becomes the rule again:
+   * these assert it exists, that it is the only one, and that it stayed plain.
+   */
+  it("allows exactly one entrance animation, on the season name", () => {
+    const users = files.filter((f) =>
+      /hero-name-enter/.test(fs.readFileSync(f, "utf8"))
+    );
+    expect(users.map((f) => path.relative(srcDir, f)).sort()).toEqual([
+      "index.css",
+      "pages/results/SeasonHero.tsx",
+    ]);
+  });
+
+  it("the season-name entrance is a fade and a small rise, nothing more", () => {
+    const css = fs.readFileSync(path.join(srcDir, "index.css"), "utf8");
+    const frames = css.match(/@keyframes hero-name-rise\s*\{[\s\S]*?\n\}/)?.[0] ?? "";
+    expect(frames).toMatch(/opacity/);
+    // A rise, not a slide: anything past ~12px reads as a title sequence.
+    const rise = Number(frames.match(/translateY\((\d+)px\)/)?.[1] ?? 99);
+    expect(rise).toBeLessThanOrEqual(12);
+    expect(frames).not.toMatch(/gradient|background|filter|scale|rotate/);
+
+    // One pass. An iteration count would make it ambient motion off Home.
+    const rule = css.match(/\.hero-name-enter\s*\{[^}]*\}/)?.[0] ?? "";
+    expect(rule).not.toMatch(/infinite|alternate/);
+    const ms = Number(rule.match(/(\d+)ms/)?.[1] ?? 0);
+    expect(ms).toBeGreaterThan(0);
+    expect(ms).toBeLessThanOrEqual(500);
+  });
+
   it("keeps 'shimmer' where it names a makeup finish, not an effect", () => {
     // ShadeDab renders finish === "shimmer" — that is content from the palette
     // data, and removing it would delete a real product attribute.

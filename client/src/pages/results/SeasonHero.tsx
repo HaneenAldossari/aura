@@ -6,11 +6,35 @@ import type { AnalysisResult } from "../../lib/types";
  * Overview identity block: season name + tagline on the left, the palette
  * fan on the right.
  *
- * The first-visit word-by-word rise and gold shimmer were removed: the design
- * system bans shimmer by name and allows no entrance motion, only tap and
- * hover feedback. The season name is the subject — motion on it read as
- * decoration.
+ * The season name gets the one entrance in the app: a single 8px fade-up, the
+ * whole name at once. The old version staggered it word by word and ran a gold
+ * shimmer across it — the design system bans shimmer by name, and the stagger
+ * turned the answer the user waited for into a title sequence.
+ *
+ * It plays once per analysis, not once per mount, so navigating back to
+ * Results does not replay it. prefers-reduced-motion collapses it to the
+ * resting state via the global rule in index.css.
  */
+/**
+ * True the first time this analysis renders the hero, false afterwards.
+ *
+ * Read and written in the same call so React 18 strict-mode double-invocation
+ * cannot hand the entrance out twice. Without a session id there is nothing to
+ * key on, so it simply plays.
+ */
+function claimEntrance(sessionId?: string): boolean {
+  if (!sessionId || typeof sessionStorage === "undefined") return true;
+  const key = `aura:hero-seen:${sessionId}`;
+  try {
+    if (sessionStorage.getItem(key)) return false;
+    sessionStorage.setItem(key, "1");
+    return true;
+  } catch {
+    // Private mode or blocked storage — replaying is the harmless failure.
+    return true;
+  }
+}
+
 export default function SeasonHero({
   data,
   seasonName,
@@ -24,6 +48,7 @@ export default function SeasonHero({
   const [isNarrow, setIsNarrow] = useState(
     typeof window !== "undefined" && window.innerWidth < 900
   );
+  const [playEntrance] = useState(() => claimEntrance(sessionId));
 
   useEffect(() => {
     const onResize = () => setIsNarrow(window.innerWidth < 900);
@@ -75,7 +100,7 @@ export default function SeasonHero({
           }}>
             Your revelation is complete.
           </p>
-          <h1 style={{
+          <h1 className={playEntrance ? "hero-name-enter" : undefined} style={{
             fontFamily: "Cormorant Garamond, serif",
             fontWeight: 300,
             fontSize: "clamp(40px, 5.5vw, 72px)",
@@ -89,7 +114,6 @@ export default function SeasonHero({
               <span
                 key={i}
                 style={{
-                  display: "inline-block",
                   marginRight: i < seasonWords.length - 1 ? "0.25em" : 0,
                   color: i === 0 ? "#F2EEE8" : "#D4AF7A",
                   fontStyle: i === 0 ? "normal" : "italic",

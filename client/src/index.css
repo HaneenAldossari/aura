@@ -152,6 +152,19 @@
    scroll-reveal outright. Ambient motion exists in exactly two places, both on
    Home: StarField and the season ribbon. */
 
+/* The single exception: the season name arriving on Results.
+   Not scroll-reveal — it plays on mount, once per analysis, on the one element
+   that is the whole point of the screen. 8px and 420ms, no shimmer, no stagger.
+   The reduced-motion block below collapses it to its resting state. */
+.hero-name-enter {
+  animation: hero-name-rise 420ms var(--ease-ui) both;
+}
+
+@keyframes hero-name-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
