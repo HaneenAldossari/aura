@@ -169,8 +169,26 @@ describe("RTL", () => {
     expect(css).toMatch(/\[dir="rtl"\][\s\S]*?\.ltr-run[\s\S]*?direction:\s*ltr/);
   });
 
-  it("carries an Arabic face in the body stack", () => {
-    expect(css).toMatch(/--font-body:[^;]*Arabic/);
+  it("gives Arabic its own display, body and mono faces", () => {
+    // Scoped to [dir="rtl"], not appended to the Latin stacks: font fallback
+    // is chosen per glyph, so an Arabic face left in the Latin display stack
+    // would pick up any character Bodoni happens to lack.
+    const rtlBlock = css.match(/\[dir="rtl"\]\s*\{[^}]*\}/)?.[0] ?? "";
+    expect(rtlBlock).toMatch(/--font-display:\s*Amiri/);
+    expect(rtlBlock).toMatch(/--font-body:[^;]*IBM Plex Sans Arabic/);
+    expect(rtlBlock).toMatch(/--font-mono:[^;]*Arabic/);
+  });
+
+  it("loads the Arabic faces", () => {
+    const html = fs.readFileSync(path.join(SRC, "../index.html"), "utf8");
+    expect(html).toMatch(/family=Amiri/);
+    expect(html).toMatch(/family=IBM\+Plex\+Sans\+Arabic/);
+  });
+
+  it("loosens display leading for Arabic", () => {
+    // Bodoni's tight display leading reads as cramped in a script with no
+    // ascender/descender rhythm to hang on.
+    expect(css).toMatch(/\[dir="rtl"\][^{]*\.ed-season[\s\S]{0,160}line-height/);
   });
 
   it("leaves no physical left/right box properties behind", () => {

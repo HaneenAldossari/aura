@@ -137,6 +137,44 @@
 /* Numbers, hex codes and IDs stay LTR inside an isolated run, even in Arabic. */
 .ltr-run { unicode-bidi: isolate; direction: ltr; }
 
+/* ─── Arabic typography ───────────────────────────────────────────────────
+   Amiri carries the display voice that Bodoni Moda carries in Latin: a
+   high-contrast naskh with real calligraphic weight, which is the closest any
+   webfont gets to the editorial register the design is written in. IBM Plex
+   Sans Arabic takes the body and the monospace slots, because Archivo and IBM
+   Plex Mono have no Arabic coverage at all and would silently fall through to
+   whatever the system had.
+
+   Scoped to [dir="rtl"] rather than appended to the Latin stacks: a font
+   fallback is chosen per glyph, so leaving Amiri in the Latin display stack
+   would let it pick up any character Bodoni happens to lack. */
+
+[dir="rtl"] {
+  --font-display: Amiri, "Noto Naskh Arabic", Georgia, serif;
+  --font-body: "IBM Plex Sans Arabic", "Noto Sans Arabic", system-ui, sans-serif;
+  /* Plex Mono has no Arabic, and tabular Latin numerals inside an Arabic run
+     still want a monospace face — so the Arabic sans leads and Mono follows
+     for the digits and hex codes that stay in an isolated LTR run. */
+  --font-mono: "IBM Plex Sans Arabic", "IBM Plex Mono", ui-monospace, monospace;
+}
+
+/* Amiri sits small for its point size next to Bodoni; the display sizes are
+   nudged up so an Arabic headline carries the same weight on the page. */
+[dir="rtl"] .ed-season,
+[dir="rtl"] .home-title,
+[dir="rtl"] .an-title {
+  font-size: clamp(46px, 8vw, 88px);
+  line-height: 1.25;
+}
+
+/* Arabic has no ascender/descender rhythm to hang on, so the tight display
+   leading that suits Bodoni becomes cramped. */
+[dir="rtl"] .ed-head__title,
+[dir="rtl"] .ed-look__name,
+[dir="rtl"] .ed-base__title {
+  line-height: 1.4;
+}
+
 /* ─── RTL — design system §07 ─────────────────────────────────────────────
    Every rule above is logical, so direction alone mirrors the layout. These
    are the cases where mirroring is not enough. */
