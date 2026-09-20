@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { callOpenRouter, callOpenRouterJSON } from "../server/services/openrouter";
+import {
+  OpenRouterTimeoutError,
+  callOpenRouter,
+  callOpenRouterJSON,
+} from "../server/services/openrouter";
 
 function ok(content: string) {
   return {
@@ -42,6 +46,7 @@ afterEach(() => {
   delete process.env.OPENROUTER_API_KEY;
   delete process.env.MODEL_CLASSIFY;
   delete process.env.OPENROUTER_FALLBACK_MODEL;
+  delete process.env.OPENROUTER_TIMEOUT_MS;
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
@@ -113,6 +118,88 @@ describe("OPENROUTER_FALLBACK_MODEL", () => {
       vi.useRealTimers();
     }
     expect(modelsFrom(fetchMock)).toEqual(["primary/model", "primary/model"]);
+  });
+});
+
+describe("request timeout", () => {
+  /**
+   * The gap this closes: without a deadline, a connection that is accepted and
+   * then never answered waits forever. The symptom was an eval row that stopped
+   * printing progress with no error at all.
+   */
+  it("gives up on a connection that never answers", async () => {
+    process.env.OPENROUTER_TIMEOUT_MS = "50";
+    // Resolve only when aborted — a server that accepts and goes quiet.
+    fetchMock.mockImplementation(
+      (_url: string, init: RequestInit) =>
+        new Promise((_resolve, reject) => {
+          init.signal?.addEventListener("abort", () =>
+            reject(Object.assign(new Error("aborted"), { name: "AbortError" }))
+          );
+        })
+    );
+
+    await expect(callOpenRouter([{ role: "user", content: "hi" }])).rejects.toThrow(
+      OpenRouterTimeoutError
+    );
+  });
+
+  it("reports the configured deadline in the message", async () => {
+    process.env.OPENROUTER_TIMEOUT_MS = "50";
+    fetchMock.mockImplementation(
+      (_url: string, init: RequestInit) =>
+        new Promise((_resolve, reject) => {
+          init.signal?.addEventListener("abort", () =>
+            reject(Object.assign(new Error("aborted"), { name: "AbortError" }))
+          );
+        })
+    );
+    await expect(callOpenRouter([{ role: "user", content: "hi" }])).rejects.toThrow(/50ms/);
+  });
+
+  it("falls back to the other model when the primary times out", async () => {
+    process.env.OPENROUTER_TIMEOUT_MS = "50";
+    process.env.OPENROUTER_FALLBACK_MODEL = "backup/model";
+    let call = 0;
+    fetchMock.mockImplementation((_url: string, init: RequestInit) => {
+      call++;
+      if (call === 1) {
+        return new Promise((_resolve, reject) => {
+          init.signal?.addEventListener("abort", () =>
+            reject(Object.assign(new Error("aborted"), { name: "AbortError" }))
+          );
+        });
+      }
+      return Promise.resolve(ok("recovered"));
+    });
+
+    await expect(callOpenRouter([{ role: "user", content: "hi" }])).resolves.toBe("recovered");
+    expect(modelsFrom(fetchMock)).toEqual(["primary/model", "backup/model"]);
+  });
+
+  it("does not time out a request that answers in time", async () => {
+    process.env.OPENROUTER_TIMEOUT_MS = "5000";
+    fetchMock.mockResolvedValueOnce(ok("fine"));
+    await expect(callOpenRouter([{ role: "user", content: "hi" }])).resolves.toBe("fine");
+  });
+
+  /** A caller cancelling is not our timeout, and must not be relabelled as one. */
+  it("passes a caller's own abort through unchanged", async () => {
+    process.env.OPENROUTER_TIMEOUT_MS = "10000";
+    const controller = new AbortController();
+    fetchMock.mockImplementation(
+      (_url: string, init: RequestInit) =>
+        new Promise((_resolve, reject) => {
+          init.signal?.addEventListener("abort", () =>
+            reject(Object.assign(new Error("aborted"), { name: "AbortError" }))
+          );
+        })
+    );
+    const pending = callOpenRouter([{ role: "user", content: "hi" }], {
+      signal: controller.signal,
+    });
+    controller.abort();
+    await expect(pending).rejects.not.toBeInstanceOf(OpenRouterTimeoutError);
   });
 });
 

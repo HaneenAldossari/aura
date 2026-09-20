@@ -128,6 +128,22 @@ export function maxTokensClassify(): number {
 }
 
 /**
+ * How long to wait for OpenRouter before giving up.
+ *
+ * Without this a hung connection waits forever: the client accepts the socket,
+ * never responds, and nothing times it out. The symptom is an eval row that
+ * stops printing dots with no error, or an analyse request that never returns.
+ *
+ * Generous, because a real classification with reasoning takes 15-25s and a
+ * slow model can take longer. It is a backstop against a dead connection, not
+ * a latency budget.
+ */
+export function requestTimeoutMs(): number {
+  const raw = Number(process.env.OPENROUTER_TIMEOUT_MS);
+  return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 120_000;
+}
+
+/**
  * Reasoning tokens are a large share of classification cost, but they appear to
  * help on a judgement-heavy task. Kept ON by default; the eval harness varies
  * this to measure the accuracy-vs-cost tradeoff.

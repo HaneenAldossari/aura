@@ -125,13 +125,19 @@ export async function classify(
       costUsd: estimateCost(provider),
     };
   } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
     return {
       season: null,
       secondary: null,
       confidence: null,
       latencyMs: Date.now() - started,
+      // A timeout still burned time but produced nothing billable here; a
+      // completed call that failed to parse did cost money. Reporting zero for
+      // both would understate a run that timed out repeatedly, so name it.
       costUsd: 0,
-      error: err instanceof Error ? err.message : String(err),
+      error: err instanceof Error && err.name === "OpenRouterTimeoutError"
+        ? `timed out after ${Math.round((Date.now() - started) / 1000)}s`
+        : message,
     };
   }
 }

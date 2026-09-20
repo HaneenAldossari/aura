@@ -276,4 +276,6 @@ path resolution entirely by handing each codec a pre-compiled module.
 - `temperature: 0` + `seed` gives a stable *season*, not byte-identical output.
 - Low-confidence results return **HTTP 200** with `result.error`, and the client reads
   `photoTips` only from that path. Moving it to a non-2xx status silently drops the tips UI.
-- There is no request timeout in `openrouter.ts` yet.
+- `openrouter.ts` has a request deadline (`OPENROUTER_TIMEOUT_MS`, default 120s). It
+  covers the whole buffered call, but for a stream only the wait for headers — a deadline
+  spanning the body would cut a long chat off mid-sentence.

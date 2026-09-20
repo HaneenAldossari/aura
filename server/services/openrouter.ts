@@ -4,7 +4,7 @@
  * go through callOpenRouter().
  */
 
-import { fallbackModel, modelClassify } from "../utils/config";
+import { fallbackModel, modelClassify, requestTimeoutMs } from "../utils/config";
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 
@@ -74,19 +74,55 @@ function buildBody(
   return body;
 }
 
+/** Raised when we gave up waiting, as opposed to the provider refusing. */
+export class OpenRouterTimeoutError extends Error {
+  constructor(ms: number) {
+    super(`OpenRouter did not respond within ${ms}ms`);
+    this.name = "OpenRouterTimeoutError";
+  }
+}
+
+/**
+ * A request with a deadline that the caller can cancel early.
+ *
+ * The timer is cleared explicitly rather than using AbortSignal.timeout, because
+ * for a streaming response the deadline must cover only the wait for headers.
+ * A timeout spanning the whole body would kill a long chat mid-sentence.
+ */
 async function requestOnce(
   body: Record<string, unknown>,
   signal?: AbortSignal
-): Promise<Response> {
-  return fetch(OPENROUTER_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${getApiKey()}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-    signal,
-  });
+): Promise<{ response: Response; done: () => void }> {
+  const timeoutMs = requestTimeoutMs();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const done = () => clearTimeout(timer);
+
+  // Honour a caller's own cancellation as well as our deadline.
+  const onAbort = () => controller.abort();
+  signal?.addEventListener("abort", onAbort, { once: true });
+
+  try {
+    const response = await fetch(OPENROUTER_URL, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${getApiKey()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+      signal: controller.signal,
+    });
+    return { response, done };
+  } catch (err) {
+    done();
+    // A caller-initiated abort is theirs to interpret; ours becomes a timeout.
+    if (controller.signal.aborted && !signal?.aborted) {
+      throw new OpenRouterTimeoutError(timeoutMs);
+    }
+    throw err;
+  } finally {
+    signal?.removeEventListener("abort", onAbort);
+  }
 }
 
 /**
@@ -108,29 +144,33 @@ async function sendOnce(
   options: CallOptions
 ): Promise<string> {
   const body = buildBody(messages, options);
-  let response = await requestOnce(body, options.signal);
+  let attempt = await requestOnce(body, options.signal);
 
   // 429s are the most common transient failure — retry once, honoring
   // Retry-After when present (capped at 15s).
-  if (response.status === 429) {
-    const retryAfter = Number(response.headers.get("retry-after")) || 5;
-    const waitMs = Math.min(retryAfter, 15) * 1000;
-    await new Promise((resolve) => setTimeout(resolve, waitMs));
-    response = await requestOnce(body, options.signal);
+  if (attempt.response.status === 429) {
+    const retryAfter = Number(attempt.response.headers.get("retry-after")) || 5;
+    attempt.done();
+    await new Promise((resolve) => setTimeout(resolve, Math.min(retryAfter, 15) * 1000));
+    attempt = await requestOnce(body, options.signal);
   }
 
-  if (!response.ok) {
-    const errText = await response.text();
-    if (options.disableReasoning && rejectsDisabledReasoning(errText)) {
-      return sendOnce(messages, { ...options, disableReasoning: false });
+  try {
+    if (!attempt.response.ok) {
+      const errText = await attempt.response.text();
+      if (options.disableReasoning && rejectsDisabledReasoning(errText)) {
+        return sendOnce(messages, { ...options, disableReasoning: false });
+      }
+      throw new Error(`OpenRouter API error: ${attempt.response.status} ${errText}`);
     }
-    throw new Error(`OpenRouter API error: ${response.status} ${errText}`);
-  }
 
-  const data = (await response.json()) as {
-    choices?: { message?: { content?: string } }[];
-  };
-  return data.choices?.[0]?.message?.content || "";
+    const data = (await attempt.response.json()) as {
+      choices?: { message?: { content?: string } }[];
+    };
+    return data.choices?.[0]?.message?.content || "";
+  } finally {
+    attempt.done();
+  }
 }
 
 /**
@@ -199,24 +239,29 @@ async function openStream(
   options: CallOptions
 ): Promise<Response> {
   const body = { ...buildBody(messages, options), stream: true };
-  let response = await requestOnce(body, options.signal);
+  let attempt = await requestOnce(body, options.signal);
 
-  if (response.status === 429) {
-    const retryAfter = Number(response.headers.get("retry-after")) || 5;
+  if (attempt.response.status === 429) {
+    const retryAfter = Number(attempt.response.headers.get("retry-after")) || 5;
+    attempt.done();
     await new Promise((resolve) =>
       setTimeout(resolve, Math.min(retryAfter, 15) * 1000)
     );
-    response = await requestOnce(body, options.signal);
+    attempt = await requestOnce(body, options.signal);
   }
 
-  if (!response.ok || !response.body) {
-    const errText = await response.text();
+  if (!attempt.response.ok || !attempt.response.body) {
+    const errText = await attempt.response.text();
+    attempt.done();
     if (options.disableReasoning && rejectsDisabledReasoning(errText)) {
       return openStream(messages, { ...options, disableReasoning: false });
     }
-    throw new Error(`OpenRouter API error: ${response.status} ${errText}`);
+    throw new Error(`OpenRouter API error: ${attempt.response.status} ${errText}`);
   }
-  return response;
+
+  // Headers are in. Stop the clock so a long stream is never cut short.
+  attempt.done();
+  return attempt.response;
 }
 
 export async function* streamOpenRouter(
