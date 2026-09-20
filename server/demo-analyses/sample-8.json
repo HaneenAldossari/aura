@@ -1,7 +1,7 @@
 {
   "season": "Light Summer",
-  "seasonTagline": "Ethereal, delicate, and bathed in soft morning light",
-  "confidence": 92,
+  "seasonTagline": "Airy, luminous, and gracefully pastel",
+  "confidence": 94,
   "undertone": "cool",
   "depth": "Light",
   "chroma": "Medium",
@@ -9,18 +9,18 @@
   "contrastLevel": "low",
   "chromaLevel": "muted",
   "colorDNA": {
-    "warmth": 38,
+    "warmth": 32,
     "depth": 14,
     "clarity": 42,
     "contrast": 22
   },
-  "reasoning": "Fair porcelain skin with subtle cool pink and delicate neutral undertones, showing very little natural melanin depth. Naturally light ash blonde to soft cool mouse brown visible along the rootline, blending softly against your complexion. Soft grey-blue irises with a gentle, diffused ring and subtle slate depth rather than vivid jewel tones.",
-  "seasonStory": "As a Light Summer, your colouring evokes misty dawn landscapes and soft pastel watercolours. You shine brightest in pale, frosted, and feather-light hues with just a drop of cool slate or rose. Heavy, saturated, or deeply warm shades will overwhelm your natural glow, whereas soft lavender, powdery blue, and gentle rose pink bring clarity and freshness to your face.",
+  "reasoning": "Fair porcelain with a subtle cool pink-beige undertone and gentle translucency. Naturally ash-toned light blonde or fair brown at the roots, providing gentle framing. Soft slate grey-blue with low saturation and a gentle, diffused iris pattern.",
+  "seasonStory": "Light Summer sits at the transition between spring's gentle morning light and summer's delicate coolness. Your colouring thrives in watercolour shades—soft powder blues, cool lavender, seafoam, and pale petal pinks that mirror the ethereal clarity and softness of your natural features.",
   "lightingQuality": "Natural daylight",
   "keyFeatures": {
-    "skinTone": "Fair porcelain skin with subtle cool pink and delicate neutral undertones, showing very little natural melanin depth.",
-    "eyeColor": "Soft grey-blue irises with a gentle, diffused ring and subtle slate depth rather than vivid jewel tones.",
-    "hairColor": "Naturally light ash blonde to soft cool mouse brown visible along the rootline, blending softly against your complexion.",
+    "skinTone": "Fair porcelain with a subtle cool pink-beige undertone and gentle translucency.",
+    "eyeColor": "Soft slate grey-blue with low saturation and a gentle, diffused iris pattern.",
+    "hairColor": "Naturally ash-toned light blonde or fair brown at the roots, providing gentle framing.",
     "veinColor": "",
     "contrast": "low contrast"
   },
@@ -161,12 +161,12 @@
     "foundation": {
       "recommended": [],
       "avoid": [],
-      "tip": "Sheer, luminous fluid foundation with neutral-cool undertones to let your natural translucency shine."
+      "tip": "Sheer cool-neutral tinted moisturiser or light-coverage luminous foundation to preserve skin translucency."
     },
-    "blush": "Soft petal pink swept lightly over the apples of your cheeks.",
-    "bronzer": "Very subtle cool taupe contour used sparingly; avoid traditional golden bronzers.",
-    "lips": "Delicate rosebud pinks or cool petal balms with a sheer, dewy finish.",
-    "eyes": "Soft pearl grey or muted cool lilac wash with a smudged slate liner.",
+    "blush": "Soft Petal Pink swept lightly over the apples of your cheeks.",
+    "bronzer": "Cool Light Taupe used very sparingly for gentle contouring rather than tanning.",
+    "lips": "Soft Rose Pink or sheer Cool Pink Gloss.",
+    "eyes": "Rose Taupe wash across the lid paired with Soft Grey along the lash line.",
     "nails": {
       "bestColors": [],
       "avoidColors": []
@@ -182,25 +182,25 @@
     "metals": "Silver, White Gold, Rose Gold, Platinum",
     "stones": "",
     "avoid": "Yellow Gold, Bronze, Copper",
-    "style": "Brushed silver, white gold, platinum, and soft cool pearls that echo your delicate, luminous cool undertone."
+    "style": "Fine, delicate brushed silver, white gold, and light platinum. Delicate pearls and soft iridescent gemstones complement your soft aesthetic beautifully."
   },
   "hairColor": {
-    "bestHighlights": "Very fine, pale pearlescent ribbons of cool platinum blonde.",
-    "bestOverall": "Soft baby blonde, cool champagne blonde, or light ash blonde.",
-    "avoid": "Golden copper, brassy honey tones, or heavy dark espresso shades."
+    "bestHighlights": "Baby-fine cool champagne and platinum babylights.",
+    "bestOverall": "Light pearl blonde, cool ash blonde, or soft cool light mushroom brown.",
+    "avoid": "Heavy brassy golden blondes, copper, or harsh jet black shades that overwhelm your delicate colouring."
   },
   "celebrities": [
     {
-      "name": "Naomi Watts",
-      "why": "Shares your delicate cool porcelain skin, soft blue eyes, and low overall contrast level."
-    },
-    {
       "name": "Reese Witherspoon",
-      "why": "Exemplifies the quintessential Light Summer balance of ethereal lightness with cool-neutral undertones."
+      "why": "Shares your luminous, light, and delicate cool-toned harmony that shines in soft pastels."
     },
     {
-      "name": "Amanda Seyfried",
-      "why": "Possesses the same luminous, low-contrast fair features that glow in soft pastel hues."
+      "name": "Naomi Watts",
+      "why": "Exhibits the same ethereal fair complexion and soft blue-grey eyes requiring light, cool tones."
+    },
+    {
+      "name": "Dakota Fanning",
+      "why": "Features a similarly delicate low-contrast colouring with subtle cool-pink skin."
     }
   ],
   "koreanAnalysis": {
@@ -210,7 +210,7 @@
   },
   "crossValidation": {
     "agrees": true,
-    "confidence": 92
+    "confidence": 94
   },
   "makeupShades": {
     "foundation": [
@@ -386,43 +386,124 @@
     ],
     "nails": [
       {
-        "name": "Soft Rose",
-        "hex": "#EBA3B4",
+        "name": "Sugar Daddy",
+        "hex": "#DC9EAA",
         "category": "nails",
-        "finish": "cream"
+        "finish": "satin",
+        "asset": "sugar-daddy"
       },
       {
-        "name": "Powder Blue",
-        "hex": "#A8C4DE",
+        "name": "Angel Food",
+        "hex": "#E3C9CB",
         "category": "nails",
-        "finish": "cream"
+        "finish": "satin",
+        "asset": "angel-food"
       },
       {
-        "name": "Cool Lilac",
-        "hex": "#C0AED0",
+        "name": "Tiara",
+        "hex": "#DAA9C5",
         "category": "nails",
-        "finish": "cream"
+        "finish": "satin",
+        "asset": "tiara"
       },
       {
-        "name": "Rosy Nude",
-        "hex": "#D3969B",
+        "name": "Mod About You",
+        "hex": "#E2A7B0",
         "category": "nails",
-        "finish": "cream"
+        "finish": "satin",
+        "asset": "mod-about-you"
+      },
+      {
+        "name": "Princesses Rule",
+        "hex": "#C37E8B",
+        "category": "nails",
+        "finish": "satin",
+        "asset": "princesses-rule"
+      },
+      {
+        "name": "Lovie Dovie",
+        "hex": "#EAAEBE",
+        "category": "nails",
+        "finish": "satin",
+        "asset": "lovie-dovie"
       }
     ],
     "skip": "Skip black, orange and deep browns — the weight and the warmth both work against a light cool face."
   },
+  "styleShades": {
+    "gemstones": [
+      {
+        "name": "Rose Quartz",
+        "hex": "#C89B9D",
+        "accent": "#DFC5C6",
+        "asset": "rose-quartz"
+      },
+      {
+        "name": "Moonstone",
+        "hex": "#B4BFCB",
+        "accent": "#D4DAE1",
+        "asset": "moonstone"
+      },
+      {
+        "name": "Aquamarine",
+        "hex": "#8AB1C3",
+        "accent": "#BBD2DC",
+        "asset": "aquamarine"
+      },
+      {
+        "name": "Amethyst",
+        "hex": "#563776",
+        "accent": "#9D8BB0",
+        "asset": "amethyst"
+      }
+    ],
+    "hair": [
+      {
+        "name": "Ash Blonde",
+        "hex": "#B0A08A",
+        "accent": "#DED2BE"
+      },
+      {
+        "name": "Cool Light Brown",
+        "hex": "#7A6A5E",
+        "accent": "#AC9C8E"
+      },
+      {
+        "name": "Platinum Beige",
+        "hex": "#CEC4B8",
+        "accent": "#EEE6DC"
+      },
+      {
+        "name": "Soft Ash Brown",
+        "hex": "#665A52",
+        "accent": "#98887E"
+      }
+    ],
+    "hairAvoid": [
+      {
+        "name": "Warm Golden Blonde",
+        "hex": "#C09A4E",
+        "accent": "#E8CE8A"
+      },
+      {
+        "name": "Jet Black",
+        "hex": "#0D0D10",
+        "accent": "#38383F"
+      }
+    ],
+    "metalNote": "Silver and white gold, kept light. Heavy metals overwhelm a delicate face."
+  },
   "looks": [
     {
-      "name": "Powdered Petal Glow",
-      "vibe": "Effortless daytime freshness with a hint of romantic cool rose",
+      "name": "Ethereal Day",
+      "vibe": "Fresh and effortlessly luminous natural radiance",
       "timeOfDay": "day",
       "shades": [
         {
-          "name": "Soft Pearl Grey",
-          "hex": "#C8C6CC",
+          "name": "Rose Taupe",
+          "hex": "#B49AA0",
           "category": "eye",
-          "finish": "shimmer",
+          "finish": "matte",
           "slot": "eye"
         },
         {
@@ -456,20 +537,20 @@
       ]
     },
     {
-      "name": "Misty Twilight Evening",
-      "vibe": "Soft smoky dimension designed to flatter low-contrast colouring",
+      "name": "Twilight Bloom",
+      "vibe": "Softly defined romantic evening elegance",
       "timeOfDay": "evening",
       "shades": [
         {
-          "name": "Rose Taupe",
-          "hex": "#B49AA0",
+          "name": "Cool Lilac",
+          "hex": "#C0AED0",
           "category": "eye",
-          "finish": "matte",
+          "finish": "satin",
           "slot": "eye"
         },
         {
-          "name": "Cool Slate",
-          "hex": "#5E6878",
+          "name": "Muted Plum Liner",
+          "hex": "#6E566A",
           "category": "liner",
           "finish": "matte",
           "slot": "liner"
@@ -489,11 +570,11 @@
           "slot": "lip"
         },
         {
-          "name": "Cool Light Taupe",
-          "hex": "#B08E7C",
-          "category": "bronzer",
-          "finish": "matte",
-          "slot": "bronzer"
+          "name": "Soft Rose Pearl",
+          "hex": "#F6DDE2",
+          "category": "highlight",
+          "finish": "shimmer",
+          "slot": "highlight"
         }
       ]
     }
@@ -509,25 +590,25 @@
     "depth": "light",
     "chroma": "muted",
     "contrast": "low",
-    "evidence": "Your skin displays a delicate neutral-cool porcelain quality with soft rosy undertones. Your soft grey-blue eyes have a misty, muted clarity, and your natural contrast level is gentle and ethereal."
+    "evidence": "Your skin displays a delicate, neutral-cool rosy undertone paired with soft grey-blue eyes. The overall balance across your complexion, eyebrows, and natural features is luminous, light, and softly blended rather than stark."
   },
-  "rationale": "Your primary feature is your exceptional lightness, closely paired with a gentle, neutral-cool temperature and softly diffused chroma. While you can borrow subtle pastel warmth from your sister season Light Spring, cooler powdery tones illuminate your complexion without making you appear sallow. Deeper seasons like Soft Summer or Cool Summer easily overpower your delicate natural balance.",
+  "rationale": "Your primary characteristic is lightness, complemented by a soft, neutral-cool undertone. While you can borrow subtle pastel warmth from Light Spring, your delicate cool-rose skin and grey-blue eyes harmonise best with the gentle, airy pastel palette of Light Summer. Saturated or dark shades overpower your natural ethereal presence.",
   "measured": {
     "skin": {
-      "L": 80.22916699653615,
-      "C": 18.132026149481028,
-      "h": 52.27701614286802
+      "L": 77.081886505023,
+      "C": 19.60595494802067,
+      "h": 52.250382957670695
     },
     "hair": null,
     "eyes": {
-      "L": 33.74054260986194,
-      "C": 1.6567940345849381,
-      "h": 105.03822441762983
+      "L": 29.142627268299186,
+      "C": 1.5627135322701982,
+      "h": 105.42535614326394
     },
     "hairStatus": "dyed",
     "axes": {
       "hue": {
-        "value": -0.022298385713197887,
+        "value": -0.024961704232930516,
         "label": "neutral-cool"
       },
       "value": {
@@ -535,12 +616,12 @@
         "label": "light"
       },
       "chroma": {
-        "value": -0.45962527202767844,
+        "value": -0.38101573610556416,
         "label": "soft"
       }
     },
     "contrast": {
-      "value": 46.48862438667421,
+      "value": 47.93925923672381,
       "label": "high"
     },
     "skinBand": "light"
@@ -549,7 +630,7 @@
   "rules": {
     "primary": "Light Summer",
     "secondary": "Light Spring",
-    "margin": 8.3,
+    "margin": 7.4,
     "ambiguous": false
   },
   "agreement": {
@@ -560,15 +641,19 @@
   "alternatives": [
     {
       "season": "Light Summer",
-      "score": 86.2
+      "score": 86.5
     },
     {
       "season": "Light Spring",
-      "score": 77.9
+      "score": 79.1
     },
     {
       "season": "Soft Summer",
-      "score": 68.3
+      "score": 66.7
     }
-  ]
+  ],
+  "qualityIssues": [
+    "colour_cast"
+  ],
+  "qualityOk": true
 }

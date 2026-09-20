@@ -108,11 +108,41 @@ export async function handleDemoList(request: Request): Promise<Response> {
         try {
           const raw = JSON.parse(
             fs.readFileSync(path.join(DEMO_DIR, `${id}.json`), "utf8")
-          ) as { season?: string };
-          return { id, season: typeof raw.season === "string" ? raw.season : "" };
+          ) as {
+            season?: string;
+            rules?: { primary?: string };
+            agreement?: { agrees?: boolean; level?: string };
+            qualityIssues?: string[];
+          };
+
+          // A label is only a claim we can stand behind when the measurement
+          // and the model reached it independently. Where they disagree the
+          // rules win the label — they are the half with numbers behind them —
+          // and it is tagged so nobody reads it as a settled verdict. An
+          // LLM-only label is never shown: that is how two deep-skinned faces
+          // came to be captioned "Light Summer" and "Light Spring".
+          // A colour cast changes what every measurement below it means, so a
+          // photo carrying one cannot produce a settled label however well the
+          // two halves agree. This is the gate's own existing finding, not a
+          // new threshold.
+          const cast = (raw.qualityIssues ?? []).includes("colour_cast");
+          // `agrees` is also true when the model lands on the rules' SECOND
+          // choice, which is a near miss rather than agreement on a season.
+          // A caption is a flat assertion, so it needs the stricter test.
+          const agrees = raw.agreement?.level === "primary" && !cast;
+          const rulesPrimary = raw.rules?.primary ?? "";
+          const season = agrees ? (raw.season ?? "") : rulesPrimary;
+
+          return {
+            id,
+            season,
+            agrees,
+            /** Flags the sample for review rather than hiding the disagreement. */
+            needsReview: !agrees,
+          };
         } catch {
           // A malformed fixture should cost its own label, not the gallery.
-          return { id, season: "" };
+          return { id, season: "", agrees: false, needsReview: true };
         }
       });
     return json({ samples });

@@ -110,6 +110,14 @@ async function main() {
 
       try {
         const result = await classify(measured.uploadBase64, measured.features);
+
+        // Keep what the on-device gate said about the photo. The gallery uses
+        // it to decide whether a label can be shown plainly: a photo our own
+        // quality check flagged for colour cast has no business producing a
+        // confident season caption.
+        result.qualityIssues = measured.qualityIssues ?? [];
+        result.qualityOk = measured.qualityOk ?? null;
+
         fs.writeFileSync(path.join(OUT_DIR, `${id}.json`), JSON.stringify(result, null, 2));
         const looks = (result.looks as unknown[] | undefined)?.length ?? 0;
         console.log(

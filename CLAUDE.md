@@ -268,6 +268,58 @@ Reasoning tokens count against `max_tokens` on `google/gemini-3.8-flash`, so the
 8192 default had less headroom than it appeared to. `MAX_TOKENS_CLASSIFY` now
 defaults to **12288**. Worth re-checking whenever the schema grows again.
 
+### 2026-09-20 — specular highlights were inflating skin L* by up to 15
+
+Two deep-skinned demo faces came back labelled **Light Summer** and **Light
+Spring** — impossible, since the light seasons are light in value by
+definition. Hybrid had run correctly; the measurement was wrong.
+
+Cause: the region estimator took a plain median over each sampled patch, and
+those patches are the three most specular points on a studio-lit face. Measured
+on `sample-1`:
+
+| patch | L\* | C\* |
+| --- | --- | --- |
+| lit cheekbone | 32.9 | 21.2 |
+| mid-forehead | **68.3** | 17.8 |
+| pooled median (what we used) | 60.4 | 27.7 |
+| face-wide median | 45.8 | — |
+
+A 35-point spread across one face. Specular reflection is **additive and
+one-sided** — a highlight can only raise L\*, never lower it — so a median over
+a lit patch is a biased estimator, and the bias grows with gloss. It was worst
+on the deepest skin, where specular-to-diffuse contrast is highest, which is
+exactly the direction that turns a deep face into a light season.
+
+Two fixes, both structural rather than tuned:
+
+1. `diffusePixels()` takes the **p15-p50 band of L\*** within a region before
+   the median (`SPECULAR.diffuseBand` in `measure/seasons.config.ts`). The
+   highlight is in the upper tail, shadow in the lower.
+2. The componentwise medians now come from the **same subset of pixels**.
+   Taking `median(L)`, `median(a)`, `median(b)` independently describes a
+   colour no pixel in the patch ever had — a strange thing to hand a
+   classifier that reasons about hue.
+
+`sample-1` moved 60.4 → 56.7. Better, not solved: the forehead patch still
+dominates. **Deliberately not fixed here.** Reweighting regions is a
+measurement-core change, and these nine faces are not photometrically
+realistic — all nine measure skin C\* 17-41 where real skin sits near 12-25,
+and the quality gate flags `colour_cast` on every one of them. Retuning
+against them would be calibrating to the artefact. It belongs in Phase 4
+against `eval/real`.
+
+`scripts/dev/overlayBrowser.ts` had its own copy of this statistic, so the tool
+for checking the measurement silently disagreed with the measurement. It now
+imports the same function.
+
+**Gallery rule.** A sample shows a season plainly only when the rules and the
+model agree at **primary** level and the quality gate found no colour cast.
+Otherwise it shows the rules' primary with a `measured` tag and is flagged for
+review. A model-only label is never shown. With every demo face flagged for
+colour cast, all nine currently read as provisional — which is the honest
+state of them.
+
 ## Interface strings
 
 Every user-facing string lives in `client/src/i18n/en.ts`, in **British English**

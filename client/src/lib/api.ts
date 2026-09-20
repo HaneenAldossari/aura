@@ -70,7 +70,12 @@ export async function analyzePhotos(files: File[]): Promise<AnalyzeResponse> {
 
 export interface DemoSample {
   id: string;
+  /** The label to show: the agreed season, or the rules' primary. */
   season: string;
+  /** True when measurement and model reached the same season independently. */
+  agrees: boolean;
+  /** Set when they did not — the label is the rules', and provisional. */
+  needsReview: boolean;
 }
 
 export async function listDemoSamples(): Promise<DemoSample[]> {
@@ -81,7 +86,9 @@ export async function listDemoSamples(): Promise<DemoSample[]> {
   // Tolerate the old string[] shape, so a client ahead of the server still
   // renders a gallery — just without labels.
   return data.samples.map((s: unknown) =>
-    typeof s === "string" ? { id: s, season: "" } : (s as DemoSample)
+    typeof s === "string"
+      ? { id: s, season: "", agrees: false, needsReview: true }
+      : (s as DemoSample)
   );
 }
 

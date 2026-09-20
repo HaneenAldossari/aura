@@ -214,6 +214,26 @@ export const AXIS_WEIGHTS = {
  * global midpoint that fits mid-tone skin and misreads the ends. The eval must
  * report accuracy per band, otherwise a bias on one band hides inside the mean.
  */
+/**
+ * Which slice of a region's pixels counts as diffuse skin.
+ *
+ * Specular reflection is additive and one-sided: a highlight can only ever
+ * raise L*, never lower it. A median over the whole patch is therefore a
+ * biased estimator of skin colour, and the bias grows with how glossy the
+ * lighting is — measured on the demo faces it ran +8 to +15 L*, worst on the
+ * deepest skin, where the specular-to-diffuse contrast is highest. That is
+ * enough to move a face two whole bands.
+ *
+ * Shadow contaminates the other tail (pores, occlusion, the edge of a disc),
+ * so the estimate comes from a band rather than a simple low percentile.
+ *
+ * estimate — calibrate in Phase 4 against real photos with known colouring.
+ */
+export const SPECULAR = {
+  /** Fraction of the region's L* range, sorted ascending, taken as diffuse. */
+  diffuseBand: { lo: 0.15, hi: 0.5 },
+} as const;
+
 export const SKIN_BANDS = {
   /** L* below this is "deep". estimate — calibrate in Phase 4 */
   deepBelow: 45.0,

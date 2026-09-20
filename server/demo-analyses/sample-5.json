@@ -1,6 +1,6 @@
 {
   "season": "Light Spring",
-  "seasonTagline": "Luminous, sunlit warmth with delicate clarity",
+  "seasonTagline": "Luminous, delicate warmth with an airy, sunlit radiance",
   "confidence": 88,
   "undertone": "warm",
   "depth": "Light",
@@ -9,18 +9,18 @@
   "contrastLevel": "medium",
   "chromaLevel": "medium",
   "colorDNA": {
-    "warmth": 76,
+    "warmth": 74,
     "depth": 26,
-    "clarity": 64,
-    "contrast": 52
+    "clarity": 65,
+    "contrast": 50
   },
-  "reasoning": "Your complexion shows a warm, luminous golden radiance with high clarity and a light overall value. Your hair is dyed and excluded from natural tone assessment, focusing your analysis purely on your skin and eyes. Your deep, expressive eyes provide grounded contrast and definition against your sunlit complexion.",
-  "seasonStory": "As a Light Spring, your palette is inspired by the first gentle rays of spring sunshine, blossoming flowers, and fresh golden warmth. Heavy, dark colours or cold, icy tones can weigh your complexion down, whereas light, warm hues with a soft touch of clarity illuminate your natural golden glow. Embracing delicate peach, warm ivory, and soft golden corals creates seamless, glowing harmony with your features.",
+  "reasoning": "Your complexion has a luminous golden-peach undertone with radiant warmth and smooth clarity across the high points of your face. Your hair is drawn back and dyed, showing a deep base that was excluded from natural tonal calibration. Your eyes are an expressive, deep warm brown with subtle golden-amber depth.",
+  "seasonStory": "As a Light Spring, your beauty flourishes in colours that feel bathed in gentle morning sunlight. Your palette is fresh, buoyant, and warmed by golden undertones, featuring shades such as warm champagne, soft coral, light peach, and buttermilk. Overly heavy, cool, or dusky colours can overpower your natural luminosity, whereas clean, light, golden-infused colours effortlessly enhance your natural glow.",
   "lightingQuality": "Natural daylight",
   "keyFeatures": {
-    "skinTone": "Your complexion shows a warm, luminous golden radiance with high clarity and a light overall value.",
-    "eyeColor": "Your deep, expressive eyes provide grounded contrast and definition against your sunlit complexion.",
-    "hairColor": "Your hair is dyed and excluded from natural tone assessment, focusing your analysis purely on your skin and eyes.",
+    "skinTone": "Your complexion has a luminous golden-peach undertone with radiant warmth and smooth clarity across the high points of your face.",
+    "eyeColor": "Your eyes are an expressive, deep warm brown with subtle golden-amber depth.",
+    "hairColor": "Your hair is drawn back and dyed, showing a deep base that was excluded from natural tonal calibration.",
     "veinColor": "",
     "contrast": "medium contrast"
   },
@@ -154,12 +154,12 @@
     "foundation": {
       "recommended": [],
       "avoid": [],
-      "tip": "Opt for a sheer-to-medium luminous golden foundation that lets your natural warmth shine through."
+      "tip": "Choose a lightweight, radiant liquid foundation with warm golden or peachy undertones to showcase your natural skin luminosity."
     },
-    "blush": "A dusting of soft peach or delicate apricot cream across the apples of your cheeks.",
-    "bronzer": "A sheer, light warm golden tan to softly warm the perimeter of your face.",
-    "lips": "Fresh peach nude or sheer coral pink gloss to subtly enhance your natural lip colour.",
-    "eyes": "Warm champagne shimmer across the lid paired with soft bronze definition along the lash line.",
+    "blush": "Soft coral or light peach cream pressed gently onto the apples of your cheeks.",
+    "bronzer": "Light warm tan dusted lightly across your temples and high cheekbones.",
+    "lips": "Peach nude or light watermelon gloss to complement your natural lip tone.",
+    "eyes": "Warm champagne shimmer blended across your lids with subtle bronze definition.",
     "nails": {
       "bestColors": [],
       "avoidColors": []
@@ -175,25 +175,25 @@
     "metals": "Yellow Gold, Rose Gold, Champagne Gold",
     "stones": "",
     "avoid": "Silver, Platinum",
-    "style": "Polished yellow gold, light champagne gold, and warm peach pearl jewellery seamlessly harmonise with your golden undertone, whereas cool silver or heavy antique metals will appear detached."
+    "style": "Light yellow gold, warm champagne metals, and softly polished peach pearls beautifully complement your warm, glowing undertones."
   },
   "hairColor": {
-    "bestHighlights": "Delicate ribbons of warm caramel and sun-kissed golden peach",
-    "bestOverall": "Rich honey brown or warm golden chestnut to frame your features naturally",
-    "avoid": "Harsh blue-black, flat ash brown, or icy platinum"
+    "bestHighlights": "Delicate caramel and warm apricot babylights woven around the face to reflect natural light.",
+    "bestOverall": "Warm honey brown or light golden chestnut that enhances your sunlit skin tone.",
+    "avoid": "Blue-black, stark platinum, or cool ash tones that create a dull cast against your golden skin."
   },
   "celebrities": [
     {
-      "name": "Freema Agyeman",
-      "why": "Shares your luminous golden complexion and blossoms when wearing light, warm, sun-drenched shades."
+      "name": "Kerry Washington",
+      "why": "Shares your glowing warm undertone and looks sensational in soft, sunlit peachy-coral palettes."
     },
     {
-      "name": "Paula Patton",
-      "why": "Displays a similar delicate golden radiance that looks freshest in warm, luminous palettes."
+      "name": "Beyoncé",
+      "why": "Demonstrates how warm golden skin and dark features come alive in light, luminous, warm tones."
     },
     {
-      "name": "Alicia Keys",
-      "why": "Demonstrates how warm, golden clarity thrives in gentle, sunlit tones without requiring overwhelming darkness."
+      "name": "Freida Pinto",
+      "why": "Exemplifies the delicate balance of warm, glowing skin that shines in buoyant, light spring colours."
     }
   ],
   "koreanAnalysis": {
@@ -379,36 +379,117 @@
     ],
     "nails": [
       {
-        "name": "Coral Pink",
-        "hex": "#F58C7A",
+        "name": "Passion",
+        "hex": "#D08F89",
         "category": "nails",
-        "finish": "cream"
+        "finish": "satin",
+        "asset": "passion"
       },
       {
-        "name": "Light Peach",
-        "hex": "#FFD6B5",
+        "name": "Bare With Me",
+        "hex": "#D8B7A0",
         "category": "nails",
-        "finish": "cream"
+        "finish": "satin",
+        "asset": "bare-with-me"
       },
       {
-        "name": "Warm Rose",
-        "hex": "#F58CA8",
+        "name": "Bachelorette Bash",
+        "hex": "#E36085",
         "category": "nails",
-        "finish": "cream"
+        "finish": "gloss",
+        "asset": "bachelorette-bash"
       },
       {
-        "name": "Light Aqua",
-        "hex": "#8EDDE3",
+        "name": "Sheer Bliss",
+        "hex": "#DFD4C5",
         "category": "nails",
-        "finish": "cream"
+        "finish": "satin",
+        "asset": "sheer-bliss"
+      },
+      {
+        "name": "Mademoiselle",
+        "hex": "#D3A493",
+        "category": "nails",
+        "finish": "satin",
+        "asset": "mademoiselle"
+      },
+      {
+        "name": "Perennial Chic",
+        "hex": "#B77A7A",
+        "category": "nails",
+        "finish": "satin",
+        "asset": "perennial-chic"
       }
     ],
     "skip": "Skip black, burgundy and charcoal — depth of that order swamps a light, delicate face."
   },
+  "styleShades": {
+    "gemstones": [
+      {
+        "name": "Aquamarine",
+        "hex": "#8AB1C3",
+        "accent": "#BBD2DC",
+        "asset": "aquamarine"
+      },
+      {
+        "name": "Rose Quartz",
+        "hex": "#C89B9D",
+        "accent": "#DFC5C6",
+        "asset": "rose-quartz"
+      },
+      {
+        "name": "Citrine",
+        "hex": "#CB9F1E",
+        "accent": "#E1C77C",
+        "asset": "citrine"
+      },
+      {
+        "name": "Pearl",
+        "hex": "#C3C1B9",
+        "accent": "#DCDBD6",
+        "asset": "pearl"
+      }
+    ],
+    "hair": [
+      {
+        "name": "Honey Blonde",
+        "hex": "#B4894E",
+        "accent": "#E0C08A"
+      },
+      {
+        "name": "Light Golden Brown",
+        "hex": "#8A6238",
+        "accent": "#BE9668"
+      },
+      {
+        "name": "Strawberry Blonde",
+        "hex": "#C08050",
+        "accent": "#EDB48A"
+      },
+      {
+        "name": "Warm Butter Blonde",
+        "hex": "#D2AE72",
+        "accent": "#F2DCAC"
+      }
+    ],
+    "hairAvoid": [
+      {
+        "name": "Ash Blonde Highlights",
+        "hex": "#B0A492",
+        "accent": "#D8CEBE"
+      },
+      {
+        "name": "Soft Black",
+        "hex": "#1A1A20",
+        "accent": "#42424C"
+      }
+    ],
+    "metalNote": "Light, bright gold. Heavy antique finishes sit too dark on you."
+  },
   "looks": [
     {
-      "name": "Fresh Peach Radiance",
-      "vibe": "Effortless sunlit glow for daytime elegance",
+      "name": "Fresh Sunlit Radiance",
+      "vibe": "An effortless, luminous daytime glow",
       "timeOfDay": "day",
       "shades": [
         {
@@ -419,10 +500,10 @@
           "slot": "eye"
         },
         {
-          "name": "Soft Bronze",
-          "hex": "#B48453",
+          "name": "Warm Taupe Liner",
+          "hex": "#9A7A5E",
           "category": "liner",
-          "finish": "shimmer",
+          "finish": "matte",
           "slot": "liner"
         },
         {
@@ -449,15 +530,15 @@
       ]
     },
     {
-      "name": "Golden Watermelon Glow",
-      "vibe": "Radiant warmth with a cheerful pop of colour for the evening",
+      "name": "Golden Coral Glow",
+      "vibe": "A vibrant, warm twilight look with sun-kissed polish",
       "timeOfDay": "evening",
       "shades": [
         {
-          "name": "Light Warm Brown",
-          "hex": "#B98A63",
+          "name": "Butter Gold",
+          "hex": "#EBCE8A",
           "category": "eye",
-          "finish": "matte",
+          "finish": "metallic",
           "slot": "eye"
         },
         {
@@ -475,18 +556,18 @@
           "slot": "cheek"
         },
         {
-          "name": "Light Watermelon",
-          "hex": "#EE7D80",
+          "name": "Coral Pink",
+          "hex": "#F58C7A",
           "category": "lip",
           "finish": "satin",
           "slot": "lip"
         },
         {
-          "name": "Light Gold",
-          "hex": "#F2DCA8",
-          "category": "highlight",
-          "finish": "metallic",
-          "slot": "highlight"
+          "name": "Light Warm Tan",
+          "hex": "#C79765",
+          "category": "bronzer",
+          "finish": "satin",
+          "slot": "bronzer"
         }
       ]
     }
@@ -502,38 +583,38 @@
     "depth": "light",
     "chroma": "medium",
     "contrast": "medium",
-    "evidence": "Your skin demonstrates an undeniably warm, golden undertone with a luminous, light overall value, balanced by medium chromatic clarity and defined, deep eyes."
+    "evidence": "Your skin displays an unmistakably warm, luminous golden undertone, paired with an airy light overall value and balanced medium contrast against your features."
   },
-  "rationale": "Your primary harmony is dictated by your warm undertone paired with a light value and balanced medium chroma, which positions you perfectly into Light Spring. While True Spring also matches your warm temperature, its heavier, high-chroma saturation would overpower your gentle radiance. Light Spring provides the ideal blend of delicate warmth and fresh luminosity to make your features glow.",
+  "rationale": "Your colour profile is anchored by a distinctly warm hue and a light value that harmonises directly with Light Spring. While your rich brown eyes might tempt a deeper classification, your skin's radiant clarity thrives in fresh, sunlit warmth rather than heavy, shadowy tones. True Spring serves as your closest secondary season whenever you choose to wear slightly more saturated, vivid colours.",
   "measured": {
     "skin": {
-      "L": 72.779413646458,
-      "C": 36.44561762845916,
-      "h": 57.33773537982259
+      "L": 71.14398848500971,
+      "C": 38.796777280477734,
+      "h": 57.285749509959615
     },
     "hair": null,
     "eyes": {
-      "L": 8.624712608285332,
-      "C": 8.416687344114399,
-      "h": 26.228017464414364
+      "L": 7.541293708509182,
+      "C": 7.5100426118254155,
+      "h": 20.574614056047675
     },
     "hairStatus": "dyed",
     "axes": {
       "hue": {
-        "value": 0.48377353798225897,
+        "value": 0.4785749509959615,
         "label": "warm"
       },
       "value": {
-        "value": 0.9111765458583199,
+        "value": 0.8457595394003886,
         "label": "light"
       },
       "chroma": {
-        "value": 0.10339559781037339,
+        "value": 0.07988999363991822,
         "label": "medium"
       }
     },
     "contrast": {
-      "value": 64.15470103817266,
+      "value": 63.602694776500535,
       "label": "high"
     },
     "skinBand": "light"
@@ -542,7 +623,7 @@
   "rules": {
     "primary": "Light Spring",
     "secondary": "True Spring",
-    "margin": 17.1,
+    "margin": 17,
     "ambiguous": false
   },
   "agreement": {
@@ -557,11 +638,15 @@
     },
     {
       "season": "True Spring",
-      "score": 77.3
+      "score": 77.4
     },
     {
       "season": "Light Summer",
-      "score": 71.7
+      "score": 72.1
     }
-  ]
+  ],
+  "qualityIssues": [
+    "colour_cast"
+  ],
+  "qualityOk": true
 }

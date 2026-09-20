@@ -3,12 +3,15 @@ import { formatSeasonName } from "../../utils/formatSeason";
 import type { DemoSample } from "../../lib/api";
 
 /**
- * Nine generated faces, each labelled with the season it actually returns.
+ * Generated faces, labelled only where the label can be stood behind.
  *
- * The labels are not decoration: they are read from the stored analyses, so
- * clicking a face gives exactly the season printed under it. That makes the
- * gallery a way to see all four families before committing a photo, rather
- * than a lucky dip.
+ * A season is shown plainly when the measurement and the model reached it
+ * independently. Where they disagree the rules take the label — they are the
+ * half with numbers behind them — and it carries a "measured" tag so nobody
+ * reads a provisional answer as a settled one. A model-only label is never
+ * shown: that is how two deep-skinned faces came to be captioned "Light
+ * Summer" and "Light Spring", which cannot be true of either, since the light
+ * seasons are light by definition.
  *
  * Quiet by design. It sits under the dropzone on a screen whose job is to get
  * one photo uploaded, so the thumbnails are small and the whole block reads as
@@ -55,8 +58,13 @@ export default function SampleGallery({
                 decoding="async"
               />
               {sample.season && (
-                <span className="an-sample__season">
+                <span
+                  className={`an-sample__season${sample.needsReview ? " an-sample__season--provisional" : ""}`}
+                >
                   {formatSeasonName(sample.season)}
+                  {sample.needsReview && (
+                    <span className="an-sample__tag">{t("analysis.samples.measured")}</span>
+                  )}
                 </span>
               )}
             </button>

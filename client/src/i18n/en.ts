@@ -398,6 +398,7 @@ export const en = {
       note: "AI-generated — explore without sharing your photo",
       itemLabel: "Analyse sample face {n}",
       itemLabelled: "Analyse a {season} sample face",
+      measured: "measured",
     },
 
     hair: {

@@ -345,3 +345,14 @@
 }
 
 .an-sample:hover .an-sample__season { color: var(--ink-secondary); }
+
+/* A provisional label: the rules' answer, which the model did not confirm. */
+.an-sample__season--provisional { color: var(--ink-trust); }
+
+.an-sample__tag {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-block-start: 1px;
+}
