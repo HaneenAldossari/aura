@@ -417,6 +417,35 @@ is no locale switcher yet; `?lang=ar` selects one and sticks.
 The classification and chat prompts are told to write British English too, since
 their output is rendered verbatim beside the catalogue's.
 
+## Screens
+
+Results is four tabs — Overview, Beauty, Style, Shop — rendered as text links
+on a rule, with the tab in the URL (`?tab=beauty`) so it survives a reload and
+can be linked to. `/before-you-buy/:id` redirects to `?tab=shop`.
+
+One rule decides every colour element: **a colour is a flat rectangle, a
+product is a render.** Only nails, metal discs and gem facets are photographed;
+everything else is stated flat. A flat rectangle is an honest statement of a
+colour, a rendered dab is a guess at a texture nobody supplied.
+
+Canonical data, all on the same contract — the model may name a shade but never
+assigns a hex:
+
+| data | module |
+| --- | --- |
+| palettes, neutrals, metals | `server/utils/seasonPalettes.ts` |
+| makeup shades, finishes, undertone and skip lines | `server/utils/seasonMakeup.ts` |
+| gemstones, hair colours, hair avoids, metal notes | `server/utils/seasonStyle.ts` |
+
+`npx tsx scripts/exportShadeReview.ts` writes all of it to
+`design/makeup-review.md` as tables for human review, since colour judgement is
+not something a test can make.
+
+`looks` is the one place the model names shades: it writes the look name, vibe
+line and day/evening tag and picks shades **by name** from the season's list.
+`validateLooks()` resolves every name server-side, drops what does not resolve
+rather than substituting, and logs the misses so prompt drift is visible.
+
 ## Testing
 
 ```bash
