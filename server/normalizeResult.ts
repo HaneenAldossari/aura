@@ -7,6 +7,72 @@
  * type is not.
  */
 import { getCanonicalPalette } from "./utils/seasonPalettes";
+import {
+  getSeasonMakeup,
+  resolveShade,
+  type LookSlot,
+  type MakeupShade,
+} from "./utils/seasonMakeup";
+
+/** A look after its shade names have been resolved against the canonical list. */
+export interface ResolvedLook {
+  name: string;
+  vibe: string;
+  timeOfDay: "day" | "evening";
+  shades: (MakeupShade & { slot: LookSlot })[];
+}
+
+const VALID_SLOTS = new Set<LookSlot>([
+  "eye", "liner", "cheek", "lip", "bronzer", "highlight",
+]);
+
+/**
+ * Resolve the model's looks against the season's canonical shade list.
+ *
+ * The model supplies names only; every hex here comes from our data. A name
+ * that does not resolve is dropped and counted — not substituted, because a
+ * silent substitution would render a shade the model never chose and nobody
+ * would ever find out. A look left with fewer than three shades is dropped
+ * whole, since the design's bar row stops reading as a look below that.
+ */
+export function validateLooks(
+  season: string,
+  raw: unknown
+): { looks: ResolvedLook[]; dropped: string[] } {
+  const dropped: string[] = [];
+  if (!Array.isArray(raw) || !getSeasonMakeup(season)) return { looks: [], dropped };
+
+  const looks: ResolvedLook[] = [];
+  for (const entry of raw.slice(0, 3)) {
+    const l = entry as Record<string, unknown>;
+    const name = typeof l.name === "string" ? l.name.trim() : "";
+    const vibe = typeof l.vibe === "string" ? l.vibe.trim() : "";
+    const timeOfDay = l.timeOfDay === "evening" ? "evening" : "day";
+    if (!name || !Array.isArray(l.shades)) continue;
+
+    const shades: (MakeupShade & { slot: LookSlot })[] = [];
+    const seen = new Set<LookSlot>();
+    for (const s of l.shades as Array<Record<string, unknown>>) {
+      const slot = s?.slot as LookSlot;
+      const shadeName = typeof s?.shade === "string" ? s.shade : "";
+      if (!VALID_SLOTS.has(slot) || seen.has(slot) || !shadeName) continue;
+      const resolved = resolveShade(season, slot, shadeName);
+      if (!resolved) {
+        dropped.push(`${name}/${slot}: "${shadeName}"`);
+        continue;
+      }
+      seen.add(slot);
+      shades.push({ ...resolved, slot });
+    }
+
+    if (shades.length < 3) {
+      dropped.push(`${name}: only ${shades.length} shade(s) resolved`);
+      continue;
+    }
+    looks.push({ name, vibe, timeOfDay, shades: shades.slice(0, 5) });
+  }
+  return { looks, dropped };
+}
 
 // Normalize AI response (new prompt schema) to frontend-compatible shape
 export function normalizeResult(raw: Record<string, unknown>): Record<string, unknown> {
@@ -23,6 +89,17 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
   // 12-color palette so the demo (and real analyses) are consistent. Because
   // primarySeason is enum-constrained, this lookup always resolves for live
   // analyses; the fallback below only serves legacy fixtures.
+  // Resolved here rather than inline below so a miss can be logged once. A
+  // model drifting off the shade list is a prompt problem, and it is invisible
+  // if the bad names are merely discarded in silence.
+  const { looks: resolvedLooks, dropped: droppedShades } = validateLooks(season, raw.looks);
+  if (droppedShades.length > 0) {
+    console.warn(
+      `[makeup] ${droppedShades.length} shade reference(s) did not resolve for "${season}": ` +
+        droppedShades.join("; ")
+    );
+  }
+
   const canonical = getCanonicalPalette(season);
   const palette = raw.palette as Record<string, unknown> | undefined;
   const rawBest = (palette?.bestColors || palette?.best || []) as Array<{ name: string; hex: string; reason?: string; note?: string }>;
@@ -203,6 +280,11 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
 
     // Additive: measured/derived classification detail. Phase 2 fills `axes`
     // from the measurement service when ANALYSIS_MODE=hybrid.
+    // Canonical makeup: the shade lists are ours, the look names and vibe
+    // lines are the model's, and every hex above came from the lists.
+    makeupShades: getSeasonMakeup(season),
+    looks: resolvedLooks,
+
     secondarySeason: (raw.secondarySeason as string) || "",
     axes: raw.axes || null,
     assessment: assessment || null,

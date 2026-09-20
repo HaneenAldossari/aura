@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 const Home = lazy(() => import("./pages/Home"));
 const Analysis = lazy(() => import("./pages/Analysis"));
 const Results = lazy(() => import("./pages/Results"));
+const BeforeYouBuy = lazy(() => import("./pages/BeforeYouBuy"));
 
 function PageFallback() {
   return (
@@ -32,6 +33,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/analyze" element={<Analysis />} />
           <Route path="/results/:sessionId" element={<Results />} />
+          {/* Its own route, not a tab: people return to this without re-reading
+              their result, and the id pins which palette it scores against. */}
+          <Route path="/before-you-buy/:sessionId" element={<BeforeYouBuy />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

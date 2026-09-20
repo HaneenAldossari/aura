@@ -33,15 +33,24 @@ export default function ChatWidget({
   sessionId,
   analysis,
   seasonName,
+  open,
+  onOpenChange,
 }: {
   /** Local key for chat history only — the API is stateless. */
   sessionId: string | undefined;
   /** Sent with every turn, since there is no session for the server to look up. */
   analysis: AnalysisResult;
   seasonName: string;
+  /** Controlled mode: Results drives this from its own entry row. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
   const t = useT();
-  const [chatOpen, setChatOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const controlled = open !== undefined;
+  const chatOpen = controlled ? open : uncontrolledOpen;
+  const setChatOpen = (next: boolean) =>
+    controlled ? onOpenChange?.(next) : setUncontrolledOpen(next);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() =>
     loadHistory(sessionId)
   );
@@ -138,7 +147,7 @@ export default function ChatWidget({
 
   return (
     <>
-      {!chatOpen && (
+      {!chatOpen && !controlled && (
         <button
           onClick={() => setChatOpen(true)}
           aria-label={t("results.chat.openLabel")}

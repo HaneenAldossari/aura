@@ -160,7 +160,7 @@ describe("banned decorative effects stay gone", () => {
     );
     expect(users.map((f) => path.relative(srcDir, f)).sort()).toEqual([
       "index.css",
-      "pages/results/SeasonHero.tsx",
+      "pages/results/SeasonIdentity.tsx",
     ]);
   });
 
@@ -182,10 +182,17 @@ describe("banned decorative effects stay gone", () => {
   });
 
   it("keeps 'shimmer' where it names a makeup finish, not an effect", () => {
-    // ShadeDab renders finish === "shimmer" — that is content from the palette
-    // data, and removing it would delete a real product attribute.
-    const dab = fs.readFileSync(path.join(srcDir, "pages/results/ShadeDab.tsx"), "utf8");
-    expect(dab).toMatch(/finish === "shimmer"/);
+    // The shade bars print `finish`, which is "shimmer" for real shades. That
+    // is content from the canonical list, not decoration, and the ban above
+    // must not take it with it.
+    const makeup = fs.readFileSync(path.join(srcDir, "pages/results/MakeupSection.tsx"), "utf8");
+    expect(makeup).toMatch(/ed-bar__finish/);
+    expect(makeup).toMatch(/\{shade\.finish\}/);
+    const data = fs.readFileSync(
+      path.join(__dirname, "../server/utils/seasonMakeup.ts"),
+      "utf8"
+    );
+    expect(data).toMatch(/"shimmer"/);
   });
 
   it("no hover rule moves an element or casts a shadow", () => {

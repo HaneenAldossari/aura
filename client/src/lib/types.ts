@@ -48,6 +48,48 @@ export interface Makeup {
   nails: { bestColors: string[]; avoidColors: string[] };
 }
 
+/** A shade from the canonical per-season list. Hexes are never model-written. */
+export type ShadeCategory =
+  | "foundation" | "blush" | "bronzer" | "lip"
+  | "eye" | "liner" | "highlight" | "nails";
+
+export type ShadeFinish =
+  | "matte" | "satin" | "cream" | "shimmer" | "metallic" | "gloss";
+
+export interface MakeupShade {
+  name: string;
+  hex: string;
+  category: ShadeCategory;
+  finish: ShadeFinish;
+}
+
+/** The canonical shade list for the classified season. */
+export interface SeasonMakeup {
+  foundation: MakeupShade[];
+  undertoneGuide: string;
+  blush: MakeupShade[];
+  bronzer: MakeupShade[];
+  lip: MakeupShade[];
+  eye: MakeupShade[];
+  liner: MakeupShade[];
+  highlight: MakeupShade[];
+  nails: MakeupShade[];
+  skip: string;
+}
+
+export type LookSlot = "eye" | "liner" | "cheek" | "lip" | "bronzer" | "highlight";
+
+/**
+ * A named look. The name and vibe line are the model's; every shade was
+ * resolved against the canonical list server-side, so `hex` is always ours.
+ */
+export interface Look {
+  name: string;
+  vibe: string;
+  timeOfDay: "day" | "evening";
+  shades: (MakeupShade & { slot: LookSlot })[];
+}
+
 export interface KeyFeatures {
   skinTone: string;
   eyeColor: string;
@@ -132,6 +174,10 @@ export interface AnalysisResult {
   celebrities: Celebrity[];
   koreanAnalysis?: { tone: string; description: string; kbeautyTips: string };
   crossValidation?: CrossValidation;
+  /** Canonical shade list for this season — the source of every makeup hex. */
+  makeupShades?: SeasonMakeup | null;
+  /** Named looks, shades already resolved against makeupShades. */
+  looks?: Look[];
   /** Nearest-neighbour season, one of the 12 canonical names. */
   secondarySeason?: string;
   axes?: Axes | null;

@@ -47,6 +47,92 @@ export const en = {
     shareWhatsApp: "Share on WhatsApp",
     shareText: "I'm a {season}! Discover your colour season on Your Aura: {url}",
 
+    /* ── Editorial Results (the single scrolling page) ─────────────────── */
+    analysisMeta: "Your analysis — {date}",
+    confidence: "{percent}% confidence",
+    nextClosest: "next closest · {season}",
+
+    dna: {
+      title: "Measured colour DNA",
+      warmth: "Warmth",
+      depthAxis: "Depth",
+      clarity: "Clarity",
+      contrastAxis: "Contrast",
+      measured: "measured",
+      skin: "skin",
+      hair: "hair",
+      eyes: "eyes",
+      tableCaption: "Measured CIE LCh values per region",
+      notMeasured: "not measured",
+    },
+
+    nudge: {
+      body:
+        "Your skin and hair measured close together, so a second photo in " +
+        "different light would firm this up. Nothing changes until you add one.",
+      action: "Add a second photo",
+      dismiss: "Dismiss",
+    },
+
+    hairNote: {
+      natural:
+        "You told us your hair is its natural colour, so it counted toward this " +
+        "reading. Change that answer and the season may shift one step.",
+      coloured:
+        "You told us your hair is coloured, so it was left out and your skin and " +
+        "eyes carried the reading instead.",
+      covered:
+        "You told us your hair is not visible, so it was left out and your skin " +
+        "and eyes carried the reading instead.",
+      unavailable:
+        "We couldn't read your hair, so this uses your skin and eyes only.",
+      change: "Change hair answer",
+      rerunning: "Re-analysing…",
+    },
+
+    palette: {
+      title: "Your twelve",
+      hint: "tap a colour for pairings",
+      copied: "Copied",
+      swatch: "{name}, {hex} — tap to copy",
+      save: "Save palette",
+      saving: "Saving…",
+    },
+
+    makeupSection: {
+      title: "Makeup",
+      baseLabel: "Base",
+      ladderLabel: "Foundation depth, light to deep. Your depth is marked at {depth} of 100.",
+      looksLabel: "Looks",
+      indexLabel: "Shade index",
+      day: "Day",
+      evening: "Evening",
+      slotEye: "Eye",
+      slotLiner: "Liner",
+      slotCheek: "Cheek",
+      slotLip: "Lip",
+      slotBronzer: "Bronzer",
+      slotHighlight: "Highlight",
+      catBlush: "Blush",
+      catLip: "Lip",
+      catEye: "Eye",
+      catLiner: "Liner",
+      catNails: "Nails",
+    },
+
+    styleSection: {
+      title: "Style",
+      metals: "Metals",
+      neutrals: "Neutrals",
+      avoidMetals: "Avoid metals",
+      avoid: "Avoid",
+      gemstones: "Gemstones",
+      hair: "Hair",
+    },
+
+    beforeYouBuy: "Before you buy",
+    backToResults: "Back to your results",
+
     hero: {
       eyebrow: "Your revelation is complete.",
       paletteCaption: "Your 12 signature tones",
@@ -72,28 +158,6 @@ export const en = {
       hint: "Hover a shade to see why it works against you",
     },
 
-    dna: {
-      title: "Your Colour Analysis",
-      intro:
-        "Our AI analysis has mapped your physical traits to the frequency of {season}. " +
-        "Your features possess a {quality}.",
-      qualityDeep: "grounded, majestic depth",
-      qualityLight: "soft, luminous quality",
-      axesTitle: "Colour DNA Analysis",
-      axisRangeLabel: "{low} to {high}",
-      rowUndertone: "Skin Undertone",
-      rowHair: "Hair",
-      rowEyes: "Eyes",
-      rowContrast: "Contrast",
-      cool: "Cool",
-      warm: "Warm",
-      light: "Light",
-      deep: "Deep",
-      muted: "Muted",
-      clear: "Clear",
-      blends: "Blends",
-      contrasts: "Contrasts",
-    },
 
     story: {
       title: "Your Season Story",
@@ -184,8 +248,17 @@ export const en = {
     },
 
     shop: {
-      title: "Before You Buy",
+      title: "Before you buy",
+      meta: "Before you buy — {season}",
       lede: "Upload a photo of any item — we'll tell you if it matches your {season} palette.",
+      tipLabel: "Tip —",
+      bandsLabel: "How the score reads",
+      against: "Product colour against your palette",
+      product: "product",
+      yours: "yours",
+      nearest: "· nearest in palette",
+      closerInPalette: "Closer in your palette",
+      approximate: "Screen colour is approximate. Fabric and lighting shift the result.",
       yourPalette: "Your palette",
       dropzoneLabel: "Upload a product photo to check against your palette",
       dropHeading: "Upload a photo of the item",
@@ -204,6 +277,8 @@ export const en = {
     },
 
     chat: {
+      entryTitle: "Ask about your palette",
+      entryHint: "Any product, shade or outfit — answered against your {season} reading.",
       openLabel: "Ask the colour advisor",
       panelLabel: "Colour advisor chat",
       closeLabel: "Close chat",

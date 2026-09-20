@@ -15,6 +15,7 @@ import SampleGallery from "./analysis/SampleGallery";
 import LoadingScreen from "./analysis/LoadingScreen";
 import ErrorPanel from "./analysis/ErrorPanel";
 import { useT } from "../i18n";
+import { cachePhoto } from "../lib/photoCache";
 
 export default function Analysis() {
   const t = useT();
@@ -155,10 +156,12 @@ export default function Analysis() {
         return;
       }
 
-      stages.push("building");
       // Stateless API: keep the result here and put a local key in the URL.
       const id = newResultId();
       saveResult(id, result);
+      // In memory only, so Results can re-run against the same pixels when the
+      // hair answer changes. Never written to disk — see lib/photoCache.ts.
+      cachePhoto(id, outcome.upload.bytes, hairStatus);
       navigate(`/results/${id}`);
     } catch (err) {
       // Reaching here means the upload or the API failed. Still not the user's
