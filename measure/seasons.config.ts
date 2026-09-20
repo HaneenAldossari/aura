@@ -224,14 +224,17 @@ export const AXIS_WEIGHTS = {
  * deepest skin, where the specular-to-diffuse contrast is highest. That is
  * enough to move a face two whole bands.
  *
- * Shadow contaminates the other tail (pores, occlusion, the edge of a disc),
- * so the estimate comes from a band rather than a simple low percentile.
+ * Shadow contaminates the other tail (the unlit side of the face, pores,
+ * occlusion), so the estimate comes from a band rather than a low percentile.
+ * The band sits slightly below the median because only one tail is additive:
+ * trimming harder at the top than the bottom is the asymmetry the physics
+ * asks for.
  *
  * estimate — calibrate in Phase 4 against real photos with known colouring.
  */
 export const SPECULAR = {
   /** Fraction of the region's L* range, sorted ascending, taken as diffuse. */
-  diffuseBand: { lo: 0.15, hi: 0.5 },
+  diffuseBand: { lo: 0.25, hi: 0.6 },
 } as const;
 
 export const SKIN_BANDS = {

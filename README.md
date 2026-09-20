@@ -41,6 +41,66 @@ Upload a single selfie, or try one of nine AI-generated sample faces (no persona
 - **AI Stylist Chatbot** — conversational advisor grounded in your analysis, with live streamed responses and per-session history.
 - **Reveal Moment** — first visit to your results plays a word-by-word season reveal with a gold shimmer sweep and a staggered fan-out of your palette.
 
+## Accuracy — evaluation in progress
+
+**There is no headline accuracy number yet, and any figure quoted before
+`eval/real` has photos in it would be made up.** The harness exists
+(`eval/run.ts`, accuracy plus cost and latency per model) and enforces a strict
+rule: only labelled *real* photos count toward the reported figure. AI-generated
+faces are pipeline smoke tests and are excluded from every accuracy metric,
+because a generated face has no ground-truth colouring — scoring against one
+measures model-versus-model agreement rather than correctness.
+
+The app cross-checks itself. Measurement runs on-device and ranks the twelve
+seasons from CIE LCh values; the model sees the photo and the measured numbers
+but **never the ranking**, so its verdict is independent. Agreement between the
+two caps confidence and offers alternatives. That cross-check is what surfaces
+the errors below rather than hiding them.
+
+### What the cross-check caught: specular highlights inflating skin lightness
+
+Two deep-skinned sample faces were being labelled **Light Summer** and **Light
+Spring** — impossible, since the light seasons are light in value by definition.
+The classification was working; the measurement was wrong, in three
+compounding ways.
+
+Specular reflection is **additive and one-sided**: a highlight can only raise
+L\*, never lower it. Skin colour was estimated with a plain median over three
+sampled discs, and those discs sat on both cheekbones and the mid-forehead —
+precisely where studio lighting puts its highlights. On the deepest sample face
+the lit cheekbone read L\* 32.9 and the mid-forehead read 68.3: a 35-point
+spread across one person. Worse, the segmentation mask that bounds the face was
+only computed when the user said their hair was natural, so answering "dyed"
+silently switched skin measurement to a different method.
+
+The bias was largest on the deepest skin, where specular-to-diffuse contrast is
+highest — exactly the direction that turns a deep face into a light season.
+
+**Before and after, on the deepest sample face:**
+
+| | skin L\* | band | rules | model | agreement |
+| --- | --- | --- | --- | --- | --- |
+| before | 60.4 | medium | True Winter | Light Summer | none |
+| after | **37.5** | **deep** | Deep Winter | Deep Winter | **primary** |
+
+The fixes were structural, not tuned: sample the whole face-skin mask rather
+than three lit discs, take a percentile band of L\* that trims harder at the top
+than the bottom, and compute the mask regardless of the hair answer. No
+threshold was changed.
+
+### What is still open
+
+- The sample faces are AI-generated and **measure skin chroma of C\* 17-46,
+  where real skin sits near 12-25**. The quality gate flags a colour cast on
+  every one. They are graded images, not photographs, and they are not a
+  substitute for a real dataset.
+- The gallery therefore shows a season plainly only when the measurement and
+  the model agree at primary level *and* the quality gate is clean; otherwise
+  it shows the measured ranking's answer with a `measured` tag. A model-only
+  label is never shown.
+- Every threshold in `measure/seasons.config.ts` is still marked *estimate*.
+  They are calibrated in Phase 4, against real photos.
+
 ## What's new in v2
 
 **Correctness & AI**

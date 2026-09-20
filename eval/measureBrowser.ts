@@ -71,11 +71,11 @@ async function measure(url: string, hairStatus: HairStatus): Promise<BrowserMeas
       return { ok: false, error: `expected one face, found ${faces.length}`, qualityIssues };
     }
 
+    // Always segmented: the mask bounds the face-skin region regardless of
+    // whether hair is scored. See the note in measure/pipeline.ts.
     let segmentation: Uint8Array | null = null;
-    if (hairStatus === "natural") {
-      await loadSegmenter();
-      segmentation = await segmentImage(imageData);
-    }
+    await loadSegmenter();
+    segmentation = await segmentImage(imageData);
 
     const regions = extractRegions(
       { data: image.data, width: image.width, height: image.height },

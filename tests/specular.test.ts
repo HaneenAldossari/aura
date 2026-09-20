@@ -60,9 +60,16 @@ describe("diffusePixels", () => {
     expect(diffusePixels(tiny)).toHaveLength(2);
   });
 
-  it("takes a band from the lower half, where diffuse skin sits", () => {
-    expect(SPECULAR.diffuseBand.lo).toBeGreaterThan(0);
-    expect(SPECULAR.diffuseBand.hi).toBeLessThanOrEqual(0.5);
-    expect(SPECULAR.diffuseBand.lo).toBeLessThan(SPECULAR.diffuseBand.hi);
+  it("trims harder at the top than the bottom", () => {
+    // Only one tail is additive. Specular can only add light, so the band has
+    // to cut more from the top than from the bottom — a symmetric trim would
+    // treat a highlight and a shadow as equally likely, which they are not.
+    const { lo, hi } = SPECULAR.diffuseBand;
+    expect(lo).toBeGreaterThan(0);
+    expect(hi).toBeLessThan(1);
+    expect(lo).toBeLessThan(hi);
+    const trimmedBelow = lo;
+    const trimmedAbove = 1 - hi;
+    expect(trimmedAbove).toBeGreaterThan(trimmedBelow);
   });
 });

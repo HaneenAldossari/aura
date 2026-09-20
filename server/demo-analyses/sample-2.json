@@ -1,152 +1,159 @@
 {
-  "season": "Light Spring",
-  "seasonTagline": "Luminous warmth meets fresh, sunlit clarity",
-  "confidence": 86,
+  "season": "Soft Autumn",
+  "seasonTagline": "Earthy elegance wrapped in soft, sun-warmed neutrals",
+  "confidence": 50,
   "undertone": "warm",
-  "depth": "Light",
-  "chroma": "Medium",
-  "koreanTone": "라이트톤 (Light Tone)",
+  "depth": "Medium",
+  "chroma": "Muted",
+  "koreanTone": "뮤트톤 (Mute Tone)",
   "contrastLevel": "medium",
-  "chromaLevel": "medium",
+  "chromaLevel": "muted",
   "colorDNA": {
     "warmth": 68,
-    "depth": 28,
-    "clarity": 58,
-    "contrast": 54
+    "depth": 52,
+    "clarity": 38,
+    "contrast": 50
   },
-  "reasoning": "Your complexion is luminous and light with an evident warm peach-golden undertone. Your hair is currently dyed dark, creating artificial contrast against your naturally delicate, warm skin. Your eyes are a rich, warm dark brown that provides an appealing focal point.",
-  "seasonStory": "As a Light Spring, your colouring is defined by warmth, lightness, and an airy radiance. Heavy, dark, or overly muddy colours can overpower your delicate complexion, while pure, warm pastels and light golden hues make your skin glow effortlessly. You thrive in shades reminiscent of early springtime blossoms, pale peach, and sunlit apricot.",
+  "reasoning": "Light-medium golden olive skin with delicate warm undertones and a soft, muted finish. Dyed dark hair pulled neatly back, showing a deep neutral frame around your face. Warm, velvety dark brown eyes with soft depth and minimal surface glare.",
+  "seasonStory": "Soft Autumn sits at the tranquil intersection of summer's gentle haze and autumn's golden glow. Your colouring flourishes in tones that are subtly warmed and brushed with grey or taupe, rather than stark, highly saturated pigments. When you wear muted olive, dusty terracotta, and toasted taupe, your golden-olive complexion glows with understated elegance.",
   "lightingQuality": "Natural daylight",
   "keyFeatures": {
-    "skinTone": "Your complexion is luminous and light with an evident warm peach-golden undertone.",
-    "eyeColor": "Your eyes are a rich, warm dark brown that provides an appealing focal point.",
-    "hairColor": "Your hair is currently dyed dark, creating artificial contrast against your naturally delicate, warm skin.",
+    "skinTone": "Light-medium golden olive skin with delicate warm undertones and a soft, muted finish.",
+    "eyeColor": "Warm, velvety dark brown eyes with soft depth and minimal surface glare.",
+    "hairColor": "Dyed dark hair pulled neatly back, showing a deep neutral frame around your face.",
     "veinColor": "",
     "contrast": "medium contrast"
   },
   "palette": {
     "best": [
       {
-        "name": "Ivory",
-        "hex": "#FFF4DC",
-        "note": "Warm clean white that flatters your light, fresh coloring."
+        "name": "Cream",
+        "hex": "#F3E4C8",
+        "note": "Warm soft white."
       },
       {
-        "name": "Light Peach",
-        "hex": "#FFD6B5",
-        "note": "Soft peach — quintessential Light Spring."
+        "name": "Warm Beige",
+        "hex": "#D7B98E",
+        "note": "Quiet warm neutral."
       },
       {
-        "name": "Apricot",
-        "hex": "#FFB86B",
-        "note": "Warm fruity tone that brings out your warmth."
+        "name": "Camel",
+        "hex": "#C19A6B",
+        "note": "Soft Autumn classic."
       },
       {
-        "name": "Coral Pink",
-        "hex": "#FF8C7A",
-        "note": "Fresh peachy-pink with warmth."
+        "name": "Soft Peach",
+        "hex": "#E8A77C",
+        "note": "Warm dusty peach."
       },
       {
-        "name": "Warm Rose",
-        "hex": "#F58CA8",
-        "note": "Light warm pink for romantic looks."
+        "name": "Dusty Coral",
+        "hex": "#C97868",
+        "note": "Sun-warmed soft coral."
       },
       {
-        "name": "Butter Yellow",
-        "hex": "#FFE78A",
-        "note": "Soft warm yellow that lights up your face."
+        "name": "Muted Salmon",
+        "hex": "#D98B75",
+        "note": "Gentle warm pink."
       },
       {
-        "name": "Fresh Mint",
-        "hex": "#A8E6C1",
-        "note": "Cool-warm green — clear and fresh."
+        "name": "Soft Terracotta",
+        "hex": "#B7664B",
+        "note": "Earthy warm clay."
       },
       {
-        "name": "Light Aqua",
-        "hex": "#8EDDE3",
-        "note": "Crystal blue-green for accents."
+        "name": "Olive",
+        "hex": "#7F8A4A",
+        "note": "Muted earthy green."
       },
       {
-        "name": "Sky Blue",
-        "hex": "#8FCFF2",
-        "note": "Light clear blue that mirrors your softness."
+        "name": "Moss Green",
+        "hex": "#6F7D45",
+        "note": "Earthy warm green."
       },
       {
-        "name": "Light Warm Teal",
-        "hex": "#5BC6C6",
-        "note": "Warm-leaning teal for variety."
+        "name": "Warm Teal",
+        "hex": "#4F8A83",
+        "note": "Muted blue-green accent."
       },
       {
-        "name": "Camel Beige",
-        "hex": "#CFAE7A",
-        "note": "Warm light neutral."
+        "name": "Muted Turquoise",
+        "hex": "#6EA7A1",
+        "note": "Soft warm aqua."
       },
       {
-        "name": "Soft Warm Brown",
-        "hex": "#9B6A45",
-        "note": "Warm earthy brown for grounding."
+        "name": "Soft Chocolate",
+        "hex": "#6B4A35",
+        "note": "Warm sophisticated brown."
       }
     ],
     "avoid": [
       {
-        "name": "Black",
-        "hex": "#000000",
-        "reason": "Too harsh and dark for your softness."
-      },
-      {
-        "name": "Burgundy",
-        "hex": "#6A0F2B",
-        "reason": "Too dark — fights your lightness."
-      },
-      {
-        "name": "Pure White",
+        "name": "Bright White",
         "hex": "#FFFFFF",
-        "reason": "Stark cool white overpowers — choose ivory."
-      },
-      {
-        "name": "Charcoal",
-        "hex": "#36454F",
-        "reason": "Too dark and cool."
+        "reason": "Too stark — choose cream."
       },
       {
         "name": "Hot Pink",
-        "hex": "#FF1493",
-        "reason": "Too saturated for your softness."
+        "hex": "#FF69B4",
+        "reason": "Brightness overwhelms your softness."
       },
       {
-        "name": "Olive",
-        "hex": "#708238",
-        "reason": "Too earthy and muted."
+        "name": "Black",
+        "hex": "#000000",
+        "reason": "Too harsh — chocolate is gentler."
+      },
+      {
+        "name": "Electric Blue",
+        "hex": "#0080FF",
+        "reason": "Saturation fights muted palette."
+      },
+      {
+        "name": "Neon Yellow",
+        "hex": "#F4FF00",
+        "reason": "Vibrancy clashes with subtle warmth."
+      },
+      {
+        "name": "Royal Purple",
+        "hex": "#663399",
+        "reason": "Too saturated for Soft Autumn."
       }
     ],
     "neutrals": [
-      "Ivory",
-      "Camel Beige",
-      "Soft Warm Brown"
+      "Cream",
+      "Warm Beige",
+      "Camel",
+      "Soft Chocolate"
     ],
     "neutralsWithHex": [
       {
-        "name": "Ivory",
-        "hex": "#FFF4DC"
+        "name": "Cream",
+        "hex": "#F3E4C8"
       },
       {
-        "name": "Camel Beige",
-        "hex": "#CFAE7A"
+        "name": "Warm Beige",
+        "hex": "#D7B98E"
       },
       {
-        "name": "Soft Warm Brown",
-        "hex": "#9B6A45"
+        "name": "Camel",
+        "hex": "#C19A6B"
+      },
+      {
+        "name": "Soft Chocolate",
+        "hex": "#6B4A35"
       }
     ],
     "metals": {
       "best": [
         "Yellow Gold",
         "Rose Gold",
-        "Champagne Gold"
+        "Antique Gold",
+        "Brushed Bronze"
       ],
       "avoid": [
         "Silver",
-        "Platinum"
+        "Platinum",
+        "White Gold"
       ]
     }
   },
@@ -154,236 +161,236 @@
     "foundation": {
       "recommended": [],
       "avoid": [],
-      "tip": "Choose a sheer, luminous liquid foundation with subtle warm yellow or peach undertones."
+      "tip": "Select a light-to-medium coverage foundation with neutral-warm or golden-olive undertones to preserve your natural warmth."
     },
-    "blush": "Warm petal pink or soft peachy coral swept high on the cheekbones.",
-    "bronzer": "Sheer, finely milled light warm tan to add gentle sun-kissed warmth.",
-    "lips": "Translucent peach nude or fresh coral pink with a moisturising sheen.",
-    "eyes": "Luminous warm champagne wash paired with a soft bronze defined lash line.",
+    "blush": "Soft terracotta or dusty apricot swept across the cheekbones.",
+    "bronzer": "Muted amber or soft taupe bronze for gentle warmth.",
+    "lips": "Muted brick, rosewood, or a soft cocoa gloss.",
+    "eyes": "Warm taupe and soft bronze washed over the lids with an espresso or olive-brown liner.",
     "nails": {
       "bestColors": [],
       "avoidColors": []
     }
   },
   "wardrobe": {
-    "bestColors": "Ivory, Light Peach, Apricot, Coral Pink, Warm Rose, Butter Yellow, Fresh Mint, Light Aqua, Sky Blue, Light Warm Teal, Camel Beige, Soft Warm Brown",
-    "neutralAnchors": "Ivory, Camel Beige, Soft Warm Brown",
-    "avoid": "Black, Burgundy, Pure White, Charcoal, Hot Pink, Olive"
+    "bestColors": "Cream, Warm Beige, Camel, Soft Peach, Dusty Coral, Muted Salmon, Soft Terracotta, Olive, Moss Green, Warm Teal, Muted Turquoise, Soft Chocolate",
+    "neutralAnchors": "Cream, Warm Beige, Camel, Soft Chocolate",
+    "avoid": "Bright White, Hot Pink, Black, Electric Blue, Neon Yellow, Royal Purple"
   },
   "gemstones": [],
   "jewelry": {
-    "metals": "Yellow Gold, Rose Gold, Champagne Gold",
+    "metals": "Yellow Gold, Rose Gold, Antique Gold, Brushed Bronze",
     "stones": "",
-    "avoid": "Silver, Platinum",
-    "style": "Delicate, polished light yellow gold and champagne gold jewellery flatter your radiant skin best."
+    "avoid": "Silver, Platinum, White Gold",
+    "style": "Brushed yellow gold, satin bronze, and muted antique metals bring out your natural golden-olive glow far better than high-shine silver."
   },
   "hairColor": {
-    "bestHighlights": "Soft honey and apricot balayage ribbons",
-    "bestOverall": "Light golden chestnut or warm butterscotch blonde",
-    "avoid": "Flat blue-black, harsh cool espresso, or icy platinum"
+    "bestHighlights": "Soft caramel or subtle warm hazelnut babylights to add gentle dimension.",
+    "bestOverall": "Rich dark mocha brown or warm chestnut to complement your natural depth.",
+    "avoid": "Icy platinum blonde, blue-black, or cool ash tones that clash with your warm olive undertone."
   },
   "celebrities": [
     {
-      "name": "Blake Lively",
-      "why": "Shares your warm, light skin luminosity and natural affinity for fresh peach tones."
+      "name": "Jessica Alba",
+      "why": "Shares your soft golden-olive undertone, deep warm eyes, and effortless affinity for muted, warm neutrals."
     },
     {
-      "name": "Scarlett Johansson",
-      "why": "Features the same luminous warm undertone that shines in light golden-warm colours."
+      "name": "Chrissy Teigen",
+      "why": "Features comparable warmth, medium depth, and a radiant complexion flattered by soft autumn earth tones."
     },
     {
-      "name": "Amanda Seyfried",
-      "why": "Exemplifies the delicate lightness and warm clarity characteristic of Light Spring."
+      "name": "Freida Pinto",
+      "why": "Possesses similar warm golden undertones and expressive brown eyes that look sublime in softened, toasted hues."
     }
   ],
   "koreanAnalysis": {
-    "tone": "라이트톤 (Light Tone)",
-    "description": "Your coloring falls into the 라이트톤 (Light Tone) category in the Korean system.",
+    "tone": "뮤트톤 (Mute Tone)",
+    "description": "Your coloring falls into the 뮤트톤 (Mute Tone) category in the Korean system.",
     "kbeautyTips": ""
   },
   "crossValidation": {
-    "agrees": true,
-    "confidence": 86
+    "agrees": false,
+    "confidence": 50
   },
   "makeupShades": {
     "foundation": [
       {
-        "name": "Porcelain Warm",
-        "hex": "#FBEADA",
+        "name": "Neutral Ivory",
+        "hex": "#F3DECB",
         "category": "foundation",
         "finish": "satin"
       },
       {
-        "name": "Light Ivory",
-        "hex": "#F4DCC2",
+        "name": "Soft Beige",
+        "hex": "#E2C4A6",
         "category": "foundation",
         "finish": "satin"
       },
       {
-        "name": "Warm Cream",
-        "hex": "#EACAA6",
+        "name": "Warm Sand",
+        "hex": "#C8A382",
         "category": "foundation",
         "finish": "satin"
       },
       {
-        "name": "Light Golden",
-        "hex": "#DDB289",
+        "name": "Muted Tan",
+        "hex": "#A88663",
         "category": "foundation",
         "finish": "satin"
       },
       {
-        "name": "Soft Honey",
-        "hex": "#C79B72",
+        "name": "Soft Walnut",
+        "hex": "#7F6046",
         "category": "foundation",
         "finish": "satin"
       }
     ],
-    "undertoneGuide": "Light and warm — the commonest mistake is going too deep, which drops a veil over the whole face.",
+    "undertoneGuide": "Neutral-warm and low contrast — keep the base soft, and let nothing on the face read as bright.",
     "blush": [
       {
-        "name": "Light Peach",
-        "hex": "#F5B191",
-        "category": "blush",
-        "finish": "satin"
-      },
-      {
-        "name": "Soft Coral",
-        "hex": "#F79A87",
+        "name": "Dusty Apricot",
+        "hex": "#D19A7E",
         "category": "blush",
         "finish": "matte"
       },
       {
-        "name": "Warm Petal Pink",
-        "hex": "#F7A8B4",
+        "name": "Muted Rose",
+        "hex": "#BE8074",
         "category": "blush",
-        "finish": "shimmer"
+        "finish": "satin"
       },
       {
-        "name": "Apricot Cream",
-        "hex": "#F3B487",
+        "name": "Soft Terracotta",
+        "hex": "#C08466",
         "category": "blush",
-        "finish": "cream"
+        "finish": "matte"
+      },
+      {
+        "name": "Warm Clay",
+        "hex": "#AE7561",
+        "category": "blush",
+        "finish": "matte"
       }
     ],
     "bronzer": [
       {
-        "name": "Light Warm Tan",
-        "hex": "#C79765",
+        "name": "Soft Taupe Bronze",
+        "hex": "#9C7A56",
         "category": "bronzer",
-        "finish": "satin"
+        "finish": "matte"
       },
       {
-        "name": "Soft Golden",
-        "hex": "#D2A877",
+        "name": "Muted Amber",
+        "hex": "#A8804F",
         "category": "bronzer",
-        "finish": "shimmer"
+        "finish": "satin"
       }
     ],
     "lip": [
       {
-        "name": "Peach Nude",
-        "hex": "#E8A183",
-        "category": "lip",
-        "finish": "cream"
-      },
-      {
-        "name": "Coral Pink",
-        "hex": "#F58C7A",
+        "name": "Rosewood",
+        "hex": "#9C5F58",
         "category": "lip",
         "finish": "satin"
       },
       {
-        "name": "Warm Rose",
-        "hex": "#F0899E",
+        "name": "Muted Brick",
+        "hex": "#A0604A",
+        "category": "lip",
+        "finish": "matte"
+      },
+      {
+        "name": "Soft Cocoa",
+        "hex": "#8E6253",
         "category": "lip",
         "finish": "cream"
       },
       {
-        "name": "Apricot Gloss",
-        "hex": "#F2A874",
+        "name": "Dusty Rose",
+        "hex": "#B27D77",
+        "category": "lip",
+        "finish": "cream"
+      },
+      {
+        "name": "Warm Nude Gloss",
+        "hex": "#C2907C",
         "category": "lip",
         "finish": "gloss"
-      },
-      {
-        "name": "Light Watermelon",
-        "hex": "#EE7D80",
-        "category": "lip",
-        "finish": "satin"
       }
     ],
     "eye": [
       {
-        "name": "Warm Champagne",
-        "hex": "#EFD4AE",
+        "name": "Soft Bronze",
+        "hex": "#9A7448",
         "category": "eye",
         "finish": "shimmer"
       },
       {
-        "name": "Light Peach Shimmer",
-        "hex": "#F3C2A1",
-        "category": "eye",
-        "finish": "shimmer"
-      },
-      {
-        "name": "Soft Aqua",
-        "hex": "#8EDDE3",
-        "category": "eye",
-        "finish": "satin"
-      },
-      {
-        "name": "Light Warm Brown",
-        "hex": "#B98A63",
+        "name": "Warm Taupe",
+        "hex": "#8A7561",
         "category": "eye",
         "finish": "matte"
       },
       {
-        "name": "Butter Gold",
-        "hex": "#EBCE8A",
+        "name": "Sage Olive",
+        "hex": "#77804F",
         "category": "eye",
-        "finish": "metallic"
+        "finish": "matte"
+      },
+      {
+        "name": "Muted Plum",
+        "hex": "#6E4F53",
+        "category": "eye",
+        "finish": "matte"
+      },
+      {
+        "name": "Antique Pewter",
+        "hex": "#8B7F6B",
+        "category": "eye",
+        "finish": "shimmer"
       }
     ],
     "liner": [
       {
-        "name": "Warm Taupe Liner",
-        "hex": "#9A7A5E",
+        "name": "Soft Brown",
+        "hex": "#5A4433",
         "category": "liner",
         "finish": "matte"
       },
       {
-        "name": "Soft Bronze",
-        "hex": "#B48453",
+        "name": "Olive Grey",
+        "hex": "#565A46",
+        "category": "liner",
+        "finish": "matte"
+      },
+      {
+        "name": "Muted Bronze",
+        "hex": "#7E6242",
         "category": "liner",
         "finish": "shimmer"
-      },
-      {
-        "name": "Light Chocolate",
-        "hex": "#7A5539",
-        "category": "liner",
-        "finish": "matte"
       }
     ],
     "highlight": [
       {
-        "name": "Pearl Peach",
-        "hex": "#FBE0CB",
+        "name": "Soft Champagne",
+        "hex": "#E4CDB0",
         "category": "highlight",
-        "finish": "shimmer"
+        "finish": "satin"
       },
       {
-        "name": "Light Gold",
-        "hex": "#F2DCA8",
+        "name": "Muted Pearl",
+        "hex": "#E0D3C0",
         "category": "highlight",
-        "finish": "metallic"
+        "finish": "shimmer"
       }
     ],
     "nails": [
       {
-        "name": "Passion",
-        "hex": "#D08F89",
+        "name": "Perennial Chic",
+        "hex": "#B77A7A",
         "category": "nails",
         "finish": "satin",
-        "asset": "passion"
+        "asset": "perennial-chic"
       },
       {
         "name": "Bare With Me",
@@ -393,20 +400,6 @@
         "asset": "bare-with-me"
       },
       {
-        "name": "Bachelorette Bash",
-        "hex": "#E36085",
-        "category": "nails",
-        "finish": "gloss",
-        "asset": "bachelorette-bash"
-      },
-      {
-        "name": "Sheer Bliss",
-        "hex": "#DFD4C5",
-        "category": "nails",
-        "finish": "satin",
-        "asset": "sheer-bliss"
-      },
-      {
         "name": "Mademoiselle",
         "hex": "#D3A493",
         "category": "nails",
@@ -414,34 +407,48 @@
         "asset": "mademoiselle"
       },
       {
-        "name": "Perennial Chic",
-        "hex": "#B77A7A",
+        "name": "Passion",
+        "hex": "#D08F89",
         "category": "nails",
         "finish": "satin",
-        "asset": "perennial-chic"
+        "asset": "passion"
+      },
+      {
+        "name": "Princesses Rule",
+        "hex": "#C37E8B",
+        "category": "nails",
+        "finish": "satin",
+        "asset": "princesses-rule"
+      },
+      {
+        "name": "Berry Naughty",
+        "hex": "#74303E",
+        "category": "nails",
+        "finish": "gloss",
+        "asset": "berry-naughty"
       }
     ],
-    "skip": "Skip black, burgundy and charcoal — depth of that order swamps a light, delicate face."
+    "skip": "Skip anything vivid or icy — bright coral, true red and stark white all overpower your softness."
   },
   "styleShades": {
     "gemstones": [
       {
-        "name": "Aquamarine",
-        "hex": "#8AB1C3",
-        "accent": "#BBD2DC",
-        "asset": "aquamarine"
+        "name": "Smoky Quartz",
+        "hex": "#6B5B4B",
+        "accent": "#A9A097",
+        "asset": "smoky-quartz"
+      },
+      {
+        "name": "Peridot",
+        "hex": "#7A863C",
+        "accent": "#B2B98E",
+        "asset": "peridot"
       },
       {
         "name": "Rose Quartz",
         "hex": "#C89B9D",
         "accent": "#DFC5C6",
         "asset": "rose-quartz"
-      },
-      {
-        "name": "Citrine",
-        "hex": "#CB9F1E",
-        "accent": "#E1C77C",
-        "asset": "citrine"
       },
       {
         "name": "Pearl",
@@ -452,119 +459,119 @@
     ],
     "hair": [
       {
-        "name": "Honey Blonde",
-        "hex": "#B4894E",
-        "accent": "#E0C08A"
+        "name": "Soft Mocha",
+        "hex": "#5E4632",
+        "accent": "#96785A"
       },
       {
-        "name": "Light Golden Brown",
-        "hex": "#8A6238",
-        "accent": "#BE9668"
+        "name": "Muted Chestnut",
+        "hex": "#6A4A34",
+        "accent": "#A0805E"
       },
       {
-        "name": "Strawberry Blonde",
-        "hex": "#C08050",
-        "accent": "#EDB48A"
+        "name": "Warm Ash Brown",
+        "hex": "#5A4A3E",
+        "accent": "#8E7A66"
       },
       {
-        "name": "Warm Butter Blonde",
-        "hex": "#D2AE72",
-        "accent": "#F2DCAC"
+        "name": "Dusty Caramel",
+        "hex": "#7A5C40",
+        "accent": "#B09070"
       }
     ],
     "hairAvoid": [
       {
-        "name": "Ash Blonde Highlights",
-        "hex": "#B0A492",
-        "accent": "#D8CEBE"
+        "name": "Jet Black",
+        "hex": "#0D0D10",
+        "accent": "#38383F"
       },
       {
-        "name": "Soft Black",
-        "hex": "#1A1A20",
-        "accent": "#42424C"
+        "name": "Platinum Blonde",
+        "hex": "#D8D4CC",
+        "accent": "#F2F0EC"
       }
     ],
-    "metalNote": "Light, bright gold. Heavy antique finishes sit too dark on you."
+    "metalNote": "Antique and brushed finishes. Anything highly polished is too bright here."
   },
   "looks": [
     {
-      "name": "Fresh Peach Blossom",
-      "vibe": "Effortless everyday warmth with a dewy, glowing finish",
+      "name": "Golden Hour Glow",
+      "vibe": "Effortless daytime radiance with gentle earthy warmth",
       "timeOfDay": "day",
       "shades": [
         {
-          "name": "Warm Champagne",
-          "hex": "#EFD4AE",
+          "name": "Soft Bronze",
+          "hex": "#9A7448",
           "category": "eye",
           "finish": "shimmer",
           "slot": "eye"
         },
         {
-          "name": "Warm Taupe Liner",
-          "hex": "#9A7A5E",
+          "name": "Soft Brown",
+          "hex": "#5A4433",
           "category": "liner",
           "finish": "matte",
           "slot": "liner"
         },
         {
-          "name": "Light Peach",
-          "hex": "#F5B191",
+          "name": "Dusty Apricot",
+          "hex": "#D19A7E",
           "category": "blush",
-          "finish": "satin",
+          "finish": "matte",
           "slot": "cheek"
         },
         {
-          "name": "Peach Nude",
-          "hex": "#E8A183",
+          "name": "Rosewood",
+          "hex": "#9C5F58",
           "category": "lip",
-          "finish": "cream",
+          "finish": "satin",
           "slot": "lip"
         },
         {
-          "name": "Pearl Peach",
-          "hex": "#FBE0CB",
+          "name": "Soft Champagne",
+          "hex": "#E4CDB0",
           "category": "highlight",
-          "finish": "shimmer",
+          "finish": "satin",
           "slot": "highlight"
         }
       ]
     },
     {
-      "name": "Golden Sunset Bloom",
-      "vibe": "Elevated radiance with soft coral definition for evening",
+      "name": "Earthy Elegance",
+      "vibe": "Polished and refined definition for evening occasions",
       "timeOfDay": "evening",
       "shades": [
         {
-          "name": "Light Peach Shimmer",
-          "hex": "#F3C2A1",
+          "name": "Sage Olive",
+          "hex": "#77804F",
           "category": "eye",
-          "finish": "shimmer",
+          "finish": "matte",
           "slot": "eye"
         },
         {
-          "name": "Soft Bronze",
-          "hex": "#B48453",
+          "name": "Olive Grey",
+          "hex": "#565A46",
           "category": "liner",
-          "finish": "shimmer",
+          "finish": "matte",
           "slot": "liner"
         },
         {
-          "name": "Soft Coral",
-          "hex": "#F79A87",
+          "name": "Soft Terracotta",
+          "hex": "#C08466",
           "category": "blush",
           "finish": "matte",
           "slot": "cheek"
         },
         {
-          "name": "Coral Pink",
-          "hex": "#F58C7A",
+          "name": "Muted Brick",
+          "hex": "#A0604A",
           "category": "lip",
-          "finish": "satin",
+          "finish": "matte",
           "slot": "lip"
         },
         {
-          "name": "Light Warm Tan",
-          "hex": "#C79765",
+          "name": "Muted Amber",
+          "hex": "#A8804F",
           "category": "bronzer",
           "finish": "satin",
           "slot": "bronzer"
@@ -572,49 +579,49 @@
       ]
     }
   ],
-  "secondarySeason": "Light Summer",
+  "secondarySeason": "True Autumn",
   "axes": {
-    "hue": "warm",
-    "value": "light",
-    "chroma": "medium"
+    "hue": "neutral-warm",
+    "value": "medium",
+    "chroma": "soft"
   },
   "assessment": {
     "undertone": "warm",
-    "depth": "light",
-    "chroma": "medium",
+    "depth": "medium",
+    "chroma": "muted",
     "contrast": "medium",
-    "evidence": "Your skin displays a clear golden warmth with high lightness, balanced by medium saturation across your complexion and rich depth in your irises."
+    "evidence": "Your skin displays a distinct golden-olive warmth with gentle, diffused pigmentation. With your dark brown eyes and warm olive skin, your natural contrast sits at a balanced medium level once dyed hair is discounted, whilst your overall chroma is softly muted and earthy."
   },
-  "rationale": "Your calibrated skin readings place you firmly in the light value category with an unambiguous warm hue. While your deep brown eyes provide striking definition, your skin's dominant lightness and golden radiance harmonise best with the delicate, sunny palette of Light Spring rather than the heavy, muted tones of Soft Autumn. Light Summer is your closest secondary season, sharing your light value while drifting cooler.",
+  "rationale": "Your golden-olive undertone and softly diffused colouring place you comfortably within the Autumn family. Because your chroma is gentle and muted rather than vibrant, the softened, earthy tones of Soft Autumn harmonise best with your features. True Autumn serves as your close secondary season, offering slightly richer warmth when you desire more depth.",
   "measured": {
     "skin": {
-      "L": 78.52524774207151,
-      "C": 27.54483593090757,
-      "h": 58.327659811797794
+      "L": 68.33681902418097,
+      "C": 30.280290306350125,
+      "h": 59.611080072094445
     },
     "hair": null,
     "eyes": {
-      "L": 10.07043737567853,
-      "C": 7.824976119283456,
-      "h": 47.56602593991439
+      "L": 10.650650305894885,
+      "C": 9.116191473337905,
+      "h": 50.74596274274443
     },
     "hairStatus": "dyed",
     "axes": {
       "hue": {
-        "value": 0.5827659811797794,
+        "value": 0.7111080072094446,
         "label": "warm"
       },
       "value": {
-        "value": 1,
+        "value": 0.7334727609672388,
         "label": "light"
       },
       "chroma": {
-        "value": 0.0637795194076044,
+        "value": 0.12153089004950124,
         "label": "medium"
       }
     },
     "contrast": {
-      "value": 68.45481036639299,
+      "value": 57.68616871828608,
       "label": "high"
     },
     "skinBand": "light"
@@ -623,26 +630,26 @@
   "rules": {
     "primary": "Light Spring",
     "secondary": "True Spring",
-    "margin": 13.5,
+    "margin": 6.3,
     "ambiguous": false
   },
   "agreement": {
-    "level": "primary",
-    "agrees": true
+    "level": "none",
+    "agrees": false
   },
-  "needsSecondPhoto": false,
+  "needsSecondPhoto": true,
   "alternatives": [
     {
       "season": "Light Spring",
-      "score": 91.2
+      "score": 90.2
     },
     {
       "season": "True Spring",
-      "score": 77.7
+      "score": 83.9
     },
     {
       "season": "Bright Spring",
-      "score": 68.9
+      "score": 72.1
     }
   ],
   "qualityIssues": [

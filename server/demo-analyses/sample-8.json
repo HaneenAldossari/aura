@@ -1,7 +1,7 @@
 {
   "season": "Light Summer",
-  "seasonTagline": "Airy, luminous, and gracefully pastel",
-  "confidence": 94,
+  "seasonTagline": "Delicate, luminous, and gracefully cool",
+  "confidence": 92,
   "undertone": "cool",
   "depth": "Light",
   "chroma": "Medium",
@@ -9,18 +9,18 @@
   "contrastLevel": "low",
   "chromaLevel": "muted",
   "colorDNA": {
-    "warmth": 32,
-    "depth": 14,
-    "clarity": 42,
+    "warmth": 28,
+    "depth": 15,
+    "clarity": 45,
     "contrast": 22
   },
-  "reasoning": "Fair porcelain with a subtle cool pink-beige undertone and gentle translucency. Naturally ash-toned light blonde or fair brown at the roots, providing gentle framing. Soft slate grey-blue with low saturation and a gentle, diffused iris pattern.",
-  "seasonStory": "Light Summer sits at the transition between spring's gentle morning light and summer's delicate coolness. Your colouring thrives in watercolour shades—soft powder blues, cool lavender, seafoam, and pale petal pinks that mirror the ethereal clarity and softness of your natural features.",
+  "reasoning": "Fair porcelain with a subtle cool, rosy neutral undertone and translucent clarity. Light golden-ash blonde, pulled back, revealing a gentle transition into your delicate facial coloring. Soft grey-blue with a cool, muted slate iris and clean white sclera.",
+  "seasonStory": "Light Summer sits on the cusp where cool freshness meets gentle sunshine. Your palette resembles a serene morning mist, filled with frosted pastels, sea glass tones, powdery lilacs, and soft rose petals. Heavy, dark, or excessively brassy shades will easily overwhelm your subtle presence, whereas translucent, airy hues allow your natural luminosity to shine effortlessly.",
   "lightingQuality": "Natural daylight",
   "keyFeatures": {
-    "skinTone": "Fair porcelain with a subtle cool pink-beige undertone and gentle translucency.",
-    "eyeColor": "Soft slate grey-blue with low saturation and a gentle, diffused iris pattern.",
-    "hairColor": "Naturally ash-toned light blonde or fair brown at the roots, providing gentle framing.",
+    "skinTone": "Fair porcelain with a subtle cool, rosy neutral undertone and translucent clarity.",
+    "eyeColor": "Soft grey-blue with a cool, muted slate iris and clean white sclera.",
+    "hairColor": "Light golden-ash blonde, pulled back, revealing a gentle transition into your delicate facial coloring.",
     "veinColor": "",
     "contrast": "low contrast"
   },
@@ -161,12 +161,12 @@
     "foundation": {
       "recommended": [],
       "avoid": [],
-      "tip": "Sheer cool-neutral tinted moisturiser or light-coverage luminous foundation to preserve skin translucency."
+      "tip": "Sheer, dewy foundation or BB cream with cool-neutral undertones to preserve your natural translucence."
     },
-    "blush": "Soft Petal Pink swept lightly over the apples of your cheeks.",
-    "bronzer": "Cool Light Taupe used very sparingly for gentle contouring rather than tanning.",
-    "lips": "Soft Rose Pink or sheer Cool Pink Gloss.",
-    "eyes": "Rose Taupe wash across the lid paired with Soft Grey along the lash line.",
+    "blush": "Soft cool petal pink dusted lightly across the apples of the cheeks.",
+    "bronzer": "Subtle cool-toned light taupe used sparingly for dimension rather than warmth.",
+    "lips": "Translucent rosebud gloss or sheer cool pink balm.",
+    "eyes": "Wash of pearlescent lilac or misty grey taupe with soft slate pencil.",
     "nails": {
       "bestColors": [],
       "avoidColors": []
@@ -182,25 +182,25 @@
     "metals": "Silver, White Gold, Rose Gold, Platinum",
     "stones": "",
     "avoid": "Yellow Gold, Bronze, Copper",
-    "style": "Fine, delicate brushed silver, white gold, and light platinum. Delicate pearls and soft iridescent gemstones complement your soft aesthetic beautifully."
+    "style": "Polished platinum, brushed silver, and delicate white gold harmonise flawlessly with your cool clarity."
   },
   "hairColor": {
-    "bestHighlights": "Baby-fine cool champagne and platinum babylights.",
-    "bestOverall": "Light pearl blonde, cool ash blonde, or soft cool light mushroom brown.",
-    "avoid": "Heavy brassy golden blondes, copper, or harsh jet black shades that overwhelm your delicate colouring."
+    "bestHighlights": "Fine, gossamer highlights in platinum and pale champagne-ash.",
+    "bestOverall": "Soft ash blonde, baby blonde, or light cool pearl blonde.",
+    "avoid": "Heavy golden copper, brassy caramel, or dark espresso tones that overpower your lightness."
   },
   "celebrities": [
     {
-      "name": "Reese Witherspoon",
-      "why": "Shares your luminous, light, and delicate cool-toned harmony that shines in soft pastels."
-    },
-    {
       "name": "Naomi Watts",
-      "why": "Exhibits the same ethereal fair complexion and soft blue-grey eyes requiring light, cool tones."
+      "why": "Exemplifies the luminous, ethereal lightness and neutral-cool delicacy characteristic of Light Summer."
     },
     {
-      "name": "Dakota Fanning",
-      "why": "Features a similarly delicate low-contrast colouring with subtle cool-pink skin."
+      "name": "Reese Witherspoon",
+      "why": "Features very light, delicate coloring with cool blue eyes that flourish in clear pastel tones."
+    },
+    {
+      "name": "Amanda Seyfried",
+      "why": "Shares your pale complexion and soft blue gaze that look magnificent in light, misty hues."
     }
   ],
   "koreanAnalysis": {
@@ -210,7 +210,7 @@
   },
   "crossValidation": {
     "agrees": true,
-    "confidence": 94
+    "confidence": 92
   },
   "makeupShades": {
     "foundation": [
@@ -495,15 +495,15 @@
   },
   "looks": [
     {
-      "name": "Ethereal Day",
-      "vibe": "Fresh and effortlessly luminous natural radiance",
+      "name": "Dewy Dawn",
+      "vibe": "Fresh, understated daytime radiance with subtle powdery tones",
       "timeOfDay": "day",
       "shades": [
         {
-          "name": "Rose Taupe",
-          "hex": "#B49AA0",
+          "name": "Soft Pearl Grey",
+          "hex": "#C8C6CC",
           "category": "eye",
-          "finish": "matte",
+          "finish": "shimmer",
           "slot": "eye"
         },
         {
@@ -537,8 +537,8 @@
       ]
     },
     {
-      "name": "Twilight Bloom",
-      "vibe": "Softly defined romantic evening elegance",
+      "name": "Lilac Twilight",
+      "vibe": "A dreamy, softly sculpted evening look washed in cool florals",
       "timeOfDay": "evening",
       "shades": [
         {
@@ -549,17 +549,17 @@
           "slot": "eye"
         },
         {
-          "name": "Muted Plum Liner",
-          "hex": "#6E566A",
+          "name": "Cool Slate",
+          "hex": "#5E6878",
           "category": "liner",
           "finish": "matte",
           "slot": "liner"
         },
         {
-          "name": "Soft Rose",
-          "hex": "#EBA3B4",
+          "name": "Dusty Pink",
+          "hex": "#DB94A3",
           "category": "blush",
-          "finish": "satin",
+          "finish": "matte",
           "slot": "cheek"
         },
         {
@@ -570,11 +570,11 @@
           "slot": "lip"
         },
         {
-          "name": "Soft Rose Pearl",
-          "hex": "#F6DDE2",
-          "category": "highlight",
-          "finish": "shimmer",
-          "slot": "highlight"
+          "name": "Cool Light Taupe",
+          "hex": "#B08E7C",
+          "category": "bronzer",
+          "finish": "matte",
+          "slot": "bronzer"
         }
       ]
     }
@@ -590,38 +590,38 @@
     "depth": "light",
     "chroma": "muted",
     "contrast": "low",
-    "evidence": "Your skin displays a delicate, neutral-cool rosy undertone paired with soft grey-blue eyes. The overall balance across your complexion, eyebrows, and natural features is luminous, light, and softly blended rather than stark."
+    "evidence": "Your skin exhibits a delicate neutral-cool pinkish undertone paired with light, soft grey-blue eyes. Your natural value is notably light, and the overall contrast between your features is gentle and diffused."
   },
-  "rationale": "Your primary characteristic is lightness, complemented by a soft, neutral-cool undertone. While you can borrow subtle pastel warmth from Light Spring, your delicate cool-rose skin and grey-blue eyes harmonise best with the gentle, airy pastel palette of Light Summer. Saturated or dark shades overpower your natural ethereal presence.",
+  "rationale": "Your dominant feature is an exquisite lightness supported by a predominantly cool undertone. While your delicate balance touches upon Light Spring, you lack the requisite golden warmth and peach vibrancy, thriving instead in ethereal, chalky pastels and cool misty watercolours. True Summer carries far too much grey depth for your delicate, high-value complexion, cementing Light Summer as your ideal palette.",
   "measured": {
     "skin": {
-      "L": 77.081886505023,
-      "C": 19.60595494802067,
-      "h": 52.250382957670695
+      "L": 72.808742431681,
+      "C": 20.8090269047941,
+      "h": 52.27701031346984
     },
     "hair": null,
     "eyes": {
-      "L": 29.142627268299186,
-      "C": 1.5627135322701982,
-      "h": 105.42535614326394
+      "L": 32.36038639033868,
+      "C": 1.5461237876959202,
+      "h": 106.1087849286709
     },
     "hairStatus": "dyed",
     "axes": {
       "hue": {
-        "value": -0.024961704232930516,
+        "value": -0.02229896865301626,
         "label": "neutral-cool"
       },
       "value": {
-        "value": 1,
+        "value": 0.9123496972672399,
         "label": "light"
       },
       "chroma": {
-        "value": -0.38101573610556416,
-        "label": "soft"
+        "value": -0.3168518984109814,
+        "label": "medium"
       }
     },
     "contrast": {
-      "value": 47.93925923672381,
+      "value": 40.448356041342315,
       "label": "high"
     },
     "skinBand": "light"
@@ -630,7 +630,7 @@
   "rules": {
     "primary": "Light Summer",
     "secondary": "Light Spring",
-    "margin": 7.4,
+    "margin": 6.9,
     "ambiguous": false
   },
   "agreement": {
@@ -641,15 +641,15 @@
   "alternatives": [
     {
       "season": "Light Summer",
-      "score": 86.5
+      "score": 87.5
     },
     {
       "season": "Light Spring",
-      "score": 79.1
+      "score": 80.6
     },
     {
       "season": "Soft Summer",
-      "score": 66.7
+      "score": 66.4
     }
   ],
   "qualityIssues": [

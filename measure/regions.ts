@@ -238,23 +238,51 @@ export function extractSkin(
     centroid(landmarks, LANDMARKS.forehead),
   ];
 
+  const keep = (x: number, y: number) => {
+    if (isExcluded(image, x, y, zones)) return false;
+    if (segmentation) {
+      const cls = segmentation[y * image.width + x];
+      // face-skin only: body-skin would admit neck and chest, which sit in
+      // different light and are often a different tone.
+      if (cls !== SEGMENT_CLASS.faceSkin) return false;
+    }
+    return true;
+  };
+
   let considered = 0;
   const samples: Sample[] = [];
-  for (const patch of patches) {
-    const coords = discPixels(image, patch, scale * 0.22);
-    considered += coords.length;
-    samples.push(
-      ...collect(image, coords, gamut, (x, y) => {
-        if (isExcluded(image, x, y, zones)) return false;
-        if (segmentation) {
-          const cls = segmentation[y * image.width + x];
-          // face-skin only: body-skin would admit neck and chest, which sit in
-          // different light and are often a different tone.
-          if (cls !== SEGMENT_CLASS.faceSkin) return false;
-        }
-        return true;
-      })
-    );
+
+  if (segmentation) {
+    // Whole face-skin mask, not three discs.
+    //
+    // A face is not lit evenly, and the cheekbones and mid-forehead — exactly
+    // where the discs sat — are where studio lighting puts its highlights. On
+    // the demo faces that cost up to 35 L* between the lit forehead and the
+    // shadowed cheek of the same person, so three discs were a biased spatial
+    // sample of a non-uniform surface. The mask covers the lit and shadowed
+    // sides both, which is what lets the diffuse band in features.ts pick out
+    // skin rather than the lamp.
+    const coords: { x: number; y: number }[] = [];
+    for (let y = 0; y < image.height; y++) {
+      const row = y * image.width;
+      for (let x = 0; x < image.width; x++) {
+        if (segmentation[row + x] !== SEGMENT_CLASS.faceSkin) continue;
+        considered++;
+        if (keep(x, y)) coords.push({ x, y });
+      }
+    }
+    // Assigned, not spread: the mask yields tens of thousands of pixels and
+    // `push(...array)` passes every one as an argument, which overflows the
+    // call stack somewhere north of about 65k.
+    const collected = collect(image, coords, gamut, () => true);
+    for (const sample of collected) samples.push(sample);
+  } else {
+    // No mask: fall back to the three patches, which at least stay on a face.
+    for (const patch of patches) {
+      const coords = discPixels(image, patch, scale * 0.22);
+      considered += coords.length;
+      samples.push(...collect(image, coords, gamut, keep));
+    }
   }
 
   return finish("skin", samples, considered, trim, SCORING.minRegionPixels.skin);

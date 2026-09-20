@@ -1,26 +1,26 @@
 {
   "season": "Light Spring",
-  "seasonTagline": "Luminous, delicate, and sunlit warmth",
+  "seasonTagline": "Fresh, luminous peach tones bathed in soft morning sunlight",
   "confidence": 92,
   "undertone": "warm",
   "depth": "Light",
   "chroma": "Medium",
-  "koreanTone": "라이트톤",
+  "koreanTone": "라이트톤 (Light Tone)",
   "contrastLevel": "medium",
-  "chromaLevel": "muted",
+  "chromaLevel": "medium",
   "colorDNA": {
-    "warmth": 56,
-    "depth": 18,
-    "clarity": 48,
-    "contrast": 52
+    "warmth": 62,
+    "depth": 24,
+    "clarity": 68,
+    "contrast": 54
   },
-  "reasoning": "Your skin is fair porcelain with a subtle peach-ivory warmth and delicate translucency. Your hair is dyed dark, creating artificial surface contrast that overpowers your naturally delicate colouring. Your eyes are a soft, warm deep brown with a gentle iris pattern and warm golden flecks.",
-  "seasonStory": "As a Light Spring, your colouring is defined by lightness above all else, warmed by a gentle peach and golden undertone. Your palette captures the earliest days of spring: freshly bloomed blossom, pale daffodils, warm morning sunlight, and delicate watercolour tints. Heavy, dark, or overly saturated tones overpower your fine features, whereas light, glowing shades allow your natural radiance to harmonise effortlessly.",
+  "reasoning": "Your complexion is luminous and fair with soft peachy-yellow warmth, giving you a fresh, radiant glow. While your current dark hair provides striking definition, your natural colouring thrives best when paired with gentle warmth. Your eyes are a rich, clear deep brown that offer a lively sparkle against your lighter skin.",
+  "seasonStory": "Light Spring sits right at the threshold where winter melts into gentle springtime warmth. Your coloring is defined by airiness, radiance, and a whisper of golden light. Heavy, dark, or muddy shades overwhelm your features, while clear, sun-warmed pastels and delicate coral tones make your skin glow effortlessly.",
   "lightingQuality": "Natural daylight",
   "keyFeatures": {
-    "skinTone": "Your skin is fair porcelain with a subtle peach-ivory warmth and delicate translucency.",
-    "eyeColor": "Your eyes are a soft, warm deep brown with a gentle iris pattern and warm golden flecks.",
-    "hairColor": "Your hair is dyed dark, creating artificial surface contrast that overpowers your naturally delicate colouring.",
+    "skinTone": "Your complexion is luminous and fair with soft peachy-yellow warmth, giving you a fresh, radiant glow.",
+    "eyeColor": "Your eyes are a rich, clear deep brown that offer a lively sparkle against your lighter skin.",
+    "hairColor": "While your current dark hair provides striking definition, your natural colouring thrives best when paired with gentle warmth.",
     "veinColor": "",
     "contrast": "medium contrast"
   },
@@ -154,12 +154,12 @@
     "foundation": {
       "recommended": [],
       "avoid": [],
-      "tip": "Choose a light-coverage, dewy formula with a neutral-warm ivory or peach undertone to preserve your natural luminosity."
+      "tip": "A luminous, sheer-to-medium foundation with neutral-warm peach undertones to maintain your natural radiance."
     },
-    "blush": "Soft peach or warm petal pink swept lightly over the apples of your cheeks.",
-    "bronzer": "A sheer whisper of soft golden tan or light warm champagne warmth.",
-    "lips": "Fresh peach nude, coral pink gloss, or sheer warm watermelon.",
-    "eyes": "Warm champagne wash with soft bronze definition along the lash line.",
+    "blush": "Fresh apricot or soft warm coral swept high across the apples of your cheeks.",
+    "bronzer": "A light, finely milled warm tan dusted sparingly along the high points of your face.",
+    "lips": "Juicy peach nude or translucent coral pink gloss for a natural, plump finish.",
+    "eyes": "Warm champagne shimmer washed over lids with a soft chocolate definition along the lash line.",
     "nails": {
       "bestColors": [],
       "avoidColors": []
@@ -175,30 +175,30 @@
     "metals": "Yellow Gold, Rose Gold, Champagne Gold",
     "stones": "",
     "avoid": "Silver, Platinum",
-    "style": "Fine, delicate jewellery in polished light yellow gold, champagne gold, or warm rose gold with luminous pearl accents."
+    "style": "Delicate, polished light yellow gold, rose gold, and luminous warm pearls complement your gentle warmth beautifully."
   },
   "hairColor": {
-    "bestHighlights": "Subtle warm caramel or delicate honey ribbons woven throughout",
-    "bestOverall": "Light golden brown, warm milk chocolate, or soft honey chestnut",
-    "avoid": "Harsh blue-black, flat jet black, or heavy ash tones that overpower your delicate features"
+    "bestHighlights": "Subtle warm caramel, butterscotch, or soft peach-gold balayage.",
+    "bestOverall": "Medium golden brown, warm light chestnut, or soft honey-toned mocha.",
+    "avoid": "Blue-black, stark platinum blonde, or heavy ash-toned dyes that can dull your complexion."
   },
   "celebrities": [
     {
       "name": "Song Hye-kyo",
-      "why": "Shares your luminous porcelain skin, soft warm brown eyes, and delicate Spring radiance."
+      "why": "Shares your luminous, fair neutral-warm skin tone and thrives in soft, radiant peachy pastels."
     },
     {
-      "name": "Yoona",
-      "why": "Displays your clear, light ivory-peach complexion and graceful, low-to-medium contrast warmth."
+      "name": "IU (Lee Ji-eun)",
+      "why": "Exhibits a similar delicate balance of fair, warm-leaning skin and clear, dark brown eyes."
     },
     {
       "name": "Scarlett Johansson",
-      "why": "Naturally possesses the same ethereal lightness, delicate neutral-warm undertone, and soft golden glow."
+      "why": "Exemplifies the delicate warmth, medium contrast, and soft luminosity of the Light Spring palette."
     }
   ],
   "koreanAnalysis": {
-    "tone": "라이트톤",
-    "description": "Your coloring falls into the 라이트톤 category in the Korean system.",
+    "tone": "라이트톤 (Light Tone)",
+    "description": "Your coloring falls into the 라이트톤 (Light Tone) category in the Korean system.",
     "kbeautyTips": ""
   },
   "crossValidation": {
@@ -488,8 +488,8 @@
   },
   "looks": [
     {
-      "name": "Fresh Peach Glow",
-      "vibe": "An effortless, sun-dappled daytime glow for everyday radiance.",
+      "name": "Fresh Morning Bloom",
+      "vibe": "Effortless, luminous freshness for everyday daytime radiance",
       "timeOfDay": "day",
       "shades": [
         {
@@ -530,8 +530,8 @@
       ]
     },
     {
-      "name": "Golden Hour Bloom",
-      "vibe": "Luminous warmth with gentle definition for dinner and evenings out.",
+      "name": "Golden Sunset Petal",
+      "vibe": "Subtly defined warmth with glowing coral-pink accents",
       "timeOfDay": "evening",
       "shades": [
         {
@@ -563,53 +563,11 @@
           "slot": "lip"
         },
         {
-          "name": "Soft Golden",
-          "hex": "#D2A877",
+          "name": "Light Warm Tan",
+          "hex": "#C79765",
           "category": "bronzer",
-          "finish": "shimmer",
+          "finish": "satin",
           "slot": "bronzer"
-        }
-      ]
-    },
-    {
-      "name": "Soft Watercolour Petal",
-      "vibe": "A delicate, airy wash of floral colour for bright mornings.",
-      "timeOfDay": "day",
-      "shades": [
-        {
-          "name": "Butter Gold",
-          "hex": "#EBCE8A",
-          "category": "eye",
-          "finish": "metallic",
-          "slot": "eye"
-        },
-        {
-          "name": "Soft Bronze",
-          "hex": "#B48453",
-          "category": "liner",
-          "finish": "shimmer",
-          "slot": "liner"
-        },
-        {
-          "name": "Warm Petal Pink",
-          "hex": "#F7A8B4",
-          "category": "blush",
-          "finish": "shimmer",
-          "slot": "cheek"
-        },
-        {
-          "name": "Warm Rose",
-          "hex": "#F0899E",
-          "category": "lip",
-          "finish": "cream",
-          "slot": "lip"
-        },
-        {
-          "name": "Light Gold",
-          "hex": "#F2DCA8",
-          "category": "highlight",
-          "finish": "metallic",
-          "slot": "highlight"
         }
       ]
     }
@@ -618,73 +576,73 @@
   "axes": {
     "hue": "neutral-warm",
     "value": "light",
-    "chroma": "soft"
+    "chroma": "medium"
   },
   "assessment": {
     "undertone": "warm",
     "depth": "light",
-    "chroma": "muted",
+    "chroma": "medium",
     "contrast": "medium",
-    "evidence": "Your skin sits at an exceptionally light value with a gentle, neutral-warm golden undertone and soft saturation. Your deep brown eyes provide medium contrast against your fair, luminous complexion, but your overall appearance remains delicate rather than stark or earthy."
+    "evidence": "Your skin possesses a delicate ivory base with distinct neutral-warm, golden-peach undertones. Your deep brown eyes create a lovely clarity against your luminous complexion, placing you squarely in a light, gently warm palette."
   },
-  "rationale": "Your dominant characteristic is light value, supported by a gentle neutral-warm undertone that thrives in luminous, tint-based colours rather than heavy or earthy shades. Although your soft chroma might tempt a classification of Soft Autumn, your very high skin lightness and delicate glow mean that muted autumn earth tones would weigh you down. You flow naturally into Light Summer as your secondary season, allowing you to wear select soft cool pastels as long as they remain light and airy.",
+  "rationale": "Your primary characteristic is lightness combined with a gentle golden warmth, perfectly matching Light Spring. While your neutral-warm balance allows you to borrow soft pastel elements from Light Summer, cool or icy tones quickly drain your healthy peach flush. Darker Autumn palettes also prove too heavy and earthy for your inherently delicate, luminous colouring.",
   "measured": {
     "skin": {
-      "L": 81.48589060154954,
-      "C": 16.960726209768566,
-      "h": 53.0154653671878
+      "L": 74.28664899842333,
+      "C": 20.44127317418922,
+      "h": 55.99024478539096
     },
     "hair": null,
     "eyes": {
-      "L": 11.025380217553138,
-      "C": 8.305886533787064,
-      "h": 33.45964431558247
+      "L": 11.777086336405764,
+      "C": 9.299134245669686,
+      "h": 38.38497012799977
     },
     "hairStatus": "dyed",
     "axes": {
       "hue": {
-        "value": 0.05154653671878009,
+        "value": 0.34902447853909635,
         "label": "neutral-warm"
       },
       "value": {
-        "value": 1,
+        "value": 0.9714659599369333,
         "label": "light"
       },
       "chroma": {
-        "value": -0.48823828460304886,
-        "label": "soft"
+        "value": -0.27685824656291635,
+        "label": "medium"
       }
     },
     "contrast": {
-      "value": 70.46051038399641,
+      "value": 62.509562662017565,
       "label": "high"
     },
     "skinBand": "light"
   },
   "hairAvailable": false,
   "rules": {
-    "primary": "Light Summer",
-    "secondary": "Light Spring",
-    "margin": 5.4,
-    "ambiguous": true
+    "primary": "Light Spring",
+    "secondary": "Light Summer",
+    "margin": 9.7,
+    "ambiguous": false
   },
   "agreement": {
-    "level": "secondary",
+    "level": "primary",
     "agrees": true
   },
   "needsSecondPhoto": false,
   "alternatives": [
     {
-      "season": "Light Summer",
-      "score": 84.1
-    },
-    {
       "season": "Light Spring",
-      "score": 78.7
+      "score": 86.2
     },
     {
-      "season": "Soft Autumn",
-      "score": 69.1
+      "season": "Light Summer",
+      "score": 76.5
+    },
+    {
+      "season": "True Spring",
+      "score": 66.7
     }
   ],
   "qualityIssues": [

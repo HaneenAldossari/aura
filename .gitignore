@@ -38,3 +38,7 @@ dev/
 
 # Sprint scratch tools — screenshots and one-off probes, not part of the repo.
 scripts/dev/_*.ts
+
+# Candidate demo faces awaiting vetting — images only, README is committed.
+eval/candidates/*
+!eval/candidates/README.md

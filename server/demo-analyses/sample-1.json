@@ -1,148 +1,154 @@
 {
-  "season": "True Summer",
-  "seasonTagline": "Calm, refined, and effortlessly elegant in pure cool tones.",
-  "confidence": 50,
+  "season": "Deep Winter",
+  "seasonTagline": "Velvety depth meets cool, dramatic clarity",
+  "confidence": 95,
   "undertone": "cool",
-  "depth": "Medium",
+  "depth": "Deep / high contrast",
   "chroma": "Medium",
-  "koreanTone": "쿨톤",
-  "contrastLevel": "medium",
+  "koreanTone": "딥톤 (Deep Tone)",
+  "contrastLevel": "high",
   "chromaLevel": "medium",
   "colorDNA": {
     "warmth": 18,
-    "depth": 56,
-    "clarity": 48,
-    "contrast": 54
+    "depth": 92,
+    "clarity": 74,
+    "contrast": 82
   },
-  "reasoning": "Your skin has a smooth, rich medium complexion with clear cool-neutral undertones, completely free of yellow, golden, or peachy warmth. Your hair is closely cropped and dyed, displaying a deep neutral-cool dark base. Your eyes are a deep, velvety dark brown with cool sclera contrast and soft depth.",
-  "seasonStory": "As a True Summer, your natural palette is serene, balanced, and distinctly cool. You come alive in colours steeped in blue and slate undertones—such as soft navy, heather plum, cool raspberry, and misty rose. Heavy warmth or golden earth tones clash with your natural clarity, whereas cool, diffused shades illuminate your complexion and bring a luminous, radiant glow to your skin.",
+  "reasoning": "Rich, deep cocoa complexion with cool-neutral blue-red undertones and radiant clarity. Naturally dense, deep black texture with neutral-cool undertones framing your face. Deep obsidian irises with sharp contrast against crisp, bright whites.",
+  "seasonStory": "Deep Winter is a season of profound richness, intensity, and regal drama. Your colouring thrives on depth combined with coolness, meaning you look most striking in deep jewel tones like sapphire, blackened plum, and crisp true black. Rather than being overpowered by intense pigments, your features effortlessly command them, creating an elegant and luminous presence.",
   "lightingQuality": "Natural daylight",
   "keyFeatures": {
-    "skinTone": "Your skin has a smooth, rich medium complexion with clear cool-neutral undertones, completely free of yellow, golden, or peachy warmth.",
-    "eyeColor": "Your eyes are a deep, velvety dark brown with cool sclera contrast and soft depth.",
-    "hairColor": "Your hair is closely cropped and dyed, displaying a deep neutral-cool dark base.",
+    "skinTone": "Rich, deep cocoa complexion with cool-neutral blue-red undertones and radiant clarity.",
+    "eyeColor": "Deep obsidian irises with sharp contrast against crisp, bright whites.",
+    "hairColor": "Naturally dense, deep black texture with neutral-cool undertones framing your face.",
     "veinColor": "",
-    "contrast": "medium contrast"
+    "contrast": "high contrast"
   },
   "palette": {
     "best": [
       {
-        "name": "Soft White",
-        "hex": "#F2F1EE",
-        "note": "Cool clean white."
-      },
-      {
-        "name": "Cool Pink",
-        "hex": "#D98CA6",
-        "note": "True Summer signature pink."
-      },
-      {
-        "name": "Rose",
-        "hex": "#C96F8C",
-        "note": "Cool dusty rose."
-      },
-      {
-        "name": "Raspberry Rose",
-        "hex": "#B84A6B",
-        "note": "Saturated cool pink."
-      },
-      {
-        "name": "Mauve",
-        "hex": "#A87898",
-        "note": "Cool muted purple-pink."
-      },
-      {
-        "name": "Lavender Gray",
-        "hex": "#A8A0C4",
-        "note": "Cool soft purple."
-      },
-      {
-        "name": "Periwinkle",
-        "hex": "#7F95C8",
-        "note": "Cool clear blue-purple."
-      },
-      {
-        "name": "Slate Blue",
-        "hex": "#5F7FA3",
-        "note": "Sophisticated cool blue."
-      },
-      {
-        "name": "Soft Teal",
-        "hex": "#5B9EA0",
-        "note": "Cool muted blue-green."
-      },
-      {
-        "name": "Cool Sage",
-        "hex": "#8FA89B",
-        "note": "Cool muted green."
-      },
-      {
-        "name": "Blue Gray",
-        "hex": "#7D8796",
-        "note": "Versatile cool neutral."
-      },
-      {
-        "name": "Soft Navy",
-        "hex": "#2F405C",
-        "note": "Cool deep anchor."
-      }
-    ],
-    "avoid": [
-      {
-        "name": "Pumpkin",
-        "hex": "#D85B1F",
-        "reason": "Warm orange fights your cool tone."
-      },
-      {
-        "name": "Mustard",
-        "hex": "#C39B26",
-        "reason": "Warm earthy yellow clashes."
-      },
-      {
-        "name": "Camel",
-        "hex": "#C19A6B",
-        "reason": "Warm neutral muddies you."
+        "name": "Pure White",
+        "hex": "#FFFFFF",
+        "note": "Crisp white — Deep Winter signature contrast."
       },
       {
         "name": "Black",
         "hex": "#000000",
-        "reason": "Too harsh — choose navy."
+        "note": "Wear it boldly."
       },
       {
-        "name": "Bright Coral",
-        "hex": "#FF7F50",
-        "reason": "Too warm and saturated."
+        "name": "Charcoal",
+        "hex": "#1E1E24",
+        "note": "Sophisticated cool grey-black."
+      },
+      {
+        "name": "Deep Navy",
+        "hex": "#071A3D",
+        "note": "Cool deep blue."
+      },
+      {
+        "name": "Midnight Blue",
+        "hex": "#0A2342",
+        "note": "Profound cool blue."
+      },
+      {
+        "name": "Emerald",
+        "hex": "#006B54",
+        "note": "Cool jewel green."
+      },
+      {
+        "name": "Pine Teal",
+        "hex": "#004D4D",
+        "note": "Deep cool teal."
+      },
+      {
+        "name": "Deep Plum",
+        "hex": "#3B1A45",
+        "note": "Rich cool purple."
+      },
+      {
+        "name": "Aubergine",
+        "hex": "#2A1533",
+        "note": "Cool deep purple-black."
+      },
+      {
+        "name": "Burgundy",
+        "hex": "#6A0F2B",
+        "note": "Cool wine — adds richness."
+      },
+      {
+        "name": "Cranberry",
+        "hex": "#8C1D40",
+        "note": "Saturated cool red."
+      },
+      {
+        "name": "Icy Pink",
+        "hex": "#F2D7E6",
+        "note": "Cool pale pink for soft contrast."
+      }
+    ],
+    "avoid": [
+      {
+        "name": "Beige",
+        "hex": "#F5F5DC",
+        "reason": "Warm muted tone washes you out."
+      },
+      {
+        "name": "Pumpkin",
+        "hex": "#D85B1F",
+        "reason": "Warm orange clashes with cool depth."
+      },
+      {
+        "name": "Mustard",
+        "hex": "#C39B26",
+        "reason": "Earthy warmth fights your clarity."
+      },
+      {
+        "name": "Camel",
+        "hex": "#C19A6B",
+        "reason": "Warm neutral muddies sharpness."
+      },
+      {
+        "name": "Salmon Pink",
+        "hex": "#FA8072",
+        "reason": "Warm coral fights cool tone."
       },
       {
         "name": "Olive",
         "hex": "#708238",
-        "reason": "Warm earthy — fights your softness."
+        "reason": "Warm muted green clashes."
       }
     ],
     "neutrals": [
-      "Soft White",
-      "Blue Gray",
-      "Soft Navy"
+      "Pure White",
+      "Black",
+      "Charcoal",
+      "Deep Navy"
     ],
     "neutralsWithHex": [
       {
-        "name": "Soft White",
-        "hex": "#F2F1EE"
+        "name": "Pure White",
+        "hex": "#FFFFFF"
       },
       {
-        "name": "Blue Gray",
-        "hex": "#7D8796"
+        "name": "Black",
+        "hex": "#000000"
       },
       {
-        "name": "Soft Navy",
-        "hex": "#2F405C"
+        "name": "Charcoal",
+        "hex": "#1E1E24"
+      },
+      {
+        "name": "Deep Navy",
+        "hex": "#071A3D"
       }
     ],
     "metals": {
       "best": [
         "Silver",
+        "Platinum",
         "White Gold",
-        "Platinum"
+        "Pewter"
       ],
       "avoid": [
         "Yellow Gold",
@@ -155,243 +161,236 @@
     "foundation": {
       "recommended": [],
       "avoid": [],
-      "tip": "Select a medium shade with cool neutral or red-cool undertones, avoiding golden, honey, or yellow-based formulations."
+      "tip": "Choose a deep neutral-cool espresso base with subtle blue or red undertones, avoiding golden-yellow hues."
     },
-    "blush": "A sweep of soft raspberry or cool rose on the apples of your cheeks.",
-    "bronzer": "A matte cool taupe sculpt to softly define without introducing warm orange tones.",
-    "lips": "Cool rose, soft raspberry, or a swipe of dusty plum gloss.",
-    "eyes": "Smoky washes of cool taupe, pearl grey, and soft plum with charcoal tightlining.",
+    "blush": "Rich blackened rose or deep berry draped high across the cheekbones.",
+    "bronzer": "Deep neutral sculpt powder without warm orange or golden shimmer.",
+    "lips": "Statement black cherry, rich crimson gloss, or saturated cool berry.",
+    "eyes": "Smoky charcoal or blackened plum with a sharp true black winged liner.",
     "nails": {
       "bestColors": [],
       "avoidColors": []
     }
   },
   "wardrobe": {
-    "bestColors": "Soft White, Cool Pink, Rose, Raspberry Rose, Mauve, Lavender Gray, Periwinkle, Slate Blue, Soft Teal, Cool Sage, Blue Gray, Soft Navy",
-    "neutralAnchors": "Soft White, Blue Gray, Soft Navy",
-    "avoid": "Pumpkin, Mustard, Camel, Black, Bright Coral, Olive"
+    "bestColors": "Pure White, Black, Charcoal, Deep Navy, Midnight Blue, Emerald, Pine Teal, Deep Plum, Aubergine, Burgundy, Cranberry, Icy Pink",
+    "neutralAnchors": "Pure White, Black, Charcoal, Deep Navy",
+    "avoid": "Beige, Pumpkin, Mustard, Camel, Salmon Pink, Olive"
   },
   "gemstones": [],
   "jewelry": {
-    "metals": "Silver, White Gold, Platinum",
+    "metals": "Silver, Platinum, White Gold, Pewter",
     "stones": "",
     "avoid": "Yellow Gold, Bronze, Copper",
-    "style": "Opt for brushed silver, white gold, or platinum jewellery; delicate cool pearls and moonstones complement your skin beautifully, whereas warm yellow gold detracts from your cool elegance."
+    "style": "High-shine metals such as platinum, polished white gold, and bright silver harmonise seamlessly with your cool depth, especially when paired with brilliant diamonds or rich emeralds."
   },
   "hairColor": {
-    "bestHighlights": "Subtle cool ash brown or mushroom brown babylights",
-    "bestOverall": "Natural soft cool black, dark ash brown, or deep espresso",
-    "avoid": "Warm golden honey, copper, caramel, or auburn dyes that clash with your cool skin tone"
+    "bestHighlights": "Subtle cool-toned blue-black gloss or deep charcoal babylights.",
+    "bestOverall": "Jet black or deepest cool espresso with a glossy mirror shine.",
+    "avoid": "Warm caramel, copper, honey, or golden brown highlights that create brassiness against your cool skin."
   },
   "celebrities": [
     {
-      "name": "Letitia Wright",
-      "why": "Shares your cool undertone and refined, medium-contrast balance that shines in cool, powdery blues and berries."
+      "name": "Lupita Nyong'o",
+      "why": "Shares your striking, rich skin depth and coolness, radiating in bold jewel tones and high-contrast palettes."
     },
     {
-      "name": "Bianca Lawson",
-      "why": "Exhibits a similar cool medium depth and looks stunning in muted jewel tones rather than warm bronzes."
+      "name": "Alek Wek",
+      "why": "Possesses a similarly commanding cool-neutral deep depth that comes alive against saturated icy and jewel tones."
     },
     {
       "name": "Danai Gurira",
-      "why": "Demonstrates how cool-toned complexions radiate in pure cool pastels, slate grey, and rich berry shades."
+      "why": "Exhibits deep, intense features that are effortlessly complemented by cool, vivid Winter hues rather than warm tones."
     }
   ],
   "koreanAnalysis": {
-    "tone": "쿨톤",
-    "description": "Your coloring falls into the 쿨톤 category in the Korean system.",
+    "tone": "딥톤 (Deep Tone)",
+    "description": "Your coloring falls into the 딥톤 (Deep Tone) category in the Korean system.",
     "kbeautyTips": ""
   },
   "crossValidation": {
-    "agrees": false,
-    "confidence": 50
+    "agrees": true,
+    "confidence": 95
   },
   "makeupShades": {
     "foundation": [
       {
-        "name": "Rose Porcelain",
-        "hex": "#F8E2DA",
+        "name": "Cool Porcelain",
+        "hex": "#F1DAD0",
         "category": "foundation",
         "finish": "satin"
       },
       {
-        "name": "Cool Ivory",
-        "hex": "#EFD1C2",
+        "name": "Neutral Beige",
+        "hex": "#DDBCA4",
         "category": "foundation",
         "finish": "satin"
       },
       {
-        "name": "Rose Beige",
-        "hex": "#DBB39D",
+        "name": "Cool Honey",
+        "hex": "#BE9573",
         "category": "foundation",
         "finish": "satin"
       },
       {
-        "name": "Cool Tan",
-        "hex": "#C19A80",
+        "name": "Cool Chestnut",
+        "hex": "#8F6549",
         "category": "foundation",
         "finish": "satin"
       },
       {
-        "name": "Cool Cocoa",
-        "hex": "#9E7660",
+        "name": "Deep Espresso",
+        "hex": "#5C3B2C",
         "category": "foundation",
         "finish": "satin"
       }
     ],
-    "undertoneGuide": "Cool and rose-based throughout — match to the pink in your skin, not the depth of your hair.",
+    "undertoneGuide": "Cool to neutral-cool undertone at depth — match exactly, and avoid golden or peachy bases.",
     "blush": [
       {
-        "name": "Cool Rose",
-        "hex": "#DE8296",
+        "name": "Cool Plum",
+        "hex": "#8E4A5E",
         "category": "blush",
         "finish": "matte"
       },
       {
-        "name": "Soft Raspberry",
-        "hex": "#C86285",
+        "name": "Deep Berry",
+        "hex": "#94374F",
         "category": "blush",
         "finish": "satin"
       },
       {
-        "name": "Mauve Pink",
-        "hex": "#C98CA0",
+        "name": "Blackened Rose",
+        "hex": "#7E3A47",
         "category": "blush",
         "finish": "matte"
       },
       {
-        "name": "Dusty Berry",
-        "hex": "#B45F7C",
+        "name": "Cool Wine",
+        "hex": "#7A2E42",
         "category": "blush",
         "finish": "matte"
       }
     ],
     "bronzer": [
       {
-        "name": "Cool Taupe Sculpt",
-        "hex": "#A07C6A",
+        "name": "Cool Taupe",
+        "hex": "#7E5E4C",
         "category": "bronzer",
         "finish": "matte"
       },
       {
-        "name": "Rosy Contour",
-        "hex": "#A88374",
+        "name": "Deep Neutral Bronze",
+        "hex": "#6F4B3A",
         "category": "bronzer",
-        "finish": "matte"
+        "finish": "satin"
       }
     ],
     "lip": [
       {
-        "name": "Cool Rose",
-        "hex": "#D2637E",
-        "category": "lip",
-        "finish": "satin"
-      },
-      {
-        "name": "Soft Raspberry",
-        "hex": "#C04A72",
+        "name": "True Red",
+        "hex": "#C0142E",
         "category": "lip",
         "finish": "matte"
       },
       {
-        "name": "Mauve",
-        "hex": "#A96A83",
+        "name": "Black Cherry",
+        "hex": "#5A1024",
+        "category": "lip",
+        "finish": "satin"
+      },
+      {
+        "name": "Deep Plum",
+        "hex": "#4E1D38",
+        "category": "lip",
+        "finish": "matte"
+      },
+      {
+        "name": "Cool Berry",
+        "hex": "#8E1F43",
         "category": "lip",
         "finish": "cream"
       },
       {
-        "name": "Dusty Plum",
-        "hex": "#8E4E68",
-        "category": "lip",
-        "finish": "cream"
-      },
-      {
-        "name": "Rose Gloss",
-        "hex": "#DB7C96",
+        "name": "Crimson Gloss",
+        "hex": "#A8123A",
         "category": "lip",
         "finish": "gloss"
       }
     ],
     "eye": [
       {
-        "name": "Cool Taupe",
-        "hex": "#96878C",
+        "name": "Charcoal",
+        "hex": "#36353B",
         "category": "eye",
         "finish": "matte"
       },
       {
-        "name": "Soft Plum",
-        "hex": "#7A5A72",
+        "name": "Icy Silver",
+        "hex": "#C6CBD2",
+        "category": "eye",
+        "finish": "metallic"
+      },
+      {
+        "name": "Deep Emerald",
+        "hex": "#0E4F3C",
         "category": "eye",
         "finish": "satin"
       },
       {
-        "name": "Slate Blue",
-        "hex": "#6B7E9C",
+        "name": "Blackened Plum",
+        "hex": "#3B2138",
         "category": "eye",
-        "finish": "satin"
+        "finish": "matte"
       },
       {
-        "name": "Pearl Grey",
-        "hex": "#BEBCC4",
+        "name": "Sapphire",
+        "hex": "#1B3A6B",
         "category": "eye",
         "finish": "shimmer"
-      },
-      {
-        "name": "Muted Teal",
-        "hex": "#5C8A8A",
-        "category": "eye",
-        "finish": "satin"
       }
     ],
     "liner": [
       {
-        "name": "Soft Charcoal",
-        "hex": "#4E4C56",
+        "name": "True Black",
+        "hex": "#101013",
         "category": "liner",
         "finish": "matte"
       },
       {
-        "name": "Cool Plum Liner",
-        "hex": "#5E4258",
+        "name": "Blackened Navy",
+        "hex": "#151E35",
         "category": "liner",
         "finish": "matte"
       },
       {
-        "name": "Slate Liner",
-        "hex": "#556076",
+        "name": "Gunmetal",
+        "hex": "#4A4D55",
         "category": "liner",
-        "finish": "matte"
+        "finish": "metallic"
       }
     ],
     "highlight": [
       {
-        "name": "Rose Pearl",
-        "hex": "#F2DFE2",
+        "name": "Icy Pearl",
+        "hex": "#E7E9EE",
         "category": "highlight",
         "finish": "shimmer"
       },
       {
-        "name": "Cool Moonstone",
-        "hex": "#E7E4EA",
+        "name": "Cool Platinum",
+        "hex": "#D6D9DE",
         "category": "highlight",
-        "finish": "shimmer"
+        "finish": "metallic"
       }
     ],
     "nails": [
       {
-        "name": "Bachelorette Bash",
-        "hex": "#E36085",
+        "name": "Big Apple Red",
+        "hex": "#B01B1E",
         "category": "nails",
         "finish": "gloss",
-        "asset": "bachelorette-bash"
-      },
-      {
-        "name": "Midnight Cami",
-        "hex": "#344360",
-        "category": "nails",
-        "finish": "gloss",
-        "asset": "midnight-cami"
+        "asset": "big-apple-red"
       },
       {
         "name": "Berry Naughty",
@@ -401,48 +400,55 @@
         "asset": "berry-naughty"
       },
       {
-        "name": "Tiara",
-        "hex": "#DAA9C5",
-        "category": "nails",
-        "finish": "satin",
-        "asset": "tiara"
-      },
-      {
-        "name": "Princesses Rule",
-        "hex": "#C37E8B",
-        "category": "nails",
-        "finish": "satin",
-        "asset": "princesses-rule"
-      },
-      {
-        "name": "Strawberry Margarita",
-        "hex": "#D03364",
+        "name": "Midnight Cami",
+        "hex": "#344360",
         "category": "nails",
         "finish": "gloss",
-        "asset": "strawberry-margarita"
+        "asset": "midnight-cami"
+      },
+      {
+        "name": "Malaga Wine",
+        "hex": "#6A3A43",
+        "category": "nails",
+        "finish": "gloss",
+        "asset": "malaga-wine"
+      },
+      {
+        "name": "Watermelon",
+        "hex": "#DF4747",
+        "category": "nails",
+        "finish": "gloss",
+        "asset": "watermelon"
+      },
+      {
+        "name": "Perennial Chic",
+        "hex": "#B77A7A",
+        "category": "nails",
+        "finish": "satin",
+        "asset": "perennial-chic"
       }
     ],
-    "skip": "Skip orange, gold and warm camel — warmth of any kind is what pulls this face off-key."
+    "skip": "Skip warm orange, camel and muted earth tones — they dull the clarity your colouring depends on."
   },
   "styleShades": {
     "gemstones": [
       {
-        "name": "Sapphire",
-        "hex": "#204081",
-        "accent": "#7E90B6",
-        "asset": "sapphire"
+        "name": "Garnet",
+        "hex": "#693032",
+        "accent": "#A88788",
+        "asset": "garnet"
       },
       {
-        "name": "Rose Quartz",
-        "hex": "#C89B9D",
-        "accent": "#DFC5C6",
-        "asset": "rose-quartz"
+        "name": "Ruby",
+        "hex": "#822635",
+        "accent": "#B6818A",
+        "asset": "ruby"
       },
       {
-        "name": "Pearl",
-        "hex": "#C3C1B9",
-        "accent": "#DCDBD6",
-        "asset": "pearl"
+        "name": "Emerald",
+        "hex": "#12724B",
+        "accent": "#76AD97",
+        "asset": "emerald"
       },
       {
         "name": "Amethyst",
@@ -453,77 +459,77 @@
     ],
     "hair": [
       {
-        "name": "Cool Ash Brown",
-        "hex": "#5A4E4A",
-        "accent": "#8C7E78"
+        "name": "Blue Black",
+        "hex": "#141418",
+        "accent": "#3A3A48"
       },
       {
-        "name": "Mushroom Blonde",
-        "hex": "#A4948A",
-        "accent": "#D2C4BA"
+        "name": "Cool Espresso",
+        "hex": "#2A1E1A",
+        "accent": "#544038"
       },
       {
-        "name": "Soft Cool Brown",
-        "hex": "#4E4240",
-        "accent": "#7E7068"
+        "name": "Deep Mahogany",
+        "hex": "#3A1820",
+        "accent": "#70303C"
       },
       {
-        "name": "Pearl Blonde",
-        "hex": "#C6BAB2",
-        "accent": "#E8E0D8"
+        "name": "Dark Ash Brown",
+        "hex": "#332C2A",
+        "accent": "#5E524E"
       }
     ],
     "hairAvoid": [
       {
-        "name": "Golden Copper",
-        "hex": "#B4682E",
-        "accent": "#E09A5E"
+        "name": "Golden Blonde",
+        "hex": "#C09A4E",
+        "accent": "#E8CE8A"
       },
       {
-        "name": "Jet Black",
-        "hex": "#0D0D10",
-        "accent": "#38383F"
+        "name": "Warm Copper",
+        "hex": "#B4682E",
+        "accent": "#E09A5E"
       }
     ],
-    "metalNote": "Silver, white gold and rose gold with a cool cast. Yellow gold reads brassy."
+    "metalNote": "Silver, platinum and white gold. Yellow gold muddies the contrast."
   },
   "looks": [
     {
-      "name": "Fresh Rose Minimalist",
-      "vibe": "Effortless polished daytime definition",
+      "name": "Effortless Obsidian",
+      "vibe": "Polished, striking daytime definition with clean lines",
       "timeOfDay": "day",
       "shades": [
         {
-          "name": "Cool Taupe",
-          "hex": "#96878C",
+          "name": "Charcoal",
+          "hex": "#36353B",
           "category": "eye",
           "finish": "matte",
           "slot": "eye"
         },
         {
-          "name": "Soft Charcoal",
-          "hex": "#4E4C56",
+          "name": "True Black",
+          "hex": "#101013",
           "category": "liner",
           "finish": "matte",
           "slot": "liner"
         },
         {
-          "name": "Cool Rose",
-          "hex": "#DE8296",
+          "name": "Deep Berry",
+          "hex": "#94374F",
           "category": "blush",
-          "finish": "matte",
+          "finish": "satin",
           "slot": "cheek"
         },
         {
-          "name": "Rose Gloss",
-          "hex": "#DB7C96",
+          "name": "Cool Berry",
+          "hex": "#8E1F43",
           "category": "lip",
-          "finish": "gloss",
+          "finish": "cream",
           "slot": "lip"
         },
         {
-          "name": "Rose Pearl",
-          "hex": "#F2DFE2",
+          "name": "Icy Pearl",
+          "hex": "#E7E9EE",
           "category": "highlight",
           "finish": "shimmer",
           "slot": "highlight"
@@ -531,119 +537,119 @@
       ]
     },
     {
-      "name": "Twilight Plum Glamour",
-      "vibe": "Sultry cool-toned evening intensity",
+      "name": "Midnight Glamour",
+      "vibe": "Dramatic, smouldering jewel-toned elegance",
       "timeOfDay": "evening",
       "shades": [
         {
-          "name": "Soft Plum",
-          "hex": "#7A5A72",
+          "name": "Deep Emerald",
+          "hex": "#0E4F3C",
           "category": "eye",
           "finish": "satin",
           "slot": "eye"
         },
         {
-          "name": "Cool Plum Liner",
-          "hex": "#5E4258",
+          "name": "Blackened Navy",
+          "hex": "#151E35",
           "category": "liner",
           "finish": "matte",
           "slot": "liner"
         },
         {
-          "name": "Dusty Berry",
-          "hex": "#B45F7C",
+          "name": "Cool Plum",
+          "hex": "#8E4A5E",
           "category": "blush",
           "finish": "matte",
           "slot": "cheek"
         },
         {
-          "name": "Dusty Plum",
-          "hex": "#8E4E68",
+          "name": "Black Cherry",
+          "hex": "#5A1024",
           "category": "lip",
-          "finish": "cream",
+          "finish": "satin",
           "slot": "lip"
         },
         {
-          "name": "Cool Taupe Sculpt",
-          "hex": "#A07C6A",
-          "category": "bronzer",
-          "finish": "matte",
-          "slot": "bronzer"
+          "name": "Cool Platinum",
+          "hex": "#D6D9DE",
+          "category": "highlight",
+          "finish": "metallic",
+          "slot": "highlight"
         }
       ]
     }
   ],
-  "secondarySeason": "Soft Summer",
+  "secondarySeason": "Deep Autumn",
   "axes": {
     "hue": "cool",
-    "value": "medium",
+    "value": "dark",
     "chroma": "medium"
   },
   "assessment": {
     "undertone": "cool",
-    "depth": "medium",
+    "depth": "deep",
     "chroma": "medium",
-    "contrast": "medium",
-    "evidence": "Your skin displays a cool undertone with calm, blue-red undertones rather than golden warmth, positioned at a medium depth with balanced, medium contrast against your dark eyes and defined features."
+    "contrast": "high",
+    "evidence": "Your skin possesses a rich espresso depth with clear cool-neutral undertones, complemented by vivid white sclera against deep, dark irises that create striking clarity."
   },
-  "rationale": "Your colouring is defined by distinct cool undertones combined with medium depth and medium clarity, which aligns directly with True Summer. While deeper complexions are frequently assumed to be Winter, your features lack the stark, icy contrast required for True Winter and instead harmonise naturally with the refined, cool, and gently muted palette of True Summer. Soft Summer is your nearest secondary season, but your undertone is decidedly cool rather than neutral-leaning.",
+  "rationale": "Your primary feature is deep value accompanied by cool undertones, which squarely positions you in Deep Winter. While Deep Autumn shares your commanding depth, the warm golden and earthy pigments of Autumn clash with the cool, blue-based depth present in your complexion. Deep Winter allows you to wear intense, richly saturated cool shades that illuminate your features without looking muddy.",
   "measured": {
     "skin": {
-      "L": 56.660393674974216,
-      "C": 32.46339543951645,
-      "h": 43.18580415023757
+      "L": 37.53705874675106,
+      "C": 26.585724236591567,
+      "h": 44.930201466123606
     },
     "hair": null,
     "eyes": {
-      "L": 7.270750721641431,
-      "C": 4.964468645157868,
-      "h": 39.898448856234396
+      "L": 8.265219868299905,
+      "C": 6.060627206786876,
+      "h": 36.79278843859099
     },
     "hairStatus": "dyed",
     "axes": {
       "hue": {
-        "value": -0.9314195849762428,
+        "value": -0.7569798533876394,
         "label": "cool"
       },
       "value": {
-        "value": 0.26641574699896864,
-        "label": "medium"
+        "value": -0.4985176501299577,
+        "label": "dark"
       },
       "chroma": {
-        "value": 0.06666666666666671,
+        "value": -0.008761374048449733,
         "label": "medium"
       }
     },
     "contrast": {
-      "value": 49.38964295333278,
-      "label": "high"
+      "value": 29.271838878451153,
+      "label": "medium"
     },
-    "skinBand": "medium"
+    "skinBand": "deep"
   },
   "hairAvailable": false,
   "rules": {
-    "primary": "True Winter",
-    "secondary": "Bright Winter",
-    "margin": 18.5,
-    "ambiguous": false
+    "primary": "Deep Winter",
+    "secondary": "True Winter",
+    "margin": 0.5,
+    "ambiguous": true
   },
   "agreement": {
-    "level": "none",
-    "agrees": false
+    "level": "primary",
+    "agrees": true
   },
-  "needsSecondPhoto": true,
+  "needsSecondPhoto": false,
   "alternatives": [
     {
+      "season": "Deep Winter",
+      "score": 83.8
+    },
+    {
       "season": "True Winter",
-      "score": 87.3
+      "score": 83.3
     },
     {
       "season": "True Summer",
-      "score": 84.1
-    },
-    {
-      "season": "Light Summer",
-      "score": 74
+      "score": 82.9
     }
   ],
   "qualityIssues": [

@@ -268,6 +268,87 @@ Reasoning tokens count against `max_tokens` on `google/gemini-3.8-flash`, so the
 8192 default had less headroom than it appeared to. `MAX_TOKENS_CLASSIFY` now
 defaults to **12288**. Worth re-checking whenever the schema grows again.
 
+### 2026-09-20 — specular highlights were inflating skin L* by up to 23
+
+Two deep-skinned demo faces came back labelled **Light Summer** and **Light
+Spring** — impossible, since the light seasons are light in value by
+definition. Hybrid had run correctly and both had measured features, a rules
+ranking and an agreement check. The measurement was wrong.
+
+Three separate faults, each masking the next.
+
+**1. The estimator ignored that specular is one-sided.** `statsFor` took a
+plain median over the patch. Specular reflection is additive — a highlight can
+only raise L\*, never lower it — so a median over a lit patch is biased, and the
+bias grows with gloss. It was worst on the deepest skin, where
+specular-to-diffuse contrast is highest, which is exactly the direction that
+turns a deep face into a light season. Componentwise medians were also taken
+independently per channel, describing a colour no pixel in the patch ever had.
+
+**2. Skin was sampled from three discs on the most specular points of a face.**
+`extractSkin` used both cheekbone centroids and the mid-forehead — where studio
+lighting puts its highlights. On `sample-1`:
+
+| patch | L\* |
+| --- | --- |
+| lit cheekbone | 32.9 |
+| mid-forehead | **68.3** |
+| what we measured | 60.4 |
+| whole face, banded | **37.5** |
+
+A 35-point spread across one face. Three discs are a biased *spatial* sample of
+a non-uniformly lit surface; the face-skin mask covers the lit and shadowed
+sides both.
+
+**3. The mask was only computed when hair was natural.** The segmentation mask
+does two jobs — isolating hair, and bounding the face-skin region — and they
+were tied to one answer. Saying "dyed" or "covered" silently switched skin
+measurement to the three-disc fallback: a different method for the same
+question, chosen by an unrelated answer. This hid fix 2 entirely until the
+demo regeneration ran with `--hair=dyed` and the numbers did not move.
+
+**Before and after on `sample-1`** (the deepest demo face):
+
+| | skin L\* | band | rules | model | agreement |
+| --- | --- | --- | --- | --- | --- |
+| before | 60.4 | medium | True Winter | Light Summer | none |
+| after | **37.5** | **deep** | Deep Winter | Deep Winter | **primary** |
+
+`SPECULAR.diffuseBand` (p25-p60 of L\* within a region) lives in
+`measure/seasons.config.ts`. The band sits below the median because only one
+tail is additive — trimming harder at the top than the bottom is the asymmetry
+the physics asks for.
+
+**White balance was ruled out.** `whiteBalanceGains` exists in `color.ts` but
+the pipeline never calls it, so the bright white backgrounds were not inflating
+anything.
+
+**What is still open.** `sample-5` reads L\* 58.4 — better than 72.8, still
+high for the face. Its skin measures **C\* 41**, where real skin sits near
+12-25, and the quality gate flags `colour_cast` on all nine demo faces. These
+images are graded, not photographed; the residual is the fixture, not the
+estimator. `eval/real` is what settles it.
+
+`scripts/dev/overlayBrowser.ts` had its own copy of the statistic, so the tool
+for checking the measurement silently disagreed with it. It now imports the
+same function.
+
+**Gallery rule.** A sample shows a season plainly only when the rules and the
+model agree at **primary** level and the gate found no colour cast. Otherwise
+it shows the rules' primary with a `measured` tag and is flagged for review. A
+model-only label is never shown.
+
+### 2026-09-20 — `looks` pushed classification past its token budget
+
+Adding `looks` to the classification schema made the longest responses truncate
+mid-JSON, surfacing as `Expected ',' or '}' after property value` — a parse
+error that reads like a bad model rather than a budget that ran out. Found on
+`sample-1`, the deepest-skinned demo face, which produces the longest prose.
+
+Reasoning tokens count against `max_tokens` on `google/gemini-3.8-flash`, so the
+8192 default had less headroom than it appeared to. `MAX_TOKENS_CLASSIFY` now
+defaults to **12288**. Worth re-checking whenever the schema grows again.
+
 ### 2026-09-20 — specular highlights were inflating skin L* by up to 15
 
 Two deep-skinned demo faces came back labelled **Light Summer** and **Light
