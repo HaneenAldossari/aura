@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import { useT } from "../../i18n";
 
 /* ─── CTA ────────────────────────── */
 export default function CTASection() {
   const navigate = useNavigate();
+  const t = useT();
 
   return (
     <section style={{ padding: "100px 40px 120px", textAlign: "center", position: "relative", overflow: "hidden", zIndex: 10 }}>
@@ -22,10 +24,10 @@ export default function CTASection() {
 
       <div style={{ position: "relative", zIndex: 10 }}>
         <h2 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: "clamp(36px, 6vw, 60px)", marginBottom: "24px", letterSpacing: "-0.02em" }}>
-          Ready to Meet Your Colors?
+          {t("home.cta.title")}
         </h2>
         <p style={{ color: "var(--text-secondary)", maxWidth: "512px", margin: "0 auto 48px", fontSize: "18px", fontWeight: 300, lineHeight: 1.6 }}>
-          Upload one photo and discover the palette that was always meant for you.
+          {t("home.cta.body")}
         </p>
         <button
           onClick={() => navigate("/analyze")}
@@ -43,7 +45,7 @@ export default function CTASection() {
             animation: "pulse-glow 3s infinite",
           }}
         >
-          Discover Your Palette
+          {t("home.cta.button")}
         </button>
       </div>
     </section>

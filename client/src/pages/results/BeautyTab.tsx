@@ -4,6 +4,7 @@ import { getSeasonBeautyGuide } from "../../data/seasonBeautyGuide";
 import { isWarmSeason } from "../../data/seasonColors";
 import EditorialSection from "./MakeupSection";
 import ShadeDab from "./ShadeDab";
+import { useT } from "../../i18n";
 import "./results-tabs.css";
 
 /** Undertone families for the foundation bar, fair → deep. */
@@ -53,6 +54,7 @@ export default function BeautyTab({
   const depthPct = Math.max(0, Math.min(100, depth ?? 50));
 
   // Foundation may arrive as an object ({recommended, avoid, tip}) or a legacy tip string
+  const t = useT();
   const fd = makeup?.foundation as Foundation | string | undefined;
   const liveFoundationTip = typeof fd === "string" ? fd : fd?.tip;
   const foundationTip = liveFoundationTip || guide.foundationTip;
@@ -75,7 +77,7 @@ export default function BeautyTab({
       >
         <SplitText
           key="beauty-heading"
-          text="Your Beauty Guide"
+          text={t("results.beauty.title")}
           className="text-3xl font-bold"
           tag="h2"
           delay={30}
@@ -83,11 +85,11 @@ export default function BeautyTab({
         />
 
         {/* ── Foundation — honest undertone bar, no fake shade chips ── */}
-        <EditorialSection title="Foundation" direction="Your undertone, met at its true depth.">
+        <EditorialSection title={t("results.beauty.foundationTitle")} direction={t("results.beauty.foundationBody")}>
           <div style={{ paddingTop: 8 }}>
             <div
               role="img"
-              aria-label={`Your undertone family from fair to deep, with your depth marked at ${Math.round(depthPct)} of 100`}
+              aria-label={t("results.beauty.foundationMeter", { depth: Math.round(depthPct) })}
               style={{
                 position: "relative",
                 height: 14,
@@ -123,15 +125,15 @@ export default function BeautyTab({
                 color: "var(--text-muted)",
               }}
             >
-              <span>Fair</span>
-              <span>Deep</span>
+              <span>{t("results.beauty.fair")}</span>
+              <span>{t("results.beauty.deep")}</span>
             </div>
             <p style={captionStyle}>{foundationTip}</p>
           </div>
         </EditorialSection>
 
         {/* ── Blush ── */}
-        <EditorialSection title="Blush" direction="Where the color meets your cheekbone.">
+        <EditorialSection title={t("results.beauty.blushTitle")} direction={t("results.beauty.blushBody")}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 22, alignItems: "flex-start" }}>
             {guide.blush.map((s) => (
               <ShadeDab key={s.name} shade={s} />
@@ -141,7 +143,7 @@ export default function BeautyTab({
         </EditorialSection>
 
         {/* ── Bronzer — light → deep with day / warmth / sculpt roles ── */}
-        <EditorialSection title="Bronzer" direction="Warmth placed where the sun would find you.">
+        <EditorialSection title={t("results.beauty.bronzerTitle")} direction={t("results.beauty.bronzerBody")}>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 26, alignItems: "flex-start" }}>
             {guide.bronzer.map((s, i) => (
               <div key={s.name} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
@@ -165,10 +167,10 @@ export default function BeautyTab({
         </EditorialSection>
 
         {/* ── Lips — everyday and bold drops ── */}
-        <EditorialSection title="Lips" direction="From barely-there to unmistakable.">
+        <EditorialSection title={t("results.beauty.lipsTitle")} direction={t("results.beauty.lipsBody")}>
           <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
             <div>
-              <p style={microLabelStyle}>Everyday</p>
+              <p style={microLabelStyle}>{t("results.beauty.everyday")}</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 22, alignItems: "flex-start" }}>
                 {guide.lips.everyday.map((s) => (
                   <ShadeDab key={s.name} shade={s} shape="drop" size={58} />
@@ -176,7 +178,7 @@ export default function BeautyTab({
               </div>
             </div>
             <div>
-              <p style={microLabelStyle}>Bold</p>
+              <p style={microLabelStyle}>{t("results.beauty.bold")}</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 22, alignItems: "flex-start" }}>
                 {guide.lips.bold.map((s) => (
                   <ShadeDab key={s.name} shade={s} shape="drop" size={68} />
@@ -188,14 +190,14 @@ export default function BeautyTab({
         </EditorialSection>
 
         {/* ── Eyes — loose overlapping cluster, like a used palette ── */}
-        <EditorialSection title="Eyes" direction="Worn soft, the way a palette actually gets used.">
+        <EditorialSection title={t("results.beauty.eyesTitle")} direction={t("results.beauty.eyesBody")}>
           <div
             style={{
               display: "flex",
               flexWrap: "wrap",
               alignItems: "flex-start",
               paddingTop: 12,
-              paddingLeft: 8,
+              paddingInlineStart: 8,
             }}
           >
             {guide.eyes.map((s, i) => (
@@ -203,7 +205,7 @@ export default function BeautyTab({
                 key={s.name}
                 style={{
                   transform: `rotate(${EYE_ROTATIONS[i % EYE_ROTATIONS.length]}deg) translateY(${EYE_OFFSETS[i % EYE_OFFSETS.length]}px)`,
-                  marginLeft: i === 0 ? 0 : -14,
+                  marginInlineStart: i === 0 ? 0 : -14,
                   zIndex: i + 1,
                 }}
               >
@@ -215,10 +217,10 @@ export default function BeautyTab({
         </EditorialSection>
 
         {/* ── Nails — almond chips, then a recessive avoid row ── */}
-        <EditorialSection title="Nails" direction="Ten small canvases, tuned to your season.">
+        <EditorialSection title={t("results.beauty.nailsTitle")} direction={t("results.beauty.nailsBody")}>
           <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
             <div>
-              <p style={microLabelStyle}>Your shades</p>
+              <p style={microLabelStyle}>{t("results.beauty.yourShades")}</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 20, alignItems: "flex-start" }}>
                 {guide.nails.best.map((s) => (
                   <ShadeDab key={s.name} shade={s} shape="almond" size={58} />
@@ -227,7 +229,7 @@ export default function BeautyTab({
             </div>
             {guide.nails.avoid.length > 0 && (
               <div>
-                <p style={{ ...microLabelStyle, color: "var(--text-muted)" }}>Skip these</p>
+                <p style={{ ...microLabelStyle, color: "var(--text-muted)" }}>{t("results.beauty.skipThese")}</p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 20, alignItems: "flex-start" }}>
                   {guide.nails.avoid.map((s) => (
                     <ShadeDab key={s.name} shade={s} shape="almond" size={58} avoid />

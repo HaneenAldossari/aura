@@ -226,6 +226,22 @@ should be widened — it is what most users see. Both are open.
 Also open and deliberately untouched: `QUALITY.maxScleraCast = 8` fires on both
 demo faces measured so far (8.40, 11.95). Left alone until real photos arrive.
 
+## Interface strings
+
+Every user-facing string lives in `client/src/i18n/en.ts`, in **British English**
+— colour, analyse, jewellery, grey. `ar.ts` is deep-partial against it and falls
+back per key; `Key` is derived from `en`, so a mistyped key will not compile.
+Content (season names, shade names) and model-written prose are deliberately
+outside the catalogue — `client/src/i18n/README.md` says why, and what to do
+instead.
+
+Layout is direction-agnostic: logical CSS properties only, with the four cases
+mirroring cannot fix collected in the `[dir="rtl"]` block of `index.css`. There
+is no locale switcher yet; `?lang=ar` selects one and sticks.
+
+The classification and chat prompts are told to write British English too, since
+their output is rendered verbatim beside the catalogue's.
+
 ## Testing
 
 ```bash

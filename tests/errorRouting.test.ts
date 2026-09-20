@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { describe, expect, it } from "vitest";
 import { createStageQueue, DEFAULT_MIN_STAGE_MS } from "../measure/stageQueue";
+import { en } from "../client/src/i18n/en";
 
 const CLIENT = path.join(__dirname, "../client/src/pages");
 
@@ -10,16 +11,34 @@ function read(relative: string): string {
 }
 
 /**
- * Source with comments stripped.
+ * Source with comments stripped and every t("key") replaced by its English
+ * string.
  *
- * These assertions are about what a user sees, and the panels' comments quote
- * the very strings being asserted against while explaining the bug they exist
- * to prevent.
+ * Two reasons for the substitution rather than matching on key names. The
+ * assertions below are about what a user actually reads, and a key can be
+ * renamed or repointed without the sentence changing — or, worse, the sentence
+ * can change while the key stays put. Resolving through the catalogue means
+ * this still fails if someone puts "better photos" back in front of a decoder
+ * failure, whichever file they put it in.
+ *
+ * Comments are stripped because the panels quote the very strings being
+ * asserted against, while explaining the bug they exist to prevent.
  */
+function resolve(key: string): string {
+  const value = key.split(".").reduce<any>((node, part) => node?.[part], en);
+  return typeof value === "string" ? value : key;
+}
+
 function rendered(relative: string): string {
   return read(relative)
     .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/^\s*\/\/.*$/gm, "");
+    .replace(/^\s*\/\/.*$/gm, "")
+    // Any quoted dotted path that resolves in the catalogue, so a ternary
+    // inside t(...) and a key held in a lookup table both substitute.
+    .replace(/["'`]([a-z][\w]*(?:\.[\w]+)+)["'`]/g, (whole, key: string) => {
+      const value = resolve(key);
+      return value === key ? whole : JSON.stringify(value);
+    });
 }
 
 /**

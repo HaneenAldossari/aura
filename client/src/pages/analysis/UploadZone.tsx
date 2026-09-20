@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { Upload, Camera, X } from "lucide-react";
 import IconButton from "../../components/ui/IconButton";
+import { useT } from "../../i18n";
 
 export default function UploadZone({
   preview,
@@ -13,6 +14,7 @@ export default function UploadZone({
   onDrop: (e: React.DragEvent) => void;
   onRemove: () => void;
 }) {
+  const t = useT();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   return (
@@ -21,14 +23,14 @@ export default function UploadZone({
         <div className="relative rounded-2xl overflow-hidden border-2 border-gold/30 aspect-[4/5]">
           <img
             src={preview}
-            alt="Face Photo"
+            alt={t("analysis.upload.previewAlt")}
             className="w-full h-full object-cover"
           />
           {/* IconButton forces inline background/color — un-set them so the
               original bg-espresso/80, hover:bg-red-900 and text-cream classes
               keep applying; hover:opacity-100 cancels its base hover:opacity-80. */}
           <IconButton
-            aria-label="Remove photo"
+            aria-label={t("analysis.upload.remove")}
             onClick={onRemove}
             className="absolute top-3 right-3 w-8 h-8 bg-espresso/80 text-cream hover:bg-red-900 hover:opacity-100"
             style={{ background: undefined, color: undefined }}
@@ -36,14 +38,14 @@ export default function UploadZone({
             <X className="w-4 h-4" />
           </IconButton>
           <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-espresso/80 to-transparent">
-            <p className="text-cream text-xs font-medium">Face Photo</p>
+            <p className="text-cream text-xs font-medium">{t("analysis.upload.previewCaption")}</p>
           </div>
         </div>
       ) : (
         <div
           role="button"
           tabIndex={0}
-          aria-label="Upload a photo of your face"
+          aria-label={t("analysis.upload.dropzoneLabel")}
           onClick={() => fileInputRef.current?.click()}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -59,14 +61,14 @@ export default function UploadZone({
             <Camera className="w-6 h-6" />
           </div>
           <div className="text-center px-4">
-            <p className="text-cream text-sm font-medium mb-1">Upload Your Face</p>
+            <p className="text-cream text-sm font-medium mb-1">{t("analysis.upload.heading")}</p>
             <p className="text-cream-muted text-xs leading-relaxed">
-              Natural daylight — no makeup, no filters
+              {t("analysis.upload.hint")}
             </p>
           </div>
           <div className="flex items-center gap-1 text-gold/50 text-xs">
             <Upload className="w-3 h-3" />
-            Drop or tap to upload
+            {t("analysis.upload.action")}
           </div>
         </div>
       )}

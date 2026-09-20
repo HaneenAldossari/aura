@@ -78,8 +78,7 @@
 .shade-dab--avoid .shade-dab__blob-wrap::after {
   content: "";
   position: absolute;
-  left: -7px;
-  right: -7px;
+  inset-inline: -7px;
   top: 50%;
   height: 1px;
   background: var(--text-muted);
@@ -118,8 +117,7 @@
   content: "";
   position: absolute;
   top: 26px;
-  left: -4px;
-  right: -4px;
+  inset-inline: -4px;
   height: 1px;
   background: var(--text-muted);
   transform: rotate(-28deg);

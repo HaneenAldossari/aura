@@ -1,9 +1,21 @@
+import { useT } from "../../i18n";
 /** Share buttons (WhatsApp). */
 export default function ShareSection({ seasonName }: { seasonName: string }) {
+  const t = useT();
+
   return (
     <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 56 }}>
       {[
-        { label: "Share on WhatsApp", href: `https://wa.me/?text=${encodeURIComponent(`I'm a ${seasonName}! Discover your color season on Your Aura: ${typeof window !== "undefined" ? window.location.origin : ""}`)}`, external: true },
+        {
+          label: t("results.shareWhatsApp"),
+          href: `https://wa.me/?text=${encodeURIComponent(
+            t("results.shareText", {
+              season: seasonName,
+              url: typeof window !== "undefined" ? window.location.origin : "",
+            })
+          )}`,
+          external: true,
+        },
       ].map((btn) => (
         <a
           key={btn.label}

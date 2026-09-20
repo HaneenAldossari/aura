@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { ColorSwatch } from "../../lib/types";
+import { useT } from "../../i18n";
 
 interface FanDeckProps {
   colors: ColorSwatch[];
@@ -14,6 +15,7 @@ interface FanDeckProps {
  * the hex. Collapses to a stacked chip list under 480px.
  */
 export default function FanDeck({ colors, size = "large" }: FanDeckProps) {
+  const t = useT();
   const [active, setActive] = useState<number | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -91,7 +93,7 @@ export default function FanDeck({ colors, size = "large" }: FanDeckProps) {
               background: "var(--bg-card)",
               border: "1px solid var(--border-color)",
               cursor: "pointer",
-              textAlign: "left",
+              textAlign: "start",
             }}
           >
             <span
@@ -110,7 +112,7 @@ export default function FanDeck({ colors, size = "large" }: FanDeckProps) {
                 {c.name}
               </span>
               <span style={{ fontFamily: "Inter, sans-serif", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-muted)" }}>
-                {copied === c.hex ? "Copied ✓" : c.hex}
+                {copied === c.hex ? t("results.fan.copied") : c.hex}
               </span>
             </span>
           </button>
@@ -125,7 +127,10 @@ export default function FanDeck({ colors, size = "large" }: FanDeckProps) {
       <div
         ref={deckRef}
         role="group"
-        aria-label="Palette colors — arrow keys to browse, Enter to copy"
+        /* palette-band: the swatches are a numbered sequence, so under RTL the
+           order reverses (index.css) to keep the first card at the reading edge. */
+        className="palette-band"
+        aria-label={t("results.fan.deckLabel")}
         style={{
           display: "flex",
           justifyContent: "center",
@@ -148,11 +153,11 @@ export default function FanDeck({ colors, size = "large" }: FanDeckProps) {
               onFocus={() => setActive(i)}
               onBlur={() => setActive((a) => (a === i ? null : a))}
               onKeyDown={(e) => onKeyDown(e, i)}
-              aria-label={`${c.name} ${c.hex} — press Enter to copy`}
+              aria-label={t("results.fan.cardLabel", { name: c.name, hex: c.hex })}
               style={{
                 width: cardW,
                 height: cardH,
-                marginLeft: i === 0 ? 0 : -overlap,
+                marginInlineStart: i === 0 ? 0 : -overlap,
                 borderRadius: large ? 14 : 10,
                 border: isActive
                   ? "1.5px solid var(--accent-gold)"
@@ -212,7 +217,7 @@ export default function FanDeck({ colors, size = "large" }: FanDeckProps) {
                     pointerEvents: "none",
                   }}
                 >
-                  Copied
+                  {t("results.fan.copied")}
                 </span>
               )}
             </button>
@@ -238,7 +243,7 @@ export default function FanDeck({ colors, size = "large" }: FanDeckProps) {
                 {activeColor.name}
               </span>
               <span style={{ fontFamily: "Inter, sans-serif", fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent-gold)" }}>
-                {copied === activeColor.hex ? "Copied ✓" : activeColor.hex}
+                {copied === activeColor.hex ? t("results.fan.copied") : activeColor.hex}
               </span>
             </div>
             {large && (activeColor.note || activeColor.reason) && (
@@ -249,7 +254,7 @@ export default function FanDeck({ colors, size = "large" }: FanDeckProps) {
           </>
         ) : (
           <span style={{ fontFamily: "Inter, sans-serif", fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--text-muted)" }}>
-            Hover a card · click to copy
+            {t("results.fan.hint")}
           </span>
         )}
       </div>

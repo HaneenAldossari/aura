@@ -1,3 +1,4 @@
+import { useT } from "../../i18n";
 interface WearChip {
   name: string;
   hex: string;
@@ -33,9 +34,13 @@ function WearCard({ title, description, chips }: WearCardConfig) {
 
 /** "How to Wear Your Palette" — 3 parameterized cards. */
 export default function HowToWearCards({ cards }: { cards: WearCardConfig[] }) {
+  const t = useT();
+
   return (
     <section style={{ marginBottom: 80 }}>
-      <h3 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 32, fontWeight: 300, color: "#F2EEE8", marginBottom: 24 }}>How to Wear Your Palette</h3>
+      <h3 style={{ fontFamily: "Cormorant Garamond, serif", fontSize: 32, fontWeight: 300, color: "#F2EEE8", marginBottom: 24 }}>
+        {t("results.wear.title")}
+      </h3>
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(3, 1fr)",

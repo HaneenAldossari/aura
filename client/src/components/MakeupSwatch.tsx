@@ -1,4 +1,5 @@
 import { getMakeupSwatchImage } from "../utils/makeupSwatchImage";
+import { useT } from "../i18n";
 
 type MakeupCategory = "foundation" | "lips" | "blush" | "bronzer" | "eyeshadow" | "nails";
 
@@ -19,6 +20,7 @@ export function MakeupSwatch({
   avoid = false,
   label = true,
 }: MakeupSwatchProps) {
+  const t = useT();
   const src = getMakeupSwatchImage(category, name);
   const isNail = category === "nails";
 
@@ -66,7 +68,7 @@ export function MakeupSwatch({
                 el.parentElement.style.background = hex;
                 el.parentElement.style.borderRadius = borderRadius as string;
                 const missLabel = document.createElement("span");
-                missLabel.textContent = "shade not in library";
+                missLabel.textContent = t("results.beauty.shadeMissing");
                 missLabel.style.cssText = "position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:10px;font-style:italic;color:var(--text-muted);white-space:nowrap;";
                 el.parentElement.style.position = "relative";
                 el.parentElement.appendChild(missLabel);
@@ -82,7 +84,7 @@ export function MakeupSwatch({
               borderRadius,
             }} />
             <span style={{ position: "absolute", bottom: -16, left: "50%", transform: "translateX(-50%)", fontSize: "10px", fontStyle: "italic", color: "var(--text-muted)", whiteSpace: "nowrap" }}>
-              shade not in library
+              {t("results.beauty.shadeMissing")}
             </span>
           </>
         )}

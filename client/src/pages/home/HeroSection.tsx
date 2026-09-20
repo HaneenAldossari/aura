@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import ShinyText from "../../components/ShinyText";
 import DrapeWall from "./DrapeWall";
+import { useT } from "../../i18n";
 
 /* ─── Hero: Split Layout with the Drape Wall ── */
 export default function HeroSection() {
   const navigate = useNavigate();
+  const t = useT();
 
   return (
     <section style={{
@@ -18,7 +20,7 @@ export default function HeroSection() {
       {/* Left: Text */}
       <div style={{ flex: "1 1 480px", maxWidth: "560px", animation: "fade-up 0.8s ease-out both" }}>
         <span style={{ color: "var(--accent-gold)", fontSize: "11px", letterSpacing: "0.3em", textTransform: "uppercase", display: "block", marginBottom: "24px" }}>
-          AI-Powered Color Analysis
+          {t("home.eyebrow")}
         </span>
 
         <h1 style={{
@@ -28,11 +30,11 @@ export default function HeroSection() {
           letterSpacing: "-0.02em",
           marginBottom: "28px",
         }}>
-          Discover the Colors
+          {t("home.titleLine1")}
           <br />
-          That Were{" "}
+          {t("home.titleLine2Lead")}{" "}
           <ShinyText
-            text="Made for You"
+            text={t("home.titleLine2Accent")}
             speed={2.5}
             delay={0.3}
             color="#D4AF7A"
@@ -54,8 +56,7 @@ export default function HeroSection() {
           marginBottom: "40px",
           maxWidth: "480px",
         }}>
-          Upload one photo. Your Aura reads your undertone, depth, and contrast
-          to reveal your seasonal color palette — your colors, your rules.
+          {t("home.lede")}
         </p>
 
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: "48px" }}>
@@ -73,7 +74,7 @@ export default function HeroSection() {
               transition: "transform 0.2s",
             }}
           >
-            Discover Your Palette
+            {t("home.ctaPrimary")}
           </button>
           <a
             href="#journey"
@@ -88,7 +89,7 @@ export default function HeroSection() {
               transition: "background 0.3s",
             }}
           >
-            How It Works
+            {t("home.ctaSecondary")}
           </a>
         </div>
 

@@ -14,8 +14,10 @@ import UploadZone from "./analysis/UploadZone";
 import SampleGallery from "./analysis/SampleGallery";
 import LoadingScreen from "./analysis/LoadingScreen";
 import ErrorPanel from "./analysis/ErrorPanel";
+import { useT } from "../i18n";
 
 export default function Analysis() {
+  const t = useT();
   const navigate = useNavigate();
   const [step, setStep] = useState<
     "upload" | "analyzing" | "error" | "quality" | "system"
@@ -90,7 +92,7 @@ export default function Analysis() {
       saveResult(id, result);
       navigate(`/results/${id}`);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Failed to load sample.";
+      const message = err instanceof Error ? err.message : t("errors.sampleLoad");
       setError(message);
       setErrorKind("sample");
       setStep("error");
@@ -146,7 +148,7 @@ export default function Analysis() {
       );
 
       if (result.error === "low_confidence") {
-        setError(result.message as string || "The AI needs better photos for an accurate analysis.");
+        setError(result.message as string || t("errors.lowConfidence"));
         setPhotoTips((result.photoTips as string[]) || []);
         setErrorKind("photo");
         setStep("error");
@@ -164,8 +166,8 @@ export default function Analysis() {
       console.error("[aura] analysis request failed:", err);
       setSystemMessage(
         err instanceof Error && /network|fetch|load failed/i.test(err.message)
-          ? "We couldn't reach the server. Check your connection and try again."
-          : "Something went wrong on our side — this isn't a problem with your photo. Please try again."
+          ? t("errors.offline")
+          : t("errors.server")
       );
       setStep("system");
     }
@@ -187,10 +189,10 @@ export default function Analysis() {
             className="flex items-center gap-2 text-cream-muted hover:text-cream transition cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Back</span>
+            <span className="text-sm">{t("common.back")}</span>
           </button>
           <span className="text-gold text-sm font-medium">
-            Step {step === "upload" ? "1" : "2"} of 2
+            {t("analysis.stepOf", { step: step === "upload" ? 1 : 2, total: 2 })}
           </span>
         </div>
       </nav>
@@ -203,10 +205,10 @@ export default function Analysis() {
               className="text-3xl md:text-4xl font-bold text-cream mb-2"
               style={{ fontFamily: "Cormorant Garamond, serif" }}
             >
-              Upload Your Photo
+              {t("analysis.title")}
             </h1>
             <p className="text-cream-muted mb-8">
-              Upload a clear photo of your face — natural lighting, no filters, hair visible
+              {t("analysis.lede")}
             </p>
 
             {/* Upload + Sample gallery — side-by-side on desktop */}
@@ -234,9 +236,8 @@ export default function Analysis() {
 
             {/* Tip */}
             <div className="p-4 rounded-xl bg-gold/5 border border-gold/10 text-sm text-cream-muted mb-8">
-              <strong className="text-gold">Tip:</strong> Remove makeup if
-              possible for the most accurate results. Avoid filters, ring
-              lights, and artificial lighting.
+              <strong className="text-gold">{t("analysis.tipLabel")}</strong>{" "}
+              {t("analysis.tipBody")}
             </div>
 
             {/* Analyze button */}
@@ -245,7 +246,7 @@ export default function Analysis() {
               disabled={!hasPhoto}
               className="w-full py-4 rounded-xl bg-gold text-espresso font-semibold text-lg disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gold-light transition cursor-pointer"
             >
-              {hasPhoto ? "Analyze Photo" : "Upload a photo to begin"}
+              {t(hasPhoto ? "analysis.submit" : "analysis.submitDisabled")}
             </button>
           </div>
         )}

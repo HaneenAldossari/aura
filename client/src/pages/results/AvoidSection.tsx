@@ -1,11 +1,13 @@
 import { useState } from "react";
 import type { ColorSwatch } from "../../lib/types";
+import { useT } from "../../i18n";
 
 /**
  * "Worth avoiding" — a dominant panel of the season's clashing colors.
  * Each chip is slashed through; hover/focus reveals why it clashes.
  */
 export default function AvoidSection({ avoid }: { avoid: ColorSwatch[] }) {
+  const t = useT();
   const [active, setActive] = useState<number | null>(null);
   const colors = avoid.slice(0, 6);
   if (colors.length === 0) return null;
@@ -35,7 +37,10 @@ export default function AvoidSection({ avoid }: { avoid: ColorSwatch[] }) {
             whiteSpace: "nowrap",
           }}
         >
-          Worth <span style={{ fontStyle: "italic", color: "var(--color-error)" }}>avoiding</span>
+          {t("results.avoid.titleLead")}{" "}
+          <span style={{ fontStyle: "italic", color: "var(--color-error)" }}>
+            {t("results.avoid.titleAccent")}
+          </span>
         </h2>
         <div style={{ flex: 1, height: 0.5, background: "rgba(224,85,85,0.2)" }} />
         <span
@@ -48,7 +53,7 @@ export default function AvoidSection({ avoid }: { avoid: ColorSwatch[] }) {
             whiteSpace: "nowrap",
           }}
         >
-          These fight your coloring
+          {t("results.avoid.kicker")}
         </span>
       </div>
 
@@ -61,7 +66,7 @@ export default function AvoidSection({ avoid }: { avoid: ColorSwatch[] }) {
           margin: "0 0 22px",
         }}
       >
-        Near your face they dull your skin and steal your light — keep them below the waist, in accessories, or off the rack entirely.
+        {t("results.avoid.body")}
       </p>
 
       <div
@@ -78,7 +83,10 @@ export default function AvoidSection({ avoid }: { avoid: ColorSwatch[] }) {
             onMouseLeave={() => setActive((a) => (a === i ? null : a))}
             onFocus={() => setActive(i)}
             onBlur={() => setActive((a) => (a === i ? null : a))}
-            aria-label={`${c.name} — ${c.reason || c.note || "clashes with your season"}`}
+            aria-label={t("results.avoid.swatchLabel", {
+              name: c.name,
+              reason: c.reason || c.note || t("results.avoid.defaultReason"),
+            })}
             style={{
               position: "relative",
               height: 84,
@@ -148,7 +156,7 @@ export default function AvoidSection({ avoid }: { avoid: ColorSwatch[] }) {
           transition: "opacity 0.25s ease",
         }}
       >
-        {activeReason || "Hover a shade to see why it works against you"}
+        {activeReason || t("results.avoid.hint")}
       </p>
     </section>
   );

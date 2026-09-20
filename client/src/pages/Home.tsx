@@ -6,6 +6,7 @@ import JourneySection from "./home/JourneySection";
 import WhatYouGetSection from "./home/WhatYouGetSection";
 import SeasonCarousel from "./home/SeasonCarousel";
 import CTASection from "./home/CTASection";
+import { useT } from "../i18n";
 
 /* ─── Section Divider ───────────────────────────── */
 // NOTE: intentionally NOT the shared ui/GoldDivider — that one renders a
@@ -25,6 +26,7 @@ function GoldDivider() {
 /* ─── Main Component ────────────────────────────── */
 export default function Home() {
   const navigate = useNavigate();
+  const t = useT();
 
   return (
     <div className="animate-fade-in" style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)", fontFamily: "'Inter', system-ui, sans-serif" }}>
@@ -34,17 +36,17 @@ export default function Home() {
       <nav style={{ position: "relative", zIndex: 50, padding: "32px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", flexDirection: "row", alignItems: "baseline", gap: "10px" }}>
           <span style={{ fontFamily: "Cormorant Garamond, serif", fontWeight: 300, fontSize: "16px", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--accent-gold)", lineHeight: 1 }}>
-            your
+            {t("common.brandPrefix")}
           </span>
           <span style={{ fontFamily: "Cormorant Garamond, serif", fontWeight: 500, fontSize: "38px", letterSpacing: "0.08em", color: "var(--text-primary)", lineHeight: 1 }}>
-            Aura
+            {t("common.brandName")}
           </span>
         </div>
         <button
           onClick={() => navigate("/analyze")}
           style={{ padding: "10px 24px", borderRadius: "9999px", fontSize: "14px", fontWeight: 600, background: "var(--accent-gold)", color: "var(--bg-primary)", border: "none", cursor: "pointer", transition: "transform 0.2s" }}
         >
-          Get Started
+          {t("common.getStarted")}
         </button>
       </nav>
 
@@ -89,7 +91,7 @@ export default function Home() {
             color: "var(--text-muted)",
             textTransform: "uppercase",
           }}>
-            Your Aura
+            {t("common.brandFull")}
           </span>
         </div>
         <p style={{
@@ -100,7 +102,7 @@ export default function Home() {
           margin: 0,
           opacity: 0.7,
         }}>
-          Created by Haneen · AI Color Analysis · {new Date().getFullYear()}
+          {t("common.createdBy")} · {t("common.tagline")} · {new Date().getFullYear()}
         </p>
       </footer>
     </div>

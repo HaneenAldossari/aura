@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./DrapeWall.css";
+import { useT, type Key } from "../../i18n";
 
 /* ─── The Drape Wall ───
    Recreates the color-analysis studio moment: fabric drapes hanging
@@ -10,7 +11,7 @@ type Season = {
   name: "Spring" | "Summer" | "Autumn" | "Winter";
   colors: string[]; // signature family hexes, top → bottom of the drape
   dominant: string; // used for the background tint wash
-  caption: string; // headline hook when focused
+  captionKey: Key; // headline hook when focused
 };
 
 const SEASONS: Season[] = [
@@ -18,25 +19,25 @@ const SEASONS: Season[] = [
     name: "Spring",
     colors: ["#DB8768", "#E3C36F", "#93A860"], // coral / warm yellow / fresh green
     dominant: "#DB8768",
-    caption: "Spring freshens you.",
+    captionKey: "home.drape.spring",
   },
   {
     name: "Summer",
     colors: ["#C49AA2", "#7A8BA3", "#A38EA9"], // dusty rose / slate blue / soft mauve
     dominant: "#7A8BA3",
-    caption: "Summer softens you.",
+    captionKey: "home.drape.summer",
   },
   {
     name: "Autumn",
     colors: ["#A85A38", "#77713F", "#B08542"], // rust / olive / gold-brown
     dominant: "#A85A38",
-    caption: "Autumn warms you.",
+    captionKey: "home.drape.autumn",
   },
   {
     name: "Winter",
     colors: ["#A9C1D6", "#26365A", "#77294B", "#141419"], // icy blue / navy / berry / black
     dominant: "#77294B",
-    caption: "Winter sharpens you.",
+    captionKey: "home.drape.winter",
   },
 ];
 
@@ -81,6 +82,7 @@ function useMediaQuery(query: string) {
 }
 
 export default function DrapeWall() {
+  const t = useT();
   const navigate = useNavigate();
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const isDesktop = useMediaQuery("(min-width: 1024px)");
@@ -121,7 +123,7 @@ export default function DrapeWall() {
         aria-live="polite"
         className={`drape-wall__caption${active !== null ? " drape-wall__caption--focused" : ""}`}
       >
-        {active !== null ? SEASONS[active].caption : "Which one wakes up your face?"}
+        {active !== null ? t(SEASONS[active].captionKey) : t("home.drape.prompt")}
       </p>
 
       <div className="drape-wall__scroller">

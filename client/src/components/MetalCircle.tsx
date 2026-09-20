@@ -1,3 +1,4 @@
+import { useT } from "../i18n";
 const METAL_LABELS: Record<string, string> = {
   "rose-gold": "Rose Gold",
   "silver": "Silver",
@@ -24,6 +25,7 @@ export const METAL_FILE_MAP: Record<string, string> = {
 };
 
 export function MetalCircle({ metal, recommended, size = 52 }: MetalCircleProps) {
+  const t = useT();
   return (
     <div style={{
       display: "flex",
@@ -57,7 +59,7 @@ export function MetalCircle({ metal, recommended, size = 52 }: MetalCircleProps)
           color: "#706860",
           lineHeight: 1,
         }}>
-          not ideal
+          {t("results.style.notIdeal")}
         </span>
       )}
     </div>

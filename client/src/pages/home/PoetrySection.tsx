@@ -1,5 +1,8 @@
+import { useT } from "../../i18n";
 /* ─── Precision Meets Poetry ──────── */
 export default function PoetrySection() {
+  const t = useT();
+
   return (
     <section style={{
       position: "relative", zIndex: 10,
@@ -34,7 +37,7 @@ export default function PoetrySection() {
           position: "relative",
           zIndex: 1,
         }}>
-          Precision Meets Poetry
+          {t("home.poetry.title")}
         </h2>
         <p style={{
           color: "var(--text-secondary)",
@@ -46,8 +49,7 @@ export default function PoetrySection() {
           position: "relative",
           zIndex: 1,
         }}>
-          We combine advanced AI color science with an artistic eye to decode
-          the hues that make you radiant.
+          {t("home.poetry.body")}
         </p>
         <p style={{
           fontFamily: "Cormorant Garamond, serif",
@@ -58,7 +60,7 @@ export default function PoetrySection() {
           position: "relative",
           zIndex: 1,
         }}>
-          From a single portrait to your complete colour world.
+          {t("home.poetry.closing")}
         </p>
       </div>
     </section>

@@ -1,3 +1,4 @@
+import { useT } from "../../i18n";
 export default function SampleGallery({
   samples,
   onSampleClick,
@@ -5,20 +6,22 @@ export default function SampleGallery({
   samples: string[];
   onSampleClick: (id: string) => void;
 }) {
+  const t = useT();
+
   return (
     <div>
       <p className="text-cream-muted text-xs uppercase tracking-widest mb-1">
-        Or try a sample face
+        {t("analysis.samples.heading")}
       </p>
       <p className="text-cream-muted/70 text-xs mb-4">
-        AI-generated — explore without sharing your photo
+        {t("analysis.samples.note")}
       </p>
       <div className="grid grid-cols-3 gap-2">
         {samples.map((id) => (
           <button
             key={id}
             onClick={() => onSampleClick(id)}
-            aria-label={`Analyze sample face ${id.replace("sample-", "")}`}
+            aria-label={t("analysis.samples.itemLabel", { n: id.replace("sample-", "") })}
             className="relative aspect-square rounded-lg overflow-hidden border border-gold/15 hover:border-gold/50 transition cursor-pointer group"
           >
             <img loading="lazy" decoding="async"

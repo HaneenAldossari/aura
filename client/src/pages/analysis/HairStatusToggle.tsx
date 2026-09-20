@@ -1,4 +1,5 @@
 import type { HairStatus } from "../../lib/types";
+import { useT, type Key } from "../../i18n";
 
 /**
  * Asked before analysis, because dyed or covered hair carries no information
@@ -9,10 +10,10 @@ import type { HairStatus } from "../../lib/types";
  * Prominent rather than tucked away, and defaulted to "natural" only because it
  * is the commonest case — not because it is safe to leave unread.
  */
-const OPTIONS: { value: HairStatus; label: string; hint: string }[] = [
-  { value: "natural", label: "Natural", hint: "Never coloured, or grown out" },
-  { value: "dyed", label: "Coloured", hint: "Dyed, highlighted or toned" },
-  { value: "covered", label: "Not visible", hint: "Covered, or out of frame" },
+const OPTIONS: { value: HairStatus; labelKey: Key; hintKey: Key }[] = [
+  { value: "natural", labelKey: "analysis.hair.naturalLabel", hintKey: "analysis.hair.naturalHint" },
+  { value: "dyed", labelKey: "analysis.hair.dyedLabel", hintKey: "analysis.hair.dyedHint" },
+  { value: "covered", labelKey: "analysis.hair.coveredLabel", hintKey: "analysis.hair.coveredHint" },
 ];
 
 export default function HairStatusToggle({
@@ -22,16 +23,18 @@ export default function HairStatusToggle({
   value: HairStatus;
   onChange: (next: HairStatus) => void;
 }) {
+  const t = useT();
+
   return (
     <fieldset className="mt-6">
       <legend className="text-sm mb-1" style={{ color: "var(--text-primary)" }}>
-        Is your hair its natural colour?
+        {t("analysis.hair.legend")}
       </legend>
       <p className="text-xs mb-3" style={{ color: "var(--text-muted)" }}>
-        Coloured hair tells us nothing about your natural colouring, so we leave it out.
+        {t("analysis.hair.note")}
       </p>
 
-      <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Hair colour status">
+      <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label={t("analysis.hair.groupLabel")}>
         {OPTIONS.map((option) => {
           const selected = value === option.value;
           return (
@@ -51,10 +54,10 @@ export default function HairStatusToggle({
                 className="block text-sm font-medium"
                 style={{ color: selected ? "var(--accent-gold)" : "var(--text-primary)" }}
               >
-                {option.label}
+                {t(option.labelKey)}
               </span>
               <span className="block text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
-                {option.hint}
+                {t(option.hintKey)}
               </span>
             </button>
           );

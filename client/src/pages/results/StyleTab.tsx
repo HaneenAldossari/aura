@@ -6,6 +6,7 @@ import { HairCard } from "../../components/HairCard";
 import { getHairShadesForSeason, getHairSubtitle } from "../../data/hairShadeLibrary";
 import EditorialSection from "./MakeupSection";
 import GemFacet from "./GemFacet";
+import { useT } from "../../i18n";
 import "./results-tabs.css";
 
 const groupLabelStyle = {
@@ -24,6 +25,7 @@ export default function StyleTab({
   data: AnalysisResult;
   seasonName: string;
 }) {
+  const t = useT();
   const palette = data.palette;
   const jewelry = data.jewelry;
   const hairColor = data.hairColor;
@@ -56,7 +58,7 @@ export default function StyleTab({
           >
             <SplitText
               key="style-heading"
-              text="Your Style Guide"
+              text={t("results.style.title")}
               className="text-3xl font-bold"
               tag="h2"
               delay={30}
@@ -64,11 +66,11 @@ export default function StyleTab({
             />
 
             {/* ── Metals — yours vs not yours ── */}
-            <EditorialSection title="Metals" direction="The hardware that agrees with your skin.">
+            <EditorialSection title={t("results.style.metalsTitle")} direction={t("results.style.metalsBody")}>
               <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                 {yourMetals.length > 0 && (
                   <div>
-                    <p style={groupLabelStyle}>Your metals</p>
+                    <p style={groupLabelStyle}>{t("results.style.yourMetals")}</p>
                     <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
                       {yourMetals.map((metal) => (
                         <MetalCircle
@@ -82,7 +84,7 @@ export default function StyleTab({
                 )}
                 {notYourMetals.length > 0 && (
                   <div>
-                    <p style={{ ...groupLabelStyle, color: "var(--text-muted)" }}>Not yours</p>
+                    <p style={{ ...groupLabelStyle, color: "var(--text-muted)" }}>{t("results.style.notYours")}</p>
                     <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
                       {notYourMetals.map((metal) => (
                         <div key={metal} className="metal-not-yours">
@@ -99,7 +101,7 @@ export default function StyleTab({
             </EditorialSection>
 
             {/* ── Gemstones — faceted SVG stones from the season guide ── */}
-            <EditorialSection title="Gemstones" direction="Stones that return your light.">
+            <EditorialSection title={t("results.style.gemsTitle")} direction={t("results.style.gemsBody")}>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 28, alignItems: "flex-start" }}>
                 {guide.gemstones.map((g) => (
                   <GemFacet key={g.name} gem={g} />
@@ -113,7 +115,7 @@ export default function StyleTab({
                 style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
               >
                 <p className="text-xs uppercase tracking-wide mb-2" style={{ color: "var(--accent-gold)" }}>
-                  Style Tips
+                  {t("results.style.tipsTitle")}
                 </p>
                 <p className="leading-relaxed text-sm" style={{ color: "var(--text-primary)" }}>
                   {jewelry.style}
@@ -145,7 +147,7 @@ export default function StyleTab({
           <EditorialSection title="Hair" direction={hairSubtitle}>
             <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
               <div>
-                <p style={groupLabelStyle}>Recommended</p>
+                <p style={groupLabelStyle}>{t("results.style.hairRecommended")}</p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                   {hairShades.best.map((shade) => (
                     <HairCard key={shade.id} shade={shade} />
@@ -156,7 +158,7 @@ export default function StyleTab({
               {hairShades.avoid.length > 0 && (
                 <div>
                   <div style={{ height: "0.5px", background: "var(--accent-gold)", opacity: 0.4, marginBottom: 12 }} />
-                  <p style={{ ...groupLabelStyle, color: "var(--text-muted)" }}>Colours to avoid</p>
+                  <p style={{ ...groupLabelStyle, color: "var(--text-muted)" }}>{t("results.style.hairAvoid")}</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                     {hairShades.avoid.map((shade) => (
                       <HairCard key={shade.id} shade={shade} avoid />
@@ -180,13 +182,16 @@ export default function StyleTab({
               }}
             >
               {data.hairAvailable === false
-                ? (data.hairNote ??
-                  "We couldn't read your hair, so this uses your skin and eyes only.")
+                ? (data.hairNote ?? t("results.style.hairNoteUnavailable"))
                 : data.measured.hairStatus === "natural"
-                  ? "You told us your hair is its natural colour, so we included it."
-                  : `You told us your hair is ${
-                      data.measured.hairStatus === "dyed" ? "coloured" : "not visible"
-                    }, so we left it out and used your skin and eyes.`}
+                  ? t("results.style.hairNoteNatural")
+                  : t("results.style.hairNoteExcluded", {
+                      status: t(
+                        data.measured.hairStatus === "dyed"
+                          ? "results.style.hairStatusDyed"
+                          : "results.style.hairStatusCovered"
+                      ),
+                    })}
             </div>
           )}
 
@@ -197,7 +202,7 @@ export default function StyleTab({
               style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
             >
               <p className="text-xs uppercase tracking-wide mb-2" style={{ color: "var(--accent-gold)" }}>
-                Best Highlights
+                {t("results.style.hairBestHighlights")}
               </p>
               <p className="leading-relaxed text-sm" style={{ color: "var(--text-primary)" }}>
                 {hairColor.bestHighlights}
@@ -210,7 +215,7 @@ export default function StyleTab({
               style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
             >
               <p className="text-xs uppercase tracking-wide mb-2" style={{ color: "var(--accent-gold)" }}>
-                Overall Direction
+                {t("results.style.hairOverall")}
               </p>
               <p className="leading-relaxed text-sm" style={{ color: "var(--text-primary)" }}>
                 {hairColor.bestOverall}

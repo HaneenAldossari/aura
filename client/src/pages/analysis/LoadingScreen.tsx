@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import {
   Loader2,
   Eye,
@@ -8,15 +8,29 @@ import {
   CheckCircle2,
   ShieldCheck,
 } from "lucide-react";
+import { useT, type Key } from "../../i18n";
 
+/* Stage keys are the pipeline's own event names and must not change; the copy
+   beside each one is a catalogue key, resolved per render. */
 const ANALYSIS_STAGES = [
-  { icon: <Scan />, key: "loading-face-model", title: "Getting ready", description: "Downloading the face model — this happens once.", duration: 4000 },
-  { icon: <Eye />, key: "checking", title: "Checking your photo", description: "Focus, lighting and framing, right here on your device...", duration: 3000 },
-  { icon: <Palette />, key: "loading-detail-model", title: "Loading detail model", description: "One more download so we can read your hair...", duration: 6000 },
-  { icon: <Sparkles />, key: "measuring", title: "Measuring your colouring", description: "Reading skin, hair and eye colour in CIE Lab...", duration: 4000 },
-  { icon: <ShieldCheck />, key: "analyzing", title: "Determining your season", description: "Matching your measurements against the 12 seasons...", duration: 12000 },
-  { icon: <CheckCircle2 />, key: "building", title: "Building your profile", description: "Generating your palette, makeup guide, and recommendations...", duration: 5000 },
-] as const;
+  { icon: <Scan />, key: "loading-face-model", titleKey: "loading.stage.faceModelTitle", bodyKey: "loading.stage.faceModelBody", duration: 4000 },
+  { icon: <Eye />, key: "checking", titleKey: "loading.stage.checkingTitle", bodyKey: "loading.stage.checkingBody", duration: 3000 },
+  { icon: <Palette />, key: "loading-detail-model", titleKey: "loading.stage.detailModelTitle", bodyKey: "loading.stage.detailModelBody", duration: 6000 },
+  { icon: <Sparkles />, key: "measuring", titleKey: "loading.stage.measuringTitle", bodyKey: "loading.stage.measuringBody", duration: 4000 },
+  { icon: <ShieldCheck />, key: "analyzing", titleKey: "loading.stage.analysingTitle", bodyKey: "loading.stage.analysingBody", duration: 12000 },
+  { icon: <CheckCircle2 />, key: "building", titleKey: "loading.stage.buildingTitle", bodyKey: "loading.stage.buildingBody", duration: 5000 },
+] as const satisfies ReadonlyArray<{ icon: ReactNode; key: string; titleKey: Key; bodyKey: Key; duration: number }>;
+
+/* Named, not indexed: a translator sees what each fact is, and reordering is safe. */
+const FACT_KEYS = [
+  "loading.fact.caygill",
+  "loading.fact.jackson",
+  "loading.fact.korea",
+  "loading.fact.undertone",
+  "loading.fact.hair",
+  "loading.fact.precision",
+  "loading.fact.skin",
+] as const satisfies ReadonlyArray<Key>;
 
 /** Stage keys the pipeline and the upload step emit. */
 export type LoadingStageKey = (typeof ANALYSIS_STAGES)[number]["key"];
@@ -38,19 +52,10 @@ export default function LoadingScreen({
   /** 0-1 within the current stage, for the two model downloads. */
   stageProgress?: number;
 }) {
+  const t = useT();
   const [activeStage, setActiveStage] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [funFact, setFunFact] = useState(0);
-
-  const funFacts = [
-    "Color analysis originated in the 1940s when artist Suzanne Caygill noticed people look better in certain color families.",
-    "The 4-season system was popularized by Carole Jackson's 1980 book 'Color Me Beautiful'.",
-    "Korean personal color analysis (퍼스널컬러) became a massive beauty trend in the 2010s.",
-    "Your undertone never changes — it's determined by your melanin, hemoglobin, and carotenoid levels.",
-    "Your natural hair color provides strong clues about whether you're warm or cool-toned.",
-    "The 12-season system provides 3x more precision than the basic 4-season model.",
-    "Wearing your right colors can make your skin look clearer and more even without any makeup.",
-  ];
 
   // Progress through stages based on time
   useEffect(() => {
@@ -89,7 +94,7 @@ export default function LoadingScreen({
   // Cycle fun facts every 8 seconds (or proportionally faster in compressed mode)
   useEffect(() => {
     const interval = setInterval(() => {
-      setFunFact((prev) => (prev + 1) % funFacts.length);
+      setFunFact((prev) => (prev + 1) % FACT_KEYS.length);
     }, Math.max(2500, 8000 * scale));
     return () => clearInterval(interval);
   }, [scale]);
@@ -158,10 +163,10 @@ export default function LoadingScreen({
         style={{ fontFamily: "Cormorant Garamond, serif" }}
         key={`title-${activeStage}`}
       >
-        {ANALYSIS_STAGES[activeStage].title}
+        {t(ANALYSIS_STAGES[activeStage].titleKey)}
       </h2>
       <p className="text-cream-muted text-sm text-center max-w-sm mb-8" key={`desc-${activeStage}`}>
-        {ANALYSIS_STAGES[activeStage].description}
+        {t(ANALYSIS_STAGES[activeStage].bodyKey)}
       </p>
 
       {/* Stage progress steps */}
@@ -205,7 +210,7 @@ export default function LoadingScreen({
                   isActive ? "text-cream font-medium" : isComplete ? "text-cream-muted" : "text-cream-muted/50"
                 }`}
               >
-                {stage.title}
+                {t(stage.titleKey)}
               </span>
 
               {/* Elapsed indicator for active */}
@@ -219,7 +224,7 @@ export default function LoadingScreen({
 
               {/* Checkmark for complete */}
               {isComplete && (
-                <span className="ml-auto text-warm-green text-xs">Done</span>
+                <span className="ml-auto text-warm-green text-xs">{t("loading.done")}</span>
               )}
             </div>
           );
@@ -228,15 +233,15 @@ export default function LoadingScreen({
 
       {/* Fun fact */}
       <div className="max-w-md text-center px-6 py-4 rounded-xl bg-espresso-light/50 border border-gold/8">
-        <p className="text-gold text-xs uppercase tracking-widest mb-2">Did you know?</p>
+        <p className="text-gold text-xs uppercase tracking-widest mb-2">{t("loading.didYouKnow")}</p>
         <p className="text-cream-muted text-sm leading-relaxed transition-opacity duration-500" key={funFact}>
-          {funFacts[funFact]}
+          {t(FACT_KEYS[funFact])}
         </p>
       </div>
 
       {/* Reassurance */}
       <p className="text-cream-muted/40 text-xs mt-6">
-        This usually takes 20-30 seconds — hang tight!
+        {t("loading.reassurance")}
       </p>
     </div>
   );

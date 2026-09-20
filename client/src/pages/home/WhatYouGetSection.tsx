@@ -1,17 +1,14 @@
 import { useState } from "react";
 import FeatureMockup from "./FeatureMockup";
+import { useT } from "../../i18n";
 
-const featureCards = [
-  { key: "season", title: "Your Season", desc: "Your personal season from the 12-season system with complete colour analysis" },
-  { key: "palette", title: "Color Palette", desc: "12 curated shades in your exact seasonal colours" },
-  { key: "beauty", title: "Beauty Guide", desc: "Foundation, blush, bronzer, lips, and eyeshadow matched to your undertone" },
-  { key: "nails", title: "Nail Guide", desc: "3 nail swatches perfectly matched to your palette" },
-  { key: "metals", title: "Metals & Gemstones", desc: "Your ideal jewellery metals and gemstone recommendations" },
-  { key: "check", title: "Before You Buy", desc: "Upload any product photo to check if it matches your palette" },
-];
+/* Keys only — the copy lives in the catalogue, resolved per render so a locale
+   change re-labels the list without remounting it. */
+const featureCards = ["season", "palette", "beauty", "nails", "metals", "check"] as const;
 
 /* ─── What You Get ──────────────── */
 export default function WhatYouGetSection() {
+  const t = useT();
   const [activeFeature, setActiveFeature] = useState(0);
 
   return (
@@ -27,27 +24,27 @@ export default function WhatYouGetSection() {
         marginBottom: "16px",
         letterSpacing: "-0.02em",
       }}>
-        What You Get
+        {t("home.whatYouGet.title")}
       </h2>
       <div style={{ width: "40px", height: "1px", background: "var(--accent-gold)", marginBottom: "48px" }} />
 
       <div className="features-layout" style={{ display: "flex", flexDirection: "column", gap: "40px" }}>
         {/* Left: text list */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0" }}>
-          {featureCards.map((f, i) => {
+          {featureCards.map((key, i) => {
             const isActive = i === activeFeature;
             return (
               <button
-                key={f.key}
+                key={key}
                 onClick={() => setActiveFeature(i)}
                 style={{
                   display: "block",
                   padding: "18px 20px",
                   background: "transparent",
                   border: "none",
-                  borderLeft: isActive ? "2px solid var(--accent-gold)" : "2px solid transparent",
+                  borderInlineStart: isActive ? "2px solid var(--accent-gold)" : "2px solid transparent",
                   cursor: "pointer",
-                  textAlign: "left",
+                  textAlign: "start",
                   transition: "all 0.3s ease",
                 }}
               >
@@ -59,7 +56,7 @@ export default function WhatYouGetSection() {
                   letterSpacing: "0.03em",
                   transition: "color 0.3s",
                 }}>
-                  {f.title}
+                  {t(`home.whatYouGet.${key}Title` as const)}
                 </h4>
                 <p style={{
                   fontSize: "13px",
@@ -68,7 +65,7 @@ export default function WhatYouGetSection() {
                   margin: 0,
                   transition: "color 0.3s",
                 }}>
-                  {f.desc}
+                  {t(`home.whatYouGet.${key}Body` as const)}
                 </p>
               </button>
             );

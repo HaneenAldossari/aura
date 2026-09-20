@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import FanDeck from "./FanDeck";
 import type { AnalysisResult } from "../../lib/types";
+import { useT } from "../../i18n";
 
 /**
  * Overview identity block: season name + tagline on the left, the palette
@@ -44,6 +45,7 @@ export default function SeasonHero({
   seasonName: string;
   sessionId?: string;
 }) {
+  const t = useT();
   const seasonWords = seasonName.split(" ");
   const [isNarrow, setIsNarrow] = useState(
     typeof window !== "undefined" && window.innerWidth < 900
@@ -63,7 +65,7 @@ export default function SeasonHero({
   const traits = [
     data.undertone,
     data.chroma,
-    data.contrastLevel && `${data.contrastLevel} contrast`,
+    data.contrastLevel && t("results.hero.contrastSuffix", { level: data.contrastLevel }),
   ].filter(Boolean) as string[];
 
   return (
@@ -98,7 +100,7 @@ export default function SeasonHero({
             marginBottom: 10,
             opacity: 0.8,
           }}>
-            Your revelation is complete.
+            {t("results.hero.eyebrow")}
           </p>
           <h1 className={playEntrance ? "hero-name-enter" : undefined} style={{
             fontFamily: "Cormorant Garamond, serif",
@@ -114,7 +116,7 @@ export default function SeasonHero({
               <span
                 key={i}
                 style={{
-                  marginRight: i < seasonWords.length - 1 ? "0.25em" : 0,
+                  marginInlineEnd: i < seasonWords.length - 1 ? "0.25em" : 0,
                   color: i === 0 ? "#F2EEE8" : "#D4AF7A",
                   fontStyle: i === 0 ? "normal" : "italic",
                 }}
@@ -146,8 +148,8 @@ export default function SeasonHero({
               color: "#B8B0A4",
               maxWidth: 440,
               lineHeight: 1.55,
-              borderLeft: "2px solid rgba(212,175,122,0.3)",
-              paddingLeft: 20,
+              borderInlineStart: "2px solid rgba(212,175,122,0.3)",
+              paddingInlineStart: 20,
               paddingTop: 4,
               paddingBottom: 4,
               margin: 0,
@@ -168,7 +170,7 @@ export default function SeasonHero({
             textAlign: "center",
             margin: "0 0 4px",
           }}>
-            Your 12 signature tones
+            {t("results.hero.paletteCaption")}
           </p>
           <FanDeck colors={colors} size={isNarrow ? "medium" : "medium"} />
         </div>

@@ -1,4 +1,5 @@
 import { RefreshCw, ServerCrash } from "lucide-react";
+import { useT } from "../../i18n";
 
 /**
  * Our failure, shown as ours.
@@ -19,6 +20,8 @@ export default function SystemErrorPanel({
   message: string;
   onRetry: () => void;
 }) {
+  const t = useT();
+
   return (
     <div
       className="rounded-2xl p-6 max-w-lg mx-auto"
@@ -27,7 +30,7 @@ export default function SystemErrorPanel({
       <div className="flex items-center gap-3 mb-4">
         <ServerCrash size={20} style={{ color: "var(--accent-gold)" }} aria-hidden />
         <h2 className="text-lg" style={{ color: "var(--text-primary)" }}>
-          Something went wrong on our side
+          {t("errors.systemTitle")}
         </h2>
       </div>
 
@@ -35,7 +38,7 @@ export default function SystemErrorPanel({
         {message}
       </p>
       <p className="text-sm leading-relaxed mb-6" style={{ color: "var(--text-muted)" }}>
-        Your photo is fine — there's nothing you need to change about it.
+        {t("errors.systemReassurance")}
       </p>
 
       <button
@@ -45,7 +48,7 @@ export default function SystemErrorPanel({
         style={{ background: "var(--accent-gold)", color: "var(--bg-base, #10100e)" }}
       >
         <RefreshCw size={16} aria-hidden />
-        Try again
+        {t("common.retry")}
       </button>
     </div>
   );

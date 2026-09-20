@@ -4,13 +4,16 @@ import { streamChatMessage } from "../../lib/api";
 import type { AnalysisResult } from "../../lib/types";
 import type { ChatMessage } from "../../lib/types";
 import IconButton from "../../components/ui/IconButton";
+import { useT, type Key } from "../../i18n";
 
-const quickQuestions = [
-  "What Moonglaze blush suits me?",
-  "Does Charlotte Tilbury Pillow Talk work on me?",
-  "Best OPI nail polish for me?",
-  "Is MAC Ruby Woo good for me?",
-  "Gold or silver jewelry for me?",
+/* Starter prompts, as keys — the question is sent to the model in whatever
+   locale the user is reading, which is the language they expect a reply in. */
+const quickQuestions: Key[] = [
+  "results.chat.suggestion1",
+  "results.chat.suggestion2",
+  "results.chat.suggestion3",
+  "results.chat.suggestion4",
+  "results.chat.suggestion5",
 ];
 
 function loadHistory(sessionId: string | undefined): ChatMessage[] {
@@ -37,6 +40,7 @@ export default function ChatWidget({
   analysis: AnalysisResult;
   seasonName: string;
 }) {
+  const t = useT();
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() =>
     loadHistory(sessionId)
@@ -121,7 +125,7 @@ export default function ChatWidget({
       if (!streamed) {
         setChatMessages([
           ...newMessages,
-          { role: "assistant", content: "Sorry, I had trouble responding. Please try again." },
+          { role: "assistant", content: t("results.chat.failed") },
         ]);
       }
     }
@@ -137,7 +141,7 @@ export default function ChatWidget({
       {!chatOpen && (
         <button
           onClick={() => setChatOpen(true)}
-          aria-label="Ask the color advisor"
+          aria-label={t("results.chat.openLabel")}
           className="fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition cursor-pointer animate-bounce-in z-50"
           style={{ background: 'var(--accent-gold)', color: 'var(--text-on-accent)' }}
         >
@@ -153,15 +157,15 @@ export default function ChatWidget({
               : "fixed bottom-6 right-6 w-[380px] max-w-[calc(100vw-2rem)] h-[520px] rounded-2xl shadow-2xl flex flex-col z-50 animate-bounce-in overflow-hidden"
           }
           role="dialog"
-          aria-label="Color advisor chat"
+          aria-label={t("results.chat.panelLabel")}
           style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
         >
           <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-color)' }}>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(212,175,122,0.12)' }}><Sparkles className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} /></div>
               <div>
-                <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Color Advisor &bull; {seasonName}</p>
-                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Ask anything specific</p>
+                <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{t("results.chat.titleWithSeason", { season: seasonName })}</p>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t("results.chat.subtitle")}</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -171,10 +175,10 @@ export default function ChatWidget({
                   className="text-xs px-2 py-1 rounded-lg transition cursor-pointer"
                   style={{ color: 'var(--text-muted)' }}
                 >
-                  Clear
+                  {t("results.chat.clear")}
                 </button>
               )}
-              <IconButton aria-label="Close chat" onClick={() => setChatOpen(false)} style={{ color: 'var(--text-muted)' }}><X className="w-5 h-5" /></IconButton>
+              <IconButton aria-label={t("results.chat.closeLabel")} onClick={() => setChatOpen(false)} style={{ color: 'var(--text-muted)' }}><X className="w-5 h-5" /></IconButton>
             </div>
           </div>
 
@@ -183,13 +187,13 @@ export default function ChatWidget({
               <div className="space-y-3">
                 <div className="rounded-xl rounded-tl-sm p-3" style={{ background: 'rgba(212,175,122,0.12)' }}>
                   <p className="text-sm" style={{ color: 'var(--text-primary)' }}>
-                    Hi! I know your {seasonName} profile. Ask me about any specific product, shade, brand, or outfit — I&apos;ll give you a direct, personalized answer!
+                    {t("results.chat.greeting", { season: seasonName })}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  {quickQuestions.map((q) => (
-                    <button key={q} onClick={() => sendMessage(q)} className="px-3 py-1.5 rounded-full text-xs transition cursor-pointer" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
-                      {q}
+                  {quickQuestions.map((key) => (
+                    <button key={key} onClick={() => sendMessage(t(key))} className="px-3 py-1.5 rounded-full text-xs transition cursor-pointer" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
+                      {t(key)}
                     </button>
                   ))}
                 </div>
@@ -211,14 +215,14 @@ export default function ChatWidget({
                 <div className="rounded-xl rounded-bl-sm px-4 py-3 flex items-center gap-2" style={{ background: 'rgba(212,175,122,0.12)' }}>
                   {chatSearchPhase ? (
                     <>
-                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Looking up product details</span>
+                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{t("results.chat.searching")}</span>
                       {[0, 1, 2].map((i) => (
                         <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-gold)', animation: "typing-dot 1.2s ease-in-out infinite", animationDelay: `${i * 0.2}s` }} />
                       ))}
                     </>
                   ) : (
                     <>
-                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>Thinking</span>
+                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{t("results.chat.thinking")}</span>
                       {[0, 1, 2].map((i) => (
                         <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-gold)', animation: "typing-dot 1.2s ease-in-out infinite", animationDelay: `${i * 0.2}s` }} />
                       ))}
@@ -237,13 +241,13 @@ export default function ChatWidget({
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter") handleSendChat(); }}
-                placeholder="Ask about a product or shade..."
-                aria-label="Message the color advisor"
+                placeholder={t("results.chat.placeholder")}
+                aria-label={t("results.chat.inputLabel")}
                 className="flex-1 rounded-xl px-4 py-2.5 text-sm outline-none"
                 style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
               />
               <IconButton
-                aria-label="Send message"
+                aria-label={t("results.chat.sendLabel")}
                 onClick={handleSendChat}
                 disabled={!chatInput.trim() || chatLoading}
                 className="w-10 h-10 disabled:opacity-30"

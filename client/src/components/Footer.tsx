@@ -1,8 +1,10 @@
+import { useT } from "../i18n";
 /**
  * Shared footer. `compact` renders the small single-line variant used on
  * Results; the default renders the brand footer used on Home.
  */
 export default function Footer({ compact = false }: { compact?: boolean }) {
+  const t = useT();
   const year = new Date().getFullYear();
 
   if (compact) {
@@ -17,7 +19,7 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
           textAlign: "center",
         }}
       >
-        &copy; {year} Your Aura &middot; AI Color Analysis &middot; 12 Season System
+        &copy; {year} {t("common.brandFull")} &middot; {t("common.tagline")} &middot; {t("common.seasonSystem")}
       </p>
     );
   }
@@ -38,7 +40,8 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
           margin: "0 0 8px",
         }}
       >
-        <span style={{ color: "var(--accent-gold)" }}>your</span> Aura
+        <span style={{ color: "var(--accent-gold)" }}>{t("common.brandPrefix")}</span>{" "}
+        {t("common.brandName")}
       </p>
       <p
         style={{
@@ -50,7 +53,7 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
           opacity: 0.7,
         }}
       >
-        Created by Haneen · AI Color Analysis · {year}
+        {t("common.createdBy")} · {t("common.tagline")} · {year}
       </p>
     </footer>
   );

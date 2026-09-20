@@ -1,5 +1,6 @@
 import { Camera, RefreshCw } from "lucide-react";
 import type { QualityIssue } from "../../lib/measure";
+import { useT } from "../../i18n";
 
 /**
  * Shown when the browser-side quality gate rejects a photo.
@@ -15,6 +16,7 @@ export default function QualityPanel({
   issues: QualityIssue[];
   onRetake: () => void;
 }) {
+  const t = useT();
   const fatal = issues.some((i) => i.fatal);
 
   return (
@@ -25,7 +27,7 @@ export default function QualityPanel({
       <div className="flex items-center gap-3 mb-4">
         <Camera size={20} style={{ color: "var(--accent-gold)" }} aria-hidden />
         <h2 className="text-lg" style={{ color: "var(--text-primary)" }}>
-          {fatal ? "We can't read that photo" : "This photo will give a rough result"}
+          {t(fatal ? "errors.qualityFatalTitle" : "errors.qualitySoftTitle")}
         </h2>
       </div>
 
@@ -42,7 +44,7 @@ export default function QualityPanel({
       </ul>
 
       <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
-        Your photo stayed on your device — we checked it here, and nothing was uploaded.
+        {t("errors.qualityPrivacy")}
       </p>
 
       <button
@@ -52,7 +54,7 @@ export default function QualityPanel({
         style={{ background: "var(--accent-gold)", color: "var(--bg-base, #10100e)" }}
       >
         <RefreshCw size={16} aria-hidden />
-        Try another photo
+        {t("errors.qualityRetake")}
       </button>
     </div>
   );

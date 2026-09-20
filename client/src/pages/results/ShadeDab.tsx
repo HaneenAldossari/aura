@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { BeautyShade } from "../../data/seasonBeautyGuide";
+import { useT } from "../../i18n";
 import "./results-tabs.css";
 
 export type ShadeShape = "dab" | "drop" | "almond";
@@ -28,6 +29,7 @@ export default function ShadeDab({
   shape?: ShadeShape;
   avoid?: boolean;
 }) {
+  const t = useT();
   const [copied, setCopied] = useState(false);
   const timer = useRef<number | undefined>(undefined);
   useEffect(() => () => window.clearTimeout(timer.current), []);
@@ -127,12 +129,18 @@ export default function ShadeDab({
       type="button"
       className={`shade-dab${avoid ? " shade-dab--avoid" : ""}`}
       onClick={copyHex}
-      aria-label={`${shade.name}${finish ? `, ${finish} finish` : ""}${avoid ? ", not recommended" : ""} — copy hex ${shade.hex}`}
-      title={`Copy ${shade.hex}`}
+      aria-label={t("results.beauty.shadeLabel", {
+        name: shade.name,
+        // The finish is a data value (matte, gloss, shimmer) and stays as it
+        // comes; only the sentence around it is translated.
+        finish: `${finish ? `, ${finish} finish` : ""}${avoid ? t("results.beauty.notRecommended") : ""}`,
+        hex: shade.hex,
+      })}
+      title={t("results.beauty.copyHex", { hex: shade.hex })}
     >
       <span className="shade-dab__blob-wrap" style={{ display: "block", width, height }}>
         <span className="shade-dab__hexchip" role="status">
-          {copied ? "Copied" : shade.hex}
+          {copied ? t("results.beauty.copied") : shade.hex}
         </span>
         <span className="shade-dab__ring" style={{ borderRadius: RADII[shape] }} />
         <span style={blob}>{layers}</span>

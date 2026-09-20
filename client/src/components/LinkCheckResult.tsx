@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import "../pages/results/results-tabs.css";
+import { useT, type Key } from "../i18n";
 
 interface SimilarColor {
   name: string;
@@ -30,11 +31,11 @@ const VERDICT_COLORS: Record<LinkCheckData["verdict"], string> = {
   avoid: "var(--color-error)",
 };
 
-const VERDICT_LABELS: Record<string, string> = {
-  great: "Perfect match",
-  good: "Good match",
-  maybe: "Might work",
-  avoid: "Not your color",
+const VERDICT_LABELS: Record<string, Key> = {
+  great: "results.shop.verdictGreat",
+  good: "results.shop.verdictGood",
+  maybe: "results.shop.verdictMaybe",
+  avoid: "results.shop.verdictAvoid",
 };
 
 // Semicircular gauge geometry: 180° arc of radius 80 in a 200×112 viewBox
@@ -45,13 +46,18 @@ const ARC_LEN = Math.PI * ARC_R;
 export function LinkCheckResult({ result, onReset }: LinkCheckResultProps) {
   const [mounted, setMounted] = useState(false);
   const [hoveredColor, setHoveredColor] = useState<string | null>(null);
+  const t = useT();
   const prefersReduced = useMemo(
     () => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches,
     [],
   );
 
   const verdictColor = VERDICT_COLORS[result.verdict] ?? "var(--accent-gold)";
-  const verdictLabel = VERDICT_LABELS[result.verdict] ?? result.verdict;
+  // An unrecognised verdict falls through as its own raw value rather than a
+  // key — the server's enum should make that unreachable, but a new verdict
+  // slipping through should read as itself, not as a missing-string warning.
+  const verdictKey = VERDICT_LABELS[result.verdict];
+  const verdictLabel = verdictKey ? t(verdictKey) : result.verdict;
   const score = Math.max(0, Math.min(100, result.matchScore));
   const shown = mounted || prefersReduced;
   const dashOffset = shown ? ARC_LEN * (1 - score / 100) : ARC_LEN;
@@ -209,7 +215,7 @@ export function LinkCheckResult({ result, onReset }: LinkCheckResultProps) {
           style={{
             background: "color-mix(in srgb, var(--accent-gold) 7%, transparent)",
             border: "1px solid color-mix(in srgb, var(--accent-gold) 18%, transparent)",
-            borderLeft: "3px solid var(--accent-gold)",
+            borderInlineStart: "3px solid var(--accent-gold)",
             borderRadius: "0 12px 12px 0",
             padding: "12px 16px",
             marginBottom: "24px",
@@ -233,7 +239,7 @@ export function LinkCheckResult({ result, onReset }: LinkCheckResultProps) {
               margin: "0 0 14px",
             }}
           >
-            Closest tones from your palette
+            {t("results.shop.closestTones")}
           </p>
           <div style={{ display: "flex", gap: "18px", flexWrap: "wrap", marginBottom: "24px" }}>
             {result.similarColors.map((c) => (
@@ -309,7 +315,7 @@ export function LinkCheckResult({ result, onReset }: LinkCheckResultProps) {
           e.currentTarget.style.color = "var(--text-secondary)";
         }}
       >
-        Check Another Item
+        {t("results.shop.checkAnother")}
       </button>
     </div>
   );

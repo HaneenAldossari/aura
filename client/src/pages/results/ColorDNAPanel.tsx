@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { getDescriptors } from "./seasonDescriptors";
 import { getSeasonBeautyGuide } from "../../data/seasonBeautyGuide";
+import { useT } from "../../i18n";
 import "./results-tabs.css";
 
 /** Resolved DNA values (AI-returned, with neutral fallbacks). */
@@ -25,6 +26,7 @@ export default function ColorDNAPanel({
   seasonName: string;
   colorDNA: ColorDNAValues;
 }) {
+  const t = useT();
   const prefersReduced = useMemo(
     () => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches,
     [],
@@ -40,18 +42,18 @@ export default function ColorDNAPanel({
 
   const clamp = (v: number) => Math.max(0, Math.min(100, v));
   const axes = [
-    { low: "Cool", high: "Warm", from: "#7A8FA6", to: "#C4934A", value: clamp(colorDNA.temperature) },
-    { low: "Light", high: "Deep", from: "#F0E8D8", to: "#2A1E16", value: clamp(colorDNA.depth) },
-    { low: "Muted", high: "Clear", from: "#8A8578", to: "#D4AF7A", value: clamp(colorDNA.clarity) },
-    { low: "Blends", high: "Contrasts", from: "#BCB4A6", to: "#15151B", value: clamp(colorDNA.contrast) },
+    { low: t("results.dna.cool"), high: t("results.dna.warm"), from: "#7A8FA6", to: "#C4934A", value: clamp(colorDNA.temperature) },
+    { low: t("results.dna.light"), high: t("results.dna.deep"), from: "#F0E8D8", to: "#2A1E16", value: clamp(colorDNA.depth) },
+    { low: t("results.dna.muted"), high: t("results.dna.clear"), from: "#8A8578", to: "#D4AF7A", value: clamp(colorDNA.clarity) },
+    { low: t("results.dna.blends"), high: t("results.dna.contrasts"), from: "#BCB4A6", to: "#15151B", value: clamp(colorDNA.contrast) },
   ];
 
   const desc = getDescriptors(seasonName);
   const featureRows = [
-    { label: "Skin Undertone", value: desc.undertone },
-    { label: "Hair", value: desc.hair },
-    { label: "Eyes", value: desc.eyes },
-    { label: "Contrast", value: desc.contrast },
+    { label: t("results.dna.rowUndertone"), value: desc.undertone },
+    { label: t("results.dna.rowHair"), value: desc.hair },
+    { label: t("results.dna.rowEyes"), value: desc.eyes },
+    { label: t("results.dna.rowContrast"), value: desc.contrast },
   ].filter((r) => r.value);
 
   return (
@@ -68,11 +70,17 @@ export default function ColorDNAPanel({
             lineHeight: 1.15,
           }}
         >
-          Your Colour Analysis
+          {t("results.dna.title")}
         </h3>
         <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6, margin: "0 0 20px", maxWidth: 620 }}>
-          Our AI analysis has mapped your physical traits to the frequency of {seasonName}. Your features
-          possess a {colorDNA.depth > 60 ? "grounded, majestic depth" : "soft, luminous quality"}.
+          {t("results.dna.intro", {
+            season: seasonName,
+            quality: t(
+              colorDNA.depth > 60
+                ? "results.dna.qualityDeep"
+                : "results.dna.qualityLight"
+            ),
+          })}
         </p>
         <div style={{ display: "flex", flexDirection: "column" }}>
           {featureRows.map((row, i) => (
@@ -104,7 +112,7 @@ export default function ColorDNAPanel({
                   fontFamily: "Cormorant Garamond, serif",
                   fontSize: 16,
                   color: "var(--text-primary)",
-                  textAlign: "right",
+                  textAlign: "end",
                   lineHeight: 1.3,
                 }}
               >
@@ -147,7 +155,7 @@ export default function ColorDNAPanel({
             margin: "0 0 12px",
           }}
         >
-          Color DNA Analysis
+          {t("results.dna.axesTitle")}
         </h3>
         <div style={{ display: "flex", flexDirection: "column", gap: 34, position: "relative", zIndex: 1 }}>
           {axes.map(({ low, high, from, to, value }, i) => {
@@ -160,7 +168,7 @@ export default function ColorDNAPanel({
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={Math.round(value)}
-                aria-label={`${low} to ${high}`}
+                aria-label={t("results.dna.axisRangeLabel", { low, high })}
               >
                 {/* End labels */}
                 <div

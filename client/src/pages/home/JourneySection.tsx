@@ -1,5 +1,13 @@
+import { useT } from "../../i18n";
 /* ─── Path to Discovery ──────────── */
 export default function JourneySection() {
+  const t = useT();
+  const steps = [
+    { title: t("home.journey.step1Title"), sub: t("home.journey.step1Body") },
+    { title: t("home.journey.step2Title"), sub: t("home.journey.step2Body") },
+    { title: t("home.journey.step3Title"), sub: t("home.journey.step3Body") },
+  ];
+
   return (
     <section id="journey" style={{
       position: "relative", zIndex: 10,
@@ -9,14 +17,14 @@ export default function JourneySection() {
     }}>
       <div style={{ textAlign: "center", marginBottom: "72px" }}>
         <span style={{ color: "var(--accent-gold)", fontSize: "11px", letterSpacing: "0.3em", textTransform: "uppercase", display: "block", marginBottom: "16px" }}>
-          How It Works
+          {t("home.journey.eyebrow")}
         </span>
         <h2 style={{
           fontFamily: "Cormorant Garamond, serif",
           fontSize: "clamp(28px, 4vw, 44px)",
           letterSpacing: "-0.02em",
         }}>
-          Path to Discovery
+          {t("home.journey.title")}
         </h2>
         <div style={{ width: "40px", height: "1px", background: "var(--accent-gold)", margin: "24px auto 0" }} />
       </div>
@@ -68,11 +76,7 @@ export default function JourneySection() {
           position: "relative",
           zIndex: 1,
         }}>
-          {[
-            { title: "Upload", sub: "A clear photo of your face in natural light — that's all we need to begin." },
-            { title: "Analyse", sub: "AI reads your skin undertone, eye color, and natural contrast level in seconds." },
-            { title: "Discover", sub: "Your complete color season, palette, and personalized beauty guide — revealed." },
-          ].map((step, i) => (
+          {steps.map((step, i) => (
             <div
               key={i}
               style={{
@@ -116,8 +120,7 @@ export default function JourneySection() {
                 lineHeight: 1.6,
                 margin: 0,
                 maxWidth: "220px",
-                marginLeft: "auto",
-                marginRight: "auto",
+                marginInline: "auto",
               }}>
                 {step.sub}
               </p>

@@ -1,4 +1,5 @@
 import type { ColorDNAValues } from "./ColorDNAPanel";
+import { useT } from "../../i18n";
 
 /** Season photo + story paragraph. */
 export default function SeasonStory({
@@ -10,6 +11,8 @@ export default function SeasonStory({
   seasonStory?: string;
   colorDNA: ColorDNAValues;
 }) {
+  const t = useT();
+
   return (
     <section style={{ marginBottom: 80 }}>
       <div style={{
@@ -49,10 +52,17 @@ export default function SeasonStory({
             color: "#D4AF7A",
             marginBottom: 20,
           }}>
-            Your Season Story
+            {t("results.story.title")}
           </h2>
           <p style={{ fontSize: 15, color: "#B8B0A4", lineHeight: 1.8, maxWidth: 520 }}>
-            {seasonStory || `As a ${seasonName}, your coloring reflects ${colorDNA.temperature > 60 ? "warmth and richness" : "coolness and clarity"}. Your features carry a ${colorDNA.contrast > 60 ? "high-contrast" : "soft"} quality with ${colorDNA.depth > 60 ? "deep" : "light"}, ${colorDNA.clarity > 50 ? "clear" : "muted"} tones that define your unique palette. The colours chosen for you enhance your natural harmony and bring out your best features.`}
+            {seasonStory ||
+              t("results.story.fallback", {
+                season: seasonName,
+                temperature: t(colorDNA.temperature > 60 ? "results.story.temperatureWarm" : "results.story.temperatureCool"),
+                contrast: t(colorDNA.contrast > 60 ? "results.story.contrastHigh" : "results.story.contrastSoft"),
+                depth: t(colorDNA.depth > 60 ? "results.story.depthDeep" : "results.story.depthLight"),
+                clarity: t(colorDNA.clarity > 50 ? "results.story.clarityClear" : "results.story.clarityMuted"),
+              })}
           </p>
         </div>
       </div>

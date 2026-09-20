@@ -5,12 +5,14 @@ import type { ColorSwatch, Palette } from "../../lib/types";
 import { LinkCheckResult } from "../../components/LinkCheckResult";
 import SplitText from "../../components/SplitText";
 import type { AnalysisResult } from "../../lib/types";
+import { useT } from "../../i18n";
 
 /**
  * Image-checker state. Lives at the Results level (not inside ShopTab) so
  * the result survives switching tabs — exactly as in the original page.
  */
 export function useLinkChecker(analysis: AnalysisResult | null) {
+  const t = useT();
   const [linkResult, setLinkResult] = useState<Record<string, any> | null>(null);
   const [linkLoading, setLinkLoading] = useState(false);
   const [linkError, setLinkError] = useState<string | null>(null);
@@ -25,11 +27,11 @@ export function useLinkChecker(analysis: AnalysisResult | null) {
     setLinkError(null);
     setLinkResult(null);
     try {
-      if (!analysis) throw new Error('No analysis loaded');
+      if (!analysis) throw new Error(t("results.shop.noAnalysis"));
       const res = await checkLinkImage(file, analysis);
       setLinkResult(res);
     } catch (err: any) {
-      setLinkError(err.message || 'Image check failed');
+      setLinkError(err.message || t("results.shop.checkFailed"));
     } finally {
       setLinkLoading(false);
     }
@@ -52,19 +54,20 @@ export default function ShopTab({
   seasonName: string;
   checker: LinkChecker;
 }) {
+  const t = useT();
   const { linkResult, linkLoading, linkError, imagePreview, fileInputRef, handleImageSelect, reset } = checker;
 
   return (
     <div className="animate-slide-up" style={{ maxWidth: '640px', margin: '0 auto' }}>
       <div className="mb-8">
-        <SplitText key="shop-heading" text="Before You Buy" className="text-3xl font-bold mb-2" tag="h1" delay={30} duration={0.5} />
-        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Upload a photo of any item — we'll tell you if it matches your {seasonName} palette.</p>
+        <SplitText key="shop-heading" text={t("results.shop.title")} className="text-3xl font-bold mb-2" tag="h1" delay={30} duration={0.5} />
+        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t("results.shop.lede", { season: seasonName })}</p>
       </div>
 
       {/* Palette quick-view */}
       {palette?.best?.length > 0 && (
         <div className="mb-6" style={{ padding: "12px 16px", borderRadius: "12px", background: "var(--bg-card)", border: "1px solid var(--border-color)" }}>
-          <p style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--accent-gold)", marginBottom: "8px" }}>Your palette</p>
+          <p style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--accent-gold)", marginBottom: "8px" }}>{t("results.shop.yourPalette")}</p>
           <div style={{ display: "flex", gap: "10px" }}>
             {palette.best.slice(0, 5).map((c: ColorSwatch) => (
               <div
@@ -104,7 +107,7 @@ export default function ShopTab({
           <div
             role="button"
             tabIndex={0}
-            aria-label="Upload a product photo to check against your palette"
+            aria-label={t("results.shop.dropzoneLabel")}
             onClick={() => fileInputRef.current?.click()}
             onKeyDown={e => {
               if (e.key === "Enter" || e.key === " ") {
@@ -123,8 +126,8 @@ export default function ShopTab({
             style={{ background: 'var(--bg-card)', border: '2px dashed var(--border-accent)', minHeight: '180px' }}
           >
             <Camera className="w-8 h-8" style={{ color: 'var(--accent-gold)' }} />
-            <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Upload a photo of the item</p>
-            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Tap to browse or drag & drop — JPG, PNG, or WebP</p>
+            <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{t("results.shop.dropHeading")}</p>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t("results.shop.dropHint")}</p>
           </div>
 
         </>
@@ -134,9 +137,9 @@ export default function ShopTab({
       {linkLoading && (
         <div className="rounded-xl p-8 text-center space-y-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-card)' }}>
           {imagePreview && (
-            <img src={imagePreview} alt="Uploaded item" className="w-32 h-32 object-cover rounded-xl mx-auto" />
+            <img src={imagePreview} alt={t("results.shop.uploadedAlt")} className="w-32 h-32 object-cover rounded-xl mx-auto" />
           )}
-          <p className="text-sm animate-pulse" style={{ color: 'var(--text-muted)' }}>Analyzing colors...</p>
+          <p className="text-sm animate-pulse" style={{ color: 'var(--text-muted)' }}>{t("results.shop.checking")}</p>
         </div>
       )}
 

@@ -10,8 +10,10 @@ import StyleTab from "./results/StyleTab";
 import ShopTab, { useLinkChecker } from "./results/ShopTab";
 import ChatWidget from "./results/ChatWidget";
 import { useResultsData } from "./results/useResultsData";
+import { useT } from "../i18n";
 
 export default function Results() {
+  const t = useT();
   const { sessionId } = useParams<{ sessionId: string }>();
   const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("overview");
@@ -41,9 +43,9 @@ export default function Results() {
   if (!data) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <p style={{ color: 'var(--text-muted)' }}>Results not found.</p>
+        <p style={{ color: 'var(--text-muted)' }}>{t("results.notFound")}</p>
         <button onClick={() => navigate("/analyze")} className="hover:underline cursor-pointer" style={{ color: 'var(--accent-gold)' }}>
-          Start a new analysis
+          {t("results.startOver")}
         </button>
       </div>
     );

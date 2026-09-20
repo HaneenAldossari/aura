@@ -1,7 +1,9 @@
 import { seasonCarouselData } from "./homeData";
+import { useT } from "../../i18n";
 
 /* ─── Season Carousel (moving tape) ── */
 export default function SeasonCarousel() {
+  const t = useT();
   return (
     <section style={{
       position: "relative", zIndex: 10,
@@ -15,7 +17,7 @@ export default function SeasonCarousel() {
           letterSpacing: "-0.02em",
           color: "var(--text-primary)",
         }}>
-          Which Season Are You?
+          {t("home.carousel.title")}
         </h2>
       </div>
 

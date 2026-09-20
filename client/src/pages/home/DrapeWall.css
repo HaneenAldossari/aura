@@ -7,6 +7,13 @@
   align-items: center;
   gap: 22px;
   padding: 8px 4px 0;
+  /* The tint below bleeds 26% past each edge by design. Clip it horizontally
+     so it cannot widen the page — it was adding 41px of horizontal scroll at
+     390px, invisible in LTR because the overflow sat off the right edge, and
+     immediately visible in RTL where the scroll origin is the right edge.
+     clip rather than hidden, so vertical bleed still works and this never
+     becomes a scroll container. */
+  overflow-x: clip;
 }
 
 /* Radial background tint of the focused drape's dominant color */
@@ -45,6 +52,14 @@
   position: relative;
   z-index: 1;
   max-width: 100%;
+  /* The track is wider than a phone; it was named a scroller but never made
+     one, so it simply overflowed. */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.drape-wall__scroller::-webkit-scrollbar {
+  display: none;
 }
 
 .drape-wall__track {
@@ -59,8 +74,7 @@
 .drape-wall__rail {
   position: absolute;
   top: 10px;
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   height: 1px;
   background: var(--accent-gold);
   opacity: 0.75;
@@ -77,10 +91,10 @@
   background: var(--bg-primary);
 }
 .drape-wall__rail::before {
-  left: 2px;
+  inset-inline-start: 2px;
 }
 .drape-wall__rail::after {
-  right: 2px;
+  inset-inline-end: 2px;
 }
 
 /* One hanging drape (a real button) */

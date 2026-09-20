@@ -136,6 +136,57 @@
 /* Numbers, hex codes and IDs stay LTR inside an isolated run, even in Arabic. */
 .ltr-run { unicode-bidi: isolate; direction: ltr; }
 
+/* ─── RTL — design system §07 ─────────────────────────────────────────────
+   Every rule above is logical, so direction alone mirrors the layout. These
+   are the cases where mirroring is not enough. */
+
+/* The 12-swatch band reverses so swatch 01 stays at the reading edge. It is a
+   numbered sequence, not a picture: mirroring the container alone would leave
+   01 at the far end, where it reads last. */
+[dir="rtl"] .swatch-band,
+[dir="rtl"] .palette-band {
+  flex-direction: row-reverse;
+}
+
+/* Arabic is never letterspaced. The design's Latin caps labels carry their
+   emphasis in tracking; in Arabic that breaks the joins between letters, so
+   the emphasis moves to weight instead. Applies to the type primitives and to
+   the utility classes that set tracking. */
+[dir="rtl"] .t-label,
+[dir="rtl"] .t-micro,
+[dir="rtl"] .tracking-widest,
+[dir="rtl"] .tracking-wide,
+[dir="rtl"] [style*="letter-spacing"] {
+  letter-spacing: normal !important;
+  font-weight: 600;
+}
+
+/* Uppercasing does nothing in Arabic — the script has no case — and the
+   transform is a no-op that only misleads whoever reads the CSS. */
+[dir="rtl"] .t-label,
+[dir="rtl"] .t-micro,
+[dir="rtl"] .uppercase {
+  text-transform: none;
+}
+
+/* Numbers, hex codes and IDs stay LTR inside an isolated run wherever they
+   appear, so "#C9A567" and "62%" do not get reordered by the bidi algorithm. */
+[dir="rtl"] .tabular-nums,
+[dir="rtl"] .hex,
+[dir="rtl"] .ltr-run {
+  unicode-bidi: isolate;
+  direction: ltr;
+}
+
+/* The nav edge fades are gradients, which have no logical keywords — swap the
+   two physical directions by hand. */
+[dir="rtl"] .nav-scroll-container::after {
+  background: linear-gradient(to left, transparent, var(--bg-primary));
+}
+[dir="rtl"] .nav-scroll-container::before {
+  background: linear-gradient(to right, transparent, var(--bg-primary));
+}
+
 * {
   box-sizing: border-box;
 }
@@ -316,7 +367,7 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  right: 0;
+  inset-inline-end: 0;
   bottom: 0;
   width: 40px;
   background: linear-gradient(to right, transparent, var(--bg-primary));
@@ -327,7 +378,7 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  left: 0;
+  inset-inline-start: 0;
   bottom: 0;
   width: 40px;
   background: linear-gradient(to left, transparent, var(--bg-primary));
@@ -369,10 +420,7 @@ body {
 .strikethrough-overlay::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: linear-gradient(
     135deg,
     transparent 40%,

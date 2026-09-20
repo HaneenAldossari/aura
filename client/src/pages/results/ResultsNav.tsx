@@ -2,14 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import type { Palette } from "../../lib/types";
+import { useT, type Key } from "../../i18n";
 
 export type Tab = "overview" | "beauty" | "style" | "shop";
 
-const tabs: { key: Tab; label: string }[] = [
-  { key: "overview", label: "Overview" },
-  { key: "beauty", label: "Beauty" },
-  { key: "style", label: "Style" },
-  { key: "shop", label: "Shop" },
+const tabs: { key: Tab; labelKey: Key }[] = [
+  { key: "overview", labelKey: "results.tabOverview" },
+  { key: "beauty", labelKey: "results.tabBeauty" },
+  { key: "style", labelKey: "results.tabStyle" },
+  { key: "shop", labelKey: "results.tabShop" },
 ];
 
 /**
@@ -32,6 +33,7 @@ export default function ResultsNav({
   seasonName: string;
   palette: Palette | undefined;
 }) {
+  const t = useT();
   const navigate = useNavigate();
   const rowRef = useRef<HTMLDivElement>(null);
   const [indicator, setIndicator] = useState({ left: 0, width: 0 });
@@ -65,33 +67,33 @@ export default function ResultsNav({
         <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
           <button onClick={() => navigate("/")} className="flex items-center gap-2 transition cursor-pointer" style={{ color: 'var(--text-muted)' }}>
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Home</span>
+            <span className="text-sm">{t("results.navHome")}</span>
           </button>
         </div>
         <div className="nav-scroll-container max-w-5xl mx-auto px-6 pb-2 relative">
           <div className="overflow-x-auto nav-scroll">
-            <div ref={rowRef} role="tablist" aria-label="Result sections" className="flex gap-1 relative">
-              {tabs.map((t, i) => (
+            <div ref={rowRef} role="tablist" aria-label={t("results.sectionsLabel")} className="flex gap-1 relative">
+              {tabs.map((tab_, i) => (
                 <button
-                  key={t.key}
-                  data-tab={t.key}
+                  key={tab_.key}
+                  data-tab={tab_.key}
                   role="tab"
-                  aria-selected={tab === t.key}
-                  tabIndex={tab === t.key ? 0 : -1}
-                  onClick={() => onTabChange(t.key)}
+                  aria-selected={tab === tab_.key}
+                  tabIndex={tab === tab_.key ? 0 : -1}
+                  onClick={() => onTabChange(tab_.key)}
                   onKeyDown={(e) => onKeyDown(e, i)}
                   className="whitespace-nowrap transition cursor-pointer"
                   style={{
                     fontSize: "12px",
                     letterSpacing: "0.16em",
                     textTransform: "uppercase",
-                    color: tab === t.key ? "var(--accent-gold)" : "var(--text-muted)",
+                    color: tab === tab_.key ? "var(--accent-gold)" : "var(--text-muted)",
                     background: "none",
                     border: "none",
                     padding: "6px 12px",
                   }}
                 >
-                  {t.label}
+                  {t(tab_.labelKey)}
                 </button>
               ))}
               {/* sliding gold hairline */}
@@ -118,7 +120,7 @@ export default function ResultsNav({
           <div style={{ maxWidth: 760, margin: "0 auto" }} className="flex items-center gap-2">
             <div style={{ width: 6, height: 6, borderRadius: "50%", background: palette?.best?.[0]?.hex || "var(--accent-gold)", flexShrink: 0 }} />
             <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.18em", color: "var(--text-muted)" }}>
-              Showing results for {seasonName}
+              {t("results.showingFor", { season: seasonName })}
             </span>
           </div>
         </div>
