@@ -1,12 +1,11 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 
 // Route-level code splitting — each page (and its heavy deps like gsap)
 // loads only when visited.
 const Home = lazy(() => import("./pages/Home"));
 const Analysis = lazy(() => import("./pages/Analysis"));
 const Results = lazy(() => import("./pages/Results"));
-const BeforeYouBuy = lazy(() => import("./pages/BeforeYouBuy"));
 
 function PageFallback() {
   return (
@@ -25,6 +24,12 @@ function PageFallback() {
   );
 }
 
+/** The standalone page became the Shop tab; shared links still land right. */
+function BeforeYouBuyRedirect() {
+  const { sessionId } = useParams<{ sessionId: string }>();
+  return <Navigate to={`/results/${sessionId}?tab=shop`} replace />;
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -33,9 +38,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/analyze" element={<Analysis />} />
           <Route path="/results/:sessionId" element={<Results />} />
-          {/* Its own route, not a tab: people return to this without re-reading
-              their result, and the id pins which palette it scores against. */}
-          <Route path="/before-you-buy/:sessionId" element={<BeforeYouBuy />} />
+          {/* Kept as a redirect: the standalone page became the Shop tab, and
+              any link already shared should still land on the right thing. */}
+          <Route path="/before-you-buy/:sessionId" element={<BeforeYouBuyRedirect />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

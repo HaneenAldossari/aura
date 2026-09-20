@@ -7,6 +7,7 @@
  * type is not.
  */
 import { getCanonicalPalette } from "./utils/seasonPalettes";
+import { getSeasonStyle } from "./utils/seasonStyle";
 import {
   getSeasonMakeup,
   resolveShade,
@@ -283,6 +284,9 @@ export function normalizeResult(raw: Record<string, unknown>): Record<string, un
     // Canonical makeup: the shade lists are ours, the look names and vibe
     // lines are the model's, and every hex above came from the lists.
     makeupShades: getSeasonMakeup(season),
+    // Canonical gemstones and hair colours, so the Style tab can render colour
+    // rather than the model's prose about colour.
+    styleShades: getSeasonStyle(season),
     looks: resolvedLooks,
 
     secondarySeason: (raw.secondarySeason as string) || "",

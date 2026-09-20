@@ -66,6 +66,36 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
   const looks = data.looks ?? [];
   const depth = data.colorDNA?.depth;
 
+  // Which rung of the ladder the measured depth falls on. The caption names
+  // that swatch, because "your depth is 22 of 100" is not something anyone can
+  // take to a counter — "look for shades named like Light Ivory" is.
+  const step =
+    typeof depth === "number"
+      ? Math.min(
+          makeup.foundation.length - 1,
+          Math.max(0, Math.floor((depth / 100) * makeup.foundation.length))
+        )
+      : null;
+
+  const depthWord = (data.measured?.axes?.value?.label ?? data.depth ?? "")
+    .split("/")[0]
+    .trim()
+    .toLowerCase();
+  const undertoneWord = (data.measured?.axes?.hue?.label ?? data.undertone ?? "")
+    .split("/")[0]
+    .trim()
+    .toLowerCase();
+
+  // Two names either side of the marked rung: a counter has more than one
+  // shade at any depth, and naming only one reads as a prescription.
+  const examples =
+    step === null
+      ? ""
+      : [makeup.foundation[step], makeup.foundation[step + 1] ?? makeup.foundation[step - 1]]
+          .filter(Boolean)
+          .map((f) => f.name.toLowerCase())
+          .join(" or ");
+
   return (
     <section className="ed-section" aria-labelledby="makeup-label">
       <h2 className="ed-section__label" id="makeup-label">
@@ -84,27 +114,31 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
           })}
         >
           {makeup.foundation.map((shade, i) => (
-            <span
-              key={shade.name}
-              className="ed-ladder__step"
-              style={{ background: shade.hex, position: "relative" }}
-              title={shade.name}
-            >
-              {/* One tick, on the step the measured depth falls in. */}
-              {typeof depth === "number" &&
-                Math.min(
-                  makeup.foundation.length - 1,
-                  Math.floor((depth / 100) * makeup.foundation.length)
-                ) === i && (
-                  <span
-                    className="ed-ladder__mark"
-                    style={{ insetInlineStart: "50%" }}
-                    aria-hidden
-                  />
+            <span className="ed-rung" key={shade.name}>
+              <span
+                className={`ed-ladder__step${step === i ? " ed-ladder__step--on" : ""}`}
+                style={{ background: shade.hex }}
+              >
+                {step === i && (
+                  <span className="ed-ladder__mark" style={{ insetInlineStart: "50%" }} aria-hidden />
                 )}
+              </span>
+              <span className={`ed-rung__name${step === i ? " ed-rung__name--on" : ""}`}>
+                {shade.name}
+              </span>
             </span>
           ))}
         </div>
+
+        {step !== null && depthWord && (
+          <p className="ed-depthline">
+            {t("results.makeupSection.yourDepth", {
+              depth: depthWord,
+              undertone: undertoneWord,
+              examples,
+            })}
+          </p>
+        )}
         <p className="ed-skip" style={{ marginBlockStart: "var(--space-2)" }}>
           {makeup.undertoneGuide}
         </p>

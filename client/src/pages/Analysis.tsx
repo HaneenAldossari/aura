@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
-import { analyzeMeasured, analyzePhotos, loadDemoSample, listDemoSamples } from "../lib/api";
+import { analyzeMeasured, loadDemoSample, listDemoSamples, type DemoSample } from "../lib/api";
 import { measureFile, warmUpModels, type QualityIssue } from "../lib/measure";
 import type { HairStatus } from "../lib/types";
 import HairStatusToggle from "./analysis/HairStatusToggle";
@@ -16,6 +15,8 @@ import LoadingScreen from "./analysis/LoadingScreen";
 import ErrorPanel from "./analysis/ErrorPanel";
 import { useT } from "../i18n";
 import { cachePhoto } from "../lib/photoCache";
+import Masthead from "./results/Masthead";
+import "./analysis/analysis-editorial.css";
 
 export default function Analysis() {
   const t = useT();
@@ -34,8 +35,11 @@ export default function Analysis() {
   // Show the 9 thumbnails instantly — they're static assets in client/public/demo-faces/.
   // Then in the background confirm with the API which actually have analyses ready
   // (fall back to the static list if the API fails — keeps the gallery visible).
-  const STATIC_SAMPLES = Array.from({ length: 9 }, (_, i) => `sample-${i + 1}`);
-  const [availableSamples, setAvailableSamples] = useState<string[]>(STATIC_SAMPLES);
+  const STATIC_SAMPLES = Array.from({ length: 9 }, (_, i) => ({
+    id: `sample-${i + 1}`,
+    season: "",
+  }));
+  const [availableSamples, setAvailableSamples] = useState<DemoSample[]>(STATIC_SAMPLES);
 
   // 20 MB of models, on versioned immutable URLs. Starting now overlaps the
   // download with the user choosing a photo instead of stacking on top of it.
@@ -53,7 +57,6 @@ export default function Analysis() {
     file: null,
     preview: null,
   });
-  const [samplePreview, setSamplePreview] = useState<string | null>(null);
 
   const hasPhoto = !!photo.file;
 
@@ -65,23 +68,11 @@ export default function Analysis() {
     reader.readAsDataURL(file);
   }, []);
 
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith("image/")) {
-        handleFileSelect(file);
-      }
-    },
-    [handleFileSelect]
-  );
-
   const removePhoto = () => {
     setPhoto({ file: null, preview: null });
   };
 
   const handleSampleClick = async (sampleId: string) => {
-    setSamplePreview(`/demo-faces/${sampleId}.webp`);
     setStep("analyzing");
     setError(null);
     try {
@@ -182,122 +173,106 @@ export default function Analysis() {
     setStep("upload");
   };
 
+  const tips = [
+    t("analysis.tip1"),
+    t("analysis.tip2"),
+    t("analysis.tip3"),
+    t("analysis.tip4"),
+  ];
+
+  const stepMeta =
+    step === "analyzing" ? t("analysis.stepAnalysis") : t("analysis.stepPhoto");
+
   return (
-    <div className="min-h-screen animate-fade-in">
-      {/* Nav — kept local instead of NavShell: this page uses py-4 (NavShell is py-3 + gap-4) */}
-      <nav className="fixed top-0 w-full z-50 glass-dark">
-        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-2 text-cream-muted hover:text-cream transition cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">{t("common.back")}</span>
-          </button>
-          <span className="text-gold text-sm font-medium">
-            {t("analysis.stepOf", { step: step === "upload" ? 1 : 2, total: 2 })}
-          </span>
-        </div>
-      </nav>
+    <div className="ed-page">
+      <div className="ed-shell">
+        <Masthead meta={stepMeta} />
 
-      <div className="max-w-4xl mx-auto px-6 pt-24 pb-16">
-        {/* ─── Upload Step ─────────────────── */}
+        {/* ── Upload ─────────────────────────────────────────────────── */}
         {step === "upload" && (
-          <div className="animate-fade-in-up">
-            <h1
-              className="text-3xl md:text-4xl font-bold text-cream mb-2"
-              style={{ fontFamily: "Cormorant Garamond, serif" }}
-            >
-              {t("analysis.title")}
-            </h1>
-            <p className="text-cream-muted mb-8">
-              {t("analysis.lede")}
-            </p>
+          <>
+            <h1 className="an-title">{t("analysis.photoTitle")}</h1>
+            <hr className="an-title__rule" />
+            <p className="an-lede">{t("analysis.photoLede")}</p>
 
-            {/* Upload + Sample gallery — side-by-side on desktop */}
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-8 items-start">
-              <UploadZone
-                preview={photo.preview}
-                onFileSelect={handleFileSelect}
-                onDrop={handleDrop}
-                onRemove={removePhoto}
-              />
+            <div className="an-grid">
+              <div>
+                <UploadZone
+                  preview={photo.preview}
+                  onFileSelect={handleFileSelect}
+                  onRemove={removePhoto}
+                />
 
-              {/* Sample gallery — privacy-friendly demo */}
-              {availableSamples.length > 0 && (
-                <SampleGallery samples={availableSamples} onSampleClick={handleSampleClick} />
-              )}
-            </div>
-
-            {/* Hair status — asked before analysis because dyed or covered hair
-                carries no information about natural colouring. */}
-            {hasPhoto && (
-              <div className="mb-8">
-                <HairStatusToggle value={hairStatus} onChange={setHairStatus} />
+                {availableSamples.length > 0 && (
+                  <div style={{ marginBlockStart: "var(--space-5)" }}>
+                    <SampleGallery
+                      samples={availableSamples}
+                      onSampleClick={handleSampleClick}
+                    />
+                  </div>
+                )}
               </div>
-            )}
 
-            {/* Tip */}
-            <div className="p-4 rounded-xl bg-gold/5 border border-gold/10 text-sm text-cream-muted mb-8">
-              <strong className="text-gold">{t("analysis.tipLabel")}</strong>{" "}
-              {t("analysis.tipBody")}
+              <div>
+                <HairStatusToggle value={hairStatus} onChange={setHairStatus} />
+
+                <h2 className="ed-section__label">{t("analysis.accurateRead")}</h2>
+                <ol className="an-tips">
+                  {tips.map((tip, i) => (
+                    <li className="an-tip" key={tip}>
+                      <span className="an-tip__n ltr-run">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="an-tip__text">{tip}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
             </div>
 
-            {/* Analyze button */}
-            <button
-              onClick={handleAnalyze}
-              disabled={!hasPhoto}
-              className="w-full py-4 rounded-xl bg-gold text-espresso font-semibold text-lg disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gold-light transition cursor-pointer"
-            >
-              {t(hasPhoto ? "analysis.submit" : "analysis.submitDisabled")}
-            </button>
-          </div>
+            <div className="an-foot">
+              <div>
+                <p className="an-foot__privacy">{t("analysis.privacy")}</p>
+                {!hasPhoto && (
+                  <p className="an-foot__hint">{t("analysis.chooseToContinue")}</p>
+                )}
+              </div>
+              <button
+                type="button"
+                className="ed-button"
+                onClick={handleAnalyze}
+                disabled={!hasPhoto}
+              >
+                {t("analysis.analyse")}
+              </button>
+            </div>
+          </>
         )}
 
-        {/* ─── Analyzing — Full Loading Page ─ */}
+        {/* ── Loading ────────────────────────────────────────────────── */}
         {step === "analyzing" && (
           <LoadingScreen
-            uploadedPhotos={samplePreview ? [samplePreview] : photo.preview ? [photo.preview] : []}
-            totalDuration={samplePreview ? 2500 : undefined}
-            stage={samplePreview ? undefined : stage}
-            stageProgress={samplePreview ? undefined : stageProgress}
+            stage={stage}
+            stageProgress={stageProgress}
+            onCancel={() => navigate("/")}
           />
         )}
 
-        {/* ─── Quality gate — nothing was uploaded ─ */}
+        {/* ── The three failure states ───────────────────────────────── */}
         {step === "quality" && (
-          <div className="animate-fade-in-up">
-            <QualityPanel issues={qualityIssues} onRetake={handleRetake} />
-          </div>
+          <QualityPanel issues={qualityIssues} onRetake={() => setStep("upload")} />
         )}
 
-        {/* ─── Our failure, not the photo's ─ */}
         {step === "system" && (
-          <div className="animate-fade-in-up">
-            <SystemErrorPanel
-              message={systemMessage}
-              onRetry={() => {
-                setSystemMessage("");
-                setStep("upload");
-              }}
-            />
-          </div>
+          <SystemErrorPanel message={systemMessage} onRetry={() => setStep("upload")} />
         )}
 
-        {/* ─── Error / Retry ───────────────── */}
         {step === "error" && (
           <ErrorPanel
             errorKind={errorKind}
             error={error}
             photoTips={photoTips}
-            onRetry={() => {
-              setStep("upload");
-              setError(null);
-              setPhotoTips([]);
-              setErrorKind("photo");
-              setSamplePreview(null);
-              listDemoSamples().then(setAvailableSamples).catch(() => {});
-            }}
+            onRetry={() => setStep("upload")}
           />
         )}
       </div>

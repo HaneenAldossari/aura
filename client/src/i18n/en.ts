@@ -103,6 +103,7 @@ export const en = {
       title: "Makeup",
       baseLabel: "Base",
       ladderLabel: "Foundation depth, light to deep. Your depth is marked at {depth} of 100.",
+      yourDepth: "Your depth: {depth}, {undertone} — look for shades named like {examples}.",
       looksLabel: "Looks",
       indexLabel: "Shade index",
       day: "Day",
@@ -131,6 +132,12 @@ export const en = {
     },
 
     beforeYouBuy: "Before you buy",
+    buyCard: {
+      body:
+        "Photograph anything you are about to buy and get a score against your " +
+        "twelve colours, with the nearest shade you already own.",
+      cta: "Check an item",
+    },
     backToResults: "Back to your results",
 
     hero: {
@@ -315,6 +322,59 @@ export const en = {
     submit: "Analyse Photo",
     submitDisabled: "Upload a photo to begin",
 
+    /* ── Editorial Upload ─────────────────────────────────────────────── */
+    stepPhoto: "Step 1 of 3 — your photo",
+    stepAnalysis: "Step 2 of 3 — analysis",
+    photoTitle: "Your photo",
+    photoLede:
+      "One clear photo in daylight is all the analysis needs. It is checked on " +
+      "your device first, and nothing leaves the phone until it passes.",
+    choosePhoto: "Choose a photo",
+    dropHint: "or drag one here · JPG, PNG · min 800px",
+    browse: "Browse",
+    privacy: "Your photo is checked on your device; nothing uploads until it passes.",
+    chooseToContinue: "Choose a photo to continue",
+    analyse: "Analyse my colour",
+    hairLegend: "Is your hair its natural colour?",
+    hairNote:
+      "Coloured or covered hair is excluded from the reading, and skin and eyes " +
+      "carry more weight instead.",
+
+    accurateRead: "For an accurate read",
+    tip1: "Daylight near a window, no lamps or ring light",
+    tip2: "Bare face, hair off the forehead and cheeks",
+    tip3: "No filters, beauty mode or heavy edits",
+    tip4: "Plain background, face squarely to the light",
+
+    /* ── Editorial Loading ────────────────────────────────────────────── */
+    loadingTitle: "Reading your colour",
+    loadingLede:
+      "Five steps, all of them in your browser. The two model downloads happen once.",
+    stageCount: "stage {n} of {total}",
+    loadingPrivacy:
+      "Everything so far has run in your browser. Your photo has not been uploaded.",
+    cancel: "Cancel",
+
+    stage5: {
+      readyTitle: "Getting ready",
+      readyBody: "Downloading the face model — this happens once.",
+      checkingTitle: "Checking your photo",
+      checkingBody: "Focus, lighting and framing, right here on your device.",
+      detailTitle: "Loading detail model",
+      detailBody: "One more download so we can read your hair.",
+      measuringTitle: "Measuring your colouring",
+      measuringBody: "Reading skin, hair and eye colour in CIE Lab.",
+      seasonTitle: "Determining your season",
+      seasonBody: "Matching your measurements against the 12 seasons.",
+    },
+
+    statusWaiting: "Waiting",
+    statusDone: "done",
+    statusPending: "—",
+    statusChecksPassed: "Passed all {n} checks",
+    statusDownloaded: "{mb} MB",
+    statusDownloading: "{percent}% · {done}/{total} MB",
+
     upload: {
       dropzoneLabel: "Upload a photo of your face",
       heading: "Upload Your Face",
@@ -329,6 +389,7 @@ export const en = {
       heading: "Or try a sample face",
       note: "AI-generated — explore without sharing your photo",
       itemLabel: "Analyse sample face {n}",
+      itemLabelled: "Analyse a {season} sample face",
     },
 
     hair: {

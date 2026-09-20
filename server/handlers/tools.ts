@@ -13,6 +13,8 @@ import { maxFileSizeBytes } from "../utils/config";
 import { normalizeResult } from "../normalizeResult";
 import { validateAnalysisResult } from "./analysisResult";
 import { fail, json, methodNotAllowed, providerErrorResponse, readUpload } from "./http";
+import { getSeasonMakeup } from "../utils/seasonMakeup";
+import { getSeasonStyle } from "../utils/seasonStyle";
 
 const DEMO_DIR = path.join(__dirname, "../demo-analyses");
 
@@ -95,11 +97,24 @@ export async function handleDemoList(request: Request): Promise<Response> {
   if (request.method !== "GET") return methodNotAllowed("GET");
   try {
     if (!fs.existsSync(DEMO_DIR)) return json({ samples: [] });
+    // The season travels with the id so the gallery can label each face
+    // without loading nine full analyses to read one field from each.
     const samples = fs
       .readdirSync(DEMO_DIR)
       .filter((f) => f.endsWith(".json"))
       .map((f) => f.replace(/\.json$/, ""))
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+      .map((id) => {
+        try {
+          const raw = JSON.parse(
+            fs.readFileSync(path.join(DEMO_DIR, `${id}.json`), "utf8")
+          ) as { season?: string };
+          return { id, season: typeof raw.season === "string" ? raw.season : "" };
+        } catch {
+          // A malformed fixture should cost its own label, not the gallery.
+          return { id, season: "" };
+        }
+      });
     return json({ samples });
   } catch {
     return json({ samples: [] });
@@ -135,7 +150,18 @@ export async function handleDemoLoad(request: Request): Promise<Response> {
     // is dropped, and `measured` is attached after normalisation so it is lost
     // outright. Older fixtures predate the pipeline and still need the pass.
     const alreadyNormalised = "palette" in raw && "colorDNA" in raw;
-    return json({ result: alreadyNormalised ? raw : normalizeResult(raw) });
+    const result = alreadyNormalised ? raw : normalizeResult(raw);
+
+    // Canonical shade data is a pure function of the season, so it is looked
+    // up on the way out rather than trusted from the file. A fixture written
+    // before these fields existed still gets them, and correcting a hex in
+    // seasonMakeup.ts or seasonStyle.ts reaches the demo samples immediately
+    // instead of after a $0.09 regeneration run.
+    const season = (result.season as string) ?? "";
+    result.makeupShades = getSeasonMakeup(season);
+    result.styleShades = getSeasonStyle(season);
+
+    return json({ result });
   } catch (err) {
     console.error("Demo load failed:", err instanceof Error ? err.message : err);
     return fail(500, "demo_load_failed", "Could not load that sample.");

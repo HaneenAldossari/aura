@@ -68,11 +68,21 @@ export async function analyzePhotos(files: File[]): Promise<AnalyzeResponse> {
   return data;
 }
 
-export async function listDemoSamples(): Promise<string[]> {
+export interface DemoSample {
+  id: string;
+  season: string;
+}
+
+export async function listDemoSamples(): Promise<DemoSample[]> {
   const res = await fetch(`${BASE}/demo-list`);
   if (!res.ok) return [];
   const data = await safeJson(res);
-  return Array.isArray(data.samples) ? data.samples : [];
+  if (!Array.isArray(data.samples)) return [];
+  // Tolerate the old string[] shape, so a client ahead of the server still
+  // renders a gallery — just without labels.
+  return data.samples.map((s: unknown) =>
+    typeof s === "string" ? { id: s, season: "" } : (s as DemoSample)
+  );
 }
 
 export async function loadDemoSample(sampleId: string): Promise<AnalyzeResponse> {

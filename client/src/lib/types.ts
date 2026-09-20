@@ -77,6 +77,19 @@ export interface SeasonMakeup {
   skip: string;
 }
 
+/** Canonical gemstone and hair shades, for the visual Style tab. */
+export interface StoneShade {
+  name: string;
+  hex: string;
+  accent: string;
+}
+
+export interface SeasonStyle {
+  gemstones: StoneShade[];
+  hair: StoneShade[];
+  metalNote: string;
+}
+
 export type LookSlot = "eye" | "liner" | "cheek" | "lip" | "bronzer" | "highlight";
 
 /**
@@ -176,6 +189,8 @@ export interface AnalysisResult {
   crossValidation?: CrossValidation;
   /** Canonical shade list for this season — the source of every makeup hex. */
   makeupShades?: SeasonMakeup | null;
+  /** Canonical gemstones and hair colours for this season. */
+  styleShades?: SeasonStyle | null;
   /** Named looks, shades already resolved against makeupShades. */
   looks?: Look[];
   /** Nearest-neighbour season, one of the 12 canonical names. */
