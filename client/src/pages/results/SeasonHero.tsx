@@ -4,8 +4,12 @@ import type { AnalysisResult } from "../../lib/types";
 
 /**
  * Overview identity block: season name + tagline on the left, the palette
- * fan on the right — one unified reveal for demo and live analyses alike.
- * First visit plays a word-by-word rise + gold shimmer; repeats are static.
+ * fan on the right.
+ *
+ * The first-visit word-by-word rise and gold shimmer were removed: the design
+ * system bans shimmer by name and allows no entrance motion, only tap and
+ * hover feedback. The season name is the subject — motion on it read as
+ * decoration.
  */
 export default function SeasonHero({
   data,
@@ -17,7 +21,6 @@ export default function SeasonHero({
   sessionId?: string;
 }) {
   const seasonWords = seasonName.split(" ");
-  const [reveal, setReveal] = useState(false);
   const [isNarrow, setIsNarrow] = useState(
     typeof window !== "undefined" && window.innerWidth < 900
   );
@@ -27,16 +30,6 @@ export default function SeasonHero({
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
-
-  useEffect(() => {
-    if (!sessionId) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const key = `aura-revealed-${sessionId}`;
-    if (!sessionStorage.getItem(key)) {
-      sessionStorage.setItem(key, "1");
-      setReveal(true);
-    }
-  }, [sessionId]);
 
   const colors = (data.palette?.best || [])
     .filter((c, i, arr) => arr.findIndex((x) => x.name === c.name) === i)
@@ -79,7 +72,6 @@ export default function SeasonHero({
             letterSpacing: "0.05em",
             marginBottom: 10,
             opacity: 0.8,
-            animation: reveal ? "fadeIn 1s ease-out both" : undefined,
           }}>
             Your revelation is complete.
           </p>
@@ -92,7 +84,6 @@ export default function SeasonHero({
             color: "#F2EEE8",
             margin: "0 0 18px 0",
             position: "relative",
-            overflow: reveal ? "hidden" : undefined,
           }}>
             {seasonWords.map((word, i) => (
               <span
@@ -102,28 +93,11 @@ export default function SeasonHero({
                   marginRight: i < seasonWords.length - 1 ? "0.25em" : 0,
                   color: i === 0 ? "#F2EEE8" : "#D4AF7A",
                   fontStyle: i === 0 ? "normal" : "italic",
-                  animation: reveal
-                    ? `slideUp 0.8s cubic-bezier(0.22,1,0.36,1) ${0.15 + i * 0.18}s both`
-                    : undefined,
                 }}
               >
                 {word}
               </span>
             ))}
-            {reveal && (
-              <span
-                aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background:
-                    "linear-gradient(105deg, transparent 30%, rgba(212,175,122,0.25) 50%, transparent 70%)",
-                  transform: "translateX(-100%)",
-                  animation: "hero-shimmer 1.4s ease-out 0.9s forwards",
-                  pointerEvents: "none",
-                }}
-              />
-            )}
           </h1>
 
           {/* trait line — undertone · chroma · contrast */}
@@ -135,7 +109,6 @@ export default function SeasonHero({
               textTransform: "uppercase",
               color: "var(--text-muted)",
               margin: "0 0 20px 0",
-              animation: reveal ? "fadeIn 0.9s ease-out 0.7s both" : undefined,
             }}>
               {traits.join("  ·  ")}
             </p>
@@ -154,7 +127,6 @@ export default function SeasonHero({
               paddingTop: 4,
               paddingBottom: 4,
               margin: 0,
-              animation: reveal ? "fadeIn 0.9s ease-out 0.9s both" : undefined,
             }}>
               &ldquo;{data.seasonTagline}&rdquo;
             </p>

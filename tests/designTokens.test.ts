@@ -112,3 +112,55 @@ describe("safe-area insets exist for installed PWA mode", () => {
     expect(CSS).toMatch(new RegExp(`--safe-${side}:\\s*env\\(safe-area-inset-${side}`));
   });
 });
+
+/**
+ * The design system permits exactly two pieces of ambient motion, both on Home:
+ * StarField and the season ribbon. Everywhere else the interface holds still.
+ * These pin the removals so they cannot creep back component by component.
+ */
+describe("banned decorative effects stay gone", () => {
+  const srcDir = path.join(__dirname, "../client/src");
+
+  function walk(dir: string): string[] {
+    return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) return walk(full);
+      return /\.(tsx?|css)$/.test(e.name) ? [full] : [];
+    });
+  }
+
+  const files = walk(srcDir);
+
+  it.each([
+    // The class, the hook and the component — not the English word, which
+    // appears legitimately in body copy ("to reveal your palette").
+    ["scroll reveal", /className=["'`][^"'`]*\breveal\b|useReveal|<Reveal[\s/>]/, /$^/],
+    ["hover lift", /lift-hover/, /$^/],
+    ["shimmer sweep", /shimmer-move|hero-shimmer|skeleton-sweep/, /$^/],
+    ["parallax", /parallax/i, /$^/],
+  ])("no %s anywhere in client/src", (_label, pattern, allow) => {
+    const offenders = files.filter((f) => {
+      if (allow.test(f)) return false;
+      const body = fs.readFileSync(f, "utf8");
+      // Comments explaining a removal are not a reintroduction.
+      const code = body.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+      return pattern.test(code);
+    });
+    expect(offenders.map((f) => path.relative(srcDir, f))).toEqual([]);
+  });
+
+  it("keeps 'shimmer' where it names a makeup finish, not an effect", () => {
+    // ShadeDab renders finish === "shimmer" — that is content from the palette
+    // data, and removing it would delete a real product attribute.
+    const dab = fs.readFileSync(path.join(srcDir, "pages/results/ShadeDab.tsx"), "utf8");
+    expect(dab).toMatch(/finish === "shimmer"/);
+  });
+
+  it("no hover rule moves an element or casts a shadow", () => {
+    const css = fs.readFileSync(path.join(srcDir, "index.css"), "utf8");
+    const hoverBlocks = [...css.matchAll(/:hover\s*\{([^}]*)\}/g)].map((m) => m[1]);
+    for (const block of hoverBlocks) {
+      expect(block).not.toMatch(/transform|box-shadow/);
+    }
+  });
+});

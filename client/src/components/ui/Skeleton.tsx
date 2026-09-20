@@ -1,10 +1,16 @@
 import type { CSSProperties } from "react";
 
-/** Loading placeholder with a soft gold shimmer sweep. */
+/**
+ * Loading placeholder.
+ *
+ * A flat panel, not a sweep. The design system allows tap and hover feedback
+ * only — an animated shimmer is ambient motion, and ambient motion exists in
+ * exactly two places, both on Home.
+ */
 export default function Skeleton({
   width = "100%",
   height = 16,
-  radius = 8,
+  radius = 0,
   style,
 }: {
   width?: number | string;
@@ -19,21 +25,9 @@ export default function Skeleton({
         width,
         height,
         borderRadius: radius,
-        background: "var(--bg-card-subtle)",
-        position: "relative",
-        overflow: "hidden",
+        background: "var(--surface-raised)",
         ...style,
       }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "linear-gradient(90deg, transparent 20%, rgba(212,175,122,0.08) 50%, transparent 80%)",
-          animation: "skeleton-sweep 1.6s ease-in-out infinite",
-        }}
-      />
-    </div>
+    />
   );
 }

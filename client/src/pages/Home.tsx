@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import StarField from "../components/StarField";
-import Reveal from "../components/Reveal";
 import HeroSection from "./home/HeroSection";
 import PoetrySection from "./home/PoetrySection";
 import JourneySection from "./home/JourneySection";
@@ -53,15 +52,15 @@ export default function Home() {
 
       <GoldDivider />
 
-      <Reveal><PoetrySection /></Reveal>
+      <PoetrySection />
 
       <GoldDivider />
 
-      <Reveal><JourneySection /></Reveal>
+      <JourneySection />
 
       <GoldDivider />
 
-      <Reveal><WhatYouGetSection /></Reveal>
+      <WhatYouGetSection />
 
       <GoldDivider />
 
@@ -69,7 +68,7 @@ export default function Home() {
 
       <GoldDivider />
 
-      <Reveal><CTASection /></Reveal>
+      <CTASection />
 
       {/* ─── Footer ─────────────────────── */}
       {/* NOTE: intentionally NOT the shared Footer — its default variant uses a

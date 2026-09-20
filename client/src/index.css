@@ -147,25 +147,10 @@
   border-radius: inherit;
 }
 
-/* Scroll reveal (useReveal hook adds .reveal, observer adds .revealed) */
-.reveal {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.reveal.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Standard interactive lift for cards and buttons */
-.lift-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-}
-.lift-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-glow);
-}
+/* Removed: scroll reveal and the hover lift.
+   The design system allows tap and hover feedback only, 150-250ms, and bans
+   scroll-reveal outright. Ambient motion exists in exactly two places, both on
+   Home: StarField and the season ribbon. */
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -385,47 +370,13 @@ body {
   pointer-events: none;
 }
 
-/* Shimmer/shine effect for metallic swatches */
-.shimmer {
-  position: relative;
-  overflow: hidden;
-}
-.shimmer::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(255,255,255,0.08) 50%,
-    transparent 70%
-  );
-  animation: shimmer-move 3s ease-in-out infinite;
-}
-@keyframes hero-shimmer {
-  to { transform: translateX(100%); }
-}
 
-@keyframes skeleton-sweep {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-@keyframes shimmer-move {
-  0% { transform: translateX(-100%) translateY(-100%); }
-  100% { transform: translateX(100%) translateY(100%); }
-}
-
-/* Swatch hover grow effect */
+/* Swatches respond with a border, not a lift — system 06, micro-interactions. */
 .swatch-hover {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color var(--dur-fast) var(--ease-ui);
 }
 .swatch-hover:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  border-color: var(--accent);
 }
 
 /* Lip shape clip path */

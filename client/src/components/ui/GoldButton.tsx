@@ -31,7 +31,7 @@ export default function GoldButton({
 
   return (
     <button
-      className={`lift-hover inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-medium tracking-wide cursor-pointer ${className}`}
+      className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-medium tracking-wide cursor-pointer ${className}`}
       style={{ fontFamily: "Inter, sans-serif", ...base, ...style }}
       {...rest}
     >
