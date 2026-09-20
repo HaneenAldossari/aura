@@ -1,26 +1,33 @@
 import { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { analyzeMeasured, loadDemoSample, listDemoSamples, type DemoSample } from "../lib/api";
-import { measureFile, warmUpModels, type QualityIssue } from "../lib/measure";
+import { measureFile, measureBytes, averageFeatures, warmUpModels, type QualityIssue } from "../lib/measure";
 import type { HairStatus } from "../lib/types";
 import HairStatusToggle from "./analysis/HairStatusToggle";
 import QualityPanel from "./analysis/QualityPanel";
 import SystemErrorPanel from "./analysis/SystemErrorPanel";
 import { createStageQueue } from "../../../measure/stageQueue";
-import { newResultId, saveResult } from "../lib/resultStore";
+import { newResultId, saveResult, loadResult } from "../lib/resultStore";
 import type { LoadingStageKey } from "./analysis/LoadingScreen";
 import UploadZone from "./analysis/UploadZone";
 import SampleGallery from "./analysis/SampleGallery";
 import LoadingScreen from "./analysis/LoadingScreen";
 import ErrorPanel from "./analysis/ErrorPanel";
 import { useT } from "../i18n";
-import { cachePhoto } from "../lib/photoCache";
+import { cachePhoto, getCachedPhoto, rekeyCachedPhoto } from "../lib/photoCache";
 import Masthead from "./results/Masthead";
 import "./analysis/analysis-editorial.css";
 
 export default function Analysis() {
   const t = useT();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  // Second-photo mode: the nudge on Results sends people here with the id of
+  // the analysis to firm up. The first photo is still in memory; this one is
+  // measured under different light and the two are averaged.
+  const secondFor = params.get("second") || undefined;
+  const firstPhoto = getCachedPhoto(secondFor);
+  const isSecond = Boolean(secondFor && firstPhoto);
   const [step, setStep] = useState<
     "upload" | "analyzing" | "error" | "quality" | "system"
   >("upload");
@@ -139,10 +146,23 @@ export default function Analysis() {
       stages.push("analyzing");
       setStageProgress(undefined);
 
-      const { result } = await analyzeMeasured(
-        outcome.upload.bytes,
-        outcome.features.forScoring
-      );
+      // A second photo firms up the measurement; it does not re-judge the
+      // face. The two feature sets are averaged in Lab (hue is circular, so
+      // the mean of 350 and 10 degrees is 180 — the opposite colour), and the
+      // image sent is still the first one, which is what the verdict was built
+      // on.
+      let features = outcome.features;
+      let uploadBytes = outcome.upload.bytes;
+
+      if (isSecond && firstPhoto) {
+        const firstOutcome = await measureBytes(firstPhoto.bytes, hairStatus);
+        if (firstOutcome.kind === "measured") {
+          features = averageFeatures(firstOutcome.features, outcome.features);
+          uploadBytes = firstOutcome.upload.bytes;
+        }
+      }
+
+      const { result } = await analyzeMeasured(uploadBytes, features.forScoring);
 
       if (result.error === "low_confidence") {
         setError(result.message as string || t("errors.lowConfidence"));
@@ -154,10 +174,18 @@ export default function Analysis() {
 
       // Stateless API: keep the result here and put a local key in the URL.
       const id = newResultId();
-      saveResult(id, result);
-      // In memory only, so Results can re-run against the same pixels when the
-      // hair answer changes. Never written to disk — see lib/photoCache.ts.
-      cachePhoto(id, outcome.upload.bytes, hairStatus);
+      // Client-side annotation: the API saw one merged feature set and cannot
+      // know how many photos produced it.
+      saveResult(id, { ...result, photoCount: isSecond ? 2 : 1 });
+      if (isSecond && firstPhoto) {
+        // Keep the original photo, so "change hair answer" still works after
+        // a second photo has been added.
+        rekeyCachedPhoto(secondFor, id);
+      } else {
+        // In memory only, so Results can re-run against the same pixels when
+        // the hair answer changes. Never on disk — see lib/photoCache.ts.
+        cachePhoto(id, outcome.upload.bytes, hairStatus);
+      }
       navigate(`/results/${id}`);
     } catch (err) {
       // Reaching here means the upload or the API failed. Still not the user's
@@ -196,9 +224,13 @@ export default function Analysis() {
         {/* ── Upload ─────────────────────────────────────────────────── */}
         {step === "upload" && (
           <>
-            <h1 className="an-title">{t("analysis.photoTitle")}</h1>
+            <h1 className="an-title">
+              {t(isSecond ? "analysis.secondTitle" : "analysis.photoTitle")}
+            </h1>
             <hr className="an-title__rule" />
-            <p className="an-lede">{t("analysis.photoLede")}</p>
+            <p className="an-lede">
+              {t(isSecond ? "analysis.secondLede" : "analysis.photoLede")}
+            </p>
 
             <div className="an-grid">
               <div>

@@ -15,6 +15,7 @@ import {
 import type { QualityIssue } from "../../../measure/quality";
 import type { HairStatus } from "./types";
 
+export { averageFeatures } from "../../../measure/features";
 export type { StageEvent, QualityIssue };
 export type MeasureOutcome = PipelineResult;
 

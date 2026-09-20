@@ -214,6 +214,11 @@ export interface AnalysisResult {
   /** The rule-based verdict. The season above is still the model's. */
   rules?: { primary: string; secondary: string; margin: number; ambiguous: boolean };
   agreement?: { level: "primary" | "secondary" | "none"; agrees: boolean };
+  /**
+   * How many photos fed the measurement. Set by the client, not the server —
+   * the API sees one merged feature set and has no way to know.
+   */
+  photoCount?: number;
   /** A suggestion, never a gate, until Phase 4 calibrates the thresholds. */
   needsSecondPhoto?: boolean;
   alternatives?: { season: string; score: number }[];

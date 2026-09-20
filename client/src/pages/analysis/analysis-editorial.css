@@ -356,3 +356,9 @@
   color: var(--accent);
   margin-block-start: 1px;
 }
+
+/* ── Failure states ───────────────────────────────────────────────────── */
+
+/* All three share the shell so a failure looks like part of the app rather
+   than a dialog that escaped from somewhere else. */
+.an-state { max-inline-size: 62ch; }

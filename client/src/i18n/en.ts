@@ -49,6 +49,7 @@ export const en = {
 
     /* ── Editorial Results (the single scrolling page) ─────────────────── */
     analysisMeta: "Your analysis — {date}",
+    twoPhotos: "Measured from two photos, averaged.",
     confidence: "{percent}% confidence",
     nextClosest: "next closest · {season}",
 
@@ -334,6 +335,11 @@ export const en = {
     stepPhoto: "Step 1 of 3 — your photo",
     stepAnalysis: "Step 2 of 3 — analysis",
     photoTitle: "Your photo",
+    secondTitle: "A second photo",
+    secondLede:
+      "Take this one in different light from the first — near a window if the " +
+      "first was indoors. The two readings are averaged; your season only " +
+      "changes if the measurement does.",
     photoLede:
       "One clear photo in daylight is all the analysis needs. It is checked on " +
       "your device first, and nothing leaves the phone until it passes.",

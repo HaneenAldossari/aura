@@ -131,8 +131,12 @@ export default function Results() {
 
         {tab === "overview" && (
           <>
-            {data.needsSecondPhoto && (
-              <SecondPhotoNudge onAdd={() => navigate("/analyze?second=1")} />
+            {/* The nudge retires once a second photo has been added: it asks
+                for something that has already been done. */}
+            {data.needsSecondPhoto && (data.photoCount ?? 1) < 2 && (
+              <SecondPhotoNudge
+                onAdd={() => navigate(`/analyze?second=${sessionId}`)}
+              />
             )}
 
             <div className="ed-split">
@@ -147,6 +151,9 @@ export default function Results() {
                   sessionId={sessionId}
                 />
                 <ColourDNA data={data} />
+                {(data.photoCount ?? 1) >= 2 && (
+                  <p className="ed-twophoto">{t("results.twoPhotos")}</p>
+                )}
                 {getCachedPhoto(sessionId) && (
                   <HairNote data={data} onChange={changeHairAnswer} rerunning={rerunning} />
                 )}

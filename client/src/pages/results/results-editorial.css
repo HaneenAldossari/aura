@@ -547,3 +547,14 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
+
+/* Stated plainly rather than as a badge: it is a fact about the reading, and
+   the reader asked for it. */
+.ed-twophoto {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-trust);
+  border-inline-start: 1px solid var(--accent);
+  padding-inline-start: var(--space-3);
+  margin: var(--space-4) 0 0;
+}

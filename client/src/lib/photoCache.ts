@@ -28,6 +28,18 @@ export function cachePhoto(resultId: string, bytes: Uint8Array, hairStatus: Hair
   cached = { resultId, bytes, hairStatus };
 }
 
+/**
+ * Carry the cached photo forward to a new result id.
+ *
+ * A second photo produces a new analysis, and the first photo has to survive
+ * that — otherwise "change hair answer" stops working the moment someone adds
+ * a second photo, which is the opposite of the intended direction of travel.
+ */
+export function rekeyCachedPhoto(fromId: string | undefined, toId: string): void {
+  if (!cached || !fromId || cached.resultId !== fromId) return;
+  cached = { ...cached, resultId: toId };
+}
+
 /** The cached photo, but only if it is the one behind `resultId`. */
 export function getCachedPhoto(resultId: string | undefined): CachedPhoto | null {
   if (!resultId || !cached || cached.resultId !== resultId) return null;
