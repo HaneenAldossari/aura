@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,700&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body { margin:0; background:#0C0A09; }
+a { color:#C9A567; text-decoration:none; }
+a:hover { color:#E3C48C; }
+</style>
+</helmet>
+
+<div style="width:1440px; margin:0 auto; background:#0C0A09; color:#F3EDE4; font-family:Archivo,Helvetica,sans-serif; padding:72px 110px 110px 110px; box-sizing:border-box; display:flex; flex-direction:column; gap:88px;">
+
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:1px solid #C9A567; padding-bottom:16px;">
+    <div style="font-family:'Bodoni Moda',serif; font-size:56px; line-height:1;">Aura design system</div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#8C8378;">Direction A — Editorial · v1</div>
+  </div>
+
+  <!-- COLOUR ROLES -->
+  <section style="display:flex; flex-direction:column; gap:28px;">
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#8C8378; border-bottom:1px solid #26211C; padding-bottom:12px;">01 — Colour roles</div>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:24px;">
+      <div style="display:flex; flex-direction:column; gap:10px;"><div style="height:96px; background:#0C0A09; border:1px solid #26211C;"></div><div style="font-size:15px;">ground</div><div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">#0C0A09 · page</div></div>
+      <div style="display:flex; flex-direction:column; gap:10px;"><div style="height:96px; background:#131110;"></div><div style="font-size:15px;">surface</div><div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">#131110 · inset panels</div></div>
+      <div style="display:flex; flex-direction:column; gap:10px;"><div style="height:96px; background:#26211C;"></div><div style="font-size:15px;">rule</div><div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">#26211C · hairlines</div></div>
+      <div style="display:flex; flex-direction:column; gap:10px;"><div style="height:96px; background:#C9A567;"></div><div style="font-size:15px;">accent</div><div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">#C9A567 · one per screen</div></div>
+      <div style="display:flex; flex-direction:column; gap:10px;"><div style="height:96px; background:#F3EDE4;"></div><div style="font-size:15px;">ink</div><div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">#F3EDE4 · display, headings</div></div>
+      <div style="display:flex; flex-direction:column; gap:10px;"><div style="height:96px; background:#C8C0B6;"></div><div style="font-size:15px;">ink secondary</div><div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">#C8C0B6 · body copy</div></div>
+      <div style="display:flex; flex-direction:column; gap:10px;"><div style="height:96px; background:#B9B0A5;"></div><div style="font-size:15px;">ink trust</div><div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">#B9B0A5 · privacy, caveats</div></div>
+      <div style="display:flex; flex-direction:column; gap:10px;"><div style="height:96px; background:#8C8378;"></div><div style="font-size:15px;">ink muted</div><div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">#8C8378 · labels · floor 4.5:1</div></div>
+    </div>
+    <div style="font-size:15px; line-height:1.7; color:#B9B0A5; max-width:900px;">Gold is a signal, never a surface: it marks the single most important state on a screen (confidence, active stage, primary action) and nothing else. Season palette colours are content, not chrome — they never become UI.</div>
+  </section>
+
+  <!-- TYPE -->
+  <section style="display:flex; flex-direction:column; gap:28px;">
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#8C8378; border-bottom:1px solid #26211C; padding-bottom:12px;">02 — Type scale</div>
+    <div style="display:grid; grid-template-columns:200px 1fr; gap:20px 40px; align-items:baseline;">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">display / 132 · 96</div><div style="font-family:'Bodoni Moda',serif; font-size:96px; line-height:0.9;">Deep Autumn</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">title / 40</div><div style="font-family:'Bodoni Moda',serif; font-size:40px;">Section title</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">stat / 26</div><div style="font-family:'Bodoni Moda',serif; font-size:26px;">Warm</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">lede / 21 Archivo</div><div style="font-size:21px; line-height:1.6; color:#C8C0B6;">Rich, warm and low-contrast-averse.</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">body / 17 Archivo</div><div style="font-size:17px; line-height:1.7; color:#C8C0B6;">Running copy, list items, guidance.</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">label / 13 · 0.16em caps</div><div style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase;">Your twelve</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">micro / 11 mono</div><div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; color:#B9B0A5;">on-device · nothing uploaded</div>
+    </div>
+    <div style="font-size:15px; line-height:1.7; color:#B9B0A5; max-width:900px;">Phone reduction: display 56 / 44, title 28, stat 22, lede 18, body 16, label 12, micro 11. Nothing below 11px anywhere.</div>
+  </section>
+
+  <!-- SPACING + GRID -->
+  <section style="display:grid; grid-template-columns:1fr 1fr; gap:64px;">
+    <div style="display:flex; flex-direction:column; gap:28px;">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#8C8378; border-bottom:1px solid #26211C; padding-bottom:12px;">03 — Spacing</div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; align-items:center; gap:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378; width:34px;">4</span><span style="height:10px; width:4px; background:#C9A567;"></span></div>
+        <div style="display:flex; align-items:center; gap:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378; width:34px;">8</span><span style="height:10px; width:8px; background:#C9A567;"></span></div>
+        <div style="display:flex; align-items:center; gap:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378; width:34px;">16</span><span style="height:10px; width:16px; background:#C9A567;"></span></div>
+        <div style="display:flex; align-items:center; gap:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378; width:34px;">24</span><span style="height:10px; width:24px; background:#C9A567;"></span></div>
+        <div style="display:flex; align-items:center; gap:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378; width:34px;">32</span><span style="height:10px; width:32px; background:#C9A567;"></span></div>
+        <div style="display:flex; align-items:center; gap:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378; width:34px;">48</span><span style="height:10px; width:48px; background:#C9A567;"></span></div>
+        <div style="display:flex; align-items:center; gap:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378; width:34px;">64</span><span style="height:10px; width:64px; background:#C9A567;"></span></div>
+        <div style="display:flex; align-items:center; gap:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378; width:34px;">96</span><span style="height:10px; width:96px; background:#C9A567;"></span></div>
+        <div style="display:flex; align-items:center; gap:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378; width:34px;">128</span><span style="height:10px; width:128px; background:#C9A567;"></span></div>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:28px;">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#8C8378; border-bottom:1px solid #26211C; padding-bottom:12px;">04 — Grid</div>
+      <div style="display:grid; grid-template-columns:repeat(12,1fr); gap:24px; height:140px;">
+        <div style="background:#1C1815;"></div><div style="background:#1C1815;"></div><div style="background:#1C1815;"></div><div style="background:#1C1815;"></div><div style="background:#1C1815;"></div><div style="background:#1C1815;"></div><div style="background:#1C1815;"></div><div style="background:#1C1815;"></div><div style="background:#1C1815;"></div><div style="background:#1C1815;"></div><div style="background:#1C1815;"></div><div style="background:#1C1815;"></div>
+      </div>
+      <div style="font-size:15px; line-height:1.8; color:#B9B0A5;">Desktop 1440 · 12 columns · 110 margins · 24 gutter · 1220 content.<br>Phone 390 · 4 columns · 24 margins · 16 gutter.<br>Results uses 6 + 6; Before You Buy uses 5 + 7.</div>
+    </div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section style="display:flex; flex-direction:column; gap:32px;">
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#8C8378; border-bottom:1px solid #26211C; padding-bottom:12px;">05 — Components</div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:56px 40px;">
+
+      <div style="display:flex; flex-direction:column; gap:14px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">Section rule + label</span>
+        <div><div style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378; padding-bottom:12px; border-bottom:1px solid #26211C;">Measured colour DNA</div></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">Stat block</span>
+        <div style="display:flex; gap:48px;"><div style="display:flex; flex-direction:column; gap:6px;"><span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Undertone</span><span style="font-family:'Bodoni Moda',serif; font-size:26px;">Warm</span></div><div style="display:flex; flex-direction:column; gap:6px;"><span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Confidence</span><span style="font-family:'Bodoni Moda',serif; font-size:26px;">High</span></div></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">Measure bar</span>
+        <div style="display:grid; grid-template-columns:96px 1fr 76px; align-items:center; gap:14px;"><span style="font-size:15px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:35%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#B9B0A5; text-align:right;">35 · muted</span></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">Swatch band (12)</span>
+        <div style="display:grid; grid-template-columns:repeat(12,1fr); height:64px;"><div style="background:#F0D8A8;"></div><div style="background:#B7834F;"></div><div style="background:#8C5A2B;"></div><div style="background:#3B2416;"></div><div style="background:#24160F;"></div><div style="background:#3F4A24;"></div><div style="background:#1F4D3A;"></div><div style="background:#005C5C;"></div><div style="background:#064B5A;"></div><div style="background:#4A263A;"></div><div style="background:#6E1F2B;"></div><div style="background:#8A3324;"></div></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">Swatch cell</span>
+        <div style="width:150px; background:#8A3324; padding:12px; display:flex; flex-direction:column; gap:36px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#F3EDE4;">12</span><span style="font-size:14px; color:#F3EDE4;">Burnt Brick<br><span style="font-family:'IBM Plex Mono',monospace; font-size:11px;">8A3324</span></span></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">Choice chip · 48px tap</span>
+        <div style="display:flex; gap:12px;"><span style="border:1px solid #C9A567; color:#C9A567; padding:14px 20px; font-size:14px;">Natural</span><span style="border:1px solid #3A322B; color:#C8C0B6; padding:14px 20px; font-size:14px;">Coloured</span></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">Actions</span>
+        <div style="display:flex; gap:16px; align-items:center;"><span style="background:#C9A567; color:#161210; padding:16px 32px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; font-weight:500;">Analyse</span><span style="border:1px solid #3A322B; color:#F3EDE4; padding:15px 30px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase;">Retake</span><a href="#" style="font-size:14px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px solid #C9A567; padding-bottom:3px;">Makeup</a></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">Progress</span>
+        <div style="display:flex; align-items:center; gap:14px;"><div style="flex:1; height:6px; background:#26211C;"><div style="width:64%; height:6px; background:#C9A567;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#C9A567;">64%</span></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:14px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">Caveat note</span>
+        <div style="border-inline-start:1px solid #3A322B; padding-inline-start:16px; font-size:15px; line-height:1.7; color:#B9B0A5;">Hair was declared natural, so it counted toward the reading.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MOTION -->
+  <section style="display:flex; flex-direction:column; gap:28px;">
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#8C8378; border-bottom:1px solid #26211C; padding-bottom:12px;">06 — Motion</div>
+    <div style="font-size:17px; line-height:1.8; color:#C8C0B6; max-width:960px; text-wrap:pretty;">There are exactly two pieces of ambient motion in Aura, both on Home: the starfield and the season-card fan. Everywhere else the interface holds still. No shimmer, scroll-reveal, parallax or floating elements on any screen, and nothing ambient behind the user's palette or their photo — those are the subject, and motion behind them reads as decoration.</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px;">
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; padding-bottom:10px; border-bottom:1px solid #26211C;"><span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Starfield</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#C9A567;">as built</span></div>
+        <div style="display:grid; grid-template-columns:120px 1fr; gap:8px 16px; font-size:15px; line-height:1.5; color:#C8C0B6;">
+          <span style="color:#8C8378;">Motion</span><span>Opacity twinkle only, no movement</span>
+          <span style="color:#8C8378;">Count</span><span>140 stars, radius 0.3–1.4px</span>
+          <span style="color:#8C8378;">Opacity</span><span>0.05 → 0.92 on Home, → 0.45 on inner pages</span>
+          <span style="color:#8C8378;">Period</span><span>2.5–6.5s per star, delay 0–9s</span>
+          <span style="color:#8C8378;">Curve</span><span>sin(phase · π) — 0 → 1 → 0</span>
+          <span style="color:#8C8378;">Render</span><span>One canvas, one rAF loop; paused while the tab is hidden</span>
+          <span style="color:#8C8378;">Reduced</span><span>Drawn once, static, at min(0.5, max)</span>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">StarField.tsx</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:baseline; padding-bottom:10px; border-bottom:1px solid #26211C;"><span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Season ribbon</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#C9A567;">proposed</span></div>
+        <div style="display:grid; grid-template-columns:120px 1fr; gap:8px 16px; font-size:15px; line-height:1.5; color:#C8C0B6;">
+          <span style="color:#8C8378;">Motion</span><span>Constant sideways drift, 8px per second</span>
+          <span style="color:#8C8378;">Cycle</span><span>720s desktop, 582s phone — one full set of twelve</span>
+          <span style="color:#8C8378;">Seam</span><span>Set duplicated; travel equals one set's span exactly</span>
+          <span style="color:#8C8378;">Focus</span><span>Centre season at full colour, the rest hold 0.45</span>
+          <span style="color:#8C8378;">Handover</span><span>60s per season desktop, 48.5s phone; 8% ramp each side</span>
+          <span style="color:#8C8378;">Name</span><span>Eyebrow caps, #8C8378 → #C9A567 on the centre season</span>
+          <span style="color:#8C8378;">Bars</span><span>32px tall, flat, canonical palette — never recoloured</span>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8C8378;">replaces the season-card fan on Home</div>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; padding-bottom:10px; border-bottom:1px solid #26211C;"><span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Micro-interactions</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#C9A567;">proposed</span></div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:32px; font-size:15px; line-height:1.5; color:#C8C0B6;">
+        <div style="display:grid; grid-template-columns:96px 1fr; gap:8px 16px;"><span style="color:#8C8378;">Scope</span><span>Tap and hover feedback only</span><span style="color:#8C8378;">Duration</span><span>150–250ms</span></div>
+        <div style="display:grid; grid-template-columns:96px 1fr; gap:8px 16px;"><span style="color:#8C8378;">Buttons</span><span>Background and border shift, 180ms</span><span style="color:#8C8378;">Swatches</span><span>Border to gold on hover, 150ms</span></div>
+        <div style="display:grid; grid-template-columns:96px 1fr; gap:8px 16px;"><span style="color:#8C8378;">Stages</span><span>Progress width transition, 250ms</span><span style="color:#8C8378;">Links</span><span>Underline colour only, 150ms</span></div>
+      </div>
+    </div>
+    <div style="border-inline-start:2px solid #C9A567; padding-inline-start:16px; font-size:16px; line-height:1.7; color:#C8C0B6; max-width:960px; text-wrap:pretty;">Marked <span style="font-family:'IBM Plex Mono',monospace; font-size:14px; color:#C9A567;">as built</span> above means read from the component; <span style="font-family:'IBM Plex Mono',monospace; font-size:14px; color:#C9A567;">proposed</span> means this system is asking for it and the code does not do it yet. The idle drift is the one intended behaviour the code does not have yet: BounceCards ships an entrance and a hover response only, so today the starfield is the sole ambient motion. Add the drift as a continuous transform loop beneath the hover tweens. Separately, BounceCards does not check <span style="font-family:'IBM Plex Mono',monospace; font-size:14px;">prefers-reduced-motion</span> — its entrance and hover tweens run regardless. StarField does handle it. Under reduced motion the fan should render in its final position with no pop and no hover tween.</div>
+  </section>
+
+  <!-- RTL -->
+  <section style="display:flex; flex-direction:column; gap:20px;">
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#8C8378; border-bottom:1px solid #26211C; padding-bottom:12px;">07 — Mirroring for Arabic</div>
+    <div style="font-size:17px; line-height:1.8; color:#C8C0B6; max-width:960px; text-wrap:pretty;">Every rule is full-width and every stack is symmetric, so the layout mirrors by flipping direction alone. Notes and quotes use logical borders (border-inline-start), never left. The 12-swatch band reverses order under RTL so swatch 01 stays at the reading edge. Percentages, hex codes and IDs stay LTR inside an isolated run. Letterspaced Latin caps labels become the Arabic equivalent at weight, not tracking — Arabic is never letterspaced.</div>
+  </section>
+
+</div>
+
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body { margin:0; background:#0C0A09; }
+a { color:#C9A567; text-decoration:none; }
+a:hover { color:#E3C48C; }
+/* the season crossing the centre comes up to full colour; the rest hold at 45% */
+@keyframes aura-bars {
+  0%, 42% { opacity:0.45 }
+  50%     { opacity:1 }
+  58%,100%{ opacity:0.45 }
+}
+@keyframes aura-name {
+  0%, 42% { color:#8C8378 }
+  50%     { color:#C9A567 }
+  58%,100%{ color:#8C8378 }
+}
+@keyframes aura-ribbon-d { from { transform:translateX(0) } to { transform:translateX(-5760px) } }
+@keyframes aura-ribbon-m { from { transform:translateX(0) } to { transform:translateX(-4656px) } }
+@media (prefers-reduced-motion: reduce) {
+  [style*="aura-ribbon-"], [style*="aura-bars"], [style*="aura-name"] { animation:none !important }
+}
+</style>
+</helmet>
+
+<section style="display:flex; flex-direction:column; gap:56px; padding:48px; font-family:Archivo,Helvetica,sans-serif;">
+  <div style="display:flex; gap:16px; color:#8C8378; font-size:13px; letter-spacing:0.14em; text-transform:uppercase;"><span>Aura — Desktop 1440</span><span style="color:#4A443E;">/</span><span>Editorial direction</span></div>
+
+  <!-- ============ 1. UPLOAD ============ -->
+  <div style="display:flex; flex-direction:column; gap:12px;">
+    <span style="color:#8C8378; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase;">01 — Upload</span>
+    <div data-screen-label="Upload — desktop" style="width:1440px; height:900px; background:#0C0A09; color:#F3EDE4; padding:56px 110px 48px 110px; box-sizing:border-box; display:flex; flex-direction:column; border:1px solid #1E1A17;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #26211C; padding-bottom:14px;">
+        <span style="font-family:'Bodoni Moda',serif; font-size:20px; letter-spacing:0.3em; text-transform:uppercase;">Aura</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Step 1 of 3 — your photo</span>
+      </div>
+      <div style="margin-top:44px;">
+        <div style="font-family:'Bodoni Moda',serif; font-size:88px; line-height:0.94;">Your photo</div>
+        <div style="width:64px; height:1px; background:#C9A567; margin:24px 0;"></div>
+        <p style="margin:0; max-width:720px; font-size:21px; line-height:1.6; color:#C8C0B6; text-wrap:pretty;">One clear photo in daylight is all the analysis needs. It is checked on your device first, and nothing leaves the phone until it passes.</p>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:64px; margin-top:48px; flex:1;">
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="flex:1; background:#131110; border:1px solid #3A322B; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;">
+            <span style="font-family:'Bodoni Moda',serif; font-size:32px;">Choose a photo</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.1em; color:#B9B0A5;">or drag one here · JPG, PNG · min 800px</span>
+            <span style="border:1px solid #3A322B; color:#F3EDE4; padding:14px 28px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; margin-top:8px;">Browse</span>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:40px;">
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378; padding-bottom:12px; border-bottom:1px solid #26211C;">Is your hair its natural colour?</div>
+            <div style="display:flex; gap:12px;">
+              <span style="border:1px solid #C9A567; color:#C9A567; padding:15px 24px; font-size:15px;">Natural</span>
+              <span style="border:1px solid #3A322B; color:#C8C0B6; padding:15px 24px; font-size:15px;">Coloured</span>
+              <span style="border:1px solid #3A322B; color:#C8C0B6; padding:15px 24px; font-size:15px;">Not visible</span>
+            </div>
+            <span style="font-size:15px; line-height:1.6; color:#B9B0A5;">Coloured or covered hair is excluded from the reading, and skin and eyes carry more weight instead.</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:14px;">
+            <div style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378; padding-bottom:12px; border-bottom:1px solid #26211C;">For an accurate read</div>
+            <div style="display:grid; grid-template-columns:28px 1fr; gap:12px 14px; font-size:17px; line-height:1.5; color:#C8C0B6;">
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8C8378; padding-top:4px;">01</span><span>Daylight near a window, no lamps or ring light</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8C8378; padding-top:4px;">02</span><span>Bare face, hair off the forehead and cheeks</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8C8378; padding-top:4px;">03</span><span>No filters, beauty mode or heavy edits</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8C8378; padding-top:4px;">04</span><span>Plain background, face squarely to the light</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="flex-shrink:0; display:flex; justify-content:space-between; align-items:center; gap:48px; border-top:1px solid #26211C; padding-top:20px; margin-top:32px;">
+        <div style="flex-shrink:0; display:flex; flex-direction:column; gap:6px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.06em; white-space:nowrap; color:#B9B0A5;">Your photo is checked on your device; nothing uploads until it passes.</span><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8C8378;">Choose a photo to continue</span></div>
+        <span style="border:1px solid #3A322B; background:#131110; color:#8C8378; padding:15px 35px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase;">Analyse my colour</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 2. LOADING ============ -->
+  <div style="display:flex; flex-direction:column; gap:12px;">
+    <span style="color:#8C8378; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase;">02 — Loading</span>
+    <div data-screen-label="Loading — desktop" style="width:1440px; height:900px; background:#0C0A09; color:#F3EDE4; padding:56px 110px 48px 110px; box-sizing:border-box; display:flex; flex-direction:column; border:1px solid #1E1A17;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #26211C; padding-bottom:14px;">
+        <span style="font-family:'Bodoni Moda',serif; font-size:20px; letter-spacing:0.3em; text-transform:uppercase;">Aura</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Step 2 of 3 — analysis</span>
+      </div>
+      <div style="margin-top:40px;">
+        <div style="font-family:'Bodoni Moda',serif; font-size:76px; line-height:0.94;">Reading your colour</div>
+        <div style="width:64px; height:1px; background:#C9A567; margin:24px 0;"></div>
+        <div style="display:flex; align-items:baseline; gap:24px;"><p style="margin:0; max-width:600px; font-size:20px; line-height:1.6; color:#C8C0B6;">Five steps, all of them in your browser. The two model downloads happen once.</p><span style="font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.12em; color:#C9A567; white-space:nowrap;">stage 3 of 5</span></div>
+      </div>
+      <div style="margin-top:40px; display:flex; flex-direction:column;">
+        <div style="display:grid; grid-template-columns:52px 1fr 300px 128px; align-items:center; gap:24px; padding:20px 0; border-top:1px solid #26211C;">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8C8378;">01</span>
+          <div><div style="font-family:'Bodoni Moda',serif; font-size:28px; line-height:1.15; color:#C8C0B6;">Getting ready</div><div style="font-size:14px; line-height:1.5; color:#B9B0A5; margin-top:4px;">Downloading the face model — this happens once.</div></div>
+          <span style="font-size:14px; color:#B9B0A5;">7.1 MB</span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#B9B0A5; text-align:right;">done</span>
+        </div>
+        <div style="display:grid; grid-template-columns:52px 1fr 300px 128px; align-items:center; gap:24px; padding:20px 0; border-top:1px solid #26211C;">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8C8378;">02</span>
+          <div><div style="font-family:'Bodoni Moda',serif; font-size:28px; line-height:1.15; color:#C8C0B6;">Checking your photo</div><div style="font-size:14px; line-height:1.5; color:#B9B0A5; margin-top:4px;">Focus, lighting and framing, right here on your device.</div></div>
+          <span style="font-size:14px; color:#B9B0A5;">Passed all four checks</span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#B9B0A5; text-align:right;">done</span>
+        </div>
+        <div style="display:grid; grid-template-columns:52px 1fr 300px 128px; align-items:center; gap:24px; padding:20px 0; border-top:1px solid #26211C;">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#C9A567;">03</span>
+          <div><div style="font-family:'Bodoni Moda',serif; font-size:28px; line-height:1.15; color:#F3EDE4;">Loading detail model</div><div style="font-size:14px; line-height:1.5; color:#B9B0A5; margin-top:4px;">One more download so we can read your hair.</div></div>
+          <div style="height:6px; background:#26211C;"><div style="width:64%; height:6px; background:#C9A567;"></div></div>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#C9A567; text-align:right;">64% · 10.2/16 MB</span>
+        </div>
+        <div style="display:grid; grid-template-columns:52px 1fr 300px 128px; align-items:center; gap:24px; padding:20px 0; border-top:1px solid #26211C;">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8C8378;">04</span>
+          <div><div style="font-family:'Bodoni Moda',serif; font-size:28px; line-height:1.15; color:#8C8378;">Measuring your colouring</div><div style="font-size:14px; line-height:1.5; color:#8C8378; margin-top:4px;">Reading skin, hair and eye colour in CIE Lab.</div></div>
+          <span style="font-size:14px; color:#8C8378;">Waiting</span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8C8378; text-align:right;">—</span>
+        </div>
+        <div style="display:grid; grid-template-columns:52px 1fr 300px 128px; align-items:center; gap:24px; padding:20px 0; border-top:1px solid #26211C; border-bottom:1px solid #26211C;">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8C8378;">05</span>
+          <div><div style="font-family:'Bodoni Moda',serif; font-size:28px; line-height:1.15; color:#8C8378;">Determining your season</div><div style="font-size:14px; line-height:1.5; color:#8C8378; margin-top:4px;">Matching your measurements against the 12 seasons.</div></div>
+          <span style="font-size:14px; color:#8C8378;">Waiting</span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8C8378; text-align:right;">—</span>
+        </div>
+      </div>
+      <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:center; border-top:1px solid #26211C; padding-top:20px;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.06em; color:#B9B0A5;">Everything so far has run in your browser. Your photo has not been uploaded.</span>
+        <a href="#" style="font-size:14px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px solid #C9A567; padding-bottom:3px;">Cancel</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 3. RESULTS ============ -->
+  <div style="display:flex; flex-direction:column; gap:12px;">
+    <span style="color:#8C8378; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase;">03 — Results</span>
+    <div data-screen-label="Results — desktop" style="width:1440px; height:900px; background:#0C0A09; color:#F3EDE4; padding:56px 110px 44px 110px; box-sizing:border-box; display:flex; flex-direction:column; border:1px solid #1E1A17;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #26211C; padding-bottom:14px;">
+        <span style="font-family:'Bodoni Moda',serif; font-size:20px; letter-spacing:0.3em; text-transform:uppercase;">Aura</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Your analysis — 16 Sep 2026</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:20px; margin-top:20px; border-inline-start:2px solid #C9A567; padding:12px 0 12px 16px;">
+        <span style="font-size:16px; line-height:1.5; color:#C8C0B6;">Your skin and hair measured close together, so a second photo in different light would firm this up. Nothing changes until you add one.</span>
+        <a href="#" style="margin-inline-start:auto; white-space:nowrap; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px solid #C9A567; padding-bottom:3px;">Add a second photo</a>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:88px; margin-top:16px; flex:1;">
+        <!-- left -->
+        <div style="display:flex; flex-direction:column;">
+          <div style="font-family:'Bodoni Moda',serif; font-size:76px; line-height:0.9;">Deep<br>Autumn</div>
+          <div style="display:flex; align-items:center; gap:18px; margin-top:20px;">
+            <span style="width:64px; height:1px; background:#C9A567;"></span>
+            <span style="font-size:14px; letter-spacing:0.16em; text-transform:uppercase; color:#C9A567;">89% confidence</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5;">next closest · True Autumn</span>
+          </div>
+          <p style="margin:18px 0 0 0; max-width:520px; font-size:18px; line-height:1.55; color:#C8C0B6; text-wrap:pretty;">Rich, warm and deep before it is bright. Saturated earth tones read as natural on you; pale and cool shades drain the face.</p>
+          <div style="margin-top:32px;">
+            <div style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378; padding-bottom:12px; border-bottom:1px solid #26211C;">Measured colour DNA</div>
+            <div style="display:flex; flex-direction:column; gap:11px; margin-top:14px;">
+                <div style="display:grid; grid-template-columns:104px 1fr 92px; align-items:center; gap:16px;"><span style="font-size:16px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:82%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">82 · warm</span></div>
+              <div style="display:grid; grid-template-columns:104px 1fr 92px; align-items:center; gap:16px;"><span style="font-size:16px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:78%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">78 · deep</span></div>
+              <div style="display:grid; grid-template-columns:104px 1fr 92px; align-items:center; gap:16px;"><span style="font-size:16px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:35%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">35 · muted</span></div>
+              <div style="display:grid; grid-template-columns:104px 1fr 92px; align-items:center; gap:16px;"><span style="font-size:16px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:75%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">75 · high</span></div>
+            </div>
+          </div>
+            <div style="display:grid; grid-template-columns:64px repeat(3,1fr); gap:4px 12px; margin-top:14px; padding-top:12px; border-top:1px solid #26211C; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5;">
+              <span style="color:#8C8378;">measured</span><span style="color:#8C8378;">L</span><span style="color:#8C8378;">C</span><span style="color:#8C8378;">h</span>
+              <span>skin</span><span>42.6</span><span>21.4</span><span>54.8</span>
+              <span>hair</span><span>18.2</span><span>9.6</span><span>41.3</span>
+              <span>eyes</span><span>24.5</span><span>12.1</span><span>48.0</span>
+            </div>
+          <div style="margin-top:auto; border-inline-start:1px solid #3A322B; padding-inline-start:16px; font-size:15px; line-height:1.7; color:#B9B0A5;">You told us your hair is its natural colour, so it counted toward this reading. Change that answer and the season may shift one step.<br><a href="#" style="display:inline-block; margin-top:10px; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px solid #C9A567; padding-bottom:3px;">Change hair answer</a></div>
+        </div>
+        <!-- right -->
+        <div style="display:flex; flex-direction:column;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; padding-bottom:12px; border-bottom:1px solid #26211C;">
+            <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Your twelve</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#B9B0A5;">tap a colour for pairings</span>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:#26211C; border:1px solid #26211C; margin-top:20px;">
+            <div style="background:#F0D8A8; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#24160F;">Deep Cream</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#3B2416;">F0D8A8</span></div>
+            <div style="background:#B7834F; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#1A1008;">Camel</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#2A1A0C;">B7834F</span></div>
+            <div style="background:#8C5A2B; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#F3EDE4;">Bronze</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#F3EDE4;">8C5A2B</span></div>
+            <div style="background:#3B2416; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#F3EDE4;">Dark Chocolate</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#DCD3C8;">3B2416</span></div>
+            <div style="background:#24160F; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#F3EDE4;">Espresso</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#C8C0B6;">24160F</span></div>
+            <div style="background:#3F4A24; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#F3EDE4;">Deep Olive</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#DCD3C8;">3F4A24</span></div>
+            <div style="background:#1F4D3A; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#F3EDE4;">Pine Green</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#DCD3C8;">1F4D3A</span></div>
+            <div style="background:#005C5C; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#F3EDE4;">Deep Teal</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#DCD3C8;">005C5C</span></div>
+            <div style="background:#064B5A; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#F3EDE4;">Petrol Blue</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#DCD3C8;">064B5A</span></div>
+            <div style="background:#4A263A; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#F3EDE4;">Aubergine</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#DCD3C8;">4A263A</span></div>
+            <div style="background:#6E1F2B; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#F3EDE4;">Warm Burgundy</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#DCD3C8;">6E1F2B</span></div>
+            <div style="background:#8A3324; height:82px; display:flex; flex-direction:column; justify-content:flex-end; padding:9px;"><span style="font-size:13px; color:#F3EDE4;">Burnt Brick</span><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:#DCD3C8;">8A3324</span></div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:22px;">
+            <div>
+              <div style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378; padding-bottom:12px; border-bottom:1px solid #26211C;">Makeup</div>
+              <div style="display:grid; grid-template-columns:auto 1fr; gap:8px 16px; margin-top:14px; font-size:15px; line-height:1.45; color:#C8C0B6;">
+                <span style="color:#8C8378;">Foundation</span><span>Warm golden, one depth deeper</span>
+                <span style="color:#8C8378;">Blush</span><span>Terracotta, brick red, bronze rose</span>
+                <span style="color:#8C8378;">Lip</span><span>Deep red, burgundy, raisin</span>
+                <span style="color:#8C8378;">Eyeshadow</span><span>Bronze, copper, forest green</span>
+                <span style="color:#8C8378;">Eyeliner</span><span>Deep brown, charcoal</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378; padding-bottom:12px; border-bottom:1px solid #26211C;">Style</div>
+              <div style="display:grid; grid-template-columns:auto 1fr; gap:8px 16px; margin-top:14px; font-size:15px; line-height:1.45; color:#C8C0B6;">
+                <span style="color:#8C8378;">Metals</span><span>Yellow gold, bronze, copper, antique gold</span>
+                <span style="color:#8C8378;">Neutrals</span><span>Deep cream, camel, dark chocolate, espresso</span>
+                <span style="color:#8C8378;">Avoid metals</span><span>Silver, platinum, white gold</span>
+                <span style="color:#8C8378;">Avoid</span><span>Pastel pink, icy blue, pure white</span>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:auto; display:flex; gap:32px; align-items:center; border-top:1px solid #26211C; padding-top:20px;">
+            <a href="#" style="font-size:14px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px solid #C9A567; padding-bottom:3px;">Full guidance</a>
+            <a href="#" style="font-size:14px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px solid #C9A567; padding-bottom:3px;">Save palette</a>
+            <span style="margin-inline-start:auto; background:#C9A567; color:#161210; padding:16px 32px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; font-weight:500;">Before you buy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 4. BEFORE YOU BUY ============ -->
+  <div style="display:flex; flex-direction:column; gap:12px;">
+    <span style="color:#8C8378; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase;">04 — Before you buy</span>
+    <div data-screen-label="Before you buy — desktop" style="width:1440px; height:900px; background:#0C0A09; color:#F3EDE4; padding:56px 110px 44px 110px; box-sizing:border-box; display:flex; flex-direction:column; border:1px solid #1E1A17;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #26211C; padding-bottom:14px;">
+        <span style="font-family:'Bodoni Moda',serif; font-size:20px; letter-spacing:0.3em; text-transform:uppercase;">Aura</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Before you buy — Deep Autumn</span>
+      </div>
+      <div style="display:grid; grid-template-columns:5fr 7fr; gap:88px; margin-top:44px; flex:1;">
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <div style="flex:1; background:repeating-linear-gradient(135deg,#17130F 0 10px,#1C1815 10px 20px); border:1px solid #26211C; display:flex; align-items:flex-end; padding:16px;"><span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; color:#B9B0A5;">[ product shot ]</span></div>
+          <div>
+            <div style="font-family:'Bodoni Moda',serif; font-size:30px;">Satin blouse, dusty rose</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; margin-top:8px;">Dusty Rose · #C98D97</div>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:flex-start; gap:40px;">
+            <div style="display:flex; align-items:baseline; gap:8px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:112px; line-height:0.85;">41</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:16px; color:#B9B0A5;">/100</span>
+            </div>
+            <div style="padding-top:16px;">
+              <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1;">Maybe — with care</div>
+              <div style="width:64px; height:1px; background:#C9A567; margin:18px 0;"></div>
+              <p style="margin:0; max-width:520px; font-size:19px; line-height:1.6; color:#C8C0B6; text-wrap:pretty;">Dusty rose is too cool and too light for a Deep Autumn. Worn near the face it flattens your depth and drains the warmth from your skin.</p>
+              <p style="margin:12px 0 0 0; max-width:520px; font-size:16px; line-height:1.55; color:#B9B0A5;"><span style="color:#8C8378;">Tip — </span>keep it away from the face: wear it as a skirt or lining, and put burnt brick or camel at the collar.</p>
+            </div>
+          </div>
+          <div style="margin-top:26px; display:flex; flex-direction:column; gap:10px;">
+            <div style="position:relative; height:6px; background:#26211C;"><div style="position:absolute; left:41%; top:-5px; width:2px; height:16px; background:#C9A567;"></div></div>
+            <div style="display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#B9B0A5;"><span>0–39 avoid</span><span>40–64 maybe</span><span>65–84 good</span><span>85–100 great</span></div>
+          </div>
+          <div style="margin-top:26px;">
+            <div style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378; padding-bottom:12px; border-bottom:1px solid #26211C;">Product colour against your palette</div>
+            <div style="display:flex; align-items:center; gap:24px; margin-top:16px;">
+              <div style="width:120px; height:60px; background:#C98D97;"></div>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#B9B0A5;">product</span>
+              <div style="flex:1; height:1px; background:#26211C;"></div>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#B9B0A5;">yours</span>
+              <div style="width:120px; height:60px; background:#6E1F2B;"></div>
+              <div><div style="font-size:17px;">Warm Burgundy</div><div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5;">6E1F2B · nearest in palette</div></div>
+            </div>
+          </div>
+          <div style="margin-top:26px;">
+            <div style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378; padding-bottom:12px; border-bottom:1px solid #26211C;">Closer in your palette</div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:16px;">
+              <div style="display:flex; flex-direction:column;"><div style="height:96px; background:#8A3324;"></div><div style="font-size:17px; margin-top:12px;">Burnt Brick</div><div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; margin-top:4px;">8A3324</div></div>
+              <div style="display:flex; flex-direction:column;"><div style="height:96px; background:#6E1F2B;"></div><div style="font-size:17px; margin-top:12px;">Warm Burgundy</div><div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; margin-top:4px;">6E1F2B</div></div>
+              <div style="display:flex; flex-direction:column;"><div style="height:96px; background:#4A263A;"></div><div style="font-size:17px; margin-top:12px;">Aubergine</div><div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; margin-top:4px;">4A263A</div></div>
+            </div>
+          </div>
+          <div style="margin-top:auto; display:flex; gap:32px; align-items:center; border-top:1px solid #26211C; padding-top:20px;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5;">Screen colour is approximate. Fabric and lighting shift the result.</span>
+            <span style="margin-inline-start:auto; border:1px solid #3A322B; color:#F3EDE4; padding:15px 30px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase;">Check another</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 5. HOME ============ -->
+  <div style="display:flex; flex-direction:column; gap:12px;">
+    <span style="color:#8C8378; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase;">05 — Home</span>
+    <div data-screen-label="Home — desktop" style="width:1440px; height:900px; background-color:#0C0A09; background-image:radial-gradient(1.6px 1.6px at 6% 12%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 14% 44%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 9% 71%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 22% 26%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 31% 8%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 27% 58%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 38% 82%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 46% 17%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 52% 46%, #8C8378 50%, transparent 50%),radial-gradient(1.6px 1.6px at 58% 74%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 63% 30%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 71% 58%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 68% 10%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 77% 86%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 83% 38%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 88% 66%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 94% 20%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 97% 50%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 19% 92%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 43% 95%, #5E574E 50%, transparent 50%); color:#F3EDE4; padding:56px 110px 40px 110px; box-sizing:border-box; display:flex; flex-direction:column; border:1px solid #1E1A17; overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #26211C; padding-bottom:14px; flex-shrink:0;">
+        <span style="font-family:'Bodoni Moda',serif; font-size:20px; letter-spacing:0.3em; text-transform:uppercase;">Aura</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Personal colour analysis</span>
+      </div>
+      <div style="display:grid; grid-template-columns:7fr 5fr; gap:72px; padding-top:0;">
+        <div style="display:flex; flex-direction:column;">
+          <span style="font-size:13px; letter-spacing:0.22em; text-transform:uppercase; color:#C9A567;">Measured, not guessed</span>
+          <div style="font-family:'Bodoni Moda',serif; font-size:66px; line-height:0.92; margin-top:16px; white-space:nowrap;">Discover the<br>Colours<br>That Were<br><span style="font-style:italic; color:#C9A567;">Made for You</span></div>
+          <p style="margin:20px 0 0 0; max-width:560px; font-size:20px; line-height:1.6; color:#C8C0B6; text-wrap:pretty;">Upload one photo. Skin, hair and eyes are measured in your browser and matched against the twelve seasons. You get your palette, your makeup shades, and a score for anything you're about to buy.</p>
+          <div style="display:flex; align-items:center; gap:36px; margin-top:28px;">
+            <span style="background:#C9A567; color:#161210; padding:18px 40px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; font-weight:500;">Discover your palette</span>
+            <a href="#" style="font-size:14px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px solid #C9A567; padding-bottom:3px;">Try a sample face</a>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; justify-content:center; gap:4px;">
+          <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378; padding-bottom:16px;">How it works</span>
+          <div style="display:grid; grid-template-columns:40px 1fr; gap:18px; padding:16px 0; border-top:1px solid #26211C;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8C8378;">01</span>
+            <div><div style="font-size:19px; line-height:1.35; color:#F3EDE4;">Add one photo</div><div style="font-size:16px; line-height:1.55; color:#C8C0B6; margin-top:6px;">Daylight, bare face, no filters. The quality check runs in your browser — nothing uploads until the photo passes.</div></div>
+          </div>
+          <div style="display:grid; grid-template-columns:40px 1fr; gap:18px; padding:16px 0; border-top:1px solid #26211C;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8C8378;">02</span>
+            <div><div style="font-size:19px; line-height:1.35; color:#F3EDE4;">Your colouring is measured</div><div style="font-size:16px; line-height:1.55; color:#C8C0B6; margin-top:6px;">Skin, hair and eyes are read in CIE Lab and matched against the twelve seasons.</div></div>
+          </div>
+          <div style="display:grid; grid-template-columns:40px 1fr; gap:18px; padding:16px 0; border-top:1px solid #26211C;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8C8378;">03</span>
+            <div><div style="font-size:19px; line-height:1.35; color:#F3EDE4;">Dress from your palette</div><div style="font-size:16px; line-height:1.55; color:#C8C0B6; margin-top:6px;">Twelve colours, makeup and metals, and a score for anything you are about to buy.</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:60px; display:flex; flex-direction:column; gap:16px;">
+        <div style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378; padding-bottom:12px; border-bottom:1px solid #26211C;">All twelve seasons</div>
+        <div style="margin:0 -110px; position:relative; height:64px; overflow:hidden;">
+          <div style="position:absolute; top:0; left:0; display:flex; gap:100px; animation:aura-ribbon-d 720s linear infinite;">
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -426.125s infinite both;">True Autumn</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -426.125s infinite both;"><div style="background:#F6E1B3;"></div><div style="background:#C99700;"></div><div style="background:#D8A31A;"></div><div style="background:#D2691E;"></div><div style="background:#C4511B;"></div><div style="background:#A94724;"></div><div style="background:#B7412E;"></div><div style="background:#A65A3A;"></div><div style="background:#6B742E;"></div><div style="background:#4E5D2C;"></div><div style="background:#2F6F6D;"></div><div style="background:#4B2E1F;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -366.125s infinite both;">Deep Autumn</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -366.125s infinite both;"><div style="background:#F0D8A8;"></div><div style="background:#B7834F;"></div><div style="background:#8C5A2B;"></div><div style="background:#3B2416;"></div><div style="background:#24160F;"></div><div style="background:#3F4A24;"></div><div style="background:#1F4D3A;"></div><div style="background:#005C5C;"></div><div style="background:#064B5A;"></div><div style="background:#4A263A;"></div><div style="background:#6E1F2B;"></div><div style="background:#8A3324;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -306.125s infinite both;">Soft Autumn</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -306.125s infinite both;"><div style="background:#F3E4C8;"></div><div style="background:#D7B98E;"></div><div style="background:#C19A6B;"></div><div style="background:#E8A77C;"></div><div style="background:#C97868;"></div><div style="background:#D98B75;"></div><div style="background:#B7664B;"></div><div style="background:#7F8A4A;"></div><div style="background:#6F7D45;"></div><div style="background:#4F8A83;"></div><div style="background:#6EA7A1;"></div><div style="background:#6B4A35;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -246.125s infinite both;">Deep Winter</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -246.125s infinite both;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#1E1E24;"></div><div style="background:#071A3D;"></div><div style="background:#0A2342;"></div><div style="background:#006B54;"></div><div style="background:#004D4D;"></div><div style="background:#3B1A45;"></div><div style="background:#2A1533;"></div><div style="background:#6A0F2B;"></div><div style="background:#8C1D40;"></div><div style="background:#F2D7E6;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -186.125s infinite both;">True Winter</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -186.125s infinite both;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#E7EAF0;"></div><div style="background:#8A8F98;"></div><div style="background:#0033A0;"></div><div style="background:#0047AB;"></div><div style="background:#0F52BA;"></div><div style="background:#007A5E;"></div><div style="background:#C8102E;"></div><div style="background:#D1007E;"></div><div style="background:#B0005A;"></div><div style="background:#5B2C83;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -126.125s infinite both;">Bright Winter</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -126.125s infinite both;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#DDEEFF;"></div><div style="background:#F9DFF0;"></div><div style="background:#005BFF;"></div><div style="background:#5A00B5;"></div><div style="background:#7F00FF;"></div><div style="background:#FF007F;"></div><div style="background:#E6007E;"></div><div style="background:#E10600;"></div><div style="background:#00A86B;"></div><div style="background:#00B8B8;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -66.125s infinite both;">Light Spring</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -66.125s infinite both;"><div style="background:#FFF4DC;"></div><div style="background:#FFD6B5;"></div><div style="background:#FFB86B;"></div><div style="background:#FF8C7A;"></div><div style="background:#F58CA8;"></div><div style="background:#FFE78A;"></div><div style="background:#A8E6C1;"></div><div style="background:#8EDDE3;"></div><div style="background:#8FCFF2;"></div><div style="background:#5BC6C6;"></div><div style="background:#CFAE7A;"></div><div style="background:#9B6A45;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -6.125s infinite both;">True Spring</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -6.125s infinite both;"><div style="background:#FFF0C9;"></div><div style="background:#FFD23F;"></div><div style="background:#F6B800;"></div><div style="background:#FF7A1A;"></div><div style="background:#E94B35;"></div><div style="background:#FF6F61;"></div><div style="background:#FF6FAE;"></div><div style="background:#6DBE45;"></div><div style="background:#8CC63F;"></div><div style="background:#00A6A6;"></div><div style="background:#00BFC4;"></div><div style="background:#8B5A2B;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear 53.875s infinite both;">Bright Spring</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear 53.875s infinite both;"><div style="background:#FFF7E6;"></div><div style="background:#FF5A5F;"></div><div style="background:#FF3366;"></div><div style="background:#FF8A3D;"></div><div style="background:#FF6B00;"></div><div style="background:#FFE600;"></div><div style="background:#A7E600;"></div><div style="background:#00A86B;"></div><div style="background:#00B3B8;"></div><div style="background:#00D4D8;"></div><div style="background:#0077FF;"></div><div style="background:#5A3218;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear 113.875s infinite both;">Light Summer</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear 113.875s infinite both;"><div style="background:#F7F3EF;"></div><div style="background:#F6C6D6;"></div><div style="background:#F4AFC4;"></div><div style="background:#D98BA3;"></div><div style="background:#C8B6E2;"></div><div style="background:#AFCBEF;"></div><div style="background:#9ECFE7;"></div><div style="background:#A7DAD8;"></div><div style="background:#B9CBB2;"></div><div style="background:#B7A9A0;"></div><div style="background:#B8BCC6;"></div><div style="background:#4D5F7A;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear 173.875s infinite both;">True Summer</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear 173.875s infinite both;"><div style="background:#F2F1EE;"></div><div style="background:#D98CA6;"></div><div style="background:#C96F8C;"></div><div style="background:#B84A6B;"></div><div style="background:#A87898;"></div><div style="background:#A8A0C4;"></div><div style="background:#7F95C8;"></div><div style="background:#5F7FA3;"></div><div style="background:#5B9EA0;"></div><div style="background:#8FA89B;"></div><div style="background:#7D8796;"></div><div style="background:#2F405C;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear 233.875s infinite both;">Soft Summer</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear 233.875s infinite both;"><div style="background:#EDE6DD;"></div><div style="background:#C996A6;"></div><div style="background:#B9798D;"></div><div style="background:#A96D85;"></div><div style="background:#9B8AA8;"></div><div style="background:#7089A3;"></div><div style="background:#607C99;"></div><div style="background:#5F8E8B;"></div><div style="background:#7F9B8E;"></div><div style="background:#A28F82;"></div><div style="background:#7A625A;"></div><div style="background:#374252;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -426.125s infinite both;">True Autumn</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -426.125s infinite both;"><div style="background:#F6E1B3;"></div><div style="background:#C99700;"></div><div style="background:#D8A31A;"></div><div style="background:#D2691E;"></div><div style="background:#C4511B;"></div><div style="background:#A94724;"></div><div style="background:#B7412E;"></div><div style="background:#A65A3A;"></div><div style="background:#6B742E;"></div><div style="background:#4E5D2C;"></div><div style="background:#2F6F6D;"></div><div style="background:#4B2E1F;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -366.125s infinite both;">Deep Autumn</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -366.125s infinite both;"><div style="background:#F0D8A8;"></div><div style="background:#B7834F;"></div><div style="background:#8C5A2B;"></div><div style="background:#3B2416;"></div><div style="background:#24160F;"></div><div style="background:#3F4A24;"></div><div style="background:#1F4D3A;"></div><div style="background:#005C5C;"></div><div style="background:#064B5A;"></div><div style="background:#4A263A;"></div><div style="background:#6E1F2B;"></div><div style="background:#8A3324;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -306.125s infinite both;">Soft Autumn</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -306.125s infinite both;"><div style="background:#F3E4C8;"></div><div style="background:#D7B98E;"></div><div style="background:#C19A6B;"></div><div style="background:#E8A77C;"></div><div style="background:#C97868;"></div><div style="background:#D98B75;"></div><div style="background:#B7664B;"></div><div style="background:#7F8A4A;"></div><div style="background:#6F7D45;"></div><div style="background:#4F8A83;"></div><div style="background:#6EA7A1;"></div><div style="background:#6B4A35;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -246.125s infinite both;">Deep Winter</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -246.125s infinite both;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#1E1E24;"></div><div style="background:#071A3D;"></div><div style="background:#0A2342;"></div><div style="background:#006B54;"></div><div style="background:#004D4D;"></div><div style="background:#3B1A45;"></div><div style="background:#2A1533;"></div><div style="background:#6A0F2B;"></div><div style="background:#8C1D40;"></div><div style="background:#F2D7E6;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -186.125s infinite both;">True Winter</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -186.125s infinite both;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#E7EAF0;"></div><div style="background:#8A8F98;"></div><div style="background:#0033A0;"></div><div style="background:#0047AB;"></div><div style="background:#0F52BA;"></div><div style="background:#007A5E;"></div><div style="background:#C8102E;"></div><div style="background:#D1007E;"></div><div style="background:#B0005A;"></div><div style="background:#5B2C83;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -126.125s infinite both;">Bright Winter</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -126.125s infinite both;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#DDEEFF;"></div><div style="background:#F9DFF0;"></div><div style="background:#005BFF;"></div><div style="background:#5A00B5;"></div><div style="background:#7F00FF;"></div><div style="background:#FF007F;"></div><div style="background:#E6007E;"></div><div style="background:#E10600;"></div><div style="background:#00A86B;"></div><div style="background:#00B8B8;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -66.125s infinite both;">Light Spring</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -66.125s infinite both;"><div style="background:#FFF4DC;"></div><div style="background:#FFD6B5;"></div><div style="background:#FFB86B;"></div><div style="background:#FF8C7A;"></div><div style="background:#F58CA8;"></div><div style="background:#FFE78A;"></div><div style="background:#A8E6C1;"></div><div style="background:#8EDDE3;"></div><div style="background:#8FCFF2;"></div><div style="background:#5BC6C6;"></div><div style="background:#CFAE7A;"></div><div style="background:#9B6A45;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear -6.125s infinite both;">True Spring</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear -6.125s infinite both;"><div style="background:#FFF0C9;"></div><div style="background:#FFD23F;"></div><div style="background:#F6B800;"></div><div style="background:#FF7A1A;"></div><div style="background:#E94B35;"></div><div style="background:#FF6F61;"></div><div style="background:#FF6FAE;"></div><div style="background:#6DBE45;"></div><div style="background:#8CC63F;"></div><div style="background:#00A6A6;"></div><div style="background:#00BFC4;"></div><div style="background:#8B5A2B;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear 53.875s infinite both;">Bright Spring</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear 53.875s infinite both;"><div style="background:#FFF7E6;"></div><div style="background:#FF5A5F;"></div><div style="background:#FF3366;"></div><div style="background:#FF8A3D;"></div><div style="background:#FF6B00;"></div><div style="background:#FFE600;"></div><div style="background:#A7E600;"></div><div style="background:#00A86B;"></div><div style="background:#00B3B8;"></div><div style="background:#00D4D8;"></div><div style="background:#0077FF;"></div><div style="background:#5A3218;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear 113.875s infinite both;">Light Summer</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear 113.875s infinite both;"><div style="background:#F7F3EF;"></div><div style="background:#F6C6D6;"></div><div style="background:#F4AFC4;"></div><div style="background:#D98BA3;"></div><div style="background:#C8B6E2;"></div><div style="background:#AFCBEF;"></div><div style="background:#9ECFE7;"></div><div style="background:#A7DAD8;"></div><div style="background:#B9CBB2;"></div><div style="background:#B7A9A0;"></div><div style="background:#B8BCC6;"></div><div style="background:#4D5F7A;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear 173.875s infinite both;">True Summer</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear 173.875s infinite both;"><div style="background:#F2F1EE;"></div><div style="background:#D98CA6;"></div><div style="background:#C96F8C;"></div><div style="background:#B84A6B;"></div><div style="background:#A87898;"></div><div style="background:#A8A0C4;"></div><div style="background:#7F95C8;"></div><div style="background:#5F7FA3;"></div><div style="background:#5B9EA0;"></div><div style="background:#8FA89B;"></div><div style="background:#7D8796;"></div><div style="background:#2F405C;"></div></div>
+              </div>
+              <div style="width:380px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;">
+                <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap; color:#8C8378; animation:aura-name 720s linear 233.875s infinite both;">Soft Summer</span>
+                <div style="display:grid; grid-template-columns:repeat(12,1fr); height:32px; opacity:0.45; animation:aura-bars 720s linear 233.875s infinite both;"><div style="background:#EDE6DD;"></div><div style="background:#C996A6;"></div><div style="background:#B9798D;"></div><div style="background:#A96D85;"></div><div style="background:#9B8AA8;"></div><div style="background:#7089A3;"></div><div style="background:#607C99;"></div><div style="background:#5F8E8B;"></div><div style="background:#7F9B8E;"></div><div style="background:#A28F82;"></div><div style="background:#7A625A;"></div><div style="background:#374252;"></div></div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:52px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid #26211C; padding-top:18px; flex-shrink:0;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.06em; white-space:nowrap; color:#B9B0A5;">Your photo is checked on your device; nothing uploads until it passes.</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8C8378;">canonical palettes</span>
+      </div>
+    </div>
+  </div>
+
+</section>

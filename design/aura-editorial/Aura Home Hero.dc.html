@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body { margin:0; background:#0C0A09; }
+a { color:#C9A567; text-decoration:none; }
+a:hover { color:#E3C48C; }
+/* A — one specimen at a time, 4s each, slow crossfade */
+@keyframes aura-specimen {
+  0%      { opacity:0 }
+  1.5%    { opacity:1 }
+  8.333%  { opacity:1 }
+  10%     { opacity:0 }
+  100%    { opacity:0 }
+}
+/* B — the ribbon drifts one full set of twelve, then repeats seamlessly */
+@keyframes aura-ribbon {
+  from { transform:translateX(0) }
+  to   { transform:translateX(-4224px) }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*="aura-specimen"] { animation:none !important; opacity:1 !important }
+  [style*="aura-specimen"]:not(:first-child) { display:none !important }
+  [style*="aura-ribbon"] { animation:none !important }
+}
+</style>
+</helmet>
+
+<section style="display:flex; flex-direction:column; gap:40px; padding:48px; font-family:Archivo,Helvetica,sans-serif;">
+  <div style="display:flex; gap:16px; color:#8C8378; font-size:13px; letter-spacing:0.14em; text-transform:uppercase;"><span>Aura — Home hero</span><span style="color:#4A443E;">/</span><span>Turn 1 — two variants, 1440px</span></div>
+
+  <div style="display:flex; flex-direction:column; gap:48px;">
+
+    <!-- ===== 1a — specimen card ===== -->
+    <div id="1a" style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border:1px solid #C9A567; color:#C9A567; font-size:12px; font-weight:600;">1a</span>
+        <span style="color:#F3EDE4; font-size:14px; letter-spacing:0.12em; text-transform:uppercase;">A — Season specimen, cycling every 4s</span>
+      </div>
+      <div data-screen-label="Home hero A — desktop" style="width:1440px; height:900px; background-color:#0C0A09; background-image:radial-gradient(1.6px 1.6px at 6% 12%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 14% 44%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 9% 71%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 22% 26%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 31% 8%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 27% 58%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 38% 82%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 46% 17%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 52% 46%, #8C8378 50%, transparent 50%),radial-gradient(1.6px 1.6px at 58% 74%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 63% 30%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 71% 58%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 68% 10%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 77% 86%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 83% 38%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 88% 66%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 94% 20%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 97% 50%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 19% 92%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 43% 95%, #5E574E 50%, transparent 50%); color:#F3EDE4; padding:56px 110px; box-sizing:border-box; display:flex; flex-direction:column; border:1px solid #1E1A17;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #26211C; padding-bottom:14px; flex-shrink:0;">
+        <span style="font-family:'Bodoni Moda',serif; font-size:20px; letter-spacing:0.3em; text-transform:uppercase;">Aura</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Personal colour analysis</span>
+      </div>
+        <div style="display:grid; grid-template-columns:7fr 5fr; gap:72px; align-items:center; flex:1;">
+          <div style="display:flex; flex-direction:column;">
+          <span style="font-size:13px; letter-spacing:0.22em; text-transform:uppercase; color:#C9A567;">Measured, not guessed</span>
+          <div style="font-family:'Bodoni Moda',serif; font-size:84px; line-height:0.9; margin-top:22px; white-space:nowrap;">Discover the<br>Colours<br>That Were<br><span style="font-style:italic; color:#C9A567;">Made for You</span></div>
+          <p style="margin:28px 0 0 0; max-width:560px; font-size:21px; line-height:1.65; color:#C8C0B6; text-wrap:pretty;">Upload one photo. Skin, hair and eyes are measured in your browser and matched against the twelve seasons. You get your palette, your makeup shades, and a score for anything you're about to buy.</p>
+          <div style="display:flex; align-items:center; gap:36px; margin-top:34px;">
+            <span style="background:#C9A567; color:#161210; padding:18px 40px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; font-weight:500;">Discover your palette</span>
+            <a href="#1a" style="font-size:14px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px solid #C9A567; padding-bottom:3px;">Try a sample face</a>
+          </div>
+          </div>
+          <div style="position:relative; height:470px;">
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear -0.72s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">Deep Autumn</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#F0D8A8;"></div><div style="background:#B7834F;"></div><div style="background:#8C5A2B;"></div><div style="background:#3B2416;"></div><div style="background:#24160F;"></div><div style="background:#3F4A24;"></div><div style="background:#1F4D3A;"></div><div style="background:#005C5C;"></div><div style="background:#064B5A;"></div><div style="background:#4A263A;"></div><div style="background:#6E1F2B;"></div><div style="background:#8A3324;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:82%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">82</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:78%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">78</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:35%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">35</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:75%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">75</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 3.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">True Autumn</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#F6E1B3;"></div><div style="background:#C99700;"></div><div style="background:#D8A31A;"></div><div style="background:#D2691E;"></div><div style="background:#C4511B;"></div><div style="background:#A94724;"></div><div style="background:#B7412E;"></div><div style="background:#A65A3A;"></div><div style="background:#6B742E;"></div><div style="background:#4E5D2C;"></div><div style="background:#2F6F6D;"></div><div style="background:#4B2E1F;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:78%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">78</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:55%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">55</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:40%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">40</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:55%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">55</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 7.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">Soft Autumn</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#F3E4C8;"></div><div style="background:#D7B98E;"></div><div style="background:#C19A6B;"></div><div style="background:#E8A77C;"></div><div style="background:#C97868;"></div><div style="background:#D98B75;"></div><div style="background:#B7664B;"></div><div style="background:#7F8A4A;"></div><div style="background:#6F7D45;"></div><div style="background:#4F8A83;"></div><div style="background:#6EA7A1;"></div><div style="background:#6B4A35;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:65%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">65</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:45%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">45</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:25%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">25</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:35%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">35</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 11.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">Deep Winter</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#1E1E24;"></div><div style="background:#071A3D;"></div><div style="background:#0A2342;"></div><div style="background:#006B54;"></div><div style="background:#004D4D;"></div><div style="background:#3B1A45;"></div><div style="background:#2A1533;"></div><div style="background:#6A0F2B;"></div><div style="background:#8C1D40;"></div><div style="background:#F2D7E6;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:25%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">25</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:80%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">80</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:75%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">75</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:85%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">85</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 15.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">True Winter</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#E7EAF0;"></div><div style="background:#8A8F98;"></div><div style="background:#0033A0;"></div><div style="background:#0047AB;"></div><div style="background:#0F52BA;"></div><div style="background:#007A5E;"></div><div style="background:#C8102E;"></div><div style="background:#D1007E;"></div><div style="background:#B0005A;"></div><div style="background:#5B2C83;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:20%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">20</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:65%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">65</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:80%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">80</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:70%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">70</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 19.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">Bright Winter</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#DDEEFF;"></div><div style="background:#F9DFF0;"></div><div style="background:#005BFF;"></div><div style="background:#5A00B5;"></div><div style="background:#7F00FF;"></div><div style="background:#FF007F;"></div><div style="background:#E6007E;"></div><div style="background:#E10600;"></div><div style="background:#00A86B;"></div><div style="background:#00B8B8;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:30%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">30</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:60%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">60</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:95%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">95</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:80%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">80</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 23.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">Light Spring</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#FFF4DC;"></div><div style="background:#FFD6B5;"></div><div style="background:#FFB86B;"></div><div style="background:#FF8C7A;"></div><div style="background:#F58CA8;"></div><div style="background:#FFE78A;"></div><div style="background:#A8E6C1;"></div><div style="background:#8EDDE3;"></div><div style="background:#8FCFF2;"></div><div style="background:#5BC6C6;"></div><div style="background:#CFAE7A;"></div><div style="background:#9B6A45;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:68%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">68</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:25%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">25</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:70%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">70</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:30%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">30</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 27.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">True Spring</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#FFF0C9;"></div><div style="background:#FFD23F;"></div><div style="background:#F6B800;"></div><div style="background:#FF7A1A;"></div><div style="background:#E94B35;"></div><div style="background:#FF6F61;"></div><div style="background:#FF6FAE;"></div><div style="background:#6DBE45;"></div><div style="background:#8CC63F;"></div><div style="background:#00A6A6;"></div><div style="background:#00BFC4;"></div><div style="background:#8B5A2B;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:75%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">75</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:40%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">40</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:80%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">80</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:50%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">50</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 31.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">Bright Spring</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#FFF7E6;"></div><div style="background:#FF5A5F;"></div><div style="background:#FF3366;"></div><div style="background:#FF8A3D;"></div><div style="background:#FF6B00;"></div><div style="background:#FFE600;"></div><div style="background:#A7E600;"></div><div style="background:#00A86B;"></div><div style="background:#00B3B8;"></div><div style="background:#00D4D8;"></div><div style="background:#0077FF;"></div><div style="background:#5A3218;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:72%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">72</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:45%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">45</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:92%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">92</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:65%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">65</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 35.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">Light Summer</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#F7F3EF;"></div><div style="background:#F6C6D6;"></div><div style="background:#F4AFC4;"></div><div style="background:#D98BA3;"></div><div style="background:#C8B6E2;"></div><div style="background:#AFCBEF;"></div><div style="background:#9ECFE7;"></div><div style="background:#A7DAD8;"></div><div style="background:#B9CBB2;"></div><div style="background:#B7A9A0;"></div><div style="background:#B8BCC6;"></div><div style="background:#4D5F7A;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:35%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">35</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:28%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">28</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:55%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">55</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:25%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">25</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 39.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">True Summer</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#F2F1EE;"></div><div style="background:#D98CA6;"></div><div style="background:#C96F8C;"></div><div style="background:#B84A6B;"></div><div style="background:#A87898;"></div><div style="background:#A8A0C4;"></div><div style="background:#7F95C8;"></div><div style="background:#5F7FA3;"></div><div style="background:#5B9EA0;"></div><div style="background:#8FA89B;"></div><div style="background:#7D8796;"></div><div style="background:#2F405C;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:30%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">30</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:42%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">42</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:45%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">45</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:40%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">40</span></div>
+            </div>
+          </div>
+          <div style="position:absolute; inset:0; opacity:0; animation:aura-specimen 48s linear 43.28s infinite both; display:flex; flex-direction:column; background:#131110; border:1px solid #26211C; padding:28px;">
+            <div style="font-family:'Bodoni Moda',serif; font-size:40px; line-height:1.1; color:#F3EDE4;">Soft Summer</div>
+            <div style="display:grid; grid-template-columns:repeat(12,1fr); height:150px; margin-top:22px;"><div style="background:#EDE6DD;"></div><div style="background:#C996A6;"></div><div style="background:#B9798D;"></div><div style="background:#A96D85;"></div><div style="background:#9B8AA8;"></div><div style="background:#7089A3;"></div><div style="background:#607C99;"></div><div style="background:#5F8E8B;"></div><div style="background:#7F9B8E;"></div><div style="background:#A28F82;"></div><div style="background:#7A625A;"></div><div style="background:#374252;"></div></div>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:26px;">
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Warmth</span><div style="height:4px; background:#26211C;"><div style="width:40%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">40</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Depth</span><div style="height:4px; background:#26211C;"><div style="width:38%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">38</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Clarity</span><div style="height:4px; background:#26211C;"><div style="width:28%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">28</span></div>
+              <div style="display:grid; grid-template-columns:78px 1fr 34px; align-items:center; gap:14px;"><span style="font-size:14px; color:#C8C0B6;">Contrast</span><div style="height:4px; background:#26211C;"><div style="width:30%; height:4px; background:#F3EDE4;"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5; text-align:right;">30</span></div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 1b — drifting ribbon ===== -->
+    <div id="1b" style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <span style="display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border:1px solid #C9A567; color:#C9A567; font-size:12px; font-weight:600;">1b</span>
+        <span style="color:#F3EDE4; font-size:14px; letter-spacing:0.12em; text-transform:uppercase;">B — Full-width colour ribbon, drifting</span>
+      </div>
+      <div data-screen-label="Home hero B — desktop" style="width:1440px; height:900px; background-color:#0C0A09; background-image:radial-gradient(1.6px 1.6px at 6% 12%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 14% 44%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 9% 71%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 22% 26%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 31% 8%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 27% 58%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 38% 82%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 46% 17%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 52% 46%, #8C8378 50%, transparent 50%),radial-gradient(1.6px 1.6px at 58% 74%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 63% 30%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 71% 58%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 68% 10%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 77% 86%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 83% 38%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 88% 66%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 94% 20%, #8C8378 50%, transparent 50%),radial-gradient(1px 1px at 97% 50%, #5E574E 50%, transparent 50%),radial-gradient(1.6px 1.6px at 19% 92%, #5E574E 50%, transparent 50%),radial-gradient(1px 1px at 43% 95%, #5E574E 50%, transparent 50%); color:#F3EDE4; padding:56px 110px 40px 110px; box-sizing:border-box; display:flex; flex-direction:column; border:1px solid #1E1A17; overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid #26211C; padding-bottom:14px; flex-shrink:0;">
+        <span style="font-family:'Bodoni Moda',serif; font-size:20px; letter-spacing:0.3em; text-transform:uppercase;">Aura</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">Personal colour analysis</span>
+      </div>
+        <div style="display:grid; grid-template-columns:7fr 5fr; gap:72px; padding-top:14px;">
+          <div style="display:flex; flex-direction:column;">
+          <span style="font-size:13px; letter-spacing:0.22em; text-transform:uppercase; color:#C9A567;">Measured, not guessed</span>
+          <div style="font-family:'Bodoni Moda',serif; font-size:84px; line-height:0.9; margin-top:22px; white-space:nowrap;">Discover the<br>Colours<br>That Were<br><span style="font-style:italic; color:#C9A567;">Made for You</span></div>
+          <p style="margin:28px 0 0 0; max-width:560px; font-size:21px; line-height:1.65; color:#C8C0B6; text-wrap:pretty;">Upload one photo. Skin, hair and eyes are measured in your browser and matched against the twelve seasons. You get your palette, your makeup shades, and a score for anything you're about to buy.</p>
+          <div style="display:flex; align-items:center; gap:36px; margin-top:34px;">
+            <span style="background:#C9A567; color:#161210; padding:18px 40px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; font-weight:500;">Discover your palette</span>
+            <a href="#1a" style="font-size:14px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px solid #C9A567; padding-bottom:3px;">Try a sample face</a>
+          </div>
+          </div>
+        </div>
+        <div style="margin-top:auto; display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid #26211C; padding-top:16px;">
+            <span style="font-size:13px; letter-spacing:0.16em; text-transform:uppercase; color:#8C8378;">All twelve seasons</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#B9B0A5;">canonical palettes</span>
+          </div>
+          <div style="position:relative; height:106px; overflow:hidden; margin:0 -110px; padding:0 110px;">
+            <div style="position:absolute; top:0; left:0; display:flex; gap:32px; animation:aura-ribbon 360s linear infinite;">
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Deep Autumn</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#F0D8A8;"></div><div style="background:#B7834F;"></div><div style="background:#8C5A2B;"></div><div style="background:#3B2416;"></div><div style="background:#24160F;"></div><div style="background:#3F4A24;"></div><div style="background:#1F4D3A;"></div><div style="background:#005C5C;"></div><div style="background:#064B5A;"></div><div style="background:#4A263A;"></div><div style="background:#6E1F2B;"></div><div style="background:#8A3324;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">True Autumn</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#F6E1B3;"></div><div style="background:#C99700;"></div><div style="background:#D8A31A;"></div><div style="background:#D2691E;"></div><div style="background:#C4511B;"></div><div style="background:#A94724;"></div><div style="background:#B7412E;"></div><div style="background:#A65A3A;"></div><div style="background:#6B742E;"></div><div style="background:#4E5D2C;"></div><div style="background:#2F6F6D;"></div><div style="background:#4B2E1F;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Soft Autumn</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#F3E4C8;"></div><div style="background:#D7B98E;"></div><div style="background:#C19A6B;"></div><div style="background:#E8A77C;"></div><div style="background:#C97868;"></div><div style="background:#D98B75;"></div><div style="background:#B7664B;"></div><div style="background:#7F8A4A;"></div><div style="background:#6F7D45;"></div><div style="background:#4F8A83;"></div><div style="background:#6EA7A1;"></div><div style="background:#6B4A35;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Deep Winter</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#1E1E24;"></div><div style="background:#071A3D;"></div><div style="background:#0A2342;"></div><div style="background:#006B54;"></div><div style="background:#004D4D;"></div><div style="background:#3B1A45;"></div><div style="background:#2A1533;"></div><div style="background:#6A0F2B;"></div><div style="background:#8C1D40;"></div><div style="background:#F2D7E6;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">True Winter</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#E7EAF0;"></div><div style="background:#8A8F98;"></div><div style="background:#0033A0;"></div><div style="background:#0047AB;"></div><div style="background:#0F52BA;"></div><div style="background:#007A5E;"></div><div style="background:#C8102E;"></div><div style="background:#D1007E;"></div><div style="background:#B0005A;"></div><div style="background:#5B2C83;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Bright Winter</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#DDEEFF;"></div><div style="background:#F9DFF0;"></div><div style="background:#005BFF;"></div><div style="background:#5A00B5;"></div><div style="background:#7F00FF;"></div><div style="background:#FF007F;"></div><div style="background:#E6007E;"></div><div style="background:#E10600;"></div><div style="background:#00A86B;"></div><div style="background:#00B8B8;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Light Spring</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFF4DC;"></div><div style="background:#FFD6B5;"></div><div style="background:#FFB86B;"></div><div style="background:#FF8C7A;"></div><div style="background:#F58CA8;"></div><div style="background:#FFE78A;"></div><div style="background:#A8E6C1;"></div><div style="background:#8EDDE3;"></div><div style="background:#8FCFF2;"></div><div style="background:#5BC6C6;"></div><div style="background:#CFAE7A;"></div><div style="background:#9B6A45;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">True Spring</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFF0C9;"></div><div style="background:#FFD23F;"></div><div style="background:#F6B800;"></div><div style="background:#FF7A1A;"></div><div style="background:#E94B35;"></div><div style="background:#FF6F61;"></div><div style="background:#FF6FAE;"></div><div style="background:#6DBE45;"></div><div style="background:#8CC63F;"></div><div style="background:#00A6A6;"></div><div style="background:#00BFC4;"></div><div style="background:#8B5A2B;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Bright Spring</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFF7E6;"></div><div style="background:#FF5A5F;"></div><div style="background:#FF3366;"></div><div style="background:#FF8A3D;"></div><div style="background:#FF6B00;"></div><div style="background:#FFE600;"></div><div style="background:#A7E600;"></div><div style="background:#00A86B;"></div><div style="background:#00B3B8;"></div><div style="background:#00D4D8;"></div><div style="background:#0077FF;"></div><div style="background:#5A3218;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Light Summer</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#F7F3EF;"></div><div style="background:#F6C6D6;"></div><div style="background:#F4AFC4;"></div><div style="background:#D98BA3;"></div><div style="background:#C8B6E2;"></div><div style="background:#AFCBEF;"></div><div style="background:#9ECFE7;"></div><div style="background:#A7DAD8;"></div><div style="background:#B9CBB2;"></div><div style="background:#B7A9A0;"></div><div style="background:#B8BCC6;"></div><div style="background:#4D5F7A;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">True Summer</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#F2F1EE;"></div><div style="background:#D98CA6;"></div><div style="background:#C96F8C;"></div><div style="background:#B84A6B;"></div><div style="background:#A87898;"></div><div style="background:#A8A0C4;"></div><div style="background:#7F95C8;"></div><div style="background:#5F7FA3;"></div><div style="background:#5B9EA0;"></div><div style="background:#8FA89B;"></div><div style="background:#7D8796;"></div><div style="background:#2F405C;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Soft Summer</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#EDE6DD;"></div><div style="background:#C996A6;"></div><div style="background:#B9798D;"></div><div style="background:#A96D85;"></div><div style="background:#9B8AA8;"></div><div style="background:#7089A3;"></div><div style="background:#607C99;"></div><div style="background:#5F8E8B;"></div><div style="background:#7F9B8E;"></div><div style="background:#A28F82;"></div><div style="background:#7A625A;"></div><div style="background:#374252;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Deep Autumn</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#F0D8A8;"></div><div style="background:#B7834F;"></div><div style="background:#8C5A2B;"></div><div style="background:#3B2416;"></div><div style="background:#24160F;"></div><div style="background:#3F4A24;"></div><div style="background:#1F4D3A;"></div><div style="background:#005C5C;"></div><div style="background:#064B5A;"></div><div style="background:#4A263A;"></div><div style="background:#6E1F2B;"></div><div style="background:#8A3324;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">True Autumn</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#F6E1B3;"></div><div style="background:#C99700;"></div><div style="background:#D8A31A;"></div><div style="background:#D2691E;"></div><div style="background:#C4511B;"></div><div style="background:#A94724;"></div><div style="background:#B7412E;"></div><div style="background:#A65A3A;"></div><div style="background:#6B742E;"></div><div style="background:#4E5D2C;"></div><div style="background:#2F6F6D;"></div><div style="background:#4B2E1F;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Soft Autumn</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#F3E4C8;"></div><div style="background:#D7B98E;"></div><div style="background:#C19A6B;"></div><div style="background:#E8A77C;"></div><div style="background:#C97868;"></div><div style="background:#D98B75;"></div><div style="background:#B7664B;"></div><div style="background:#7F8A4A;"></div><div style="background:#6F7D45;"></div><div style="background:#4F8A83;"></div><div style="background:#6EA7A1;"></div><div style="background:#6B4A35;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Deep Winter</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#1E1E24;"></div><div style="background:#071A3D;"></div><div style="background:#0A2342;"></div><div style="background:#006B54;"></div><div style="background:#004D4D;"></div><div style="background:#3B1A45;"></div><div style="background:#2A1533;"></div><div style="background:#6A0F2B;"></div><div style="background:#8C1D40;"></div><div style="background:#F2D7E6;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">True Winter</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#E7EAF0;"></div><div style="background:#8A8F98;"></div><div style="background:#0033A0;"></div><div style="background:#0047AB;"></div><div style="background:#0F52BA;"></div><div style="background:#007A5E;"></div><div style="background:#C8102E;"></div><div style="background:#D1007E;"></div><div style="background:#B0005A;"></div><div style="background:#5B2C83;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Bright Winter</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFFFFF;"></div><div style="background:#000000;"></div><div style="background:#DDEEFF;"></div><div style="background:#F9DFF0;"></div><div style="background:#005BFF;"></div><div style="background:#5A00B5;"></div><div style="background:#7F00FF;"></div><div style="background:#FF007F;"></div><div style="background:#E6007E;"></div><div style="background:#E10600;"></div><div style="background:#00A86B;"></div><div style="background:#00B8B8;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Light Spring</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFF4DC;"></div><div style="background:#FFD6B5;"></div><div style="background:#FFB86B;"></div><div style="background:#FF8C7A;"></div><div style="background:#F58CA8;"></div><div style="background:#FFE78A;"></div><div style="background:#A8E6C1;"></div><div style="background:#8EDDE3;"></div><div style="background:#8FCFF2;"></div><div style="background:#5BC6C6;"></div><div style="background:#CFAE7A;"></div><div style="background:#9B6A45;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">True Spring</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFF0C9;"></div><div style="background:#FFD23F;"></div><div style="background:#F6B800;"></div><div style="background:#FF7A1A;"></div><div style="background:#E94B35;"></div><div style="background:#FF6F61;"></div><div style="background:#FF6FAE;"></div><div style="background:#6DBE45;"></div><div style="background:#8CC63F;"></div><div style="background:#00A6A6;"></div><div style="background:#00BFC4;"></div><div style="background:#8B5A2B;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Bright Spring</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#FFF7E6;"></div><div style="background:#FF5A5F;"></div><div style="background:#FF3366;"></div><div style="background:#FF8A3D;"></div><div style="background:#FF6B00;"></div><div style="background:#FFE600;"></div><div style="background:#A7E600;"></div><div style="background:#00A86B;"></div><div style="background:#00B3B8;"></div><div style="background:#00D4D8;"></div><div style="background:#0077FF;"></div><div style="background:#5A3218;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Light Summer</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#F7F3EF;"></div><div style="background:#F6C6D6;"></div><div style="background:#F4AFC4;"></div><div style="background:#D98BA3;"></div><div style="background:#C8B6E2;"></div><div style="background:#AFCBEF;"></div><div style="background:#9ECFE7;"></div><div style="background:#A7DAD8;"></div><div style="background:#B9CBB2;"></div><div style="background:#B7A9A0;"></div><div style="background:#B8BCC6;"></div><div style="background:#4D5F7A;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">True Summer</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#F2F1EE;"></div><div style="background:#D98CA6;"></div><div style="background:#C96F8C;"></div><div style="background:#B84A6B;"></div><div style="background:#A87898;"></div><div style="background:#A8A0C4;"></div><div style="background:#7F95C8;"></div><div style="background:#5F7FA3;"></div><div style="background:#5B9EA0;"></div><div style="background:#8FA89B;"></div><div style="background:#7D8796;"></div><div style="background:#2F405C;"></div></div>
+            </div>
+            <div style="width:320px; flex-shrink:0; display:flex; flex-direction:column; gap:10px;">
+              <span style="font-family:'Bodoni Moda',serif; font-size:22px; color:#F3EDE4; white-space:nowrap;">Soft Summer</span>
+              <div style="display:grid; grid-template-columns:repeat(12,1fr); height:70px;"><div style="background:#EDE6DD;"></div><div style="background:#C996A6;"></div><div style="background:#B9798D;"></div><div style="background:#A96D85;"></div><div style="background:#9B8AA8;"></div><div style="background:#7089A3;"></div><div style="background:#607C99;"></div><div style="background:#5F8E8B;"></div><div style="background:#7F9B8E;"></div><div style="background:#A28F82;"></div><div style="background:#7A625A;"></div><div style="background:#374252;"></div></div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
