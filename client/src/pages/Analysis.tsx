@@ -297,7 +297,18 @@ export default function Analysis() {
 
         {/* ── The three failure states ───────────────────────────────── */}
         {step === "quality" && (
-          <QualityPanel issues={qualityIssues} onRetake={() => setStep("upload")} />
+          <QualityPanel
+            issues={qualityIssues}
+            // Clear the photo as well as the step. "Try another photo" that
+            // returns you to the upload screen with the rejected photo still
+            // in place leaves the dropzone hidden behind its own preview, so
+            // the one thing the button invites you to do is the one thing you
+            // cannot see how to do.
+            onRetake={() => {
+              removePhoto();
+              setStep("upload");
+            }}
+          />
         )}
 
         {step === "system" && (
@@ -309,7 +320,12 @@ export default function Analysis() {
             errorKind={errorKind}
             error={error}
             photoTips={photoTips}
-            onRetry={() => setStep("upload")}
+            onRetry={() => {
+              // Same reasoning as the quality panel: the photo that failed is
+              // not the one to try again with.
+              removePhoto();
+              setStep("upload");
+            }}
           />
         )}
       </div>
