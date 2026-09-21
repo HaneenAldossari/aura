@@ -1,4 +1,5 @@
 import MAKEUP, { shadeNamesForPrompt } from "../utils/seasonMakeup";
+import { LOOK_NAME_EXTRA_WORDS, LOOKS_PER_SEASON, vocabularyForPrompt } from "../utils/lookVocabulary";
 
 /**
  * Every shade the model may name, grouped by season.
@@ -218,13 +219,22 @@ highlights"). Name real, achievable salon colors — no invented shade names.
 
 ## MAKEUP LOOKS
 
-Write 2-3 looks in \`looks\`. Each gets a name, a one-line \`vibe\`, a \`timeOfDay\`
-of day or evening, and 4-5 shades.
+Write exactly ${LOOKS_PER_SEASON} looks in \`looks\` — at least one for day and at least one for
+evening, and no two with the same name. Each gets a name, a one-line \`vibe\`, a
+\`timeOfDay\` of day or evening, and 4-5 shades.
+
+- **\`name\` must begin with one of these terms, spelled exactly:**
+  ${vocabularyForPrompt()}.
+  You may add up to ${LOOK_NAME_EXTRA_WORDS} words after the term to say which — "Soft Glam, Plum",
+  "Smoky Eye in Bronze", "Bold Lip, Brick" — or use the term alone. Nothing may
+  come before it. A look whose name does not start with one of these terms is
+  discarded, so "Golden Hour Glow" or "Midnight Glamour" will not be shown.
 
 - Give every look an eye, a liner, a cheek and a lip. A bronzer or a highlight
   is an optional fifth — add one only when it genuinely belongs to the look.
-- Name the looks in modern beauty language people actually use. Do not explain
-  colour theory in the vibe line, and do not restate the season.
+- Pick the term that honestly describes the finished face: a bare-skin look is
+  not "Full Glam". Do not explain colour theory in the vibe line, and do not
+  restate the season.
 - **\`shade\` must be copied exactly from the list below — from the section for
   the primarySeason you chose, and from the matching slot.** Do not invent a
   shade, do not borrow one from another season, and never write a hex. The hex
@@ -504,6 +514,8 @@ export const COLOR_ANALYSIS_SCHEMA = {
       // the schema is not.
       looks: {
         type: "array",
+        minItems: LOOKS_PER_SEASON,
+        maxItems: LOOKS_PER_SEASON,
         items: {
           type: "object",
           additionalProperties: false,

@@ -26,7 +26,7 @@ export const ar: DeepPartial<Catalogue> = {
     brandPrefix: "",
     brandName: "أورا",
     brandFull: "أورا",
-    tagline: "تحليل الألوان بالذكاء الاصطناعي",
+    tagline: "تحليل الألوان الشخصي",
     seasonSystem: "نظام الفصول الاثني عشر",
     getStarted: "ابدئي الآن",
     back: "رجوع",
@@ -125,7 +125,6 @@ export const ar: DeepPartial<Catalogue> = {
     qualityPrivacy: "بقيت صورتك على جهازك — فحصناها هنا، ولم يُرفع شيء.",
     qualityRetake: "جرّبي صورة أخرى",
     systemTitle: "حدث خطأ من جانبنا",
-    systemReassurance: "صورتك سليمة — لا شيء يحتاج إلى تغيير فيها.",
     tipsHeading: "نصائح لصور أفضل:",
   },
 

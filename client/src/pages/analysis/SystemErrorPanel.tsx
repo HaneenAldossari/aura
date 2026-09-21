@@ -26,10 +26,9 @@ export default function SystemErrorPanel({
       <h1 className="an-title">{t("errors.systemTitle")}</h1>
       <hr className="an-title__rule" />
 
-      <p className="an-lede" style={{ marginBlockEnd: "var(--space-3)" }}>{message}</p>
-      <p className="an-hair__note" style={{ margin: "0 0 var(--space-5)" }}>
-        {t("errors.systemReassurance")}
-      </p>
+      {/* One line. It already says the photo is not the problem; a second
+          sentence saying so again made a small failure look like a big one. */}
+      <p className="an-lede" style={{ marginBlockEnd: "var(--space-5)" }}>{message}</p>
 
       <div className="an-foot" style={{ marginBlockStart: 0 }}>
         <p className="an-foot__privacy">{t("errors.qualityPrivacy")}</p>

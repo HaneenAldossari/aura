@@ -428,6 +428,28 @@ decorative step numerals moved into CSS `content`, the footer line lost an
 `opacity: 0.7` that took `--ink-muted` under its 4.5:1 floor, and
 `index.html` gained a description, a favicon link and a `robots.txt`.
 
+### 2026-09-21 — regenerating the demos moved three borderline faces
+
+All nine demo analyses were regenerated for the look vocabulary (same faces,
+same `--hair=dyed`, `temperature: 0` + `seed`; only the looks part of the
+prompt changed). Six came back as before. Three swapped between neighbouring
+autumns, every one of them at the **50%** cap that means the model and the
+rules disagree:
+
+| face | before | after |
+| --- | --- | --- |
+| sample-3 | True Autumn | Soft Autumn |
+| sample-5 | Soft Autumn | True Autumn |
+| sample-9 | True Autumn | Soft Autumn |
+
+Consistent with "`temperature: 0` + `seed` gives a stable *season*, not
+byte-identical output" only for the faces where the season is actually stable.
+For these three it is not, and an unrelated prompt edit was enough to move
+them. Nothing a visitor sees changes — the gallery shows no label without
+primary agreement and a clean gate — but it is one more reason these faces are
+smoke tests, and a data point for Phase 4: a 50% result is not a weak answer,
+it is two answers.
+
 ## Interface strings
 
 Every user-facing string lives in `client/src/i18n/en.ts`, in **British English**
@@ -452,17 +474,32 @@ mono eyebrows and colour tokens. Order: hero → season marquee → three steps 
 what you get → closing CTA → footer. Sections live in `client/src/pages/home/`,
 styles in `home-landing.css`.
 
-- **No colour is written on Home.** The marquee's twelve cards and the "what you
-  get" panel read `seasonPalettes`, `seasonMakeup` and `seasonStyle` through
-  `pages/home/seasonData.ts`; a card's one-line descriptor is cut from the
-  season's own `story` by `seasonDescriptor()`. `tests/homeLanding.test.ts`
-  asserts every hex against `getCanonicalPalette()` and that no Home component
-  contains a hex literal; `npm run e2e:home` asserts the same of the painted DOM.
-- **The motion budget is one ambient effect** — the hero particle canvas — plus
-  the marquee and a mount entrance. No starfield, shimmer or pulsing glow on
-  Home. Reduced motion mounts no canvas, renders no marquee clone (the belt
-  becomes a static row that scrolls inside its own window) and runs no entrance.
-  The marquee pauses on hover (only where hover is real), touch and focus.
+- **No colour is written on Home.** The marquee's twelve cards read
+  `seasonPalettes` through `pages/home/seasonData.ts`: six colours each, from
+  `HERO_SIX` — a light neutral, four colours, a dark neutral, held **by name**
+  and resolved against the season's twelve, so there is still one copy of every
+  hex. A card's one-line descriptor is cut from the season's own `story` by
+  `seasonDescriptor()`. `tests/homeLanding.test.ts` asserts every hex against
+  `getCanonicalPalette()` and that no Home component contains a hex literal;
+  `npm run e2e:home` asserts the same of the painted DOM. `HERO_SIX` is a draft
+  awaiting review in `design/makeup-review.md`.
+- **"What you get" is four rows because the app has four tabs**, and the panel
+  beside them is that tab: a phone-width capture of the real Results screen for
+  demo face 1, not a drawing of it. `npm run shots -- --live --publish` writes
+  `client/public/previews/*.webp` and `pages/home/previews.json`. Re-publish
+  after any visible change to Results, or Home shows yesterday's app.
+  `--publish` refuses to run without `--live`, so a stubbed shop result can
+  never be published as the product's.
+- **The motion budget is one ambient effect** — the particle field, fixed to the
+  viewport behind every section — plus the marquee and a mount entrance. No
+  starfield, shimmer or pulsing glow on Home. Sections are overlays, not fills:
+  a raised section is `--ink` at 3% (under 3 points of lightness against
+  `--ground`; a test holds it to 8), so nothing lids the field. It stops while
+  the tab is hidden. Reduced motion mounts no canvas, renders no marquee clone
+  (the belt becomes a static row that scrolls inside its own window) and runs
+  no entrance. The marquee pauses on hover (only where hover is real), touch
+  and focus.
+- Below 600px the hero is the primary button and "Try a sample face" only.
 - **One display face everywhere:** `--font-display` is Cormorant Garamond.
 - `npm run e2e:home` (`scripts/dev/home.ts`) builds the client, serves it,
   writes `dev/home-390.png` and `dev/home-1440.png`, and checks horizontal
@@ -495,6 +532,29 @@ not something a test can make.
 line and day/evening tag and picks shades **by name** from the season's list.
 `validateLooks()` resolves every name server-side, drops what does not resolve
 rather than substituting, and logs the misses so prompt drift is visible.
+
+Look **names** are held to a fixed vocabulary (`server/utils/lookVocabulary.ts`):
+a name must start with one of its terms ("Soft Glam, Plum"), exactly three looks
+per analysis, at least one day and one evening. The prompt is given the list,
+the schema carries `minItems`/`maxItems`, and `validateLooks()` drops a
+non-compliant name — drops, never renames. Left alone the model names looks
+like perfume ("Effortless Obsidian") and differently on every run. The list is
+a draft in `design/makeup-review.md`; changing it means
+`npm run precompute:demos -- --force --hair=dyed`, because a test holds every
+precomputed analysis to it.
+
+**A word printed beside a number is derived from that number.**
+`client/src/lib/bands.ts` is the only place a 0-100 value becomes a label: the
+Colour DNA axes and the trait line share one banding (≤35 low, 36-64 medium,
+≥65 high, applied to the *displayed* integer), and the shop check's headline
+comes from its score (≥65 "Suits you", 40-64 "Might work", <40 "Not your
+colour"). Both used to borrow labels from other sources — the measurement
+layer's axis labels, the model's prose — which are cut on different thresholds,
+so a reader could be shown "Contrast 78 · medium". `tests/displayBands.test.ts`.
+
+Before You Buy answers in words first: photo, headline verdict, the score small
+beneath it, one reason, one tip. Bands, the product-against-yours bars, the
+nearest palette colour and the alternatives are behind "Show details", closed.
 
 ## Testing
 

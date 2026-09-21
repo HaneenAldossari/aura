@@ -302,7 +302,21 @@
 
 .ed-looks { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
 
-@media (min-width: 768px) { .ed-looks { grid-template-columns: repeat(3, 1fr); gap: var(--space-4); } }
+/* Three across only where three fit with a swatch you can actually judge:
+   below 1024 a third of the column is about 220px, which is five 40px bars. */
+@media (min-width: 1024px) {
+  /* The shell's text measure is 1000px, and a third of that is five 57px
+     slots: "Blackened" and "metallic" are both wider than 57px, so the labels
+     ran into each other. The looks break out of the measure to the full grid
+     width instead — the one block on this tab that is a picture, not prose. */
+  .ed-looks {
+    --looks-w: min(100vw - 48px, 1220px);
+    inline-size: var(--looks-w);
+    margin-inline-start: calc((100% - var(--looks-w)) / 2);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-5);
+  }
+}
 
 .ed-look { border-block-start: 1px solid var(--rule); padding-block-start: var(--space-3); }
 
@@ -338,9 +352,15 @@
   color: var(--ink-secondary);
 }
 
-/* Five slots across, so a look reads as one row of colour. */
-.ed-look__shades { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-.ed-look__shades .ed-tile__chip { block-size: 46px; }
+/* Five slots across where they fit, so a look reads as one row of colour.
+   A slot is never under 64px: that clears the 48px a swatch needs to be
+   judged, and it is the width of the longest single word a label carries. On
+   a narrower card the fifth slot wraps rather than all five shrinking. */
+.ed-look__shades { display: grid; grid-template-columns: repeat(auto-fit, minmax(64px, 1fr)); gap: 6px; }
+.ed-look__shades .ed-tile { min-inline-size: 0; overflow-wrap: anywhere; }
+.ed-look__shades .ed-tile__chip { block-size: 56px; min-inline-size: 48px; }
+/* "HIGHLIGHT" is nine characters; at the section tracking it overhangs a 72px slot. */
+.ed-look__shades .ed-slot { letter-spacing: 0.04em; }
 
 .ed-slot {
   font-family: var(--font-mono);
@@ -475,23 +495,90 @@
   display: block;
 }
 
-.ed-score { display: flex; align-items: baseline; gap: var(--space-1); margin: 0; }
+/* ── Verdict card ─────────────────────────────────────────────────────────
+   Photo, answer, evidence, reason, tip. The answer is the display line; the
+   score is a caption to it. */
 
-.ed-score__value {
-  font-family: var(--font-display);
-  font-size: clamp(56px, 12vw, 96px);
-  line-height: 1;
-  color: var(--ink);
+.ed-verdictcard {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  margin-block-end: var(--space-6);
 }
 
-.ed-score__of { font-family: var(--font-mono); font-size: var(--type-body); color: var(--ink-muted); }
+@media (min-width: 768px) {
+  .ed-verdictcard { grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: var(--space-6); align-items: start; }
+  .ed-verdictcard__details { grid-column: 1 / -1; }
+}
 
 .ed-verdict {
-  font-size: var(--type-stat);
   font-family: var(--font-display);
-  color: var(--accent);
-  margin: var(--space-1) 0 var(--space-3);
+  font-size: clamp(44px, 9vw, 72px);
+  font-weight: 400;
+  line-height: 1.02;
+  color: var(--ink);
+  margin: 0 0 var(--space-2);
 }
+
+.ed-verdictcard[data-headline="suits"] .ed-verdict { color: var(--accent); }
+
+.ed-score {
+  font-family: var(--font-mono);
+  font-size: var(--type-label);
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-4);
+}
+
+.ed-score__value { color: var(--ink-secondary); }
+
+.ed-verdictcard__reason {
+  font-size: var(--type-lede);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  max-inline-size: 34em;
+  margin: 0 0 var(--space-3);
+}
+
+.ed-verdictcard__tip {
+  font-size: var(--type-body);
+  line-height: 1.55;
+  color: var(--ink-trust);
+  max-inline-size: 38em;
+  margin: 0 0 var(--space-5);
+}
+
+.ed-verdictcard .ed-actions { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-5); }
+
+.ed-verdictcard__details {
+  border-block-start: 1px solid var(--rule);
+  padding-block-start: var(--space-5);
+  max-inline-size: 640px;
+}
+
+.ed-verdictcard__details[hidden] { display: none; }
+
+/* The alternatives: a swatch you can see, the name, the hex. These three
+   classes were in the markup with no rules behind them, so the row rendered
+   as one run of text — "Pure WhiteFFFFFFBlack000000" — with no colour in it. */
+.ed-index__shades {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-block-start: var(--space-2);
+}
+
+.ed-chip { display: flex; flex-direction: column; gap: 4px; min-inline-size: 0; }
+
+.ed-chip__swatch {
+  display: block;
+  inline-size: 100%;
+  block-size: 56px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ed-chip__name { font-size: var(--type-label); line-height: 1.25; color: var(--ink); }
+.ed-chip__finish { font-family: var(--font-mono); font-size: var(--type-micro); color: var(--ink-muted); }
 
 .ed-bands {
   display: flex;

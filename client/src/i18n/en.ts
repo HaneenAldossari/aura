@@ -20,7 +20,7 @@ export const en = {
     brandPrefix: "your",
     brandName: "Aura",
     brandFull: "Your Aura",
-    tagline: "AI Colour Analysis",
+    tagline: "Personal colour analysis",
     seasonSystem: "12 Season System",
     createdBy: "Created by Haneen",
     getStarted: "Get Started",
@@ -57,7 +57,7 @@ export const en = {
       contrast: "Contrast",
     },
     previews: {
-      shop: "Score anything before you buy",
+      shop: "Photograph anything you're about to buy and get a straight answer.",
     },
     avoidRow: "Worth avoiding near your face — these dull your skin and take the light off it.",
     confidence: "{percent}% confidence",
@@ -75,6 +75,17 @@ export const en = {
       eyes: "eyes",
       tableCaption: "Measured CIE LCh values per region",
       notMeasured: "not measured",
+      // One word per band per axis; lib/bands.ts decides which.
+      bandCool: "cool",
+      bandNeutral: "neutral",
+      bandWarm: "warm",
+      bandLight: "light",
+      bandDeep: "deep",
+      bandSoft: "soft",
+      bandBright: "bright",
+      bandLow: "low",
+      bandMedium: "medium",
+      bandHigh: "high",
     },
 
     nudge: {
@@ -300,6 +311,12 @@ export const en = {
       checkAnother: "Check Another Item",
       closestTones: "Closest tones from your palette",
       scoreLabel: "Match score {score} out of 100 — {verdict}",
+      headlineSuits: "Suits you",
+      headlineMight: "Might work",
+      headlineNot: "Not your colour",
+      scoreOf: "{score} / 100",
+      showDetails: "Show details",
+      hideDetails: "Hide details",
       verdictGreat: "Perfect match",
       verdictGood: "Good match",
       verdictMaybe: "Might work",
@@ -318,8 +335,8 @@ export const en = {
       subtitle: "Ask anything specific",
       clear: "Clear",
       greeting:
-        "Hi! I know your {season} profile. Ask me about any specific product, shade, " +
-        "brand, or outfit — I'll give you a direct, personalised answer!",
+        "Hi! I know your {season} profile. Ask me about any colour, shade or " +
+        "outfit — I'll give you a direct, personalised answer.",
       placeholder: "Ask about a product or shade...",
       inputLabel: "Message the colour advisor",
       sendLabel: "Send message",
@@ -328,11 +345,13 @@ export const en = {
       failed: "Sorry, I had trouble responding. Please try again.",
       /* Starter prompts. Brand names are proper nouns and stay as written in
          every locale; only the question around them translates. */
-      suggestion1: "What Moonglaze blush suits me?",
-      suggestion2: "Does Charlotte Tilbury Pillow Talk work on me?",
-      suggestion3: "Best OPI nail polish for me?",
-      suggestion4: "Is MAC Ruby Woo good for me?",
-      suggestion5: "Gold or silver jewellery for me?",
+      // No brand or product names. The advisor answers from the palette, and
+      // a suggestion naming a product implies it knows that product's shade.
+      suggestion1: "Which red lipstick suits me?",
+      suggestion2: "Can I wear olive?",
+      suggestion3: "Which metals for a wedding?",
+      suggestion4: "What should I wear near my face for photos?",
+      suggestion5: "Is black a good colour on me?",
     },
   },
 
@@ -490,7 +509,6 @@ export const en = {
     qualityRetake: "Try another photo",
 
     systemTitle: "Something went wrong on our side",
-    systemReassurance: "Your photo is fine — there's nothing you need to change about it.",
 
     sampleTitle: "Couldn't Load Sample",
     photoTitle: "Better Photos Needed",
@@ -525,9 +543,6 @@ export const en = {
     landing: {
       eyebrow: "Your personal colour analysis",
       ctaHow: "See how it works",
-      trust1: "Measured in your browser",
-      trust2: "12 seasons",
-      trust3: "Nothing uploads until your photo passes.",
 
       marqueeLead: "Every Season is",
       marqueeAccent: "Beautiful",
@@ -544,32 +559,17 @@ export const en = {
 
       getLead: "What",
       getAccent: "You Get",
-      f1Title: "Your Season",
-      f1Body: "Deep Autumn, True Winter, Soft Summer and nine more",
-      f1Panel: "Season result",
-      f2Title: "Colour Palette",
-      f2Body: "Best colours, neutrals, and shades to avoid",
-      f2Panel: "Your palette",
-      f3Title: "Beauty Guide",
-      f3Body: "Foundation, blush, bronzer, lips and eyeshadow matched to you",
-      f3Panel: "Makeup shades",
-      f4Title: "Nail Guide",
-      f4Body: "Polish shades chosen for your season",
-      f4Panel: "Nail colours",
-      f5Title: "Jewellery & Metals",
-      f5Body: "Yellow gold, rose gold or silver — which suits you",
-      f5Panel: "Metals",
-      f6Title: "Gemstones",
-      f6Body: "Stones matched to your undertone",
-      f6Panel: "Gemstones",
-      f7Title: "Before You Buy",
-      f7Body: "Photograph anything you're about to buy and get a score against your palette.",
-      f7Panel: "Before you buy",
-      rowBest: "Best colours",
-      rowNeutrals: "Neutrals",
-      rowAvoid: "Avoid",
-      rowScoredAgainst: "Scored against",
-      rowMarkedDown: "Marked down for",
+      // Four rows, mirroring the four Results tabs, in tab order.
+      row1Title: "Your Season & Palette",
+      row1Body: "Your season, its twelve colours, neutrals and what to avoid.",
+      row2Title: "Beauty Guide",
+      row2Body: "Foundation depth, three looks, and a shade for every feature.",
+      row3Title: "Style",
+      row3Body: "Jewellery metals, hair colours and outfit pairings.",
+      row4Title: "Before You Buy",
+      row4Body: "Photograph anything you're about to buy and get a score against your palette.",
+      previewAlt: "The {tab} screen of a real {season} analysis",
+      previewNote: "From a real analysis of one of our sample faces.",
 
       closeLead: "Ready to Meet",
       closeAccent: "Your Colours",

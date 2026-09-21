@@ -4,13 +4,12 @@ import { useT } from "../../i18n";
 import { SHOW_COLOUR_FIELD } from "../../lib/flags";
 import { useReducedMotion } from "../../lib/useReducedMotion";
 import { STEPS_ID } from "./anchors";
-import HeroParticles from "./HeroParticles";
 
 /** Lazy, so the field costs the Home bundle nothing while its flag is off. */
 const ColourField = lazy(() => import("./ColourField"));
 
 /** Entrance order, in seconds. The delays are the choreography; `.lp-rise` is the motion. */
-const ENTER = { eyebrow: 0, title: 0.2, lede: 0.4, actions: 0.6, trust: 0.8 } as const;
+const ENTER = { eyebrow: 0, title: 0.2, lede: 0.4, actions: 0.6, privacy: 0.8 } as const;
 
 const delay = (seconds: number) => ({ ["--d" as string]: `${seconds}s` });
 
@@ -29,8 +28,6 @@ export default function Hero() {
 
   return (
     <section className="lp-hero">
-      {!reduced && <HeroParticles />}
-
       <header className="lp-bar">
         <span className="lp-bar__mark">{t("common.brandName")}</span>
         <Link className="lp-bar__link" to="/analyse">
@@ -57,7 +54,9 @@ export default function Hero() {
           <Link className="cta cta--primary" to="/analyse">
             {t("home.ctaPrimary2")}
           </Link>
-          <a className="cta cta--secondary" href={`#${STEPS_ID}`} onClick={toSteps}>
+          {/* Desktop only. A phone hero has room for one decision and one way
+              out of it; the steps are a thumb's scroll away regardless. */}
+          <a className="cta cta--secondary lp-hero__how" href={`#${STEPS_ID}`} onClick={toSteps}>
             {t("home.landing.ctaHow")}
           </a>
           <Link className="cta cta--secondary" to="/analyse#samples">
@@ -65,14 +64,11 @@ export default function Hero() {
           </Link>
         </div>
 
-        <div className="lp-rise" style={delay(ENTER.trust)}>
-          <ul className="lp-trust">
-            <li>{t("home.landing.trust1")}</li>
-            <li>{t("home.landing.trust2")}</li>
-            <li>{t("home.landing.trust3")}</li>
-          </ul>
-          <p className="lp-privacy">{t("home.privacy")}</p>
-        </div>
+        {/* One line about privacy, not two. The dotted trust row above this
+            said the same thing in different words. */}
+        <p className="lp-privacy lp-rise" style={delay(ENTER.privacy)}>
+          {t("home.privacy")}
+        </p>
       </div>
 
       {SHOW_COLOUR_FIELD ? (

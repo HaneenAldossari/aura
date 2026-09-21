@@ -7,7 +7,7 @@
  * data set inline by the components.
  *
  * The motion budget, all of it:
- *   1. the hero particle canvas — the one ambient effect
+ *   1. the particle field, fixed behind every section — the one ambient effect
  *   2. the season marquee
  *   3. a mount entrance (`.lp-rise`) and the panel crossfade (`.lp-swap`)
  * plus hover feedback. No shimmer, no pulsing glow, nothing scroll-driven.
@@ -58,7 +58,16 @@
   padding-inline: max(var(--lp-gutter), var(--safe-left)) max(var(--lp-gutter), var(--safe-right));
 }
 
-.lp-section--raised { background: var(--surface); }
+/* Every section sits above the particle field and none of them hides it.
+   A raised section is a veil of ink at 3%, not a fill: over --ground that is
+   under three points of lightness, well inside the 8% these are held to, so
+   the alternation still reads and the sky still shows. An opaque --surface
+   here would be a lid. */
+.lp-hero,
+.lp-section,
+#home > footer { position: relative; z-index: 1; }
+
+.lp-section--raised { background: color-mix(in srgb, var(--ink) 3%, transparent); }
 
 .lp-h2 {
   font-family: var(--font-display);
@@ -139,9 +148,12 @@
   padding-inline: max(var(--lp-gutter), var(--safe-left)) max(var(--lp-gutter), var(--safe-right));
 }
 
+/* Fixed to the viewport, under every section: the same sky at the foot of
+   the page as at the top. */
 .lp-particles {
-  position: absolute;
+  position: fixed;
   inset: 0;
+  z-index: 0;
   inline-size: 100%;
   block-size: 100%;
   pointer-events: none;
@@ -228,35 +240,15 @@
   .lp-hero__actions .cta--primary { align-self: auto; }
 }
 
-.lp-trust {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 4px 12px;
-  font-size: var(--type-micro);
-  letter-spacing: 0.025em;
-  color: var(--ink-muted);
-}
-
-/* The dot trails its item rather than leading the next, so when the row wraps
-   on a phone no line opens with a stray separator. */
-.lp-trust li:not(:last-child)::after {
-  content: "·";
-  color: var(--accent);
-  opacity: 0.6;
-  margin-inline-start: 12px;
-}
+/* Phone hero: the primary button and the sample link, nothing else. */
+@media (max-width: 599px) { .lp-hero__how { display: none; } }
 
 .lp-privacy {
   font-family: var(--font-mono);
   font-size: var(--type-micro);
   line-height: 1.5;
   color: var(--ink-trust);
-  margin: 16px 0 0;
+  margin: 0;
 }
 
 .lp-hero__scroll {
@@ -334,6 +326,7 @@
   margin: 0 0 12px;
 }
 
+/* Six, in one row: light neutral, four colours, dark neutral. */
 .lp-season__swatches {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -341,7 +334,7 @@
   margin-block-end: 16px;
 }
 
-.lp-season__swatch { display: block; aspect-ratio: 1 / 1; }
+.lp-season__swatch { display: block; block-size: 56px; }
 
 .lp-season__line {
   font-size: var(--type-label);
@@ -418,11 +411,13 @@
 
 /* ── What you get ─────────────────────────────────────────────────────── */
 
-.lp-get { display: flex; flex-direction: column; gap: 48px; }
+.lp-get { display: flex; flex-direction: column; gap: 40px; }
 
 @media (min-width: 768px) {
-  .lp-get { flex-direction: row; gap: 64px; }
-  .lp-get__list, .lp-get__stage { flex: 1 1 0; min-inline-size: 0; }
+  .lp-get { flex-direction: row; gap: 64px; align-items: center; }
+  /* The list gets the wider share: its lines are written to fit on one. */
+  .lp-get__list { flex: 1.2 1 0; min-inline-size: 0; }
+  .lp-get__stage { flex: 0.8 1 0; min-inline-size: 0; }
 }
 
 .lp-get__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
@@ -435,17 +430,17 @@
   background: none;
   border: 1px solid transparent;
   border-radius: 8px;
-  padding: 16px 20px;
+  padding: 14px 18px;
   cursor: pointer;
   transition: background 500ms var(--ease-ui), border-color 500ms var(--ease-ui);
 }
 
 @media (hover: hover) {
-  .lp-get__item:hover { background: color-mix(in srgb, var(--surface-raised) 50%, transparent); }
+  .lp-get__item:hover { background: color-mix(in srgb, var(--ink) 3%, transparent); }
 }
 
 .lp-get__item[aria-pressed="true"] {
-  background: var(--surface-raised);
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
   border-color: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
@@ -453,7 +448,7 @@
   display: block;
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 21px;
+  font-size: 19px;
   line-height: 1.3;
   color: var(--ink);
   transition: color 500ms var(--ease-ui);
@@ -463,23 +458,26 @@
 
 .lp-get__body {
   display: block;
-  font-size: var(--type-label);
+  font-size: var(--type-micro);
   line-height: 1.5;
   color: var(--ink-secondary);
-  margin-block-start: 4px;
+  margin-block-start: 2px;
 }
 
-.lp-get__stage { display: flex; justify-content: center; align-items: flex-start; }
+.lp-get__stage { display: flex; flex-direction: column; align-items: center; gap: 12px; }
 
-@media (min-width: 768px) {
-  /* The list is taller than the panel; keep the panel beside whichever item
-     was just pressed instead of stranding it at the top. */
-  .lp-get__stage { position: sticky; inset-block-start: 96px; align-self: flex-start; }
+.lp-get__note {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+  text-align: center;
+  margin: 0;
 }
 
+/* A phone-shaped frame, because what it holds is a phone capture. */
 .lp-panel {
   inline-size: 100%;
-  max-inline-size: 400px;
+  max-inline-size: 360px;
   background: var(--ground);
   border: 1px solid var(--rule);
   border-radius: 16px;
@@ -490,7 +488,7 @@
 .lp-panel__head {
   display: grid;
   gap: 4px;
-  padding: 24px 24px 16px;
+  padding: 20px 24px 14px;
   border-block-end: 1px solid var(--rule);
 }
 
@@ -515,114 +513,26 @@
 
 .lp-panel__label { font-size: var(--type-label); color: var(--ink-secondary); }
 
-/* A floor, so the panel does not jump in height between the short features
-   and the long ones. */
-.lp-panel__body { padding: 24px; min-block-size: 340px; display: grid; gap: 20px; align-content: start; }
-
-.lp-panel__season {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 36px;
-  line-height: 1.1;
-  color: var(--ink);
-  margin: 0;
+/* The top of the tab, cropped by the frame. The ratio is fixed so the panel
+   is the same height whichever row is selected, and before the image loads. */
+.lp-panel__screen {
+  position: relative;
+  aspect-ratio: 390 / 620;
+  overflow: hidden;
 }
 
-.lp-panel__line { font-size: var(--type-label); color: var(--accent); margin: -12px 0 0; }
+.lp-panel__screen img { display: block; inline-size: 100%; block-size: auto; }
 
-.lp-panel__prose {
-  font-size: var(--type-label);
-  line-height: 1.6;
-  color: var(--ink-secondary);
-  margin: 0;
+/* The capture carries on below the frame; say so, rather than cut it dead. */
+.lp-panel__screen::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: 72px;
+  background: linear-gradient(to bottom, transparent, var(--ground));
+  pointer-events: none;
 }
-
-.lp-row { display: grid; gap: 8px; }
-
-.lp-row__label {
-  font-family: var(--font-mono);
-  font-size: var(--type-micro);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
-  margin: 0;
-}
-
-.lp-strip {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  gap: 2px;
-}
-
-.lp-strip[data-named] {
-  grid-auto-flow: row;
-  grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr));
-  gap: 12px 8px;
-}
-.lp-strip__chip { display: block; block-size: 40px; }
-.lp-strip[data-named] .lp-strip__chip { block-size: 32px; }
-.lp-strip[data-struck] .lp-strip__chip { block-size: 24px; opacity: 0.55; }
-
-.lp-strip__name {
-  display: block;
-  font-size: 13px;
-  line-height: 1.3;
-  color: var(--ink-secondary);
-  margin-block-start: 6px;
-  overflow-wrap: break-word;
-}
-
-.lp-renders {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 16px 12px;
-  text-align: center;
-}
-
-.lp-renders--nails { grid-template-columns: repeat(3, 1fr); }
-.lp-renders--gems { grid-template-columns: repeat(2, 1fr); }
-.lp-renders img { display: block; margin-inline: auto; object-fit: contain; }
-.lp-renders--nails img { inline-size: 100%; max-inline-size: 72px; aspect-ratio: 3 / 4; }
-.lp-renders--gems img { inline-size: 88px; block-size: 88px; }
-
-.lp-metals { list-style: none; margin: 0; padding: 0; }
-
-.lp-metals li {
-  display: grid;
-  grid-template-columns: 28px 1fr auto;
-  align-items: center;
-  gap: 4px 16px;
-  padding-block: 14px;
-  border-block-end: 1px solid var(--rule);
-}
-
-.lp-metals__disc {
-  inline-size: 28px;
-  block-size: 28px;
-  border-radius: 50%;
-  border: 1px solid rgb(255 255 255 / 0.1);
-}
-
-.lp-metals__name { font-size: var(--type-body); color: var(--ink); }
-
-.lp-metals__verdict {
-  font-family: var(--font-mono);
-  font-size: var(--type-micro);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
-}
-
-.lp-metals__reason { grid-column: 2 / -1; font-size: var(--type-micro); color: var(--ink-muted); }
-.lp-metals [data-verdict="best"] .lp-metals__verdict { color: var(--accent); }
-.lp-metals [data-verdict="skip"] .lp-metals__name { color: var(--ink-muted); }
-.lp-metals [data-verdict="skip"] .lp-metals__disc { opacity: 0.45; }
 
 /* ── Closing ──────────────────────────────────────────────────────────── */
 
@@ -631,9 +541,7 @@
   text-align: center;
   padding-block: calc(var(--lp-section) + 16px);
   /* The glow is a gradient, not an animation: it is lighting, not motion. */
-  background:
-    radial-gradient(ellipse 50% 50% at 50% 50%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%),
-    var(--ground);
+  background: radial-gradient(ellipse 50% 50% at 50% 50%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%);
 }
 
 .lp-close__copy { max-inline-size: 672px; margin-inline: auto; }

@@ -12,6 +12,7 @@ import { analyzeMeasured } from "../lib/api";
 import type { HairStatus } from "../lib/types";
 
 import Masthead from "./results/Masthead";
+import { formatShortDate } from "../lib/formatDate";
 import ResultsTabs, { type ResultsTab } from "./results/ResultsTabs";
 import SeasonIdentity from "./results/SeasonIdentity";
 import SecondPhotoNudge from "./results/SecondPhotoNudge";
@@ -117,18 +118,14 @@ export default function Results() {
   }
 
   const seasonName = formatSeasonName(data.season);
-  const analysedOn = new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(new Date());
+  const analysedOn = formatShortDate(new Date());
 
   return (
     <div className="ed-page">
       <StarField maxOpacity={0.45} minDuration={4} durationRange={5} />
 
       <div className="ed-shell" style={{ position: "relative", zIndex: 1 }}>
-        <Masthead meta={t("results.analysisMeta", { date: analysedOn })} />
+        <Masthead meta={t("results.analysisMeta", { date: analysedOn })} metaShort={analysedOn} />
         <ResultsTabs active={tab} onChange={setTab} />
 
         {tab === "overview" && (

@@ -71,8 +71,15 @@ describe("quality issues and system errors render separately", () => {
     const system = rendered("analysis/SystemErrorPanel.tsx");
     expect(system).not.toMatch(/better photo/i);
     expect(system).toMatch(/on our side/i);
-    // States plainly that the photo is not at fault.
-    expect(system).toMatch(/photo is fine|not a problem with your photo/i);
+    // Heading, one body line, the privacy line — and nothing else.
+    expect(system.match(/<p\b/g)).toHaveLength(2);
+  });
+
+  it("says plainly, in that one body line, that the photo is not at fault", () => {
+    // The panel renders the message it is handed; both sources of it say so.
+    const pipeline = fs.readFileSync(path.join(__dirname, "../measure/pipeline.ts"), "utf8");
+    expect(pipeline).toMatch(/this isn't a problem with your photo/);
+    expect(JSON.stringify(en.errors)).toMatch(/this isn't a problem with your photo/);
   });
 
   it("logs the raw error to the console rather than rendering it", () => {

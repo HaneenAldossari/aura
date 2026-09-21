@@ -16,7 +16,7 @@ import path from "path";
 import { chromium, type Browser, type Page } from "playwright";
 import { en } from "../../client/src/i18n/en";
 import { CANONICAL_SEASONS } from "../../server/prompts/colorAnalysis";
-import { getCanonicalPalette } from "../../server/utils/seasonPalettes";
+import { getCanonicalPalette, heroSix } from "../../server/utils/seasonPalettes";
 
 const ROOT = path.resolve(__dirname, "../..");
 const OUT = path.join(ROOT, "dev");
@@ -99,7 +99,7 @@ async function checkWidth(browser: Browser, base: string, width: number) {
   check(overflowing.length === 0, "no element outside the viewport", overflowing.join(", "));
 
   const order = await page.evaluate(() =>
-    Array.from(document.querySelectorAll("#home > *")).map((el) => el.className.split(" ").pop() || el.tagName),
+    Array.from(document.querySelectorAll("#home > *:not(canvas)")).map((el) => el.className.split(" ").pop() || el.tagName),
   );
   check(
     JSON.stringify(order) === JSON.stringify(["lp-hero", "lp-marquee", "lp-section", "lp-section--raised", "lp-close", "FOOTER"]),
@@ -129,11 +129,13 @@ async function checkWidth(browser: Browser, base: string, width: number) {
   };
   const wrong: string[] = [];
   for (const card of cards) {
-    const best = getCanonicalPalette(card.name)?.best ?? [];
-    if (card.swatches.length !== 12) wrong.push(`${card.name}: ${card.swatches.length} swatches`);
+    const six = heroSix(card.name);
+    const canonical = new Set((getCanonicalPalette(card.name)?.best ?? []).map((c) => c.hex));
+    if (card.swatches.length !== 6) wrong.push(`${card.name}: ${card.swatches.length} swatches`);
     card.swatches.forEach((s, i) => {
-      if (s.hex !== best[i]?.hex) wrong.push(`${card.name}[${i}] ${s.hex} ≠ ${best[i]?.hex}`);
-      if (s.painted !== toRgb(best[i]?.hex ?? "#000000")) wrong.push(`${card.name}[${i}] painted ${s.painted}`);
+      if (s.hex !== six[i]?.hex) wrong.push(`${card.name}[${i}] ${s.hex} ≠ ${six[i]?.hex}`);
+      if (!canonical.has(s.hex)) wrong.push(`${card.name}[${i}] ${s.hex} is not in getCanonicalPalette`);
+      if (s.painted !== toRgb(six[i]?.hex ?? "#000000")) wrong.push(`${card.name}[${i}] painted ${s.painted}`);
     });
     if (!card.line.trim()) wrong.push(`${card.name}: no descriptor`);
   }
@@ -151,16 +153,51 @@ async function checkWidth(browser: Browser, base: string, width: number) {
   // ── Copy ──
   const text = (await page.locator("#home").innerText()).replace(/\s+/g, " ");
   const l = en.home.landing;
-  for (const line of [l.trust1, l.trust3, en.home.privacy, l.step2Body, l.f7Body]) {
+  for (const line of [en.home.privacy, l.step2Body, l.row4Body]) {
     check(text.toLowerCase().includes(line.toLowerCase()), `copy: “${line.slice(0, 48)}…”`);
   }
   check(!/OPI|Essie|27 gemstones|\bcolor\b/i.test(text), "no brand names, invented counts or American spelling");
+  check(!text.includes("Nothing uploads until your photo passes"), "the duplicate trust line is gone");
 
-  // ── What you get: real data ──
-  const deep = getCanonicalPalette("Deep Autumn")!;
-  await page.getByRole("button", { name: l.f2Title }).click();
-  const panel = (await page.locator("#lp-get-panel").innerText()).replace(/\s+/g, " ");
-  check(deep.best.every((c) => panel.includes(c.name)), "preview panel lists the season's real colour names");
+  // ── Hero actions ──
+  const howVisible = await page.getByRole("link", { name: l.ctaHow }).isVisible();
+  check(howVisible === width >= 600, width < 600 ? "phone hero: primary and sample only" : "desktop hero keeps “See how it works”");
+
+  // ── Particle field: fixed behind everything ──
+  const field = await page.evaluate(() => {
+    const canvas = document.querySelector<HTMLCanvasElement>("#home canvas");
+    if (!canvas) return null;
+    const style = getComputedStyle(canvas);
+    window.scrollTo(0, document.documentElement.scrollHeight);
+    const rect = canvas.getBoundingClientRect();
+    window.scrollTo(0, 0);
+    return { position: style.position, top: rect.top, height: rect.height, vh: window.innerHeight };
+  });
+  check(
+    field?.position === "fixed" && field.top === 0 && Math.abs(field.height - field.vh) < 2,
+    "particle field is fixed to the viewport at the foot of the page too",
+    JSON.stringify(field),
+  );
+
+  // ── What you get: four rows, each previewed by a capture of the real tab ──
+  const rows = await page.locator(".lp-get__item").allInnerTexts();
+  check(
+    rows.length === 4 && [l.row1Title, l.row2Title, l.row3Title, l.row4Title].every((title, i) => rows[i].startsWith(title)),
+    "what you get: exactly four rows, in tab order",
+    rows.map((r) => r.split("\n")[0]).join(" | "),
+  );
+  for (const title of [l.row1Title, l.row2Title, l.row3Title, l.row4Title]) {
+    await page.getByRole("button", { name: title }).click();
+    await page.locator(".lp-panel__screen img").scrollIntoViewIfNeeded();
+    const loaded = await page
+      .waitForFunction(() => {
+        const img = document.querySelector<HTMLImageElement>(".lp-panel__screen img");
+        return Boolean(img && img.complete && img.naturalWidth > 0);
+      }, undefined, { timeout: 10_000 })
+      .then(() => true, () => false);
+    check(loaded, `preview loads: ${title}`);
+  }
+  await page.getByRole("button", { name: l.row1Title }).click();
   await page.waitForTimeout(800); // let the crossfade and the 500ms list transition land before the shot
 
   await page.screenshot({ path: path.join(OUT, `home-${width}.png`), fullPage: true });
@@ -174,10 +211,13 @@ async function checkWidth(browser: Browser, base: string, width: number) {
   check(primary.length === 2 && primary.every(([, href]) => href === "/analyse"), "both primary CTAs → /analyse");
   check(hrefs.some(([label, href]) => label === en.common.getStarted && href === "/analyse"), "Get Started → /analyse");
 
-  await page.getByRole("link", { name: l.ctaHow }).click();
-  await page.waitForTimeout(900);
-  const stepsTop = await page.evaluate(() => document.getElementById("how-it-works")!.getBoundingClientRect().top);
-  check(Math.abs(stepsTop) < 4, "“See how it works” → the steps section", `top ${stepsTop.toFixed(0)}px`);
+  // The link is desktop-only; a phone hero is the primary button and the sample link.
+  if (width >= 600) {
+    await page.getByRole("link", { name: l.ctaHow }).click();
+    await page.waitForTimeout(900);
+    const stepsTop = await page.evaluate(() => document.getElementById("how-it-works")!.getBoundingClientRect().top);
+    check(Math.abs(stepsTop) < 4, "“See how it works” → the steps section", `top ${stepsTop.toFixed(0)}px`);
+  }
 
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.getByRole("link", { name: en.home.ctaSample }).click();
@@ -249,6 +289,9 @@ async function main() {
   fs.mkdirSync(OUT, { recursive: true });
   const given = process.argv[2];
   const served = given ? null : await serveBuild();
+  // A Playwright timeout thrown mid-run skips the finally below only if the
+  // process dies first; this makes sure the preview server never outlives us.
+  process.on("exit", () => served?.child.kill());
   const base = (given ?? served!.url).replace(/\/$/, "") + "/";
   console.log(`\n  Home acceptance against ${base}`);
 

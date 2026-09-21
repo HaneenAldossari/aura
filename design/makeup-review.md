@@ -1,6 +1,6 @@
 # Shade review
 
-Generated 2026-09-20 by `scripts/exportShadeReview.ts`.
+Generated 2026-09-21 by `scripts/exportShadeReview.ts`.
 Edit the source files, not this one — it is regenerated.
 
 | what | source |
@@ -1333,3 +1333,58 @@ _Also:_ pewter
 | hair | Mushroom Brown | ![](https://placehold.co/28x18/7A6E68/7A6E68.png) `#7A6E68` | ![](https://placehold.co/28x18/A89C96/A89C96.png) `#A89C96` |
 | hair | Cool Mocha | ![](https://placehold.co/28x18/4E423E/4E423E.png) `#4E423E` | ![](https://placehold.co/28x18/7A6C66/7A6C66.png) `#7A6C66` |
 | hair | Muted Sand | ![](https://placehold.co/28x18/A89684/A89684.png) `#A89684` | ![](https://placehold.co/28x18/D0C2B2/D0C2B2.png) `#D0C2B2` |
+
+
+---
+
+# Hero six — the Home marquee
+
+**Draft, for review.** Six colours per season for the Home marquee cards:
+a light neutral, four colours, a dark neutral. Every one is a member of that
+season's twelve, so this is a choice of *which*, never a new colour. Edit
+`HERO_SIX` in `server/utils/seasonPalettes.ts` by name; a name that is not in
+the season's palette fails `tests/homeLanding.test.ts`.
+
+What to check: does the row read as that season at a glance, and would it be
+mistaken for its neighbour (Light Spring / Light Summer, Deep Autumn / Deep
+Winter, Bright Spring / Bright Winter)?
+
+| season | light neutral | colour | colour | colour | colour | dark neutral |
+| --- | --- | --- | --- | --- | --- | --- |
+| True Autumn | Warm Cream ![](https://placehold.co/28x18/F6E1B3/F6E1B3.png) `#F6E1B3` | Mustard ![](https://placehold.co/28x18/C99700/C99700.png) `#C99700` | Rust ![](https://placehold.co/28x18/A94724/A94724.png) `#A94724` | Olive Green ![](https://placehold.co/28x18/6B742E/6B742E.png) `#6B742E` | Petrol Teal ![](https://placehold.co/28x18/2F6F6D/2F6F6D.png) `#2F6F6D` | Chocolate Brown ![](https://placehold.co/28x18/4B2E1F/4B2E1F.png) `#4B2E1F` |
+| Deep Autumn | Deep Cream ![](https://placehold.co/28x18/F0D8A8/F0D8A8.png) `#F0D8A8` | Bronze ![](https://placehold.co/28x18/8C5A2B/8C5A2B.png) `#8C5A2B` | Burnt Brick ![](https://placehold.co/28x18/8A3324/8A3324.png) `#8A3324` | Pine Green ![](https://placehold.co/28x18/1F4D3A/1F4D3A.png) `#1F4D3A` | Aubergine ![](https://placehold.co/28x18/4A263A/4A263A.png) `#4A263A` | Espresso ![](https://placehold.co/28x18/24160F/24160F.png) `#24160F` |
+| Soft Autumn | Cream ![](https://placehold.co/28x18/F3E4C8/F3E4C8.png) `#F3E4C8` | Soft Peach ![](https://placehold.co/28x18/E8A77C/E8A77C.png) `#E8A77C` | Soft Terracotta ![](https://placehold.co/28x18/B7664B/B7664B.png) `#B7664B` | Moss Green ![](https://placehold.co/28x18/6F7D45/6F7D45.png) `#6F7D45` | Muted Turquoise ![](https://placehold.co/28x18/6EA7A1/6EA7A1.png) `#6EA7A1` | Soft Chocolate ![](https://placehold.co/28x18/6B4A35/6B4A35.png) `#6B4A35` |
+| Deep Winter | Pure White ![](https://placehold.co/28x18/FFFFFF/FFFFFF.png) `#FFFFFF` | Cranberry ![](https://placehold.co/28x18/8C1D40/8C1D40.png) `#8C1D40` | Emerald ![](https://placehold.co/28x18/006B54/006B54.png) `#006B54` | Deep Plum ![](https://placehold.co/28x18/3B1A45/3B1A45.png) `#3B1A45` | Midnight Blue ![](https://placehold.co/28x18/0A2342/0A2342.png) `#0A2342` | Black ![](https://placehold.co/28x18/000000/000000.png) `#000000` |
+| True Winter | Pure White ![](https://placehold.co/28x18/FFFFFF/FFFFFF.png) `#FFFFFF` | Blue-Red ![](https://placehold.co/28x18/C8102E/C8102E.png) `#C8102E` | Fuchsia ![](https://placehold.co/28x18/D1007E/D1007E.png) `#D1007E` | Emerald Green ![](https://placehold.co/28x18/007A5E/007A5E.png) `#007A5E` | Royal Blue ![](https://placehold.co/28x18/0033A0/0033A0.png) `#0033A0` | Black ![](https://placehold.co/28x18/000000/000000.png) `#000000` |
+| Bright Winter | Pure White ![](https://placehold.co/28x18/FFFFFF/FFFFFF.png) `#FFFFFF` | Magenta ![](https://placehold.co/28x18/FF007F/FF007F.png) `#FF007F` | Electric Blue ![](https://placehold.co/28x18/005BFF/005BFF.png) `#005BFF` | Bright Violet ![](https://placehold.co/28x18/7F00FF/7F00FF.png) `#7F00FF` | Emerald ![](https://placehold.co/28x18/00A86B/00A86B.png) `#00A86B` | Black ![](https://placehold.co/28x18/000000/000000.png) `#000000` |
+| Light Spring | Ivory ![](https://placehold.co/28x18/FFF4DC/FFF4DC.png) `#FFF4DC` | Light Peach ![](https://placehold.co/28x18/FFD6B5/FFD6B5.png) `#FFD6B5` | Coral Pink ![](https://placehold.co/28x18/FF8C7A/FF8C7A.png) `#FF8C7A` | Butter Yellow ![](https://placehold.co/28x18/FFE78A/FFE78A.png) `#FFE78A` | Light Aqua ![](https://placehold.co/28x18/8EDDE3/8EDDE3.png) `#8EDDE3` | Camel Beige ![](https://placehold.co/28x18/CFAE7A/CFAE7A.png) `#CFAE7A` |
+| True Spring | Warm Ivory ![](https://placehold.co/28x18/FFF0C9/FFF0C9.png) `#FFF0C9` | Coral ![](https://placehold.co/28x18/FF6F61/FF6F61.png) `#FF6F61` | Sunflower ![](https://placehold.co/28x18/F6B800/F6B800.png) `#F6B800` | Grass Green ![](https://placehold.co/28x18/6DBE45/6DBE45.png) `#6DBE45` | Turquoise ![](https://placehold.co/28x18/00A6A6/00A6A6.png) `#00A6A6` | Golden Brown ![](https://placehold.co/28x18/8B5A2B/8B5A2B.png) `#8B5A2B` |
+| Bright Spring | Clear Ivory ![](https://placehold.co/28x18/FFF7E6/FFF7E6.png) `#FFF7E6` | Watermelon ![](https://placehold.co/28x18/FF3366/FF3366.png) `#FF3366` | Lemon Yellow ![](https://placehold.co/28x18/FFE600/FFE600.png) `#FFE600` | Emerald Green ![](https://placehold.co/28x18/00A86B/00A86B.png) `#00A86B` | Bright Blue ![](https://placehold.co/28x18/0077FF/0077FF.png) `#0077FF` | Chocolate Brown ![](https://placehold.co/28x18/5A3218/5A3218.png) `#5A3218` |
+| Light Summer | Soft White ![](https://placehold.co/28x18/F7F3EF/F7F3EF.png) `#F7F3EF` | Powder Pink ![](https://placehold.co/28x18/F6C6D6/F6C6D6.png) `#F6C6D6` | Lavender ![](https://placehold.co/28x18/C8B6E2/C8B6E2.png) `#C8B6E2` | Powder Blue ![](https://placehold.co/28x18/AFCBEF/AFCBEF.png) `#AFCBEF` | Misty Aqua ![](https://placehold.co/28x18/A7DAD8/A7DAD8.png) `#A7DAD8` | Dove Gray ![](https://placehold.co/28x18/B8BCC6/B8BCC6.png) `#B8BCC6` |
+| True Summer | Soft White ![](https://placehold.co/28x18/F2F1EE/F2F1EE.png) `#F2F1EE` | Rose ![](https://placehold.co/28x18/C96F8C/C96F8C.png) `#C96F8C` | Raspberry Rose ![](https://placehold.co/28x18/B84A6B/B84A6B.png) `#B84A6B` | Periwinkle ![](https://placehold.co/28x18/7F95C8/7F95C8.png) `#7F95C8` | Soft Teal ![](https://placehold.co/28x18/5B9EA0/5B9EA0.png) `#5B9EA0` | Soft Navy ![](https://placehold.co/28x18/2F405C/2F405C.png) `#2F405C` |
+| Soft Summer | Oyster White ![](https://placehold.co/28x18/EDE6DD/EDE6DD.png) `#EDE6DD` | Dusty Pink ![](https://placehold.co/28x18/C996A6/C996A6.png) `#C996A6` | Dusty Lavender ![](https://placehold.co/28x18/9B8AA8/9B8AA8.png) `#9B8AA8` | Smoky Blue ![](https://placehold.co/28x18/7089A3/7089A3.png) `#7089A3` | Eucalyptus ![](https://placehold.co/28x18/7F9B8E/7F9B8E.png) `#7F9B8E` | Charcoal Navy ![](https://placehold.co/28x18/374252/374252.png) `#374252` |
+
+---
+
+# Look vocabulary
+
+**Draft, for review.** A makeup look's name must *start* with one of these
+terms and may add up to 3 words after it ("Soft Glam, Plum"). The model is
+given the list and asked for exactly 3 looks; `validateLooks()` drops any look
+whose name does not comply. Edit `LOOK_VOCABULARY` in
+`server/utils/lookVocabulary.ts`, then regenerate the demo analyses
+(`npm run precompute:demos -- --force --hair=dyed`, about $0.09).
+
+- Everyday
+- No-Makeup Makeup
+- Clean Girl
+- Fresh Face
+- Sun-Kissed
+- Office Polish
+- Monochrome
+- Soft Glam
+- Latte Makeup
+- Smoky Eye
+- Bold Lip
+- Date Night
+- Full Glam

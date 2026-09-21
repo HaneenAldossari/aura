@@ -4,6 +4,8 @@
  *   npm run shots              # boots its own API + Vite, costs nothing
  *   npm run shots -- --live    # …but makes the one real shop check (~$0.003)
  *   npm run shots -- <url>     # against a stack that is already running
+ *   npm run shots -- --live --publish
+ *                              # …and refresh the four tab previews Home shows
  *
  * Writes dev/shots/<route>-<width>.png at 390 and 1440 and prints the list.
  * The folder is emptied first, so the list printed is the list on disk.
@@ -18,6 +20,12 @@
  *     verdict and product name are NOT model output — the list marks the file
  *     as stubbed so nobody reads it as evidence of what the model says.
  *
+ * --publish writes client/public/previews/<tab>.webp and the manifest beside
+ * Home's WhatYouGet.tsx: the top of each Results tab at phone width, cropped
+ * from just under the tab bar. Home shows those captures as its "what you get"
+ * previews, so they are the real screens by construction. It insists on --live:
+ * a stubbed shop result must never be published as what the product says.
+ *
  * States are reached the way a person reaches them, not by poking React:
  * a photo with no face in it for the quality panel, a blocked model download
  * for the system panel. Loading is caught by holding the second model download,
@@ -28,6 +36,7 @@ import { spawn, type ChildProcess } from "child_process";
 import fs from "fs";
 import path from "path";
 import { chromium, type Browser, type BrowserContext, type Page } from "playwright";
+import sharp from "sharp";
 import { en } from "../../client/src/i18n/en";
 
 const ROOT = path.resolve(__dirname, "../..");
@@ -45,6 +54,39 @@ const PRODUCT_PHOTO = path.join(ROOT, "client/public/seasons/autumn.webp");
 
 const args = process.argv.slice(2);
 const LIVE = args.includes("--live");
+const PUBLISH = args.includes("--publish");
+
+const PREVIEW_DIR = path.join(ROOT, "client/public/previews");
+const PREVIEW_MANIFEST = path.join(ROOT, "client/src/pages/home/previews.json");
+/** CSS px of each tab that Home's frame can show, plus a little for its fade. */
+const PREVIEW_HEIGHT = 660;
+const PREVIEW_WIDTH = 390;
+
+interface Preview {
+  src: string;
+  width: number;
+  height: number;
+}
+const previews: Record<string, Preview> = {};
+let previewSeason = "";
+
+/** The top of the current Results tab, from just under the tab bar, as WebP. */
+async function publishPreview(page: Page, id: string) {
+  const { top, pageHeight } = await page.evaluate(() => {
+    window.scrollTo(0, 0);
+    const tabs = document.querySelector(".ed-tabs");
+    return {
+      top: Math.ceil((tabs?.getBoundingClientRect().bottom ?? 0) + window.scrollY) + 8,
+      pageHeight: document.documentElement.scrollHeight,
+    };
+  });
+  const height = Math.min(PREVIEW_HEIGHT, pageHeight - top);
+  const png = await page.screenshot({ fullPage: true, clip: { x: 0, y: top, width: PREVIEW_WIDTH, height } });
+  fs.mkdirSync(PREVIEW_DIR, { recursive: true });
+  const info = await sharp(png).webp({ quality: 80 }).toFile(path.join(PREVIEW_DIR, `${id}.webp`));
+  previews[id] = { src: `/previews/${id}.webp`, width: info.width, height: info.height };
+  console.log(`      published previews/${id}.webp  ${info.width}×${info.height}  ${Math.round(info.size / 1024)} KB`);
+}
 const givenUrl = args.find((a) => /^https?:\/\//.test(a));
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -224,12 +266,19 @@ async function captureWidth(browser: Browser, base: string, width: number) {
 
   // ── Results, from one demo face ──
   let resultsUrl = "";
+  const publishing = PUBLISH && width === PREVIEW_WIDTH;
+  page.on("response", async (response) => {
+    if (!response.url().includes("/api/demo-load")) return;
+    const body = (await response.json().catch(() => null)) as { result?: { season?: string } } | null;
+    if (body?.result?.season) previewSeason = body.result.season;
+  });
   await attempt("results-overview", width, async () => {
     await page.goto(`${base}/analyse`, { waitUntil: "networkidle" });
     await page.getByRole("button", { name: en.analysis.samples.itemLabel.replace("{n}", String(DEMO_FACE)), exact: true }).click();
     await page.waitForURL(/\/results\/[^/?]+/, { timeout: 60_000 });
     resultsUrl = page.url().split("?")[0];
     await snap(page, "results-overview", width, { settleMs: 1200 });
+    if (publishing) await publishPreview(page, "overview");
   });
 
   for (const tab of ["beauty", "style", "shop"] as const) {
@@ -239,6 +288,8 @@ async function captureWidth(browser: Browser, base: string, width: number) {
       await page.goto(`${resultsUrl}?tab=${tab}`, { waitUntil: "networkidle" });
       await page.waitForSelector(`[role="tab"][aria-selected="true"]`);
       await snap(page, `results-${tab}`, width);
+      // Shop's preview is the result, published below — not the empty dropzone.
+      if (publishing && tab !== "shop") await publishPreview(page, tab);
     });
   }
 
@@ -273,6 +324,7 @@ async function captureWidth(browser: Browser, base: string, width: number) {
     await page.setInputFiles('input[type="file"]', PRODUCT_PHOTO);
     await page.waitForSelector(".ed-score", { timeout: LIVE ? 90_000 : 15_000 });
     await snap(page, "before-you-buy", width, { notes: [LIVE ? "live model call" : "STUBBED result"] });
+    if (publishing) await publishPreview(page, "before-you-buy");
     await page.unroute("**/api/link-check-image");
   });
 
@@ -350,6 +402,10 @@ async function captureWidth(browser: Browser, base: string, width: number) {
 }
 
 async function main() {
+  if (PUBLISH && !LIVE) {
+    console.error("\n  --publish needs --live: Home must never show a stubbed shop result as the product's.\n");
+    process.exit(2);
+  }
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
 
@@ -375,6 +431,22 @@ async function main() {
   } finally {
     await browser.close();
     stopAll();
+  }
+
+  if (PUBLISH) {
+    const wanted = ["overview", "beauty", "style", "before-you-buy"];
+    const missing = wanted.filter((id) => !previews[id]);
+    if (missing.length || !previewSeason) {
+      failures.push(`publish: missing ${missing.join(", ") || "season"} — manifest left as it was`);
+    } else {
+      const manifest = {
+        season: previewSeason,
+        capturedOn: new Date().toISOString().slice(0, 10),
+        tabs: Object.fromEntries(wanted.map((id) => [id, previews[id]])),
+      };
+      fs.writeFileSync(PREVIEW_MANIFEST, JSON.stringify(manifest, null, 2) + "\n");
+      console.log(`\n  published ${wanted.length} previews for ${previewSeason} → client/public/previews/`);
+    }
   }
 
   shots.sort((a, b) => a.file.localeCompare(b.file));

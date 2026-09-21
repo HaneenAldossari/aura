@@ -1,221 +1,47 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useState } from "react";
 import { useT, type Key } from "../../i18n";
-import { metalColours } from "../../lib/metals";
-import type { Color } from "../../../../server/utils/seasonPalettes";
-import { previewSeason, type SeasonPreview } from "./seasonData";
-
-const VERDICT_KEY: Record<string, Key> = {
-  best: "results.styleSection.verdictBest",
-  works: "results.styleSection.verdictWorks",
-  skip: "results.styleSection.verdictSkip",
-};
+import previews from "./previews.json";
 
 /**
- * Flat rectangles. Unnamed, they run edge to edge in one row; `named` puts the
- * shade name under each and wraps at `cols`, because a name needs about 80px
- * and twelve of them do not fit in one row of a 400px panel.
- */
-function Strip({
-  colours,
-  named = false,
-  struck = false,
-  cols = 4,
-}: {
-  colours: Color[];
-  named?: boolean;
-  struck?: boolean;
-  cols?: number;
-}) {
-  return (
-    <ul
-      className="lp-strip"
-      data-named={named || undefined}
-      data-struck={struck || undefined}
-      style={named ? { ["--cols" as string]: cols } : undefined}
-    >
-      {colours.map((colour) => (
-        <li key={colour.name} title={colour.name}>
-          <span className="lp-strip__chip" style={{ background: colour.hex }} />
-          {named && <span className="lp-strip__name">{colour.name}</span>}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function Row({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="lp-row">
-      <p className="lp-row__label">{label}</p>
-      {children}
-    </div>
-  );
-}
-
-interface Feature {
-  id: string;
-  title: Key;
-  body: Key;
-  panel: Key;
-  render: (season: SeasonPreview, t: ReturnType<typeof useT>) => ReactNode;
-}
-
-/**
- * Seven things an analysis returns, and what each actually looks like.
+ * Four rows, because the app has four tabs.
  *
- * The panel is not a mockup. Every colour, shade name, verdict and sentence in
- * it is the canonical data for one season — the same modules the results page
- * is built from — so what is promised here is literally what is delivered.
- * Colours are flat rectangles; only nails and gems are renders, as on Results.
+ * The list used to be seven features, which is a brochure's way of counting.
+ * What someone actually gets is a results page with four tabs, so the list is
+ * those four, in that order, under those names — and the panel beside it is
+ * that tab.
+ *
+ * Literally that tab: each preview is a phone-width capture of the real
+ * Results screen for a demo face, taken by `npm run shots -- --live --publish`,
+ * which writes the images to public/previews/ and the manifest beside this
+ * file. Nothing in the panel is drawn for Home, so it cannot promise something
+ * the app does not do; when the app changes, re-publishing is one command.
+ *
+ * The frame shows the top of the tab and does not scroll. A scrolling frame is
+ * a trap on a phone, where it is as wide as the screen and a thumb moving down
+ * the page lands in it.
  */
-const FEATURES: Feature[] = [
-  {
-    id: "season",
-    title: "home.landing.f1Title",
-    body: "home.landing.f1Body",
-    panel: "home.landing.f1Panel",
-    render: (s) => (
-      <>
-        <p className="lp-panel__season">{s.name}</p>
-        <p className="lp-panel__line">{s.descriptor}</p>
-        <Strip colours={s.palette.best} />
-        <p className="lp-panel__prose">{s.style.story}</p>
-      </>
-    ),
-  },
-  {
-    id: "palette",
-    title: "home.landing.f2Title",
-    body: "home.landing.f2Body",
-    panel: "home.landing.f2Panel",
-    render: (s, t) => (
-      <>
-        <Row label={t("home.landing.rowBest")}>
-          <Strip colours={s.palette.best} named />
-        </Row>
-        <Row label={t("home.landing.rowNeutrals")}>
-          <Strip colours={s.palette.neutrals} named />
-        </Row>
-        <Row label={t("home.landing.rowAvoid")}>
-          <Strip colours={s.palette.avoid} struck />
-        </Row>
-      </>
-    ),
-  },
-  {
-    id: "beauty",
-    title: "home.landing.f3Title",
-    body: "home.landing.f3Body",
-    panel: "home.landing.f3Panel",
-    render: (s, t) => (
-      <>
-        <Row label={t("results.makeupSection.catBlush")}>
-          <Strip colours={s.makeup.blush.slice(0, 4)} named />
-        </Row>
-        <Row label={t("results.makeupSection.catLip")}>
-          <Strip colours={s.makeup.lip.slice(0, 4)} named />
-        </Row>
-        <Row label={t("results.makeupSection.catEye")}>
-          <Strip colours={s.makeup.eye.slice(0, 4)} named />
-        </Row>
-        <p className="lp-panel__prose">{s.makeup.guidance.lip}</p>
-      </>
-    ),
-  },
-  {
-    id: "nails",
-    title: "home.landing.f4Title",
-    body: "home.landing.f4Body",
-    panel: "home.landing.f4Panel",
-    render: (s) => (
-      <>
-        <ul className="lp-renders lp-renders--nails">
-          {s.makeup.nails.map((shade) => (
-            <li key={shade.name}>
-              {shade.asset ? (
-                <img src={`/makeup/nails/${shade.asset}.webp`} alt="" loading="lazy" decoding="async" />
-              ) : (
-                <span className="lp-strip__chip" style={{ background: shade.hex }} />
-              )}
-              <span className="lp-strip__name">{shade.name}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="lp-panel__prose">{s.makeup.guidance.nails}</p>
-      </>
-    ),
-  },
-  {
-    id: "metals",
-    title: "home.landing.f5Title",
-    body: "home.landing.f5Body",
-    panel: "home.landing.f5Panel",
-    render: (s, t) => (
-      <>
-        <ul className="lp-metals">
-          {s.style.metals.map((metal) => {
-            const { hex, accent } = metalColours(metal.name);
-            return (
-              <li key={metal.name} data-verdict={metal.verdict}>
-                <span
-                  className="lp-metals__disc"
-                  style={{ background: `linear-gradient(140deg, ${accent}, ${hex} 65%)` }}
-                  aria-hidden="true"
-                />
-                <span className="lp-metals__name">{metal.name}</span>
-                <span className="lp-metals__verdict">{t(VERDICT_KEY[metal.verdict])}</span>
-                <span className="lp-metals__reason">{metal.reason}</span>
-              </li>
-            );
-          })}
-        </ul>
-        <p className="lp-panel__prose">{s.style.guidance.jewellery}</p>
-      </>
-    ),
-  },
-  {
-    id: "gems",
-    title: "home.landing.f6Title",
-    body: "home.landing.f6Body",
-    panel: "home.landing.f6Panel",
-    render: (s) => (
-      <ul className="lp-renders lp-renders--gems">
-        {s.style.gemstones.slice(0, 4).map((stone) => (
-          <li key={stone.name}>
-            {stone.asset ? (
-              <img src={`/makeup/gems/${stone.asset}.webp`} alt="" loading="lazy" decoding="async" />
-            ) : (
-              <span className="lp-strip__chip" style={{ background: stone.hex }} />
-            )}
-            <span className="lp-strip__name">{stone.name}</span>
-          </li>
-        ))}
-      </ul>
-    ),
-  },
-  {
-    id: "buy",
-    title: "home.landing.f7Title",
-    body: "home.landing.f7Body",
-    panel: "home.landing.f7Panel",
-    render: (s, t) => (
-      <>
-        <Row label={t("home.landing.rowScoredAgainst")}>
-          <Strip colours={s.palette.best} />
-        </Row>
-        <Row label={t("home.landing.rowMarkedDown")}>
-          <Strip colours={s.palette.avoid} named cols={3} />
-        </Row>
-      </>
-    ),
-  },
+type PreviewId = "overview" | "beauty" | "style" | "before-you-buy";
+
+interface Manifest {
+  season: string;
+  capturedOn: string;
+  tabs: Partial<Record<PreviewId, { src: string; width: number; height: number }>>;
+}
+
+const MANIFEST = previews as Manifest;
+
+const ROWS: { id: PreviewId; title: Key; body: Key }[] = [
+  { id: "overview", title: "home.landing.row1Title", body: "home.landing.row1Body" },
+  { id: "beauty", title: "home.landing.row2Title", body: "home.landing.row2Body" },
+  { id: "style", title: "home.landing.row3Title", body: "home.landing.row3Body" },
+  { id: "before-you-buy", title: "home.landing.row4Title", body: "home.landing.row4Body" },
 ];
 
 export default function WhatYouGet() {
   const t = useT();
-  const season = useMemo(() => previewSeason(), []);
   const [active, setActive] = useState(0);
-  const feature = FEATURES[active];
+  const row = ROWS[active];
+  const shot = MANIFEST.tabs[row.id];
 
   return (
     <section className="lp-section lp-section--raised" aria-labelledby="lp-get-title">
@@ -226,8 +52,8 @@ export default function WhatYouGet() {
 
         <div className="lp-get">
           <ul className="lp-get__list">
-            {FEATURES.map((f, i) => (
-              <li key={f.id}>
+            {ROWS.map((r, i) => (
+              <li key={r.id}>
                 <button
                   type="button"
                   className="lp-get__item"
@@ -235,28 +61,44 @@ export default function WhatYouGet() {
                   aria-controls="lp-get-panel"
                   onClick={() => setActive(i)}
                 >
-                  <span className="lp-get__title">{t(f.title)}</span>
-                  <span className="lp-get__body">{t(f.body)}</span>
+                  <span className="lp-get__title">{t(r.title)}</span>
+                  <span className="lp-get__body">{t(r.body)}</span>
                 </button>
               </li>
             ))}
           </ul>
 
           <div className="lp-get__stage">
-            <div className="lp-panel" id="lp-get-panel" aria-live="polite">
+            <div className="lp-panel" id="lp-get-panel">
               <div className="lp-panel__head">
                 <span className="lp-panel__brand">
                   <span className="lp-panel__dot" aria-hidden="true" />
-                  {t("common.brandName")} · {season.name}
+                  {t("common.brandName")}
+                  {MANIFEST.season ? ` · ${MANIFEST.season}` : ""}
                 </span>
-                <span className="lp-panel__label">{t(feature.panel)}</span>
+                <span className="lp-panel__label">{t(row.title)}</span>
               </div>
 
               {/* Keyed, so each change remounts and the crossfade plays again. */}
-              <div className="lp-panel__body lp-swap" key={feature.id}>
-                {feature.render(season, t)}
+              <div
+                className="lp-panel__screen lp-swap"
+                key={row.id}
+                role="img"
+                aria-label={t("home.landing.previewAlt", { tab: t(row.title), season: MANIFEST.season })}
+              >
+                {shot && (
+                  <img
+                    src={shot.src}
+                    width={shot.width}
+                    height={shot.height}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
               </div>
             </div>
+            <p className="lp-get__note">{t("home.landing.previewNote")}</p>
           </div>
         </div>
       </div>
