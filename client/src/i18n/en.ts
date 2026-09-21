@@ -59,6 +59,7 @@ export const en = {
     previews: {
       shop: "Photograph anything you're about to buy and get a straight answer.",
     },
+    avoidTitle: "Colours to avoid",
     avoidRow: "Worth avoiding near your face — these dull your skin and take the light off it.",
     confidence: "{percent}% confidence",
     nextClosest: "next closest · {season}",
@@ -99,7 +100,7 @@ export const en = {
     hairNote: {
       natural:
         "You told us your hair is its natural colour, so it counted toward this " +
-        "reading. Change that answer and the season may shift one step.",
+        "reading. A different answer is a new analysis, and the season may differ.",
       coloured:
         "You told us your hair is coloured, so it was left out and your skin and " +
         "eyes carried the reading instead.",
@@ -108,8 +109,7 @@ export const en = {
         "and eyes carried the reading instead.",
       unavailable:
         "We couldn't read your hair, so this uses your skin and eyes only.",
-      change: "Change hair answer",
-      rerunning: "Re-analysing…",
+      change: "Analyse again with a different hair answer",
     },
 
     palette: {
@@ -295,11 +295,8 @@ export const en = {
       meta: "Before you buy — {season}",
       lede: "Upload a photo of any item — we'll tell you if it matches your {season} palette.",
       tipLabel: "Tip —",
-      bandsLabel: "How the score reads",
       against: "Product colour against your palette",
       product: "product",
-      yours: "yours",
-      nearest: "· nearest in palette",
       closerInPalette: "Closer in your palette",
       approximate: "Screen colour is approximate. Fabric and lighting shift the result.",
       yourPalette: "Your palette",
@@ -314,13 +311,6 @@ export const en = {
       headlineSuits: "Suits you",
       headlineMight: "Might work",
       headlineNot: "Not your colour",
-      scoreOf: "{score} / 100",
-      showDetails: "Show details",
-      hideDetails: "Hide details",
-      verdictGreat: "Perfect match",
-      verdictGood: "Good match",
-      verdictMaybe: "Might work",
-      verdictAvoid: "Not your colour",
       noAnalysis: "No analysis loaded",
       checkFailed: "Image check failed",
     },
@@ -338,6 +328,8 @@ export const en = {
         "Hi! I know your {season} profile. Ask me about any colour, shade or " +
         "outfit — I'll give you a direct, personalised answer.",
       placeholder: "Ask about a product or shade...",
+      leftToday: "{n} of {limit} messages left today",
+      noneLeft: "0 of {limit} messages left today — they reset at midnight UTC",
       inputLabel: "Message the colour advisor",
       sendLabel: "Send message",
       searching: "Looking up product details",
@@ -509,6 +501,7 @@ export const en = {
     qualityRetake: "Try another photo",
 
     systemTitle: "Something went wrong on our side",
+    limitTitle: "That's today's limit",
 
     sampleTitle: "Couldn't Load Sample",
     photoTitle: "Better Photos Needed",
@@ -568,8 +561,10 @@ export const en = {
       row3Body: "Jewellery metals, hair colours and outfit pairings.",
       row4Title: "Before You Buy",
       row4Body: "Photograph anything you're about to buy and get a score against your palette.",
-      previewAlt: "The {tab} screen of a real {season} analysis",
-      previewNote: "From a real analysis of one of our sample faces.",
+      previewNote: "From the real analysis of our first sample face.",
+      cardBase: "Your base",
+      cardHair: "Hair",
+      cardCheckPending: "Demo check not generated yet.",
 
       closeLead: "Ready to Meet",
       closeAccent: "Your Colours",

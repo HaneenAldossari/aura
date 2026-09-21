@@ -1,3 +1,5 @@
+import { DailyLimitError, recordUse, syncFromResponse } from "./dailyCounter";
+import type { LimitKind } from "../../../server/utils/limits";
 import type {
   AnalysisResult,
   AnalyzeResponse,
@@ -20,6 +22,20 @@ async function safeJson(res: Response) {
 }
 
 /**
+ * Every limited call goes through here: the counter takes the server's number
+ * when there is one, and our own 429 becomes a DailyLimitError whose message
+ * is the friendly sentence the server wrote, so the UI shows it as it is.
+ */
+async function limited(kind: LimitKind, res: Response): Promise<Response> {
+  syncFromResponse(kind, res);
+  if (res.status === 429) {
+    const data = await safeJson(res.clone());
+    if (data.error === "daily_limit") throw new DailyLimitError(kind, data.message);
+  }
+  return res;
+}
+
+/**
  * Upload for analysis.
  *
  * `imageBytes` is the canonical JPEG produced by measure/encode.ts — ICC
@@ -38,7 +54,8 @@ export async function analyzeMeasured(
   );
   formData.append("features", JSON.stringify(features));
 
-  const res = await fetch(`${BASE}/analyze`, { method: "POST", body: formData });
+  recordUse("analyze");
+  const res = await limited("analyze", await fetch(`${BASE}/analyze`, { method: "POST", body: formData }));
   const data = await safeJson(res);
   if (!res.ok) {
     throw new Error(data.message || data.error || "Analysis failed");
@@ -55,10 +72,11 @@ export async function analyzePhotos(files: File[]): Promise<AnalyzeResponse> {
   const formData = new FormData();
   files.forEach((f) => formData.append("photos", f));
 
-  const res = await fetch(`${BASE}/analyze`, {
+  recordUse("analyze");
+  const res = await limited("analyze", await fetch(`${BASE}/analyze`, {
     method: "POST",
     body: formData,
-  });
+  }));
 
   const data = await safeJson(res);
   if (!res.ok) {
@@ -108,11 +126,12 @@ export async function sendChatMessage(
   analysis: AnalysisResult,
   messages: ChatMessage[]
 ): Promise<string> {
-  const res = await fetch(`${BASE}/chat`, {
+  recordUse("chat");
+  const res = await limited("chat", await fetch(`${BASE}/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ analysis, messages }),
-  });
+  }));
   const data = await safeJson(res);
   if (!res.ok) throw new Error(data.message || data.error || "Chat failed");
   return data.response as string;
@@ -128,14 +147,15 @@ export async function streamChatMessage(
   messages: ChatMessage[],
   onDelta: (fullText: string) => void
 ): Promise<string> {
-  const res = await fetch(`${BASE}/chat`, {
+  recordUse("chat");
+  const res = await limited("chat", await fetch(`${BASE}/chat`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "text/event-stream",
     },
     body: JSON.stringify({ analysis, messages }),
-  });
+  }));
 
   const contentType = res.headers.get("content-type") || "";
 
@@ -191,7 +211,8 @@ export async function checkLinkImage(
   formData.append("photo", file);
   formData.append("analysis", JSON.stringify(analysis));
 
-  const res = await fetch(`${BASE}/link-check-image`, { method: "POST", body: formData });
+  recordUse("shop");
+  const res = await limited("shop", await fetch(`${BASE}/link-check-image`, { method: "POST", body: formData }));
   const data = await safeJson(res);
   if (!res.ok) throw new Error(data.message || data.error || "Check failed");
   return data as LinkCheckResultData;
@@ -214,11 +235,12 @@ export async function checkLinkManual(
   brand: string,
   analysis: AnalysisResult
 ): Promise<LinkCheckResultData> {
-  const res = await fetch(`${BASE}/link-check-manual`, {
+  recordUse("shop");
+  const res = await limited("shop", await fetch(`${BASE}/link-check-manual`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ colorDesc, category, brand, analysis }),
-  });
+  }));
   const data = await safeJson(res);
   if (!res.ok) throw new Error(data.message || data.error || "Manual check failed");
   return data as LinkCheckResultData;

@@ -29,11 +29,26 @@ export interface AnalyzeOptions {
   /**
    * Measured colour values to hand the model as ground truth.
    *
-   * Never contains a season name or a ranking: a model shown the rule-based
-   * answer would anchor on it, and the agreement check computed afterwards
+   * Never contains a ranking or a score: a model shown which season the rules
+   * prefer would anchor on it, and the agreement check computed afterwards
    * would be measuring its own suggestion.
    */
   measurements?: string;
+  /**
+   * The only seasons the model may return as primarySeason: the rules' top
+   * three, alphabetical and unscored (hybrid.candidateSeasons). Said in the
+   * prompt and enforced by the schema's enum, so an out-of-set answer can only
+   * come from a fallback model that ignores strict schemas — and the handler
+   * overrules that too.
+   */
+  candidates?: string[];
+}
+
+/** The classification schema with primarySeason narrowed to this call's candidates. */
+function schemaFor(candidates: string[]): typeof COLOR_ANALYSIS_SCHEMA {
+  const schema = structuredClone(COLOR_ANALYSIS_SCHEMA) as typeof COLOR_ANALYSIS_SCHEMA;
+  (schema.schema.properties.primarySeason as unknown as { enum: string[] }).enum = [...candidates];
+  return schema;
 }
 
 export async function analyzePhotos(
@@ -65,6 +80,20 @@ export async function analyzePhotos(
     });
   }
 
+  const candidates = analyzeOptions.candidates;
+  if (candidates?.length) {
+    content.push({
+      type: "text",
+      text:
+        `CANDIDATE SEASONS: ${candidates.join(", ")}.\n\n` +
+        "The measured values above are only consistent with these seasons. " +
+        "primarySeason MUST be one of them — they are listed alphabetically, in " +
+        "no order of preference, so weigh all of them against the photo. " +
+        "secondarySeason may be any neighbouring season. If none seems right, " +
+        "pick the closest of these and say what did not fit in the rationale.",
+    });
+  }
+
   content.push({
     type: "text",
     text: "Analyze the provided photo and return the color analysis JSON.",
@@ -90,7 +119,7 @@ export async function analyzePhotos(
     try {
       parsed = await callOpenRouterJSON(
         [{ role: "user", content }],
-        COLOR_ANALYSIS_SCHEMA,
+        candidates?.length ? schemaFor(candidates) : COLOR_ANALYSIS_SCHEMA,
         options
       );
     } catch (err) {

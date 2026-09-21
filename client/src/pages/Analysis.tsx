@@ -14,6 +14,7 @@ import SampleGallery from "./analysis/SampleGallery";
 import LoadingScreen from "./analysis/LoadingScreen";
 import ErrorPanel from "./analysis/ErrorPanel";
 import { useT } from "../i18n";
+import { DailyLimitError } from "../lib/dailyCounter";
 import { cachePhoto, getCachedPhoto, rekeyCachedPhoto } from "../lib/photoCache";
 import Masthead from "./results/Masthead";
 import "./analysis/analysis-editorial.css";
@@ -32,6 +33,7 @@ export default function Analysis() {
     "upload" | "analyzing" | "error" | "quality" | "system"
   >("upload");
   const [systemMessage, setSystemMessage] = useState("");
+  const [systemTitle, setSystemTitle] = useState<string | undefined>(undefined);
   const [hairStatus, setHairStatus] = useState<HairStatus>("natural");
   const [qualityIssues, setQualityIssues] = useState<QualityIssue[]>([]);
   const [stage, setStage] = useState<LoadingStageKey | undefined>(undefined);
@@ -71,6 +73,21 @@ export default function Analysis() {
   });
 
   const hasPhoto = !!photo.file;
+
+  // "Analyse again with a different hair answer" arrives here as ?redo=<id>.
+  // The photo that produced that result is still in memory, so it is loaded
+  // back into the box with the answer it was given — and then nothing happens
+  // until Analyse is pressed. A new analysis is always somebody's decision.
+  const redoFor = params.get("redo") || undefined;
+  useEffect(() => {
+    const previous = getCachedPhoto(redoFor);
+    if (!previous) return;
+    setHairStatus(previous.hairStatus);
+    const file = new File([previous.bytes as unknown as BlobPart], "photo.jpg", { type: "image/jpeg" });
+    const reader = new FileReader();
+    reader.onload = (e) => setPhoto({ file, preview: e.target?.result as string });
+    reader.readAsDataURL(file);
+  }, [redoFor]);
 
   const handleFileSelect = useCallback((file: File) => {
     const reader = new FileReader();
@@ -191,10 +208,15 @@ export default function Analysis() {
       // Reaching here means the upload or the API failed. Still not the user's
       // photo — the gate already passed it — so this is a system error too.
       console.error("[aura] analysis request failed:", err);
+      // Our own daily limit is not a fault on either side: say what the
+      // server said, under a heading that does not claim something broke.
+      setSystemTitle(err instanceof DailyLimitError ? t("errors.limitTitle") : undefined);
       setSystemMessage(
-        err instanceof Error && /network|fetch|load failed/i.test(err.message)
-          ? t("errors.offline")
-          : t("errors.server")
+        err instanceof DailyLimitError
+          ? err.message
+          : err instanceof Error && /network|fetch|load failed/i.test(err.message)
+            ? t("errors.offline")
+            : t("errors.server")
       );
       setStep("system");
     }
@@ -240,19 +262,14 @@ export default function Analysis() {
                   onRemove={removePhoto}
                 />
 
-                {availableSamples.length > 0 && (
-                  <div style={{ marginBlockStart: "var(--space-5)" }}>
-                    <SampleGallery
-                      samples={availableSamples}
-                      onSampleClick={handleSampleClick}
-                    />
-                  </div>
-                )}
+                {/* Directly under the photo, at every width: it is a question
+                    about the photo, and the answer changes what is measured. */}
+                <div style={{ marginBlockStart: "var(--space-5)" }}>
+                  <HairStatusToggle value={hairStatus} onChange={setHairStatus} />
+                </div>
               </div>
 
               <div>
-                <HairStatusToggle value={hairStatus} onChange={setHairStatus} />
-
                 <h2 className="ed-section__label">{t("analysis.accurateRead")}</h2>
                 <ol className="an-tips">
                   {tips.map((tip, i) => (
@@ -264,6 +281,16 @@ export default function Analysis() {
                     </li>
                   ))}
                 </ol>
+
+                {/* Last: the alternative to uploading, after everything about uploading. */}
+                {availableSamples.length > 0 && (
+                  <div style={{ marginBlockStart: "var(--space-6)" }}>
+                    <SampleGallery
+                      samples={availableSamples}
+                      onSampleClick={handleSampleClick}
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -312,7 +339,7 @@ export default function Analysis() {
         )}
 
         {step === "system" && (
-          <SystemErrorPanel message={systemMessage} onRetry={() => setStep("upload")} />
+          <SystemErrorPanel title={systemTitle} message={systemMessage} onRetry={() => setStep("upload")} />
         )}
 
         {step === "error" && (

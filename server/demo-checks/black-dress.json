@@ -1,0 +1,32 @@
+{
+  "slug": "black-dress",
+  "image": "/demo-products/black-dress.webp",
+  "imageWidth": 800,
+  "imageHeight": 841,
+  "against": "sample-1",
+  "season": "Deep Winter",
+  "checkedOn": "2026-09-21",
+  "result": {
+    "productName": "Short-Sleeved A-Line Midi Dress",
+    "productColor": "Classic Black",
+    "hex": "#1F1E22",
+    "matchScore": 98,
+    "verdict": "great",
+    "reason": "True black is a cornerstone of the Deep Winter palette, perfectly complementing your cool undertones and striking natural contrast.",
+    "tip": "Style with high-shine silver jewellery and a statement cranberry or emerald clutch bag to bring vibrant contrast to the ensemble.",
+    "similarColors": [
+      {
+        "name": "Black",
+        "hex": "#000000"
+      },
+      {
+        "name": "Charcoal",
+        "hex": "#1E1E24"
+      },
+      {
+        "name": "Midnight Blue",
+        "hex": "#0A2342"
+      }
+    ]
+  }
+}

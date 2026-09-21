@@ -3,5 +3,6 @@
  * Express server and this deployment run the same code.
  */
 import { handleAnalyze } from "../server/handlers/analyze";
+import { withDailyLimit } from "../server/utils/rateLimit";
 
-export default { fetch: handleAnalyze };
+export default { fetch: withDailyLimit("analyze", handleAnalyze) };

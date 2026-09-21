@@ -170,6 +170,51 @@ export function computeAgreement(rules: ScoreResult, llmSeason: unknown): Agreem
   };
 }
 
+/** How many of the rules' top seasons the model may choose between. */
+export const CANDIDATE_COUNT = 3;
+
+/**
+ * The seasons the model may choose from: the rules' top three, alphabetically.
+ *
+ * The measurement decides the neighbourhood; the model, which can see the
+ * actual face, decides the address. Unconstrained, the same photo could come
+ * back as opposite corners of the system on a different hair answer or a
+ * different day — a reader was shown Deep Autumn and Light Spring for one
+ * face. Three adjacent candidates bound how far any single run can move.
+ *
+ * Alphabetical, and with no scores, so the model learns *which three* and not
+ * *which one the rules prefer*. That keeps the agreement check meaningful: it
+ * still measures whether the model, looking at the image, independently landed
+ * on the rules' first choice.
+ */
+export function candidateSeasons(rules: ScoreResult): Season[] {
+  return rules.ranked
+    .slice(0, CANDIDATE_COUNT)
+    .map((r) => r.season)
+    .sort((a, b) => a.localeCompare(b));
+}
+
+export interface SeasonDecision {
+  season: Season;
+  /** "model": the model chose, inside the candidates. "rules": it did not, and the rules' primary stands. */
+  source: "model" | "rules";
+  /** What the model said, when it was overruled. */
+  rejected: string | null;
+}
+
+/**
+ * The final season: the model's, if it is one of the candidates; otherwise the
+ * rules' primary. Pure, so five runs on one set of measurements can only differ
+ * by what the model says — and then only within three seasons.
+ */
+export function decideSeason(rules: ScoreResult, llmSeason: unknown): SeasonDecision {
+  const chosen = normaliseSeason(llmSeason);
+  if (chosen && candidateSeasons(rules).includes(chosen)) {
+    return { season: chosen, source: "model", rejected: null };
+  }
+  return { season: rules.primary, source: "rules", rejected: typeof llmSeason === "string" ? llmSeason : null };
+}
+
 /** Rank the seasons from validated features. */
 export function rankSeasons(features: MeasuredFeatures): ScoreResult {
   return score(features);

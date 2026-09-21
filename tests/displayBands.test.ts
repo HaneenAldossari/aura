@@ -153,12 +153,17 @@ describe("shop headline: ≥65 suits you, 40-64 might work, <40 not your colour"
     expect(en.results.shop.headlineNot).toBe("Not your colour");
   });
 
-  it("the panel leads with the headline, and keeps the working-out closed", () => {
+  it("the panel reads score, verdict, reason, tip, then the evidence — all visible", () => {
     const src = fs.readFileSync(path.join(__dirname, "../client/src/pages/results/BeforeYouBuyPanel.tsx"), "utf8");
     expect(src).toMatch(/shopHeadline\(result\.matchScore\)/);
-    expect(src).toMatch(/useState\(false\);\n/);
-    expect(src).toMatch(/hidden=\{!detailsOpen\}/);
-    expect(src.indexOf('className="ed-verdict"')).toBeLessThan(src.indexOf('className="ed-score"'));
-    expect(src.indexOf('className="ed-bands"')).toBeGreaterThan(src.indexOf('id="shop-details"'));
+    const order = ['className="ed-score"', 'className="ed-verdict"', "ed-verdictcard__reason", "ed-verdictcard__tip", 'className="ed-evidence"']
+      .map((marker) => src.indexOf(marker));
+    expect(order.every((at) => at > 0)).toBe(true);
+    expect([...order].sort((a, b) => a - b)).toEqual(order);
+    // No legend of score bands, and nothing behind a toggle.
+    expect(src).not.toMatch(/ed-bands|ed-band\b|aria-expanded|hidden=\{|showDetails|hideDetails/);
+    // The two pieces of evidence: product against nearest, and three closer.
+    expect(src).toMatch(/results\.shop\.against/);
+    expect(src).toMatch(/similarColors\.slice\(0, 3\)/);
   });
 });

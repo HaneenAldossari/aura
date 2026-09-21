@@ -13,6 +13,9 @@ import { describe, expect, it } from "vitest";
 import fs from "fs";
 import path from "path";
 import { marqueeSeasons } from "../client/src/pages/home/seasonData";
+import { demoSummary, DEMO_SAMPLE_ID } from "../client/src/pages/home/demoSummary";
+import { foundationStep } from "../client/src/lib/foundation";
+import { getSeasonMakeup } from "../server/utils/seasonMakeup";
 import { CANONICAL_SEASONS } from "../server/prompts/colorAnalysis";
 import { getCanonicalPalette, HERO_SIX, heroSix } from "../server/utils/seasonPalettes";
 import STYLE, { getSeasonStyle, seasonDescriptor } from "../server/utils/seasonStyle";
@@ -102,13 +105,15 @@ describe("season descriptors", () => {
 
 describe("what you get", () => {
   const src = read("WhatYouGet.tsx");
-  const manifest = JSON.parse(read("previews.json")) as {
-    season: string;
-    tabs: Record<string, { src: string; width: number; height: number }>;
-  };
+  const css = read("home-landing.css");
+  const demoFile = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "../server/demo-analyses/sample-1.json"), "utf8"),
+  );
+  const demo = demoFile.result ?? demoFile;
+  const summary = demoSummary();
 
   it("has exactly four rows, the app's four tabs, in tab order", () => {
-    const ids = [...src.matchAll(/\{ id: "([\w-]+)", title:/g)].map((m) => m[1]);
+    const ids = [...src.matchAll(/^    id: "([\w-]+)",$/gm)].map((m) => m[1]);
     expect(ids).toEqual(["overview", "beauty", "style", "before-you-buy"]);
     const l = en.home.landing;
     expect([l.row1Title, l.row2Title, l.row3Title, l.row4Title]).toEqual([
@@ -123,25 +128,64 @@ describe("what you get", () => {
     }
   });
 
-  it("previews each with a published capture of the real tab, for a canonical season", () => {
-    expect(CANONICAL_SEASONS).toContain(manifest.season);
-    for (const id of ["overview", "beauty", "style", "before-you-buy"]) {
-      const shot = manifest.tabs[id];
-      expect(shot, id).toBeDefined();
-      expect(fs.existsSync(path.join(__dirname, "../client/public", shot.src)), shot.src).toBe(true);
-      expect(shot.width).toBeGreaterThan(0);
-      expect(shot.height).toBeGreaterThan(0);
-    }
+  it("has one source: the season, confidence and depth are the demo file's own", () => {
+    // The file /api/demo-load serves for the first sample face. If Home ever
+    // says 94% where Results says 95%, this is the test that should have failed.
+    expect(DEMO_SAMPLE_ID).toBe("sample-1");
+    expect(summary.season).toBe(demo.season);
+    expect(summary.confidence).toBe(demo.confidence);
+    expect(CANONICAL_SEASONS).toContain(summary.season);
+    expect(read("demoSummary.ts")).toMatch(/from "\.\.\/\.\.\/\.\.\/\.\.\/server\/demo-analyses\/sample-1\.json"/);
+    // …and is not also written down anywhere in the component.
+    expect(src).not.toContain(String(demo.confidence));
+    expect(src).not.toContain(`"${demo.season}"`);
   });
 
-  it("draws nothing of its own: no canonical data, no swatches, just the capture", () => {
-    expect(src).not.toMatch(/seasonPalettes|seasonMakeup|seasonStyle|style=\{\{ background/);
-    expect(src).toMatch(/<img/);
+  it("looks the shades up the way the demo-load handler does: canonical, by that season", () => {
+    const makeup = getSeasonMakeup(demo.season)!;
+    const style = getSeasonStyle(demo.season)!;
+    expect(summary.six).toEqual(heroSix(demo.season));
+    expect(summary.descriptor).toBe(seasonDescriptor(demo.season));
+    expect(makeup.foundation).toContain(summary.beauty.base);
+    expect(summary.beauty.base).toBe(makeup.foundation[foundationStep(demo.colorDNA.depth, makeup.foundation.length)!]);
+    expect(summary.beauty.chips.map((c) => c.slot)).toEqual(["blush", "lip", "eye"]);
+    expect(summary.beauty.chips.map((c) => c.shade)).toEqual([makeup.blush[0], makeup.lip[0], makeup.eye[0]]);
+    expect(summary.style.metals).toBe(style.metals);
+    expect(summary.style.metals).toHaveLength(3);
+    expect(summary.style.hair).toBe(style.hair[0]);
+  });
+
+  it("says one line per card, and each is one sentence of canonical guidance", () => {
+    for (const line of [summary.descriptor, summary.beauty.line, summary.style.line]) {
+      expect(line.match(/[.!?](\s|$)/g)?.length, line).toBe(1);
+    }
+    expect(getSeasonMakeup(demo.season)!.guidance.base.startsWith(summary.beauty.line)).toBe(true);
+    expect(getSeasonStyle(demo.season)!.guidance.jewellery.startsWith(summary.style.line)).toBe(true);
+  });
+
+  it("uses one fixed card height and shows no capture of a screen", () => {
+    expect(css).toMatch(/\.lp-card \{\s*block-size: \d+px;/);
+    expect(css).toMatch(/\.lp-card \{[^}]*overflow: hidden;/);
+    expect(src).not.toMatch(/previews|\.webp"/);
+    expect(fs.existsSync(path.join(__dirname, "../client/public/previews"))).toBe(false);
+  });
+
+  it("takes the shop verdict from the same banding as the app, off a cached real check", () => {
+    expect(src).toMatch(/shopHeadline\(result\.matchScore\)/);
+    expect(src).toMatch(/displayed\(result\.matchScore\)/);
+    expect(src).toMatch(/server\/demo-checks\/black-dress\.json/);
+    const cached = path.join(__dirname, "../server/demo-checks/black-dress.json");
+    if (!fs.existsSync(cached)) return; // not generated yet: the card says so rather than inventing a score
+    const check = JSON.parse(fs.readFileSync(cached, "utf8"));
+    expect(check.against).toBe(DEMO_SAMPLE_ID);
+    expect(check.season).toBe(demo.season);
+    expect(typeof check.result.matchScore).toBe("number");
+    expect(fs.existsSync(path.join(__dirname, "../client/public", check.image))).toBe(true);
   });
 });
 
 describe("no second copy of a colour", () => {
-  it.each(["Hero.tsx", "SeasonMarquee.tsx", "Steps.tsx", "WhatYouGet.tsx", "ClosingCta.tsx", "ParticleField.tsx", "seasonData.ts"])(
+  it.each(["Hero.tsx", "SeasonMarquee.tsx", "Steps.tsx", "WhatYouGet.tsx", "ClosingCta.tsx", "ParticleField.tsx", "seasonData.ts", "demoSummary.ts"])(
     "%s contains no hex literal",
     (file) => {
       expect(read(file)).not.toMatch(/#[0-9a-fA-F]{6}\b/);

@@ -4,8 +4,6 @@
  *   npm run shots              # boots its own API + Vite, costs nothing
  *   npm run shots -- --live    # …but makes the one real shop check (~$0.003)
  *   npm run shots -- <url>     # against a stack that is already running
- *   npm run shots -- --live --publish
- *                              # …and refresh the four tab previews Home shows
  *
  * Writes dev/shots/<route>-<width>.png at 390 and 1440 and prints the list.
  * The folder is emptied first, so the list printed is the list on disk.
@@ -15,16 +13,11 @@
  *   - Results come from a demo face, which is a precomputed JSON read.
  *   - /api/analyze is blocked outright. The one flow that uploads a real photo
  *     is the Loading shot, and that is held two stages earlier anyway.
- *   - The shop check is answered by a stub, built from the demo result's own
- *     canonical palette so the colours in the shot are real ones. The score,
- *     verdict and product name are NOT model output — the list marks the file
- *     as stubbed so nobody reads it as evidence of what the model says.
- *
- * --publish writes client/public/previews/<tab>.webp and the manifest beside
- * Home's WhatYouGet.tsx: the top of each Results tab at phone width, cropped
- * from just under the tab bar. Home shows those captures as its "what you get"
- * previews, so they are the real screens by construction. It insists on --live:
- * a stubbed shop result must never be published as what the product says.
+ *   - The shop check is answered from server/demo-checks/black-dress.json when
+ *     it exists: a real result for this garment against this face, made once by
+ *     `npm run precompute:check`. Without it the answer is a placeholder whose
+ *     score and text are NOT model output, and the list marks the file STUBBED
+ *     so nobody reads it as evidence of what the model says.
  *
  * States are reached the way a person reaches them, not by poking React:
  * a photo with no face in it for the quality panel, a blocked model download
@@ -36,7 +29,6 @@ import { spawn, type ChildProcess } from "child_process";
 import fs from "fs";
 import path from "path";
 import { chromium, type Browser, type BrowserContext, type Page } from "playwright";
-import sharp from "sharp";
 import { en } from "../../client/src/i18n/en";
 
 const ROOT = path.resolve(__dirname, "../..");
@@ -50,43 +42,24 @@ const DEMO_FACE = 1;
 const FACE_PHOTO = path.join(ROOT, "client/public/demo-faces/sample-4.webp");
 /** A picture with no face in it: fails the quality gate on-device, so nothing uploads. */
 const NO_FACE_PHOTO = path.join(ROOT, "client/public/seasons/winter.webp");
-const PRODUCT_PHOTO = path.join(ROOT, "client/public/seasons/autumn.webp");
+/** The demo garment once it exists (scripts/precomputeDemoCheck.ts); a stand-in until then. */
+const DEMO_GARMENT = path.join(ROOT, "client/public/demo-products/black-dress.webp");
+const PRODUCT_PHOTO = fs.existsSync(DEMO_GARMENT) ? DEMO_GARMENT : path.join(ROOT, "client/public/seasons/autumn.webp");
+
+/**
+ * The precomputed check of that garment — but only if it was made against the
+ * face these shots use. A result for one person shown on another's page would
+ * be a fabrication with a real number in it.
+ */
+const CACHED_CHECK: { against: string; checkedOn: string; result: unknown } | null = (() => {
+  const file = path.join(ROOT, "server/demo-checks/black-dress.json");
+  if (!fs.existsSync(file) || PRODUCT_PHOTO !== DEMO_GARMENT) return null;
+  const check = JSON.parse(fs.readFileSync(file, "utf8"));
+  return check.against === `sample-${DEMO_FACE}` ? check : null;
+})();
 
 const args = process.argv.slice(2);
 const LIVE = args.includes("--live");
-const PUBLISH = args.includes("--publish");
-
-const PREVIEW_DIR = path.join(ROOT, "client/public/previews");
-const PREVIEW_MANIFEST = path.join(ROOT, "client/src/pages/home/previews.json");
-/** CSS px of each tab that Home's frame can show, plus a little for its fade. */
-const PREVIEW_HEIGHT = 660;
-const PREVIEW_WIDTH = 390;
-
-interface Preview {
-  src: string;
-  width: number;
-  height: number;
-}
-const previews: Record<string, Preview> = {};
-let previewSeason = "";
-
-/** The top of the current Results tab, from just under the tab bar, as WebP. */
-async function publishPreview(page: Page, id: string) {
-  const { top, pageHeight } = await page.evaluate(() => {
-    window.scrollTo(0, 0);
-    const tabs = document.querySelector(".ed-tabs");
-    return {
-      top: Math.ceil((tabs?.getBoundingClientRect().bottom ?? 0) + window.scrollY) + 8,
-      pageHeight: document.documentElement.scrollHeight,
-    };
-  });
-  const height = Math.min(PREVIEW_HEIGHT, pageHeight - top);
-  const png = await page.screenshot({ fullPage: true, clip: { x: 0, y: top, width: PREVIEW_WIDTH, height } });
-  fs.mkdirSync(PREVIEW_DIR, { recursive: true });
-  const info = await sharp(png).webp({ quality: 80 }).toFile(path.join(PREVIEW_DIR, `${id}.webp`));
-  previews[id] = { src: `/previews/${id}.webp`, width: info.width, height: info.height };
-  console.log(`      published previews/${id}.webp  ${info.width}×${info.height}  ${Math.round(info.size / 1024)} KB`);
-}
 const givenUrl = args.find((a) => /^https?:\/\//.test(a));
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -253,6 +226,25 @@ async function captureWidth(browser: Browser, base: string, width: number) {
     await snap(page, "home", width, { settleMs: 1800 }); // entrance: 0.8s delay + 0.8s
   });
 
+  // ── Home: each "What You Get" card ──
+  // The full-page shot can only show whichever row is selected, which is the
+  // first. The other three are states of the page too, so each gets a capture
+  // of the list and its card together.
+  const l = en.home.landing;
+  const cards: [string, string][] = [
+    ["season", l.row1Title], ["beauty", l.row2Title], ["style", l.row3Title], ["before-you-buy", l.row4Title],
+  ];
+  for (const [id, title] of cards) {
+    await attempt(`home-card-${id}`, width, async () => {
+      await page.getByRole("button", { name: title }).click();
+      await page.waitForFunction(() => {
+        const img = document.querySelector<HTMLImageElement>(".lp-card img");
+        return !img || (img.complete && img.naturalWidth > 0);
+      });
+      await snap(page, `home-card-${id}`, width, { element: ".lp-get", settleMs: 700 });
+    });
+  }
+
   // ── Upload, and the gallery on it ──
   await attempt("upload", width, async () => {
     await page.goto(`${base}/analyse`, { waitUntil: "networkidle" });
@@ -266,19 +258,13 @@ async function captureWidth(browser: Browser, base: string, width: number) {
 
   // ── Results, from one demo face ──
   let resultsUrl = "";
-  const publishing = PUBLISH && width === PREVIEW_WIDTH;
-  page.on("response", async (response) => {
-    if (!response.url().includes("/api/demo-load")) return;
-    const body = (await response.json().catch(() => null)) as { result?: { season?: string } } | null;
-    if (body?.result?.season) previewSeason = body.result.season;
-  });
+
   await attempt("results-overview", width, async () => {
     await page.goto(`${base}/analyse`, { waitUntil: "networkidle" });
     await page.getByRole("button", { name: en.analysis.samples.itemLabel.replace("{n}", String(DEMO_FACE)), exact: true }).click();
     await page.waitForURL(/\/results\/[^/?]+/, { timeout: 60_000 });
     resultsUrl = page.url().split("?")[0];
     await snap(page, "results-overview", width, { settleMs: 1200 });
-    if (publishing) await publishPreview(page, "overview");
   });
 
   for (const tab of ["beauty", "style", "shop"] as const) {
@@ -288,8 +274,6 @@ async function captureWidth(browser: Browser, base: string, width: number) {
       await page.goto(`${resultsUrl}?tab=${tab}`, { waitUntil: "networkidle" });
       await page.waitForSelector(`[role="tab"][aria-selected="true"]`);
       await snap(page, `results-${tab}`, width);
-      // Shop's preview is the result, published below — not the empty dropzone.
-      if (publishing && tab !== "shop") await publishPreview(page, tab);
     });
   }
 
@@ -299,6 +283,12 @@ async function captureWidth(browser: Browser, base: string, width: number) {
     const id = resultsUrl.split("/").pop()!;
     if (!LIVE) {
       await page.route("**/api/link-check-image", async (route) => {
+        // The real thing, if we have it: the same garment checked against the
+        // same demo face by the real handler, cached by precomputeDemoCheck.
+        if (CACHED_CHECK) {
+          await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(CACHED_CHECK.result) });
+          return;
+        }
         const sent = route.request().postData() ?? "";
         const analysis = JSON.parse(sent.match(/name="analysis"\r?\n\r?\n([\s\S]*?)\r?\n--/)?.[1] ?? "{}");
         const best: { name: string; hex: string }[] = analysis.palette?.best ?? [];
@@ -323,8 +313,9 @@ async function captureWidth(browser: Browser, base: string, width: number) {
     await page.waitForURL(/tab=shop/);
     await page.setInputFiles('input[type="file"]', PRODUCT_PHOTO);
     await page.waitForSelector(".ed-score", { timeout: LIVE ? 90_000 : 15_000 });
-    await snap(page, "before-you-buy", width, { notes: [LIVE ? "live model call" : "STUBBED result"] });
-    if (publishing) await publishPreview(page, "before-you-buy");
+    await snap(page, "before-you-buy", width, {
+      notes: [LIVE ? "live model call" : CACHED_CHECK ? `cached real check (${CACHED_CHECK.checkedOn})` : "STUBBED result"],
+    });
     await page.unroute("**/api/link-check-image");
   });
 
@@ -402,10 +393,6 @@ async function captureWidth(browser: Browser, base: string, width: number) {
 }
 
 async function main() {
-  if (PUBLISH && !LIVE) {
-    console.error("\n  --publish needs --live: Home must never show a stubbed shop result as the product's.\n");
-    process.exit(2);
-  }
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
 
@@ -431,22 +418,6 @@ async function main() {
   } finally {
     await browser.close();
     stopAll();
-  }
-
-  if (PUBLISH) {
-    const wanted = ["overview", "beauty", "style", "before-you-buy"];
-    const missing = wanted.filter((id) => !previews[id]);
-    if (missing.length || !previewSeason) {
-      failures.push(`publish: missing ${missing.join(", ") || "season"} — manifest left as it was`);
-    } else {
-      const manifest = {
-        season: previewSeason,
-        capturedOn: new Date().toISOString().slice(0, 10),
-        tabs: Object.fromEntries(wanted.map((id) => [id, previews[id]])),
-      };
-      fs.writeFileSync(PREVIEW_MANIFEST, JSON.stringify(manifest, null, 2) + "\n");
-      console.log(`\n  published ${wanted.length} previews for ${previewSeason} → client/public/previews/`);
-    }
   }
 
   shots.sort((a, b) => a.file.localeCompare(b.file));

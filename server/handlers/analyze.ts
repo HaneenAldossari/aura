@@ -2,8 +2,9 @@
  * POST /api/analyze
  *
  * Takes the canonical image the browser produced plus the features it measured,
- * ranks the seasons from those features, asks the model for a verdict without
- * showing it that ranking, and compares the two afterwards.
+ * ranks the seasons from those features, asks the model to choose among the
+ * top three (named alphabetically, unscored), and compares the two afterwards.
+ * A model answer outside those three is overruled by the rules' primary.
  *
  * The response is self-sufficient: everything the UI, chat and the shop check
  * need is inside `result`. There is no session store — the client keeps the
@@ -18,7 +19,9 @@ import { isDemo } from "../services/openrouter";
 import { prepareImage, validateImage } from "../utils/prepareImage";
 import { analysisMode, maxFileSizeBytes } from "../utils/config";
 import {
+  candidateSeasons,
   computeAgreement,
+  decideSeason,
   describeFeatures,
   rankSeasons,
   validateFeatures,
@@ -100,13 +103,16 @@ export async function handleAnalyze(request: Request): Promise<Response> {
       );
     }
 
-    // Rank from the measurements. The model never sees this — it is compared
-    // against the model's verdict afterwards, and a model shown the answer would
-    // anchor on it.
+    // Rank from the measurements. The model is told the top three — which
+    // three, alphabetically, never which one leads or by how much — and must
+    // choose among them. The measurement bounds the answer; the image settles it.
     const rules = hybrid && measured?.ok ? rankSeasons(measured.features) : null;
     const analyzeOptions =
       rules && measured?.ok
-        ? { measurements: describeFeatures(measured.features, rules.axes) }
+        ? {
+            measurements: describeFeatures(measured.features, rules.axes),
+            candidates: candidateSeasons(rules),
+          }
         : {};
 
     let raw = await analyzePhotos(
@@ -135,10 +141,41 @@ export async function handleAnalyze(request: Request): Promise<Response> {
       return json({ result: raw });
     }
 
+    // The model's season stands only if it is one of the candidates. Otherwise
+    // the rules' primary is the answer, confidence is capped, and the mismatch
+    // is logged with the numbers that produced it — never the image.
+    let overruled: string | null = null;
+    if (rules && measured?.ok) {
+      const decision = decideSeason(rules, raw.primarySeason ?? raw.season);
+      if (decision.source === "rules") {
+        overruled = decision.rejected ?? "(none)";
+        console.warn(
+          "[classify] model answered outside the candidates — using the rules' primary",
+          JSON.stringify({
+            model: overruled,
+            candidates: candidateSeasons(rules),
+            used: decision.season,
+            margin: rules.margin,
+            skinBand: rules.skinBand,
+            axes: {
+              hue: rules.axes.hue.value,
+              value: rules.axes.value.value,
+              chroma: rules.axes.chroma.value,
+            },
+            skin: measured.features.skin,
+            hair: measured.features.hair,
+            eyes: measured.features.eyes,
+            hairStatus: measured.features.hairStatus,
+          })
+        );
+        raw = { ...raw, primarySeason: decision.season, season: decision.season };
+      }
+    }
+
     let result = normalizeResult(raw);
 
     if (rules && measured?.ok) {
-      const agreement = computeAgreement(rules, result.season);
+      const agreement = computeAgreement(rules, overruled ?? result.season);
       const confidence = result.confidence as number;
       result = {
         ...result,
@@ -160,6 +197,8 @@ export async function handleAnalyze(request: Request): Promise<Response> {
           ambiguous: rules.ambiguous,
         },
         agreement: { level: agreement.level, agrees: agreement.agrees },
+        // Who chose the season on screen. "rules" means the model was overruled.
+        seasonSource: overruled ? "rules" : "model",
         // A suggestion, never a gate, until Phase 4 calibrates the thresholds.
         needsSecondPhoto: agreement.needsSecondPhoto,
         alternatives: agreement.alternatives,

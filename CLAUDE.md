@@ -53,18 +53,43 @@ POST /api/analyze  (canonical sRGB JPEG + measured features)
    ▼
 server: validate features (400 on implausible) → score() ranks the 12 seasons
    ▼
-        OpenRouter vision call: image + measured values, NEVER the ranking
+        OpenRouter vision call: image + measured values + the rules' TOP THREE
+        (alphabetical, unscored; primarySeason's enum is narrowed to them)
+   ▼
+        decideSeason(): model's answer if it is one of the three, else rules' primary
    ▼
         agreement check (model vs rules) → confidence cap, alternatives
    ▼
 normalizeResult() → canonical palette injected → session → client
 ```
 
-**The model never sees the rule-based ranking.** Shown the rules' answer it would
-anchor on it, and the agreement check computed afterwards would be measuring its own
-suggestion. It gets the image and the measured colour values only; agreement is
-computed once it has committed. The model's verdict is still the final season — the
-ranking sets confidence and offers alternatives, nothing more.
+**The model chooses among the rules' top three, and never sees which one leads.**
+(`candidateSeasons()` / `decideSeason()` in `server/services/hybrid.ts`.) It is given the
+image, the measured values and three season names — alphabetical, no scores — and
+`primarySeason`'s schema enum is narrowed to those three for that call. An answer outside
+them (only possible from a fallback model that ignores strict schemas) is overruled by the
+rules' primary, confidence is capped, and the mismatch is logged with the measured values,
+never the image. `seasonSource` on the result says who chose.
+
+This replaced "the model never sees any part of the ranking" on 2026-09-21. The old rule
+bought a fully independent agreement check and paid for it with range: one face came back
+Deep Autumn with hair counted and Light Spring with hair excluded — opposite corners —
+because nothing bounded the model to the neighbourhood the measurement had found. The
+measurement now decides the neighbourhood and the image decides the address. What is kept:
+the model is not told the rules' *first* choice, so "agreement: primary" still means it
+landed there by looking. What is lost: it can no longer disagree with the rules outright,
+so agreement is a weaker signal than it was, and an eval comparing model-vs-rules accuracy
+must run the model unconstrained (`analyzePhotos` without `candidates`).
+
+**A result is immutable once displayed.** One upload, one `/api/analyze` call, one id, one
+stored result. The Results page never runs an analysis and never writes to the store;
+`saveResult()` is write-once and refuses a second save to an id. A different hair answer is
+a *new* analysis, started from Upload (`/analyse?redo=<id>` reloads the same photo and
+waits for Analyse), landing on its own id. `tests/resultImmutability.test.ts` and section
+4b of `npm run e2e` (exactly one analyze call; season text never changes through scroll,
+tabs, blur/focus and an idle wait) hold this. If a preliminary, rules-only result is ever
+shown before the server answers, it must be labelled "preliminary" on screen and must not
+be replaced silently — today nothing is rendered before the answer.
 
 `needsSecondPhoto` is a **suggestion, never a gate**, until Phase 4 calibrates the
 thresholds behind it.
@@ -81,9 +106,17 @@ on the device that produced it.
 wraps each as a Vercel Function; `server/index.ts` is a ~60-line Node adapter for local
 dev. Express, multer, helmet, cors and express-rate-limit are gone.
 
-**Known gap: the LLM routes are unthrottled.** `express-rate-limit` counted per process,
-which is meaningless on serverless, and nothing replaced it. `/api/analyze` costs about
-$0.01 per call. Vercel Firewall rate limiting or a durable counter is the fix.
+**The paid routes have per-day limits**, counted in Upstash Redis because an in-process
+counter counts nothing on serverless: **15 chat messages, 5 analyses, 10 shop checks** per
+visitor per UTC day (`server/utils/limits.ts` — constants shared with the browser's
+"N of 15 messages left today" counter, so the two cannot drift). `withDailyLimit()` wraps
+the routes where they are mounted (`api/*.ts`, `server/index.ts`), never inside the
+handlers, so the eval, `diagnose` and the precompute scripts are never counted. The key is
+`sha256(RATE_LIMIT_SALT + ip)` — **never the raw IP**, never logged; without a salt the
+limiter refuses to run. Over the limit is a 429 with a friendly `message`, `remaining: 0`
+and `resetsAt`; every response carries `x-ratelimit-remaining`. If Upstash is unreachable
+requests are **allowed** and the error logged: this caps cost, it does not gate access.
+Unconfigured (local dev) means unlimited, and `/api/health` says which.
 
 `ANALYSIS_MODE=llm_only|hybrid` selects whether the measured features and rule-based ranking
 participate. Chat and shop checks read from the stored session.
@@ -450,6 +483,82 @@ primary agreement and a clean gate — but it is one more reason these faces are
 smoke tests, and a data point for Phase 4: a 50% result is not a weak answer,
 it is two answers.
 
+### 2026-09-21 — "the season changed while I was scrolling" was a one-tap re-analysis
+
+Reported on the live site: Deep Autumn became Light Spring within three minutes, no reload,
+no re-upload. Reproduced with `scripts/dev/_repro-immutable.ts` against production:
+
+| step | season | `/api/analyze` calls |
+| --- | --- | --- |
+| first render | Deep Autumn | 1 |
+| scroll, all four tabs, blur/focus, 180 s idle | Deep Autumn | 1 |
+| **one tap on the hair note's "Change hair answer"** | **Light Spring** | **2**, URL replaced |
+
+The link re-measured the cached photo under the other hair answer, called the API again and
+`navigate(…, { replace: true })`d to the new result — no confirmation, no loading screen, on
+a page being scrolled with a thumb. Cleared by the same audit: no timer, focus handler,
+refetch or retry touches a result; nothing renders before the server answers; the sample
+loader, Home and the redirects all write fresh UUID keys.
+
+`npm run diagnose` on that face shows why the two answers differ, and it is not the model
+(each column was 5/5 stable):
+
+| | hair counted | hair excluded |
+| --- | --- | --- |
+| hair | L\* 4.2, C\* 1.1 | not measured |
+| value axis | **0.04 medium** | **0.73 light** |
+| rules | True Autumn 85.7 (margin 16.5) | Light Spring 90.2 (margin 6.3) |
+
+Near-black hair at L\* 4 drags the value axis from light to medium, which moves the whole
+ranking from the springs to the autumns. That is the hair-weight question already open for
+Phase 4, now with a user-visible consequence attached.
+
+## Operations
+
+**Environment variables** (Vercel → Project → Settings → Environment Variables; mirrored in
+`.env.example`):
+
+| variable | what for |
+| --- | --- |
+| `OPENROUTER_API_KEY` | every model call |
+| `MODEL_CLASSIFY`, `MODEL_CHAT`, `MODEL_SHOP` | the OpenRouter slug per task |
+| `OPENROUTER_FALLBACK_MODEL` | optional; tried when the primary call *fails* |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | the rate-limit store (Upstash console → your database → REST API) |
+| `RATE_LIMIT_SALT` | salts the IP hash; `openssl rand -hex 32`. Changing it resets everyone's count |
+| `RATE_LIMIT_BYPASS_TOKEN` | optional; requests with it in `x-aura-bypass` are not counted. Also a GitHub Actions secret, for the weekly e2e |
+| `OPENROUTER_BALANCE_ALERT_USD` | optional; default **5** |
+
+**OpenRouter balance alert threshold: $5.** Below it `/api/health` reports
+`"status":"degraded"` and an uptime monitor watching for `"status":"ok"` alerts. $5 is about
+500 analyses — weeks of warning at current use, a day at a spike. Top up at
+openrouter.ai/credits; turn on OpenRouter's own low-balance email there as a second line.
+
+**Model retirement procedure.** OpenRouter withdraws slugs without notice. The signs:
+`/api/health` returns **503** with `problems: ["model no longer listed on OpenRouter: …"]`,
+the weekly e2e fails at its health step, analyses fail with HTTP 404 from the provider.
+1. Pick a replacement that is vision-capable and supports strict `json_schema`
+   (`EVAL_MODELS` in `server/utils/config.ts` lists vetted ones; `npx tsx scripts/probeModels.ts` checks a slug).
+2. In Vercel, set the affected `MODEL_*` variable(s) to the new slug. No code change — rule 2.
+3. **Redeploy** (env changes do not reach running deployments): Deployments → ⋯ → Redeploy.
+4. Check `/api/health` is `ok`, then `npm run e2e -- https://aura-azure-six.vercel.app`.
+5. If the *default* in `DEFAULT_MODELS` is the dead one, update it too, and re-run the demo
+   precompute — a different model writes different prose.
+Setting `OPENROUTER_FALLBACK_MODEL` in advance turns step 1-3 from an outage into a warning.
+
+**Monitoring.**
+- `.github/workflows/e2e-weekly.yml` runs `npm run e2e` against production every Monday
+  06:00 UTC (about $0.04) and on demand. Failure emails come from GitHub's own
+  notifications, plus an explicit SMTP step if the `MAIL_*` secrets are set.
+- **Uptime monitor (free, five minutes to set up):** UptimeRobot → New monitor → type
+  **Keyword** → URL `https://aura-azure-six.vercel.app/api/health` → keyword `"status":"ok"`
+  → alert when keyword **not** exists → interval 5 minutes → your email as the alert contact.
+  A keyword monitor, not a plain HTTP one: a low balance is HTTP 200 with
+  `"status":"degraded"`, and that is exactly the case worth an email. Health caches its
+  OpenRouter lookups for ten minutes, so polling costs nothing. (Better Stack and
+  Cronitor have the same keyword check on their free tiers.)
+- `npm run diagnose -- photo.jpg [--both-hair] [--runs=5]` prints every number between the
+  pixels and the verdict, side by side for several photos.
+
 ## Interface strings
 
 Every user-facing string lives in `client/src/i18n/en.ts`, in **British English**
@@ -483,13 +592,22 @@ styles in `home-landing.css`.
   `getCanonicalPalette()` and that no Home component contains a hex literal;
   `npm run e2e:home` asserts the same of the painted DOM. `HERO_SIX` is a draft
   awaiting review in `design/makeup-review.md`.
-- **"What you get" is four rows because the app has four tabs**, and the panel
-  beside them is that tab: a phone-width capture of the real Results screen for
-  demo face 1, not a drawing of it. `npm run shots -- --live --publish` writes
-  `client/public/previews/*.webp` and `pages/home/previews.json`. Re-publish
-  after any visible change to Results, or Home shows yesterday's app.
-  `--publish` refuses to run without `--live`, so a stubbed shop result can
-  never be published as the product's.
+- **"What you get" is four rows because the app has four tabs**, and beside
+  them one fixed-height card summarising the selected tab. **One source:**
+  `pages/home/demoSummary.ts` imports `server/demo-analyses/sample-1.json` — the
+  file `/api/demo-load` serves — for season, confidence and depth, and looks the
+  shades up from the canonical modules by that season, exactly as the handler
+  does. Home cannot say 94% where Results says something else. (It briefly
+  showed screen captures instead; a capture is cut-off content and a second copy
+  of every number in it.) Cards are composed to fit 316px, never cropped; the
+  Home e2e checks equal heights and no overflow.
+- The Before You Buy card shows a **real, cached** shop check:
+  `npm run precompute:check` runs a product photo from `design/demo-products/`
+  through the real handler against the demo analysis (~$0.003), and writes
+  `server/demo-checks/black-dress.json` and
+  `client/public/demo-products/black-dress.webp`. `--crop=l,t,w,h` (fractions)
+  removes a shop label first. Until it has been run the card says so rather
+  than inventing a score.
 - **The motion budget is one ambient effect** — the particle field, fixed to the
   viewport behind every section — plus the marquee and a mount entrance. No
   starfield, shimmer or pulsing glow on Home. Sections are overlays, not fills:
@@ -552,9 +670,23 @@ colour"). Both used to borrow labels from other sources — the measurement
 layer's axis labels, the model's prose — which are cut on different thresholds,
 so a reader could be shown "Contrast 78 · medium". `tests/displayBands.test.ts`.
 
-Before You Buy answers in words first: photo, headline verdict, the score small
-beneath it, one reason, one tip. Bands, the product-against-yours bars, the
-nearest palette colour and the alternatives are behind "Show details", closed.
+Before You Buy reads top to bottom: photo, the score large in the display serif
+("25 / 100"), the verdict word beneath in the accent, one reason, one tip — then
+the evidence, always visible and small: the product's colour against the nearest
+of yours, and three of yours that are closer. No score-band legend and no
+show/hide toggle. The model's prose goes through `toBritish()`
+(`server/utils/britishSpelling.ts`): the prompt asks for British spelling, the
+pass guarantees it for the closed list of words this product's copy uses.
+
+**Tab contents, in order.** Beauty: Base, Blush, Lip, Eye, Liner, Nails, then
+Looks last — the categories are the vocabulary, a look is a sentence made from
+it. Nails are **four per season**, 56px renders, labelled brand-first ("OPI · Big
+Apple Red": a polish is asked for by its maker); `brand` lives on the shade in
+`seasonMakeup.ts`. Style is one screen at 1440x900: metals as three rows with
+20px discs, four 40px gemstones in one row, four 48px hair swatches, pairings
+beneath. Overview has no second-photo banner; `needsSecondPhoto` still arrives
+in the data. Upload reads photo, hair question, tips, sample gallery — and the
+gallery shows faces and numbers only, never a season.
 
 ## Testing
 

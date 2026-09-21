@@ -3,5 +3,6 @@
  * Express server and this deployment run the same code.
  */
 import { handleChat } from "../server/handlers/chat";
+import { withDailyLimit } from "../server/utils/rateLimit";
 
-export default { fetch: handleChat };
+export default { fetch: withDailyLimit("chat", handleChat) };

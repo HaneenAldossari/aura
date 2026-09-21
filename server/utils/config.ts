@@ -94,6 +94,18 @@ export function fallbackModel(): string | undefined {
   return process.env.OPENROUTER_FALLBACK_MODEL?.trim() || undefined;
 }
 
+/**
+ * The OpenRouter balance, in USD, below which /api/health reports "degraded".
+ *
+ * $5 is about 500 analyses: at a handful of users a day that is weeks of
+ * warning, and at a sudden spike it is still a day. Set it from how fast the
+ * balance actually falls, not from how small a number feels alarming.
+ */
+export function balanceAlertUsd(): number {
+  const raw = Number(process.env.OPENROUTER_BALANCE_ALERT_USD);
+  return Number.isFinite(raw) && raw >= 0 ? raw : 5;
+}
+
 // ---------------------------------------------------------------------------
 // Analysis pipeline
 // ---------------------------------------------------------------------------

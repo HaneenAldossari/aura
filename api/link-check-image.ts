@@ -3,5 +3,6 @@
  * Express server and this deployment run the same code.
  */
 import { handleLinkCheckImage } from "../server/handlers/tools";
+import { withDailyLimit } from "../server/utils/rateLimit";
 
-export default { fetch: handleLinkCheckImage };
+export default { fetch: withDailyLimit("shop", handleLinkCheckImage) };

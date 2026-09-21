@@ -346,3 +346,88 @@ export function imageBlock(
     image_url: { url: `data:${mimeType};base64,${base64}` },
   };
 }
+
+// ---------------------------------------------------------------------------
+// Account checks, for /api/health
+// ---------------------------------------------------------------------------
+
+const MODELS_URL = "https://openrouter.ai/api/v1/models";
+const CREDITS_URL = "https://openrouter.ai/api/v1/credits";
+
+/** Health is polled by an uptime monitor; it must not become two outbound calls a minute. */
+const ACCOUNT_CACHE_MS = 10 * 60 * 1000;
+const ACCOUNT_TIMEOUT_MS = 4000;
+
+export interface ModelCheck {
+  /** true: listed. false: not listed — retired or mistyped. null: could not ask. */
+  [slug: string]: boolean | null;
+}
+
+export interface AccountStatus {
+  models: ModelCheck;
+  /** USD remaining (credits bought minus credits used), or null if OpenRouter would not say. */
+  balanceUsd: number | null;
+  checkedAt: string;
+}
+
+let cachedAccount: { at: number; slugs: string; status: AccountStatus } | null = null;
+
+async function getJson(url: string, headers: Record<string, string> = {}): Promise<unknown> {
+  const response = await fetch(url, { headers, signal: AbortSignal.timeout(ACCOUNT_TIMEOUT_MS) });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+
+/**
+ * Do the configured model slugs still exist, and how much credit is left?
+ *
+ * OpenRouter withdraws slugs without notice — both free Nemotron models this
+ * app once used now 404 — and the first anyone hears of it is every analysis
+ * failing. The public model list answers the first question without spending
+ * anything; /credits answers the second for the key's own account.
+ *
+ * Neither failure is fatal here: a check that cannot be made reports null, and
+ * the health handler treats "unknown" differently from "missing". Cached, so a
+ * monitor polling every minute costs OpenRouter one request per ten.
+ */
+export async function accountStatus(slugs: string[]): Promise<AccountStatus> {
+  const key = [...slugs].sort().join(",");
+  if (cachedAccount && cachedAccount.slugs === key && Date.now() - cachedAccount.at < ACCOUNT_CACHE_MS) {
+    return cachedAccount.status;
+  }
+
+  const models: ModelCheck = Object.fromEntries(slugs.map((s) => [s, null]));
+  try {
+    const listed = (await getJson(MODELS_URL)) as { data?: { id?: string }[] };
+    const ids = new Set((listed.data ?? []).map((m) => m.id));
+    // An empty list is a failed answer, not twelve hundred retirements.
+    if (ids.size > 0) for (const slug of slugs) models[slug] = ids.has(slug);
+  } catch (err) {
+    console.warn("[health] could not list OpenRouter models:", err instanceof Error ? err.message : err);
+  }
+
+  let balanceUsd: number | null = null;
+  if (!isDemo()) {
+    try {
+      const credits = (await getJson(CREDITS_URL, { authorization: `Bearer ${getApiKey()}` })) as {
+        data?: { total_credits?: number; total_usage?: number };
+      };
+      const bought = credits.data?.total_credits;
+      const used = credits.data?.total_usage;
+      if (typeof bought === "number" && typeof used === "number") balanceUsd = Math.round((bought - used) * 100) / 100;
+    } catch (err) {
+      // Provisioning-scoped keys cannot read credits; that is a "don't know", not a fault.
+      console.warn("[health] could not read the OpenRouter balance:", err instanceof Error ? err.message : err);
+    }
+  }
+
+  const status: AccountStatus = { models, balanceUsd, checkedAt: new Date().toISOString() };
+  // Only a complete answer is worth keeping for ten minutes.
+  if (Object.values(models).every((v) => v !== null)) cachedAccount = { at: Date.now(), slugs: key, status };
+  return status;
+}
+
+/** For tests. */
+export function resetAccountCache(): void {
+  cachedAccount = null;
+}

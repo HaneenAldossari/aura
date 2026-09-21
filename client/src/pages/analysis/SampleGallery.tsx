@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { useT } from "../../i18n";
-import { formatSeasonName } from "../../utils/formatSeason";
 import type { DemoSample } from "../../lib/api";
 
 /**
@@ -76,12 +75,11 @@ export default function SampleGallery({
                 loading="lazy"
                 decoding="async"
               />
+              {/* A number, never a season. The season belongs on the results
+                  page, after an analysis the reader asked for — and a labelled
+                  gallery turns "try one" into "pick the season you hope for". */}
               <span className="an-sample__season">
-                {sample.agrees && sample.season ? (
-                  formatSeasonName(sample.season)
-                ) : (
-                  <span className="ltr-run">{String(i + 1).padStart(2, "0")}</span>
-                )}
+                <span className="ltr-run">{String(i + 1).padStart(2, "0")}</span>
               </span>
             </button>
           </li>

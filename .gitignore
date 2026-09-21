@@ -44,3 +44,8 @@ scripts/dev/_*.ts
 # Candidate demo faces awaiting vetting — images only, README is committed.
 eval/candidates/*
 !eval/candidates/README.md
+
+# Source product photos for the demo shop check. Third-party images, often with a
+# shop's label on them; only the cropped copy in client/public/demo-products/ is
+# published. Pass --image=<path> to scripts/precomputeDemoCheck.ts on a fresh clone.
+design/demo-products/
