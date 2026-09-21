@@ -20,6 +20,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "e2e": "tsx scripts/dev/e2e.ts",
+    "e2e:home": "tsx scripts/dev/_home.ts",
     "check:wasm": "tsx scripts/dev/checkWasm.ts",
     "eval": "tsx eval/run.ts",
     "eval:label": "tsx eval/serveLabeller.ts",

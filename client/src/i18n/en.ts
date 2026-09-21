@@ -510,38 +510,71 @@ export const en = {
     titleLine2Lead: "That Were",
     titleLine2Accent: "Made for You",
     lede:
-      "Upload one photo. Your Aura reads your undertone, depth, and contrast " +
+      "Upload one photo. Aura reads your undertone, depth, and contrast " +
       "to reveal your seasonal colour palette — your colours, your rules.",
     ctaPrimary: "Discover Your Palette",
     ctaSecondary: "How It Works",
 
-    /* ── Editorial Home ───────────────────────────────────────────────── */
-    kicker: "Personal colour analysis",
-    eyebrow2: "Measured, not guessed",
-    heroLine1: "Discover the",
-    heroLine2: "Colours",
-    heroLine3: "That Were",
-    heroAccent: "Made for You",
-    lede2:
-      "Upload one photo. Skin, hair and eyes are measured in your browser and " +
-      "matched against the twelve seasons. You get your palette, your makeup " +
-      "shades, and a score for anything you're about to buy.",
     ctaPrimary2: "Discover your palette",
     ctaSample: "Try a sample face",
     privacy: "Your photo is checked on your device; nothing uploads until it passes.",
 
-    howItWorks: {
-      title: "How it works",
-      step1Title: "Add one photo",
-      step1Body:
-        "Daylight, bare face, no filters. The quality check runs in your browser " +
-        "— nothing uploads until the photo passes.",
-      step2Title: "Your colouring is measured",
+    /* ── Landing ──────────────────────────────────────────────────────────
+       Headings are split lead/accent because the accent is set in italic gold;
+       a translator moves words between the two halves, not markup. */
+    landing: {
+      eyebrow: "Your personal colour analysis",
+      ctaHow: "See how it works",
+      trust1: "Measured in your browser",
+      trust2: "12 seasons",
+      trust3: "Nothing uploads until your photo passes.",
+
+      marqueeLead: "Every Season is",
+      marqueeAccent: "Beautiful",
+
+      stepsLead: "Three Steps to",
+      stepsAccent: "Your Colours",
+      step1Title: "Upload Your Photo",
+      step1Body: "A clear, natural-light photo of your face — no filters needed.",
+      step2Title: "Your Colouring Is Measured",
       step2Body:
-        "Skin, hair and eyes are read in CIE Lab and matched against the twelve seasons.",
-      step3Title: "Dress from your palette",
-      step3Body:
-        "Twelve colours, makeup and metals, and a score for anything you are about to buy.",
+        "Skin, hair and eyes are measured in CIE Lab and matched against the twelve seasons.",
+      step3Title: "Your Palette Revealed",
+      step3Body: "Get your season, best colours, makeup shades, metals, and gemstones.",
+
+      getLead: "What",
+      getAccent: "You Get",
+      f1Title: "Your Season",
+      f1Body: "Deep Autumn, True Winter, Soft Summer and nine more",
+      f1Panel: "Season result",
+      f2Title: "Colour Palette",
+      f2Body: "Best colours, neutrals, and shades to avoid",
+      f2Panel: "Your palette",
+      f3Title: "Beauty Guide",
+      f3Body: "Foundation, blush, bronzer, lips and eyeshadow matched to you",
+      f3Panel: "Makeup shades",
+      f4Title: "Nail Guide",
+      f4Body: "Polish shades chosen for your season",
+      f4Panel: "Nail colours",
+      f5Title: "Jewellery & Metals",
+      f5Body: "Yellow gold, rose gold or silver — which suits you",
+      f5Panel: "Metals",
+      f6Title: "Gemstones",
+      f6Body: "Stones matched to your undertone",
+      f6Panel: "Gemstones",
+      f7Title: "Before You Buy",
+      f7Body: "Photograph anything you're about to buy and get a score against your palette.",
+      f7Panel: "Before you buy",
+      rowBest: "Best colours",
+      rowNeutrals: "Neutrals",
+      rowAvoid: "Avoid",
+      rowScoredAgainst: "Scored against",
+      rowMarkedDown: "Marked down for",
+
+      closeLead: "Ready to Meet",
+      closeAccent: "Your Colours",
+      closeMark: "?",
+      closeLede: "Upload one photo and discover the palette that was always meant for you.",
     },
 
     field: {

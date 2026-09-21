@@ -33,7 +33,7 @@ export function renderPaletteCanvas(
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.fillStyle = "#F3EDE4";
-  ctx.font = '400 84px "Bodoni Moda", Georgia, serif';
+  ctx.font = '400 84px "Cormorant Garamond", Georgia, serif';
   ctx.textBaseline = "alphabetic";
   ctx.fillText(seasonName, PAD, PAD + 84);
 

@@ -401,6 +401,33 @@ review. A model-only label is never shown. With every demo face flagged for
 colour cast, all nine currently read as provisional — which is the honest
 state of them.
 
+### 2026-09-21 — a blocking font stylesheet cost Home 23 Lighthouse points
+
+Home, Lighthouse mobile (simulated throttling), production build:
+
+| | performance | FCP | LCP | Speed Index |
+| --- | --- | --- | --- | --- |
+| Google Fonts `<link rel="stylesheet">` in `<head>` | **72** | 3.7 s | 3.7 s | 13.6 s |
+| Latin faces self-hosted, two preloaded | **93** | 2.0 s | 2.9 s | 2.0 s |
+| …and Home no longer a lazy route chunk | **95-96** | 1.9 s | 2.6 s | 1.9 s |
+
+A render-blocking stylesheet also blocks every script after it, so React could
+not start until fonts.googleapis.com had answered — on the run above that took
+5.4 s, during which the page was blank. The stylesheet was there before the
+Home port; the port is what measured it.
+
+Latin faces now live in `client/src/assets/fonts/` (OFL, unmodified), declared
+in `src/styles/fonts.css`, hashed into `/assets/` by Vite — which the service
+worker already caches as immutable, so an installed Aura keeps its typography
+offline. The Arabic faces stay on Google but load as `media="print"` and flip
+on load; nothing can select `[dir="rtl"]` yet. `tests/fonts.test.ts` fails if a
+blocking font `<link>` comes back.
+
+Accessibility, best practices and SEO are 100 after the same pass: the
+decorative step numerals moved into CSS `content`, the footer line lost an
+`opacity: 0.7` that took `--ink-muted` under its 4.5:1 floor, and
+`index.html` gained a description, a favicon link and a `robots.txt`.
+
 ## Interface strings
 
 Every user-facing string lives in `client/src/i18n/en.ts`, in **British English**
@@ -418,6 +445,28 @@ The classification and chat prompts are told to write British English too, since
 their output is rendered verbatim beside the catalogue's.
 
 ## Screens
+
+**Home** is a port of the Lovable landing page (`aura-color-reveal`,
+`src/pages/Index.tsx`): its structure, pacing and motion, with our buttons,
+mono eyebrows and colour tokens. Order: hero → season marquee → three steps →
+what you get → closing CTA → footer. Sections live in `client/src/pages/home/`,
+styles in `home-landing.css`.
+
+- **No colour is written on Home.** The marquee's twelve cards and the "what you
+  get" panel read `seasonPalettes`, `seasonMakeup` and `seasonStyle` through
+  `pages/home/seasonData.ts`; a card's one-line descriptor is cut from the
+  season's own `story` by `seasonDescriptor()`. `tests/homeLanding.test.ts`
+  asserts every hex against `getCanonicalPalette()` and that no Home component
+  contains a hex literal; `npm run e2e:home` asserts the same of the painted DOM.
+- **The motion budget is one ambient effect** — the hero particle canvas — plus
+  the marquee and a mount entrance. No starfield, shimmer or pulsing glow on
+  Home. Reduced motion mounts no canvas, renders no marquee clone (the belt
+  becomes a static row that scrolls inside its own window) and runs no entrance.
+  The marquee pauses on hover (only where hover is real), touch and focus.
+- **One display face everywhere:** `--font-display` is Cormorant Garamond.
+- `npm run e2e:home` builds the client, serves it, writes `dev/home-390.png`
+  and `dev/home-1440.png`, and checks horizontal scroll, section order, CTA
+  wiring and reduced motion. It makes no API call and costs nothing.
 
 Results is four tabs — Overview, Beauty, Style, Shop — rendered as text links
 on a rule, with the tab in the URL (`?tab=beauty`) so it survives a reload and

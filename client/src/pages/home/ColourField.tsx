@@ -4,6 +4,7 @@ import { fieldPalettes } from "../../../../server/utils/seasonPalettes";
 import { getSeasonStyle } from "../../../../server/utils/seasonStyle";
 import { useT } from "../../i18n";
 import { ease } from "../../lib/easing";
+import "./colour-field.css";
 
 /**
  * Twelve palettes, twelve bands, the whole system in one view.

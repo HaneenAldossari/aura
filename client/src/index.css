@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./styles/fonts.css";
 @import "./styles/editorial.css";
 
 /* ============================================================================
@@ -39,7 +40,10 @@
   --border-subtle:    var(--rule);
 
   /* ── Type ──────────────────────────────────────────────────────────────── */
-  --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
+  /* One display face for every screen. Home came from a design set in Cormorant
+     Garamond, and a landing page in one serif handing over to an app in another
+     reads as two products. */
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --font-body:    Archivo, "IBM Plex Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-mono:    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
@@ -74,9 +78,9 @@
   --content-max: 1220px;
 
   /* ── Motion ────────────────────────────────────────────────────────────── */
-  /* Micro-interactions only: tap and hover feedback, 150-250ms. Ambient
-     motion exists in exactly two places, both on Home — StarField and the
-     season ribbon. */
+  /* Micro-interactions only: tap and hover feedback, 150-250ms. Home is the
+     exception and keeps its motion in home-landing.css: one ambient effect,
+     the hero particle canvas, plus the season marquee and a mount entrance. */
   --ease-ui: cubic-bezier(0.4, 0, 0.2, 1);
   --dur-fast: 150ms;   /* swatch borders, links */
   --dur-ui:   180ms;   /* buttons */
@@ -146,7 +150,7 @@
 .ltr-run { unicode-bidi: isolate; direction: ltr; }
 
 /* ─── Arabic typography ───────────────────────────────────────────────────
-   Amiri carries the display voice that Bodoni Moda carries in Latin: a
+   Amiri carries the display voice that Cormorant Garamond carries in Latin: a
    high-contrast naskh with real calligraphic weight, which is the closest any
    webfont gets to the editorial register the design is written in. IBM Plex
    Sans Arabic takes the body and the monospace slots, because Archivo and IBM
@@ -155,7 +159,7 @@
 
    Scoped to [dir="rtl"] rather than appended to the Latin stacks: a font
    fallback is chosen per glyph, so leaving Amiri in the Latin display stack
-   would let it pick up any character Bodoni happens to lack. */
+   would let it pick up any character Cormorant happens to lack. */
 
 [dir="rtl"] {
   --font-display: Amiri, "Noto Naskh Arabic", Georgia, serif;
@@ -166,7 +170,7 @@
   --font-mono: "IBM Plex Sans Arabic", "IBM Plex Mono", ui-monospace, monospace;
 }
 
-/* Amiri sits small for its point size next to Bodoni; the display sizes are
+/* Amiri sits small for its point size next to Cormorant; the display sizes are
    nudged up so an Arabic headline carries the same weight on the page. */
 [dir="rtl"] .ed-season,
 [dir="rtl"] .home-title,
@@ -176,7 +180,7 @@
 }
 
 /* Arabic has no ascender/descender rhythm to hang on, so the tight display
-   leading that suits Bodoni becomes cramped. */
+   leading that suits Cormorant becomes cramped. */
 [dir="rtl"] .ed-head__title,
 [dir="rtl"] .ed-look__name,
 [dir="rtl"] .ed-base__title {
@@ -247,8 +251,8 @@
 
 /* Removed: scroll reveal and the hover lift.
    The design system allows tap and hover feedback only, 150-250ms, and bans
-   scroll-reveal outright. Ambient motion exists in exactly two places, both on
-   Home: StarField and the season ribbon. */
+   scroll-reveal outright. Home is the exception; its motion lives in
+   home-landing.css and nowhere else. */
 
 /* The single exception: the season name arriving on Results.
    Not scroll-reveal — it plays on mount, once per analysis, on the one element

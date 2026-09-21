@@ -97,7 +97,7 @@ describe("type scale", () => {
   });
 
   it("carries the three editorial families", () => {
-    expect(CSS).toMatch(/--font-display:\s*"Bodoni Moda"/);
+    expect(CSS).toMatch(/--font-display:\s*"Cormorant Garamond"/);
     expect(CSS).toMatch(/--font-body:\s*Archivo/);
     expect(CSS).toMatch(/--font-mono:\s*"IBM Plex Mono"/);
   });

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useT } from "../../i18n";
 import { formatSeasonName } from "../../utils/formatSeason";
 import type { DemoSample } from "../../lib/api";
@@ -27,6 +28,9 @@ import type { DemoSample } from "../../lib/api";
  * one photo uploaded, so the thumbnails are small and the whole block reads as
  * an alternative rather than a competing choice.
  */
+/** The fragment Home links to. */
+const SAMPLES_ID = "samples";
+
 export default function SampleGallery({
   samples,
   onSampleClick,
@@ -35,10 +39,23 @@ export default function SampleGallery({
   onSampleClick: (id: string) => void;
 }) {
   const t = useT();
-  if (samples.length === 0) return null;
+  const sectionRef = useRef<HTMLElement>(null);
+  const hasSamples = samples.length > 0;
+
+  // Home's "Try a sample face" links to /analyse#samples. The router does not
+  // scroll to a hash, and the gallery sits below the dropzone, so without this
+  // the link lands on a screen that looks like it ignored the request.
+  useEffect(() => {
+    if (!hasSamples || window.location.hash !== `#${SAMPLES_ID}`) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    sectionRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+    sectionRef.current?.querySelector("button")?.focus({ preventScroll: true });
+  }, [hasSamples]);
+
+  if (!hasSamples) return null;
 
   return (
-    <section>
+    <section id={SAMPLES_ID} ref={sectionRef}>
       <h2 className="ed-section__label">{t("analysis.samples.heading")}</h2>
       <p className="an-foot__hint" style={{ marginBlockEnd: "var(--space-3)" }}>
         {t("analysis.samples.note")}

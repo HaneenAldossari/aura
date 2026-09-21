@@ -1,0 +1,144 @@
+/**
+ * The Home colour field and its panel. Flagged off (lib/flags.ts); kept with
+ * the component so the pair can be switched on, or deleted, together.
+ */
+
+.field {
+  --field-h: clamp(168px, 26vh, 300px);
+  --field-gap: 2px;
+  --swatch-gap: 1px;
+  --ease-hero: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 1023px) { .field { --field-h: 176px; } }
+@media (max-width: 600px) { .field { padding-block-end: var(--safe-bottom); } }
+@media (prefers-reduced-motion: reduce) { .field__label { transition-duration: 1ms; } }
+
+/* ── Colour field ─────────────────────────────────────────────────────── */
+
+.field {
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  inline-size: 100%;
+  block-size: var(--field-h);
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.field__canvas { display: block; inline-size: 100%; block-size: 100%; }
+
+/* Underneath the canvas: the keyboard and screen-reader surface, and the
+   fallback if canvas is unavailable. */
+.field__dom {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: repeat(12, 1fr);
+  gap: var(--field-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.field--canvas .field__dom { pointer-events: none; }
+
+.field__band {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--swatch-gap);
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+}
+
+.field--canvas .field__band { pointer-events: auto; }
+.field__band:focus-visible { outline-color: var(--ink); }
+.field__swatch { display: block; }
+
+.field__label {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  transform: translate(calc(var(--x, 0px) - 50%), calc(var(--band, 0) * (100% + 6px) - 6px));
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 4px 8px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms var(--ease-hero), transform 150ms var(--ease-hero);
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.field__label[data-on="true"] { opacity: 1; }
+
+/* ── Panel ────────────────────────────────────────────────────────────── */
+
+.field__backdrop { position: fixed; inset: 0; z-index: 80; background: rgba(12, 10, 9, 0.72); }
+
+.field__panel {
+  position: fixed;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 81;
+  inline-size: min(460px, calc(100vw - 32px));
+  max-block-size: calc(100dvh - 64px);
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--rule-strong);
+  padding: var(--space-4);
+}
+
+.field__panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-block-end: var(--space-2);
+}
+
+.field__panel-title {
+  font-family: var(--font-display);
+  font-size: var(--type-title);
+  color: var(--ink);
+  margin: 0;
+}
+
+.field__panel-close {
+  background: none;
+  border: 0;
+  color: var(--ink-muted);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.field__panel-note {
+  font-size: var(--type-body);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  margin: 0 0 var(--space-4);
+}
+
+.field__panel-swatches {
+  list-style: none;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+}
+
+.field__panel-swatches li {
+  display: grid;
+  grid-template-columns: 26px 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.field__panel-swatches li > span:first-child { block-size: 26px; display: block; }
+.field__panel-name { font-size: var(--type-label); color: var(--ink); }
+.field__panel-hex { font-family: var(--font-mono); font-size: var(--type-micro); color: var(--ink-muted); }
