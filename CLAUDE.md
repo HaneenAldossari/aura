@@ -464,9 +464,10 @@ styles in `home-landing.css`.
   becomes a static row that scrolls inside its own window) and runs no entrance.
   The marquee pauses on hover (only where hover is real), touch and focus.
 - **One display face everywhere:** `--font-display` is Cormorant Garamond.
-- `npm run e2e:home` builds the client, serves it, writes `dev/home-390.png`
-  and `dev/home-1440.png`, and checks horizontal scroll, section order, CTA
-  wiring and reduced motion. It makes no API call and costs nothing.
+- `npm run e2e:home` (`scripts/dev/home.ts`) builds the client, serves it,
+  writes `dev/home-390.png` and `dev/home-1440.png`, and checks horizontal
+  scroll, section order, CTA wiring and reduced motion. It makes no API call
+  and costs nothing.
 
 Results is four tabs — Overview, Beauty, Style, Shop — rendered as text links
 on a rule, with the tab in the URL (`?tab=beauty`) so it survives a reload and
@@ -514,7 +515,17 @@ MediaPipe's WASM runtime both fetch over HTTP. Two ways to exercise those:
 npx tsx scripts/dev/overlay.ts [image ...]   # headless Chromium, writes annotated PNGs to dev/
 ```
 
-`dev/` is gitignored. The overlay draws the sampled discs per region, the hair and face-skin
+`npm run shots` (`scripts/dev/shots.ts`) photographs every screen and state at
+390 and 1440 into `dev/shots/<route>-<width>.png` and prints the list: Home,
+Upload, the sample gallery, Loading held at stage 3 of 5, the four Results tabs
+for demo face 1, Before You Buy with a result, chat open, and the
+quality-failure and system-error panels. It boots its own API and Vite, blocks
+`/api/analyze` outright and stubs the shop check, so it spends nothing; the
+stubbed file is marked in the list, and `-- --live` makes the one real call
+instead. Run it before and after any visual change.
+
+`/dev/` is gitignored — anchored, because a bare `dev/` also swallowed
+`scripts/dev/`. `scripts/dev/_*.ts` are scratch and stay ignored. The overlay draws the sampled discs per region, the hair and face-skin
 masks, the sclera patches and the exclusion zones, and prints per-region pixel counts, median
 Lab and the quality-gate result. It is the only way to check a landmark index set — whether
 index 116 is on a cheek or a jawline is a question you answer by looking.

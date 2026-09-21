@@ -7,7 +7,7 @@
  * twelve canonical names, every hex straight out of getCanonicalPalette, and
  * no colour literal in any Home component for a second copy to grow from.
  *
- * The same assertion runs against the rendered DOM in scripts/dev/_home.ts.
+ * The same assertion runs against the rendered DOM in scripts/dev/home.ts.
  */
 import { describe, expect, it } from "vitest";
 import fs from "fs";

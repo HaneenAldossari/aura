@@ -2,8 +2,9 @@
  * The flag holding the colour field back.
  *
  * A flag is a promise that the code still works. These check the field has not
- * quietly rotted while switched off — it still compiles into the app, its data
- * ordering is intact, and its acceptance suite still exists.
+ * quietly rotted while switched off — it still compiles into the app and its
+ * data ordering is intact. Its acceptance suite (scripts/dev/_hero.ts) is
+ * gitignored scratch, so asserting it exists only ever passed on one laptop.
  *
  * The hero around it was rebuilt from the Lovable landing page, so the old
  * type ladder that made room for the field is gone: turning the flag on now
@@ -35,10 +36,6 @@ describe("the flagged-off colour field", () => {
     expect(bands).toHaveLength(12);
     expect(bands.map((b) => b.season)).toEqual([...FIELD_ORDER]);
     for (const band of bands) expect(band.palette.best.length).toBeGreaterThanOrEqual(12);
-  });
-
-  it("keeps its acceptance suite", () => {
-    expect(fs.existsSync(path.join(__dirname, "../scripts/dev/_hero.ts"))).toBe(true);
   });
 
   it("is currently off", () => {
