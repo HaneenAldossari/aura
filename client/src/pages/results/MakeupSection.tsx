@@ -1,4 +1,5 @@
 import { useT, type Key } from "../../i18n";
+import { foundationStep } from "../../lib/foundation";
 import type { AnalysisResult, LookSlot, MakeupShade } from "../../lib/types";
 
 /**
@@ -92,13 +93,7 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
   const depth = data.colorDNA?.depth;
   const guidance = makeup.guidance;
 
-  const step =
-    typeof depth === "number"
-      ? Math.min(
-          makeup.foundation.length - 1,
-          Math.max(0, Math.floor((depth / 100) * makeup.foundation.length))
-        )
-      : null;
+  const step = foundationStep(depth, makeup.foundation.length);
   const matched = step === null ? null : makeup.foundation[step];
 
   return (
@@ -122,46 +117,6 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
           ))}
         </div>
       </section>
-
-      {/* ── Looks ── */}
-      {looks.length > 0 && (
-        <section className="ed-section">
-          <div className="ed-head">
-            <h2 className="ed-head__title">{t("results.makeupSection.looksLabel")}</h2>
-            <span className="ed-head__meta">
-              {t("results.makeupSection.looksMeta", { count: looks.length, season: data.season })}
-            </span>
-          </div>
-          <hr className="ed-rule" />
-          <div className="ed-looks">
-            {looks.map((look) => (
-              <article className="ed-look" key={look.name}>
-                <div className="ed-look__head">
-                  <h3 className="ed-look__name">{look.name}</h3>
-                  <span className="ed-look__tag">
-                    {t(
-                      look.timeOfDay === "evening"
-                        ? "results.makeupSection.evening"
-                        : "results.makeupSection.day"
-                    )}
-                  </span>
-                </div>
-                {look.vibe && <p className="ed-look__vibe">{look.vibe}</p>}
-                <div className="ed-look__shades">
-                  {look.shades.map((shade) => (
-                    <span key={shade.slot}>
-                      <span className="ed-slot" style={{ display: "block" }}>
-                        {t(SLOT_LABEL[shade.slot])}
-                      </span>
-                      <Tile shade={shade} />
-                    </span>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* ── One section per category, each led by its guidance ── */}
       {CATEGORIES.map((cat) => {
@@ -203,13 +158,59 @@ export default function MakeupSection({ data }: { data: AnalysisResult }) {
                 ) : (
                   <span className="ed-tile__chip" style={{ background: shade.hex }} />
                 )}
-                <span className="ed-tile__name">{shade.name}</span>
+                {/* Brand first: a polish is asked for by its maker's name. */}
+                <span className="ed-tile__name">
+                  {shade.brand ? `${shade.brand} · ${shade.name}` : shade.name}
+                </span>
                 <span className="ed-tile__sub">{shade.finish}</span>
               </span>
             ))}
           </div>
         </section>
       )}
+      {/* ── Looks, last ──
+          The categories above are the vocabulary; a look is a sentence made
+          from it. Read in that order, every shade in a look has already been
+          introduced by the time it appears. */}
+      {looks.length > 0 && (
+        <section className="ed-section">
+          <div className="ed-head">
+            <h2 className="ed-head__title">{t("results.makeupSection.looksLabel")}</h2>
+            <span className="ed-head__meta">
+              {t("results.makeupSection.looksMeta", { count: looks.length, season: data.season })}
+            </span>
+          </div>
+          <hr className="ed-rule" />
+          <div className="ed-looks">
+            {looks.map((look) => (
+              <article className="ed-look" key={look.name}>
+                <div className="ed-look__head">
+                  <h3 className="ed-look__name">{look.name}</h3>
+                  <span className="ed-look__tag">
+                    {t(
+                      look.timeOfDay === "evening"
+                        ? "results.makeupSection.evening"
+                        : "results.makeupSection.day"
+                    )}
+                  </span>
+                </div>
+                {look.vibe && <p className="ed-look__vibe">{look.vibe}</p>}
+                <div className="ed-look__shades">
+                  {look.shades.map((shade) => (
+                    <span key={shade.slot}>
+                      <span className="ed-slot" style={{ display: "block" }}>
+                        {t(SLOT_LABEL[shade.slot])}
+                      </span>
+                      <Tile shade={shade} />
+                    </span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
     </div>
   );
 }

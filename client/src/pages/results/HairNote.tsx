@@ -2,21 +2,24 @@ import { useT, type Key } from "../../i18n";
 import type { AnalysisResult } from "../../lib/types";
 
 /**
- * What we assumed about their hair, and a way to change it.
+ * What we assumed about their hair, and the way to try the other answer.
  *
  * Shown whenever measurement ran, in all four variants, because a reader has
  * no other way to tell whether hair was part of the verdict — and hair carries
  * a quarter of the chroma axis, so "we left it out" changes what the answer
  * means.
+ *
+ * The link leaves this page. It does not re-run anything here: a different
+ * hair answer is a different analysis, so it is started from Upload — same
+ * photo, already loaded — by pressing Analyse, and lands on a result of its
+ * own. The one on this page stays what it was.
  */
 export default function HairNote({
   data,
-  onChange,
-  rerunning,
+  onRedo,
 }: {
   data: AnalysisResult;
-  onChange: () => void;
-  rerunning: boolean;
+  onRedo: () => void;
 }) {
   const t = useT();
   if (!data.measured) return null;
@@ -36,8 +39,8 @@ export default function HairNote({
   return (
     <div className="ed-note">
       <p className="ed-note__text">{data.hairNote || t(key)}</p>
-      <button type="button" className="ed-link" onClick={onChange} disabled={rerunning}>
-        {rerunning ? t("results.hairNote.rerunning") : t("results.hairNote.change")}
+      <button type="button" className="ed-link" onClick={onRedo}>
+        {t("results.hairNote.change")}
       </button>
     </div>
   );

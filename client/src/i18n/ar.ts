@@ -201,10 +201,6 @@ export const ar: DeepPartial<Catalogue> = {
       checking: "جارٍ تحليل الألوان...",
       checkAnother: "افحصي قطعة أخرى",
       closestTones: "أقرب الدرجات من لوحتك",
-      verdictGreat: "تطابق تام",
-      verdictGood: "تطابق جيد",
-      verdictMaybe: "قد تناسبك",
-      verdictAvoid: "ليست من ألوانك",
     },
 
     chat: {

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { DailyLimitError, dailyLimit, remainingToday } from "../../lib/dailyCounter";
 import { MessageCircle, Send, X } from "lucide-react";
 import { streamChatMessage } from "../../lib/api";
 import type { AnalysisResult } from "../../lib/types";
@@ -104,8 +105,12 @@ export default function ChatWidget({
     );
   };
 
+  // What is left of today's messages. The server counts for real; this is the
+  // browser's matching copy (lib/dailyCounter.ts), corrected by every response.
+  const [left, setLeft] = useState(() => remainingToday("chat"));
+
   const sendMessage = useCallback(async (text: string) => {
-    if (!text.trim() || !sessionId || chatLoading) return;
+    if (!text.trim() || !sessionId || chatLoading || left <= 0) return;
     const msg = text.trim();
     setChatInput("");
     const newMessages = [...chatMessages, { role: "user" as const, content: msg }];
@@ -129,8 +134,11 @@ export default function ChatWidget({
         ]);
       });
       setChatMessages([...newMessages, { role: "assistant", content: cleanChat(response) }]);
-    } catch {
-      if (!streamed) {
+    } catch (err) {
+      if (err instanceof DailyLimitError) {
+        // Our own limit, in the server's own words — not a failure to apologise for.
+        setChatMessages([...newMessages, { role: "assistant", content: err.message }]);
+      } else if (!streamed) {
         setChatMessages([
           ...newMessages,
           { role: "assistant", content: t("results.chat.failed") },
@@ -140,7 +148,8 @@ export default function ChatWidget({
     clearTimeout(searchTimer);
     setChatLoading(false);
     setChatSearchPhase(false);
-  }, [sessionId, chatLoading, chatMessages]);
+    setLeft(remainingToday("chat"));
+  }, [sessionId, chatLoading, chatMessages, left]);
 
   const handleSendChat = () => sendMessage(chatInput);
 
@@ -245,11 +254,16 @@ export default function ChatWidget({
                 className="ed-chat__send"
                 aria-label={t("results.chat.sendLabel")}
                 onClick={handleSendChat}
-                disabled={!chatInput.trim() || chatLoading}
+                disabled={!chatInput.trim() || chatLoading || left <= 0}
               >
                 <Send size={16} aria-hidden />
               </button>
             </div>
+            <p className="ed-chat__left" aria-live="polite">
+              {left > 0
+                ? t("results.chat.leftToday", { n: left, limit: dailyLimit("chat") })
+                : t("results.chat.noneLeft", { limit: dailyLimit("chat") })}
+            </p>
           </div>
         </div>
       )}

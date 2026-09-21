@@ -43,7 +43,15 @@ export interface MakeupShade {
    * statement of a colour and a rendered dab is a guess at a texture.
    */
   asset?: string;
+  /**
+   * Who makes it. Nails only, and only because a polish is bought by its name:
+   * "Big Apple Red" means nothing at a counter without "OPI" in front of it.
+   * Every other shade here is a colour to match, not a product to find.
+   */
+  brand?: NailBrand;
 }
+
+export type NailBrand = "OPI" | "Essie";
 
 /**
  * One or two plain sentences that open a section, before any colour is shown.
@@ -93,8 +101,13 @@ const ln = (name: string, hex: string, finish: ShadeFinish): MakeupShade =>
   ({ name, hex, category: "liner", finish });
 const hi = (name: string, hex: string, finish: ShadeFinish): MakeupShade =>
   ({ name, hex, category: "highlight", finish });
-const na = (name: string, hex: string, finish: ShadeFinish, asset?: string): MakeupShade =>
-  ({ name, hex, category: "nails", finish, asset });
+const na = (
+  name: string,
+  hex: string,
+  finish: ShadeFinish,
+  asset?: string,
+  brand?: NailBrand
+): MakeupShade => ({ name, hex, category: "nails", finish, asset, brand });
 
 const MAKEUP: Record<string, SeasonMakeup> = {
   // ── AUTUMNS ───────────────────────────────────────────────────────────
@@ -138,12 +151,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Warm Champagne", "#E9CFA3", "shimmer"), hi("Soft Gold", "#D8B473", "metallic")],
     nails: [
-      na("Berry Naughty", "#74303E", "gloss", "berry-naughty"),
-      na("Malaga Wine", "#6A3A43", "gloss", "malaga-wine"),
-      na("Perennial Chic", "#B77A7A", "satin", "perennial-chic"),
-      na("Mademoiselle", "#D3A493", "satin", "mademoiselle"),
-      na("Midnight Cami", "#344360", "gloss", "midnight-cami"),
-      na("Big Apple Red", "#B01B1E", "gloss", "big-apple-red"),
+      na("Berry Naughty", "#74303E", "gloss", "berry-naughty", "OPI"),
+      na("Malaga Wine", "#6A3A43", "gloss", "malaga-wine", "OPI"),
+      na("Mademoiselle", "#D3A493", "satin", "mademoiselle", "Essie"),
+      na("Big Apple Red", "#B01B1E", "gloss", "big-apple-red", "OPI"),
     ],
     skip: "Skip icy pink, pure white and anything silver-based — they flatten your depth and cool the skin.",
   },
@@ -188,12 +199,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Liquid Gold", "#DDBB74", "metallic"), hi("Warm Apricot", "#EFC9A2", "shimmer")],
     nails: [
-      na("Cajun Shrimp", "#E14A46", "gloss", "cajun-shrimp"),
-      na("Malaga Wine", "#6A3A43", "gloss", "malaga-wine"),
-      na("Big Apple Red", "#B01B1E", "gloss", "big-apple-red"),
-      na("Mademoiselle", "#D3A493", "satin", "mademoiselle"),
-      na("Watermelon", "#DF4747", "gloss", "watermelon"),
-      na("Perennial Chic", "#B77A7A", "satin", "perennial-chic"),
+      na("Cajun Shrimp", "#E14A46", "gloss", "cajun-shrimp", "OPI"),
+      na("Malaga Wine", "#6A3A43", "gloss", "malaga-wine", "OPI"),
+      na("Big Apple Red", "#B01B1E", "gloss", "big-apple-red", "OPI"),
+      na("Mademoiselle", "#D3A493", "satin", "mademoiselle", "Essie"),
     ],
     skip: "Skip cool berry, fuchsia and blue-based reds — they fight the gold in your skin.",
   },
@@ -238,12 +247,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Soft Champagne", "#E4CDB0", "satin"), hi("Muted Pearl", "#E0D3C0", "shimmer")],
     nails: [
-      na("Perennial Chic", "#B77A7A", "satin", "perennial-chic"),
-      na("Bare With Me", "#D8B7A0", "satin", "bare-with-me"),
-      na("Mademoiselle", "#D3A493", "satin", "mademoiselle"),
-      na("Passion", "#D08F89", "satin", "passion"),
-      na("Princesses Rule", "#C37E8B", "satin", "princesses-rule"),
-      na("Berry Naughty", "#74303E", "gloss", "berry-naughty"),
+      na("Perennial Chic", "#B77A7A", "satin", "perennial-chic", "Essie"),
+      na("Bare With Me", "#D8B7A0", "satin", "bare-with-me", "OPI"),
+      na("Mademoiselle", "#D3A493", "satin", "mademoiselle", "Essie"),
+      na("Passion", "#D08F89", "satin", "passion", "Essie"),
     ],
     skip: "Skip anything vivid or icy — bright coral, true red and stark white all overpower your softness.",
   },
@@ -288,12 +295,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Icy Pearl", "#E7E9EE", "shimmer"), hi("Cool Platinum", "#D6D9DE", "metallic")],
     nails: [
-      na("Big Apple Red", "#B01B1E", "gloss", "big-apple-red"),
-      na("Berry Naughty", "#74303E", "gloss", "berry-naughty"),
-      na("Midnight Cami", "#344360", "gloss", "midnight-cami"),
-      na("Malaga Wine", "#6A3A43", "gloss", "malaga-wine"),
-      na("Watermelon", "#DF4747", "gloss", "watermelon"),
-      na("Perennial Chic", "#B77A7A", "satin", "perennial-chic"),
+      na("Big Apple Red", "#B01B1E", "gloss", "big-apple-red", "OPI"),
+      na("Berry Naughty", "#74303E", "gloss", "berry-naughty", "OPI"),
+      na("Midnight Cami", "#344360", "gloss", "midnight-cami", "OPI"),
+      na("Malaga Wine", "#6A3A43", "gloss", "malaga-wine", "OPI"),
     ],
     skip: "Skip warm orange, camel and muted earth tones — they dull the clarity your colouring depends on.",
   },
@@ -338,12 +343,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Snow Pearl", "#EDEFF3", "shimmer"), hi("Cool Silver", "#D2D7DE", "metallic")],
     nails: [
-      na("Big Apple Red", "#B01B1E", "gloss", "big-apple-red"),
-      na("Charged Up Cherry", "#BE2073", "gloss", "charged-up-cherry"),
-      na("Midnight Cami", "#344360", "gloss", "midnight-cami"),
-      na("Sheer Bliss", "#DFD4C5", "satin", "sheer-bliss"),
-      na("Watermelon", "#DF4747", "gloss", "watermelon"),
-      na("Strawberry Margarita", "#D03364", "gloss", "strawberry-margarita"),
+      na("Big Apple Red", "#B01B1E", "gloss", "big-apple-red", "OPI"),
+      na("Charged Up Cherry", "#BE2073", "gloss", "charged-up-cherry", "OPI"),
+      na("Midnight Cami", "#344360", "gloss", "midnight-cami", "OPI"),
+      na("Sheer Bliss", "#DFD4C5", "satin", "sheer-bliss", "OPI"),
     ],
     skip: "Skip orange-red, gold and anything beige-warm — they muddy a palette that wants blue underneath.",
   },
@@ -388,12 +391,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Crystal Pearl", "#F0F3F7", "shimmer"), hi("Bright Platinum", "#D8DDE4", "metallic")],
     nails: [
-      na("Watermelon", "#DF4747", "gloss", "watermelon"),
-      na("Charged Up Cherry", "#BE2073", "gloss", "charged-up-cherry"),
-      na("Sheer Bliss", "#DFD4C5", "satin", "sheer-bliss"),
-      na("Midnight Cami", "#344360", "gloss", "midnight-cami"),
-      na("Cajun Shrimp", "#E14A46", "gloss", "cajun-shrimp"),
-      na("Strawberry Margarita", "#D03364", "gloss", "strawberry-margarita"),
+      na("Charged Up Cherry", "#BE2073", "gloss", "charged-up-cherry", "OPI"),
+      na("Sheer Bliss", "#DFD4C5", "satin", "sheer-bliss", "OPI"),
+      na("Midnight Cami", "#344360", "gloss", "midnight-cami", "OPI"),
+      na("Strawberry Margarita", "#D03364", "gloss", "strawberry-margarita", "OPI"),
     ],
     skip: "Skip dusty, greyed and earthy shades — anything muted reads as dirt against your clarity.",
   },
@@ -439,12 +440,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Pearl Peach", "#FBE0CB", "shimmer"), hi("Light Gold", "#F2DCA8", "metallic")],
     nails: [
-      na("Passion", "#D08F89", "satin", "passion"),
-      na("Bare With Me", "#D8B7A0", "satin", "bare-with-me"),
-      na("Bachelorette Bash", "#E36085", "gloss", "bachelorette-bash"),
-      na("Sheer Bliss", "#DFD4C5", "satin", "sheer-bliss"),
-      na("Mademoiselle", "#D3A493", "satin", "mademoiselle"),
-      na("Perennial Chic", "#B77A7A", "satin", "perennial-chic"),
+      na("Bare With Me", "#D8B7A0", "satin", "bare-with-me", "OPI"),
+      na("Bachelorette Bash", "#E36085", "gloss", "bachelorette-bash", "Essie"),
+      na("Sheer Bliss", "#DFD4C5", "satin", "sheer-bliss", "OPI"),
+      na("Mademoiselle", "#D3A493", "satin", "mademoiselle", "Essie"),
     ],
     skip: "Skip black, burgundy and charcoal — depth of that order swamps a light, delicate face.",
   },
@@ -489,12 +488,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Bright Gold", "#EFD095", "metallic"), hi("Warm Pearl", "#F7E3C6", "shimmer")],
     nails: [
-      na("Cajun Shrimp", "#E14A46", "gloss", "cajun-shrimp"),
-      na("Bare With Me", "#D8B7A0", "satin", "bare-with-me"),
-      na("Sheer Bliss", "#DFD4C5", "satin", "sheer-bliss"),
-      na("Mademoiselle", "#D3A493", "satin", "mademoiselle"),
-      na("Watermelon", "#DF4747", "gloss", "watermelon"),
-      na("Big Apple Red", "#B01B1E", "gloss", "big-apple-red"),
+      na("Cajun Shrimp", "#E14A46", "gloss", "cajun-shrimp", "OPI"),
+      na("Bare With Me", "#D8B7A0", "satin", "bare-with-me", "OPI"),
+      na("Mademoiselle", "#D3A493", "satin", "mademoiselle", "Essie"),
+      na("Watermelon", "#DF4747", "gloss", "watermelon", "OPI"),
     ],
     skip: "Skip mauve, dusty rose and anything greyed — muting is what takes the life out of this palette.",
   },
@@ -539,12 +536,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Clear Gold", "#F6DA9C", "metallic"), hi("Bright Pearl", "#FDF0DC", "shimmer")],
     nails: [
-      na("Cajun Shrimp", "#E14A46", "gloss", "cajun-shrimp"),
-      na("Sheer Bliss", "#DFD4C5", "satin", "sheer-bliss"),
-      na("Bare With Me", "#D8B7A0", "satin", "bare-with-me"),
-      na("Bachelorette Bash", "#E36085", "gloss", "bachelorette-bash"),
-      na("Watermelon", "#DF4747", "gloss", "watermelon"),
-      na("Big Apple Red", "#B01B1E", "gloss", "big-apple-red"),
+      na("Cajun Shrimp", "#E14A46", "gloss", "cajun-shrimp", "OPI"),
+      na("Bare With Me", "#D8B7A0", "satin", "bare-with-me", "OPI"),
+      na("Bachelorette Bash", "#E36085", "gloss", "bachelorette-bash", "Essie"),
+      na("Watermelon", "#DF4747", "gloss", "watermelon", "OPI"),
     ],
     skip: "Skip dusty, smoky and earthy shades — they read as grime beside colours this clear.",
   },
@@ -590,12 +585,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Cool Pearl", "#F3E9EC", "shimmer"), hi("Soft Rose Pearl", "#F6DDE2", "shimmer")],
     nails: [
-      na("Sugar Daddy", "#DC9EAA", "satin", "sugar-daddy"),
-      na("Angel Food", "#E3C9CB", "satin", "angel-food"),
-      na("Tiara", "#DAA9C5", "satin", "tiara"),
-      na("Mod About You", "#E2A7B0", "satin", "mod-about-you"),
-      na("Princesses Rule", "#C37E8B", "satin", "princesses-rule"),
-      na("Lovie Dovie", "#EAAEBE", "satin", "lovie-dovie"),
+      na("Angel Food", "#E3C9CB", "satin", "angel-food", "Essie"),
+      na("Tiara", "#DAA9C5", "satin", "tiara", "Essie"),
+      na("Mod About You", "#E2A7B0", "satin", "mod-about-you", "Essie"),
+      na("Princesses Rule", "#C37E8B", "satin", "princesses-rule", "OPI"),
     ],
     skip: "Skip black, orange and deep browns — the weight and the warmth both work against a light cool face.",
   },
@@ -640,12 +633,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Rose Pearl", "#F2DFE2", "shimmer"), hi("Cool Moonstone", "#E7E4EA", "shimmer")],
     nails: [
-      na("Bachelorette Bash", "#E36085", "gloss", "bachelorette-bash"),
-      na("Midnight Cami", "#344360", "gloss", "midnight-cami"),
-      na("Berry Naughty", "#74303E", "gloss", "berry-naughty"),
-      na("Tiara", "#DAA9C5", "satin", "tiara"),
-      na("Princesses Rule", "#C37E8B", "satin", "princesses-rule"),
-      na("Strawberry Margarita", "#D03364", "gloss", "strawberry-margarita"),
+      na("Midnight Cami", "#344360", "gloss", "midnight-cami", "OPI"),
+      na("Berry Naughty", "#74303E", "gloss", "berry-naughty", "OPI"),
+      na("Tiara", "#DAA9C5", "satin", "tiara", "Essie"),
+      na("Princesses Rule", "#C37E8B", "satin", "princesses-rule", "OPI"),
     ],
     skip: "Skip orange, gold and warm camel — warmth of any kind is what pulls this face off-key.",
   },
@@ -690,12 +681,10 @@ const MAKEUP: Record<string, SeasonMakeup> = {
     ],
     highlight: [hi("Soft Pearl", "#EEE4E2", "satin"), hi("Muted Rose Pearl", "#F0DFDE", "shimmer")],
     nails: [
-      na("Princesses Rule", "#C37E8B", "satin", "princesses-rule"),
-      na("Malaga Wine", "#6A3A43", "gloss", "malaga-wine"),
-      na("Bare With Me", "#D8B7A0", "satin", "bare-with-me"),
-      na("Mademoiselle", "#D3A493", "satin", "mademoiselle"),
-      na("Perennial Chic", "#B77A7A", "satin", "perennial-chic"),
-      na("Passion", "#D08F89", "satin", "passion"),
+      na("Princesses Rule", "#C37E8B", "satin", "princesses-rule", "OPI"),
+      na("Malaga Wine", "#6A3A43", "gloss", "malaga-wine", "OPI"),
+      na("Perennial Chic", "#B77A7A", "satin", "perennial-chic", "Essie"),
+      na("Passion", "#D08F89", "satin", "passion", "Essie"),
     ],
     skip: "Skip black, pure white and anything vivid — high contrast and high chroma both overwhelm you.",
   },

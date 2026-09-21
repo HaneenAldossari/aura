@@ -15,6 +15,7 @@ import fs from "fs";
 import path from "path";
 import { chromium, type Browser, type Page } from "playwright";
 import { en } from "../../client/src/i18n/en";
+import demoFile from "../../server/demo-analyses/sample-1.json";
 import { CANONICAL_SEASONS } from "../../server/prompts/colorAnalysis";
 import { getCanonicalPalette, heroSix } from "../../server/utils/seasonPalettes";
 
@@ -22,6 +23,8 @@ const ROOT = path.resolve(__dirname, "../..");
 const OUT = path.join(ROOT, "dev");
 const PORT = 4179;
 const WIDTHS = [390, 1440] as const;
+
+const demo = ((demoFile as { result?: unknown }).result ?? demoFile) as { season: string; confidence: number };
 
 let failures = 0;
 const check = (ok: boolean, label: string, detail = "") => {
@@ -186,17 +189,27 @@ async function checkWidth(browser: Browser, base: string, width: number) {
     "what you get: exactly four rows, in tab order",
     rows.map((r) => r.split("\n")[0]).join(" | "),
   );
+  // Fixed height, nothing cut off: every card is the same size and none overflows.
+  const heights: number[] = [];
   for (const title of [l.row1Title, l.row2Title, l.row3Title, l.row4Title]) {
     await page.getByRole("button", { name: title }).click();
-    await page.locator(".lp-panel__screen img").scrollIntoViewIfNeeded();
-    const loaded = await page
-      .waitForFunction(() => {
-        const img = document.querySelector<HTMLImageElement>(".lp-panel__screen img");
-        return Boolean(img && img.complete && img.naturalWidth > 0);
-      }, undefined, { timeout: 10_000 })
-      .then(() => true, () => false);
-    check(loaded, `preview loads: ${title}`);
+    await page.waitForTimeout(650); // the crossfade
+    const card = await page.evaluate(() => {
+      const el = document.querySelector<HTMLElement>(".lp-card")!;
+      const box = el.getBoundingClientRect();
+      const spill = Array.from(el.querySelectorAll<HTMLElement>("*")).filter((child) => {
+        const r = child.getBoundingClientRect();
+        return r.height > 0 && (r.bottom > box.bottom + 0.5 || r.right > box.right + 0.5);
+      }).length;
+      return { height: Math.round(box.height), overflow: el.scrollHeight - el.clientHeight, spill, text: el.innerText };
+    });
+    heights.push(card.height);
+    check(card.overflow <= 0 && card.spill === 0, `card fits its frame: ${title}`, `overflow ${card.overflow}px, ${card.spill} spilling`);
+    if (title === l.row1Title) {
+      check(card.text.includes(demo.season) && card.text.includes(`${demo.confidence}%`), "season card shows the demo file's own season and confidence", `${demo.season} · ${demo.confidence}%`);
+    }
   }
+  check(new Set(heights).size === 1, "all four cards are one height", heights.join(", "));
   await page.getByRole("button", { name: l.row1Title }).click();
   await page.waitForTimeout(800); // let the crossfade and the 500ms list transition land before the shot
 

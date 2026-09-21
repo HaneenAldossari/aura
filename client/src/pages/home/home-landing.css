@@ -326,15 +326,17 @@
   margin: 0 0 12px;
 }
 
-/* Six, in one row: light neutral, four colours, dark neutral. */
+/* Six squares in one row: light neutral, four colours, dark neutral. Square,
+   not tall — a tall bar reads as a stripe in a chart, a square reads as a
+   swatch of something. */
 .lp-season__swatches {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 2px;
+  gap: 4px;
   margin-block-end: 16px;
 }
 
-.lp-season__swatch { display: block; block-size: 56px; }
+.lp-season__swatch { display: block; aspect-ratio: 1 / 1; }
 
 .lp-season__line {
   font-size: var(--type-label);
@@ -513,25 +515,127 @@
 
 .lp-panel__label { font-size: var(--type-label); color: var(--ink-secondary); }
 
-/* The top of the tab, cropped by the frame. The ratio is fixed so the panel
-   is the same height whichever row is selected, and before the image loads. */
-.lp-panel__screen {
-  position: relative;
-  aspect-ratio: 390 / 620;
+/* One height for all four cards, set here and met by composition: each card
+   is laid out to fit, so nothing is cropped and nothing scrolls. The e2e
+   checks both — same height across rows, no overflow inside any of them. */
+.lp-card {
+  block-size: 316px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   overflow: hidden;
 }
 
-.lp-panel__screen img { display: block; inline-size: 100%; block-size: auto; }
+.lp-card__line {
+  font-size: var(--type-label);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  margin: auto 0 0;
+}
 
-/* The capture carries on below the frame; say so, rather than cut it dead. */
-.lp-panel__screen::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  inset-block-end: 0;
-  block-size: 72px;
-  background: linear-gradient(to bottom, transparent, var(--ground));
-  pointer-events: none;
+.lp-card__season {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 1.02;
+  color: var(--ink);
+  margin: 0;
+}
+
+.lp-card__confidence {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: -8px 0 0;
+}
+
+/* Squares here too, the same six in the same order as the marquee card. */
+.lp-card__strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.lp-card__strip > span { display: block; aspect-ratio: 1 / 1; }
+
+.lp-card__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.lp-card__name { display: block; font-size: var(--type-label); line-height: 1.3; color: var(--ink); }
+
+.lp-card__swatch { display: block; inline-size: 100%; block-size: 44px; border: 1px solid rgb(255 255 255 / 0.06); }
+.lp-card__swatch--base { inline-size: 72px; block-size: 72px; flex: none; }
+
+.lp-card__base { display: flex; align-items: center; gap: 16px; }
+
+.lp-card__chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.lp-card__chips li { display: grid; gap: 4px; }
+
+.lp-card__metals { list-style: none; margin: 0; padding: 0; }
+
+.lp-card__metals li {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding-block: 9px;
+  border-block-end: 1px solid var(--rule);
+}
+
+.lp-card__disc { inline-size: 20px; block-size: 20px; border-radius: 50%; border: 1px solid rgb(255 255 255 / 0.1); }
+
+.lp-card__verdict {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.lp-card__metals [data-verdict="best"] .lp-card__verdict { color: var(--accent); }
+.lp-card__metals [data-verdict="skip"] .lp-card__name { color: var(--ink-muted); }
+.lp-card__metals [data-verdict="skip"] .lp-card__disc { opacity: 0.45; }
+
+.lp-card__buy { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 20px; align-items: end; flex: 1 1 auto; min-block-size: 0; }
+
+.lp-card__photo {
+  inline-size: 132px;
+  block-size: 100%;
+  max-block-size: 176px;
+  object-fit: cover;
+  object-position: center top;
+  border: 1px solid var(--rule);
+  display: block;
+}
+
+.lp-card__score {
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+}
+
+.lp-card__score span { font-size: 0.4em; color: var(--ink-muted); }
+
+.lp-card__verdictword {
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 1.15;
+  color: var(--accent);
+  margin: 6px 0 0;
 }
 
 /* ── Closing ──────────────────────────────────────────────────────────── */

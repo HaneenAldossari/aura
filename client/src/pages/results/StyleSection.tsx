@@ -55,9 +55,9 @@ export default function StyleSection({ data }: { data: AnalysisResult }) {
   const family = data.season.split(" ").slice(-1)[0].toLowerCase();
 
   return (
-    <div>
+    <div className="ed-style">
       {/* ── Jewellery: three verdicts, then the stones ── */}
-      <section className="ed-section">
+      <section className="ed-section ed-style__jewellery">
         <SectionHead
           title={t("results.styleSection.jewellery")}
           meta={t("results.styleSection.jewelleryMeta")}
@@ -115,9 +115,9 @@ export default function StyleSection({ data }: { data: AnalysisResult }) {
 
       {/* ── Hair ── */}
       {style.hair.length > 0 && (
-        <section className="ed-section">
+        <section className="ed-section ed-style__hair">
           <SectionHead title={t("results.styleSection.hair")} guidance={style.guidance.hair} />
-          <div className="ed-shaderow">
+          <div className="ed-hairrow">
             {style.hair.slice(0, 4).map((shade, i) => (
               <Swatch
                 key={shade.name}
@@ -135,7 +135,7 @@ export default function StyleSection({ data }: { data: AnalysisResult }) {
 
       {/* ── Pairings ── */}
       {style.pairings.length > 0 && (
-        <section className="ed-section">
+        <section className="ed-section ed-style__pairings">
           <SectionHead
             title={t("results.styleSection.pairings")}
             meta={t("results.styleSection.pairingsMeta")}

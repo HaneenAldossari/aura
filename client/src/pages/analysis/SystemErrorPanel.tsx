@@ -13,9 +13,12 @@ import { useT } from "../../i18n";
  * The raw error goes to the console, never on screen.
  */
 export default function SystemErrorPanel({
+  title,
   message,
   onRetry,
 }: {
+  /** Defaults to "something went wrong on our side"; a daily limit is not that. */
+  title?: string;
   message: string;
   onRetry: () => void;
 }) {
@@ -23,7 +26,7 @@ export default function SystemErrorPanel({
 
   return (
     <div className="an-state">
-      <h1 className="an-title">{t("errors.systemTitle")}</h1>
+      <h1 className="an-title">{title ?? t("errors.systemTitle")}</h1>
       <hr className="an-title__rule" />
 
       {/* One line. It already says the photo is not the problem; a second

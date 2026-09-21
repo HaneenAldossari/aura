@@ -63,6 +63,8 @@ export interface MakeupShade {
   finish: ShadeFinish;
   /** Slug of a photographed render; nails only. */
   asset?: string;
+  /** Nails only: a polish is found by its maker's name. */
+  brand?: "OPI" | "Essie";
 }
 
 /** The canonical shade list for the classified season. */

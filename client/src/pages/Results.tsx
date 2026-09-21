@@ -5,17 +5,12 @@ import ChatLauncher from "../components/ChatLauncher";
 import { formatSeasonName } from "../utils/formatSeason";
 import { useT } from "../i18n";
 import { useResultsData } from "./results/useResultsData";
-import { getCachedPhoto, cachePhoto } from "../lib/photoCache";
-import { newResultId, saveResult } from "../lib/resultStore";
-import { measureBytes } from "../lib/measure";
-import { analyzeMeasured } from "../lib/api";
-import type { HairStatus } from "../lib/types";
+import { getCachedPhoto } from "../lib/photoCache";
 
 import Masthead from "./results/Masthead";
 import { formatShortDate } from "../lib/formatDate";
 import ResultsTabs, { type ResultsTab } from "./results/ResultsTabs";
 import SeasonIdentity from "./results/SeasonIdentity";
-import SecondPhotoNudge from "./results/SecondPhotoNudge";
 import ColourDNA from "./results/ColourDNA";
 import TraitLine from "./results/TraitLine";
 import PreviewCards from "./results/PreviewCards";
@@ -28,13 +23,6 @@ import ChatWidget from "./results/ChatWidget";
 import { savePalettePng } from "./results/savePalette";
 import "./results/results-editorial.css";
 
-/** natural → coloured → not visible → natural. */
-const NEXT_HAIR: Record<HairStatus, HairStatus> = {
-  natural: "dyed",
-  dyed: "covered",
-  covered: "natural",
-};
-
 const TAB_IDS: ResultsTab[] = ["overview", "beauty", "style", "shop"];
 
 export default function Results() {
@@ -43,7 +31,6 @@ export default function Results() {
   const { sessionId } = useParams<{ sessionId: string }>();
   const [params, setParams] = useSearchParams();
   const { data, loading } = useResultsData(sessionId);
-  const [rerunning, setRerunning] = useState(false);
   const [saving, setSaving] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
 
@@ -56,36 +43,14 @@ export default function Results() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  /**
-   * Re-analyse the same pixels under a different hair answer.
-   *
-   * The photo is only in memory, so this is unavailable after a reload — the
-   * control hides itself rather than failing when pressed.
-   */
-  const changeHairAnswer = useCallback(async () => {
-    const photo = getCachedPhoto(sessionId);
-    if (!photo || rerunning) return;
-    const next = NEXT_HAIR[photo.hairStatus];
-    setRerunning(true);
-    try {
-      const outcome = await measureBytes(photo.bytes, next);
-      if (outcome.kind !== "measured") {
-        // The same pixels passed the gate minutes ago, so this is
-        // infrastructure, not the photo. Leave the current result standing.
-        console.error("[aura] re-analysis failed:", outcome);
-        return;
-      }
-      const { result } = await analyzeMeasured(outcome.upload.bytes, outcome.features.forScoring);
-      const id = newResultId();
-      saveResult(id, result);
-      cachePhoto(id, photo.bytes, next);
-      navigate(`/results/${id}`, { replace: true });
-    } catch (err) {
-      console.error("[aura] re-analysis failed:", err);
-    } finally {
-      setRerunning(false);
-    }
-  }, [sessionId, rerunning, navigate]);
+  // This page never runs an analysis and never writes a result. It used to:
+  // the hair note's link re-measured the cached photo under the other hair
+  // answer, called /api/analyze a second time and navigate(…, {replace: true})d
+  // to the new result — one tap, no confirmation, and the season on screen
+  // changed under the reader (Deep Autumn → Light Spring is exactly the
+  // hair-counted / hair-excluded pair CLAUDE.md records). A result is immutable
+  // once displayed. Changing the hair answer is a new analysis, started from
+  // Upload, by pressing Analyse; the old result keeps its id and its URL.
 
   const savePalette = useCallback(async () => {
     if (!data || saving) return;
@@ -130,14 +95,10 @@ export default function Results() {
 
         {tab === "overview" && (
           <>
-            {/* The nudge retires once a second photo has been added: it asks
-                for something that has already been done. */}
-            {data.needsSecondPhoto && (data.photoCount ?? 1) < 2 && (
-              <SecondPhotoNudge
-                onAdd={() => navigate(`/analyse?second=${sessionId}`)}
-              />
-            )}
-
+            {/* No second-photo banner. `needsSecondPhoto` still arrives in the
+                data — it is a suggestion the thresholds behind it have not
+                earned the right to make yet (Phase 4), and a banner above the
+                result read as the app doubting its own answer. */}
             <div className="ed-split">
               <div>
                 <SeasonIdentity
@@ -165,7 +126,7 @@ export default function Results() {
                   <p className="ed-twophoto">{t("results.twoPhotos")}</p>
                 )}
                 {getCachedPhoto(sessionId) && (
-                  <HairNote data={data} onChange={changeHairAnswer} rerunning={rerunning} />
+                  <HairNote data={data} onRedo={() => navigate(`/analyse?redo=${sessionId}`)} />
                 )}
               </div>
 
@@ -184,29 +145,6 @@ export default function Results() {
                   </div>
                   <hr className="ed-rule" />
                   <PaletteGrid colours={data.palette?.best ?? []} />
-
-                  {/* Clothing avoids as one compact row rather than a section
-                      of their own. It is a footnote to the palette and reads
-                      as one here; on the Style tab it read as a category. */}
-                  {(data.palette?.avoid?.length ?? 0) > 0 && (
-                    <div className="ed-avoidrow">
-                      <div
-                        className="ed-avoidrow__swatches"
-                        role="img"
-                        aria-label={t("results.avoidRow")}
-                      >
-                        {data.palette.avoid.slice(0, 6).map((colour) => (
-                          <span
-                            className="ed-avoidrow__swatch"
-                            key={colour.hex}
-                            style={{ background: colour.hex }}
-                            title={colour.name}
-                          />
-                        ))}
-                      </div>
-                      <p className="ed-avoidrow__note">{t("results.avoidRow")}</p>
-                    </div>
-                  )}
 
                   <div className="ed-actions" style={{ marginBlockStart: "var(--space-3)" }}>
                     <button
@@ -249,6 +187,28 @@ export default function Results() {
                 </button>
               </div>
             </div>
+
+            {/* Last on the page, on its own. Directly under the twelve it
+                broke the pattern: twelve colours that are yours, then six
+                that are not, in the same shape, with nothing between them but
+                a hairline. Down here it is a footnote with room for names. */}
+            {(data.palette?.avoid?.length ?? 0) > 0 && (
+              <section className="ed-section ed-avoid" aria-labelledby="avoid-label">
+                <h2 className="ed-section__label" id="avoid-label">
+                  {t("results.avoidTitle")}
+                </h2>
+                <hr className="ed-rule" />
+                <p className="ed-avoid__note">{t("results.avoidRow")}</p>
+                <ul className="ed-avoid__row">
+                  {data.palette.avoid.slice(0, 6).map((colour) => (
+                    <li key={colour.hex}>
+                      <span className="ed-avoid__swatch" style={{ background: colour.hex }} aria-hidden />
+                      <span className="ed-avoid__name">{colour.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </>
         )}
 

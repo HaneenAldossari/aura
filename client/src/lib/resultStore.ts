@@ -38,16 +38,34 @@ export function newResultId(): string {
     : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-export function saveResult(id: string, result: AnalysisResult): void {
-  memory.set(id, result);
+/**
+ * Write-once. An id names one analysis for ever: a second save to the same id
+ * is refused and logged, never applied, so nothing — a retry, a double submit,
+ * a future feature — can change what a results URL shows after it has been
+ * shown. A different answer needs a different id.
+ */
+export function saveResult(id: string, result: AnalysisResult): boolean {
   const store = safeLocalStorage();
-  if (!store) return;
+  let exists = memory.has(id);
+  try {
+    exists ||= store?.getItem(`${PREFIX}${id}`) != null;
+  } catch {
+    /* unreadable storage cannot hold a conflicting copy */
+  }
+  if (exists) {
+    console.error(`[aura] refused to overwrite result ${id}: results are immutable`);
+    return false;
+  }
+
+  memory.set(id, result);
+  if (!store) return true;
   try {
     store.setItem(`${PREFIX}${id}`, JSON.stringify(result));
     prune(store);
   } catch {
     // Quota, most likely. The in-memory copy still serves this page load.
   }
+  return true;
 }
 
 export function loadResult(id: string): AnalysisResult | null {

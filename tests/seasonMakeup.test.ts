@@ -35,11 +35,14 @@ describe("canonical makeup shades", () => {
     }
     expect(m.skip.length).toBeGreaterThan(20);
     for (const c of INDEX_CATEGORIES) {
-      const shades = m[c as keyof typeof m] as { name: string }[];
+      const shades = m[c as keyof typeof m] as { name: string; brand?: string }[];
       expect(shades.length, c).toBeGreaterThanOrEqual(3);
-      // Nails run to six: the Beauty frame gives them a row of their own, and
-      // they are rendered rather than stated so the row has space for it.
-      expect(shades.length, c).toBeLessThanOrEqual(c === "nails" ? 6 : 5);
+      expect(shades.length, c).toBeLessThanOrEqual(5);
+      // Nails are exactly four, each with the maker a polish is asked for by.
+      if (c === "nails") {
+        expect(shades.length, "nails").toBe(4);
+        for (const n of shades) expect(["OPI", "Essie"], n.name).toContain(n.brand);
+      }
     }
     // Looks need something to pull a fifth bar from.
     expect(m.bronzer.length).toBeGreaterThan(0);

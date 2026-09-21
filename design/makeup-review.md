@@ -61,8 +61,6 @@ assigns a colour, so correcting a value here corrects it everywhere.
 | nails | Malaga Wine | ![](https://placehold.co/28x18/6A3A43/6A3A43.png) `#6A3A43` | gloss |
 | nails | Big Apple Red | ![](https://placehold.co/28x18/B01B1E/B01B1E.png) `#B01B1E` | gloss |
 | nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
-| nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
-| nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
 
 _Skip line:_ Skip cool berry, fuchsia and blue-based reds — they fight the gold in your skin.
 
@@ -170,9 +168,7 @@ _Also:_ copper, bronze
 | highlight | Soft Gold | ![](https://placehold.co/28x18/D8B473/D8B473.png) `#D8B473` | metallic |
 | nails | Berry Naughty | ![](https://placehold.co/28x18/74303E/74303E.png) `#74303E` | gloss |
 | nails | Malaga Wine | ![](https://placehold.co/28x18/6A3A43/6A3A43.png) `#6A3A43` | gloss |
-| nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
 | nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
-| nails | Midnight Cami | ![](https://placehold.co/28x18/344360/344360.png) `#344360` | gloss |
 | nails | Big Apple Red | ![](https://placehold.co/28x18/B01B1E/B01B1E.png) `#B01B1E` | gloss |
 
 _Skip line:_ Skip icy pink, pure white and anything silver-based — they flatten your depth and cool the skin.
@@ -283,8 +279,6 @@ _Also:_ copper, bronze
 | nails | Bare With Me | ![](https://placehold.co/28x18/D8B7A0/D8B7A0.png) `#D8B7A0` | satin |
 | nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
 | nails | Passion | ![](https://placehold.co/28x18/D08F89/D08F89.png) `#D08F89` | satin |
-| nails | Princesses Rule | ![](https://placehold.co/28x18/C37E8B/C37E8B.png) `#C37E8B` | satin |
-| nails | Berry Naughty | ![](https://placehold.co/28x18/74303E/74303E.png) `#74303E` | gloss |
 
 _Skip line:_ Skip anything vivid or icy — bright coral, true red and stark white all overpower your softness.
 
@@ -394,8 +388,6 @@ _Also:_ antique gold, bronze
 | nails | Berry Naughty | ![](https://placehold.co/28x18/74303E/74303E.png) `#74303E` | gloss |
 | nails | Midnight Cami | ![](https://placehold.co/28x18/344360/344360.png) `#344360` | gloss |
 | nails | Malaga Wine | ![](https://placehold.co/28x18/6A3A43/6A3A43.png) `#6A3A43` | gloss |
-| nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
-| nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
 
 _Skip line:_ Skip warm orange, camel and muted earth tones — they dull the clarity your colouring depends on.
 
@@ -503,8 +495,6 @@ You carry the most contrast of any season — deep, cool and clear all at once. 
 | nails | Charged Up Cherry | ![](https://placehold.co/28x18/BE2073/BE2073.png) `#BE2073` | gloss |
 | nails | Midnight Cami | ![](https://placehold.co/28x18/344360/344360.png) `#344360` | gloss |
 | nails | Sheer Bliss | ![](https://placehold.co/28x18/DFD4C5/DFD4C5.png) `#DFD4C5` | satin |
-| nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
-| nails | Strawberry Margarita | ![](https://placehold.co/28x18/D03364/D03364.png) `#D03364` | gloss |
 
 _Skip line:_ Skip orange-red, gold and anything beige-warm — they muddy a palette that wants blue underneath.
 
@@ -608,11 +598,9 @@ You are cool right through — blue-based, clear and high in contrast. Icy brigh
 | liner | Bright Violet | ![](https://placehold.co/28x18/5E34A0/5E34A0.png) `#5E34A0` | satin |
 | highlight | Crystal Pearl | ![](https://placehold.co/28x18/F0F3F7/F0F3F7.png) `#F0F3F7` | shimmer |
 | highlight | Bright Platinum | ![](https://placehold.co/28x18/D8DDE4/D8DDE4.png) `#D8DDE4` | metallic |
-| nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
 | nails | Charged Up Cherry | ![](https://placehold.co/28x18/BE2073/BE2073.png) `#BE2073` | gloss |
 | nails | Sheer Bliss | ![](https://placehold.co/28x18/DFD4C5/DFD4C5.png) `#DFD4C5` | satin |
 | nails | Midnight Cami | ![](https://placehold.co/28x18/344360/344360.png) `#344360` | gloss |
-| nails | Cajun Shrimp | ![](https://placehold.co/28x18/E14A46/E14A46.png) `#E14A46` | gloss |
 | nails | Strawberry Margarita | ![](https://placehold.co/28x18/D03364/D03364.png) `#D03364` | gloss |
 
 _Skip line:_ Skip dusty, greyed and earthy shades — anything muted reads as dirt against your clarity.
@@ -717,12 +705,10 @@ You are winter at its clearest — cool, bright and built for saturated colour. 
 | liner | Light Chocolate | ![](https://placehold.co/28x18/7A5539/7A5539.png) `#7A5539` | matte |
 | highlight | Pearl Peach | ![](https://placehold.co/28x18/FBE0CB/FBE0CB.png) `#FBE0CB` | shimmer |
 | highlight | Light Gold | ![](https://placehold.co/28x18/F2DCA8/F2DCA8.png) `#F2DCA8` | metallic |
-| nails | Passion | ![](https://placehold.co/28x18/D08F89/D08F89.png) `#D08F89` | satin |
 | nails | Bare With Me | ![](https://placehold.co/28x18/D8B7A0/D8B7A0.png) `#D8B7A0` | satin |
 | nails | Bachelorette Bash | ![](https://placehold.co/28x18/E36085/E36085.png) `#E36085` | gloss |
 | nails | Sheer Bliss | ![](https://placehold.co/28x18/DFD4C5/DFD4C5.png) `#DFD4C5` | satin |
 | nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
-| nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
 
 _Skip line:_ Skip black, burgundy and charcoal — depth of that order swamps a light, delicate face.
 
@@ -830,10 +816,8 @@ _Also:_ light copper
 | highlight | Warm Pearl | ![](https://placehold.co/28x18/F7E3C6/F7E3C6.png) `#F7E3C6` | shimmer |
 | nails | Cajun Shrimp | ![](https://placehold.co/28x18/E14A46/E14A46.png) `#E14A46` | gloss |
 | nails | Bare With Me | ![](https://placehold.co/28x18/D8B7A0/D8B7A0.png) `#D8B7A0` | satin |
-| nails | Sheer Bliss | ![](https://placehold.co/28x18/DFD4C5/DFD4C5.png) `#DFD4C5` | satin |
 | nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
 | nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
-| nails | Big Apple Red | ![](https://placehold.co/28x18/B01B1E/B01B1E.png) `#B01B1E` | gloss |
 
 _Skip line:_ Skip mauve, dusty rose and anything greyed — muting is what takes the life out of this palette.
 
@@ -940,11 +924,9 @@ _Also:_ copper, bronze
 | highlight | Clear Gold | ![](https://placehold.co/28x18/F6DA9C/F6DA9C.png) `#F6DA9C` | metallic |
 | highlight | Bright Pearl | ![](https://placehold.co/28x18/FDF0DC/FDF0DC.png) `#FDF0DC` | shimmer |
 | nails | Cajun Shrimp | ![](https://placehold.co/28x18/E14A46/E14A46.png) `#E14A46` | gloss |
-| nails | Sheer Bliss | ![](https://placehold.co/28x18/DFD4C5/DFD4C5.png) `#DFD4C5` | satin |
 | nails | Bare With Me | ![](https://placehold.co/28x18/D8B7A0/D8B7A0.png) `#D8B7A0` | satin |
 | nails | Bachelorette Bash | ![](https://placehold.co/28x18/E36085/E36085.png) `#E36085` | gloss |
 | nails | Watermelon | ![](https://placehold.co/28x18/DF4747/DF4747.png) `#DF4747` | gloss |
-| nails | Big Apple Red | ![](https://placehold.co/28x18/B01B1E/B01B1E.png) `#B01B1E` | gloss |
 
 _Skip line:_ Skip dusty, smoky and earthy shades — they read as grime beside colours this clear.
 
@@ -1050,12 +1032,10 @@ _Also:_ copper
 | liner | Muted Plum Liner | ![](https://placehold.co/28x18/6E566A/6E566A.png) `#6E566A` | matte |
 | highlight | Cool Pearl | ![](https://placehold.co/28x18/F3E9EC/F3E9EC.png) `#F3E9EC` | shimmer |
 | highlight | Soft Rose Pearl | ![](https://placehold.co/28x18/F6DDE2/F6DDE2.png) `#F6DDE2` | shimmer |
-| nails | Sugar Daddy | ![](https://placehold.co/28x18/DC9EAA/DC9EAA.png) `#DC9EAA` | satin |
 | nails | Angel Food | ![](https://placehold.co/28x18/E3C9CB/E3C9CB.png) `#E3C9CB` | satin |
 | nails | Tiara | ![](https://placehold.co/28x18/DAA9C5/DAA9C5.png) `#DAA9C5` | satin |
 | nails | Mod About You | ![](https://placehold.co/28x18/E2A7B0/E2A7B0.png) `#E2A7B0` | satin |
 | nails | Princesses Rule | ![](https://placehold.co/28x18/C37E8B/C37E8B.png) `#C37E8B` | satin |
-| nails | Lovie Dovie | ![](https://placehold.co/28x18/EAAEBE/EAAEBE.png) `#EAAEBE` | satin |
 
 _Skip line:_ Skip black, orange and deep browns — the weight and the warmth both work against a light cool face.
 
@@ -1159,12 +1139,10 @@ Yours is the lightest and coolest of the summers — soft, cool and easily overp
 | liner | Slate Liner | ![](https://placehold.co/28x18/556076/556076.png) `#556076` | matte |
 | highlight | Rose Pearl | ![](https://placehold.co/28x18/F2DFE2/F2DFE2.png) `#F2DFE2` | shimmer |
 | highlight | Cool Moonstone | ![](https://placehold.co/28x18/E7E4EA/E7E4EA.png) `#E7E4EA` | shimmer |
-| nails | Bachelorette Bash | ![](https://placehold.co/28x18/E36085/E36085.png) `#E36085` | gloss |
 | nails | Midnight Cami | ![](https://placehold.co/28x18/344360/344360.png) `#344360` | gloss |
 | nails | Berry Naughty | ![](https://placehold.co/28x18/74303E/74303E.png) `#74303E` | gloss |
 | nails | Tiara | ![](https://placehold.co/28x18/DAA9C5/DAA9C5.png) `#DAA9C5` | satin |
 | nails | Princesses Rule | ![](https://placehold.co/28x18/C37E8B/C37E8B.png) `#C37E8B` | satin |
-| nails | Strawberry Margarita | ![](https://placehold.co/28x18/D03364/D03364.png) `#D03364` | gloss |
 
 _Skip line:_ Skip orange, gold and warm camel — warmth of any kind is what pulls this face off-key.
 
@@ -1270,8 +1248,6 @@ You are cool and soft in equal measure — the most classically summer of the th
 | highlight | Muted Rose Pearl | ![](https://placehold.co/28x18/F0DFDE/F0DFDE.png) `#F0DFDE` | shimmer |
 | nails | Princesses Rule | ![](https://placehold.co/28x18/C37E8B/C37E8B.png) `#C37E8B` | satin |
 | nails | Malaga Wine | ![](https://placehold.co/28x18/6A3A43/6A3A43.png) `#6A3A43` | gloss |
-| nails | Bare With Me | ![](https://placehold.co/28x18/D8B7A0/D8B7A0.png) `#D8B7A0` | satin |
-| nails | Mademoiselle | ![](https://placehold.co/28x18/D3A493/D3A493.png) `#D3A493` | satin |
 | nails | Perennial Chic | ![](https://placehold.co/28x18/B77A7A/B77A7A.png) `#B77A7A` | satin |
 | nails | Passion | ![](https://placehold.co/28x18/D08F89/D08F89.png) `#D08F89` | satin |
 
@@ -1363,6 +1339,44 @@ Winter, Bright Spring / Bright Winter)?
 | Light Summer | Soft White ![](https://placehold.co/28x18/F7F3EF/F7F3EF.png) `#F7F3EF` | Powder Pink ![](https://placehold.co/28x18/F6C6D6/F6C6D6.png) `#F6C6D6` | Lavender ![](https://placehold.co/28x18/C8B6E2/C8B6E2.png) `#C8B6E2` | Powder Blue ![](https://placehold.co/28x18/AFCBEF/AFCBEF.png) `#AFCBEF` | Misty Aqua ![](https://placehold.co/28x18/A7DAD8/A7DAD8.png) `#A7DAD8` | Dove Gray ![](https://placehold.co/28x18/B8BCC6/B8BCC6.png) `#B8BCC6` |
 | True Summer | Soft White ![](https://placehold.co/28x18/F2F1EE/F2F1EE.png) `#F2F1EE` | Rose ![](https://placehold.co/28x18/C96F8C/C96F8C.png) `#C96F8C` | Raspberry Rose ![](https://placehold.co/28x18/B84A6B/B84A6B.png) `#B84A6B` | Periwinkle ![](https://placehold.co/28x18/7F95C8/7F95C8.png) `#7F95C8` | Soft Teal ![](https://placehold.co/28x18/5B9EA0/5B9EA0.png) `#5B9EA0` | Soft Navy ![](https://placehold.co/28x18/2F405C/2F405C.png) `#2F405C` |
 | Soft Summer | Oyster White ![](https://placehold.co/28x18/EDE6DD/EDE6DD.png) `#EDE6DD` | Dusty Pink ![](https://placehold.co/28x18/C996A6/C996A6.png) `#C996A6` | Dusty Lavender ![](https://placehold.co/28x18/9B8AA8/9B8AA8.png) `#9B8AA8` | Smoky Blue ![](https://placehold.co/28x18/7089A3/7089A3.png) `#7089A3` | Eucalyptus ![](https://placehold.co/28x18/7F9B8E/7F9B8E.png) `#7F9B8E` | Charcoal Navy ![](https://placehold.co/28x18/374252/374252.png) `#374252` |
+
+---
+
+# Nail corrections — 2026-09-21
+
+Nails went from six per season to **four**, each now carrying its brand
+(`brand` on the shade; the Beauty tab prints "OPI · Big Apple Red").
+
+**Directed** — removed because they were wrong for the season:
+
+| season | removed | why |
+| --- | --- | --- |
+| Deep Winter | Watermelon (OPI) | a bright *warm* pink on the coolest deep season |
+| Deep Winter | Perennial Chic (Essie) | muted dusty rose; Deep Winter is clear, not muted |
+| Soft Autumn | Princesses Rule (OPI) | a bright *cool* pink on a warm, muted season |
+
+**Draft, for review** — the rest of the cut to four was my call. The rule I
+used: drop what fights the season's temperature first, then its clarity.
+
+| season | also removed | kept |
+| --- | --- | --- |
+| Deep Autumn | Perennial Chic, Midnight Cami | Berry Naughty, Malaga Wine, Big Apple Red, Mademoiselle |
+| True Autumn | Watermelon, Perennial Chic | Cajun Shrimp, Big Apple Red, Malaga Wine, Mademoiselle |
+| Soft Autumn | Berry Naughty | Perennial Chic, Passion, Bare With Me, Mademoiselle |
+| Deep Winter | — | Big Apple Red, Berry Naughty, Malaga Wine, Midnight Cami |
+| True Winter | Watermelon, Strawberry Margarita | Big Apple Red, Charged Up Cherry, Midnight Cami, Sheer Bliss |
+| Bright Winter | Watermelon, Cajun Shrimp | Charged Up Cherry, Strawberry Margarita, Midnight Cami, Sheer Bliss |
+| Light Spring | Passion, Perennial Chic | Mademoiselle, Bare With Me, Sheer Bliss, Bachelorette Bash |
+| True Spring | Sheer Bliss, Big Apple Red | Cajun Shrimp, Watermelon, Mademoiselle, Bare With Me |
+| Bright Spring | Sheer Bliss, Big Apple Red | Cajun Shrimp, Watermelon, Bachelorette Bash, Bare With Me |
+| Light Summer | Sugar Daddy, Lovie Dovie | Angel Food, Tiara, Mod About You, Princesses Rule |
+| True Summer | Bachelorette Bash, Strawberry Margarita | Tiara, Princesses Rule, Berry Naughty, Midnight Cami |
+| Soft Summer | Bare With Me, Mademoiselle | Perennial Chic, Passion, Princesses Rule, Malaga Wine |
+
+Still questionable and left in for you to judge: **Perennial Chic on Soft
+Autumn** (you removed it from Deep Winter for being muted-cool; Soft Autumn is
+muted but warm), and **Berry Naughty / Midnight Cami on True Summer** (deep for
+a medium-value season). The per-season nail tables above show what ships.
 
 ---
 
