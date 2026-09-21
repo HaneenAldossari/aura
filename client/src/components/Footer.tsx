@@ -34,7 +34,7 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
     >
       <p
         style={{
-          fontFamily: "Cormorant Garamond, serif",
+          fontFamily: "var(--font-display)",
           fontSize: "20px",
           color: "var(--text-secondary)",
           margin: "0 0 8px",
@@ -50,7 +50,6 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
           color: "var(--text-muted)",
           textTransform: "uppercase",
           margin: 0,
-          opacity: 0.7,
         }}
       >
         {t("common.createdBy")} · {t("common.tagline")} · {year}

@@ -1,9 +1,12 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from "react-router-dom";
 
-// Route-level code splitting — each page (and its heavy deps like gsap)
-// loads only when visited.
-const Home = lazy(() => import("./pages/Home"));
+import Home from "./pages/Home";
+
+// Route-level code splitting — each page (and its heavy deps) loads only when
+// visited. Home is the exception: it is where almost everyone arrives, and as
+// a lazy chunk it could not even be requested until the main bundle had run,
+// which put a full round trip between the visitor and the headline.
 const Analysis = lazy(() => import("./pages/Analysis"));
 const Results = lazy(() => import("./pages/Results"));
 

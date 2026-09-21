@@ -456,6 +456,49 @@ export function allSeasonPalettes(): { season: string; palette: SeasonPalette }[
   })).filter((entry) => Boolean(entry.palette));
 }
 
+/**
+ * Six colours that stand for a season at a glance: a light neutral, four
+ * colours, a dark neutral, in that order.
+ *
+ * For anywhere twelve is too many — the Home marquee shows these. Twelve
+ * swatches in a 256px card are 33px each and read as confetti; six read as a
+ * palette. The four colours are chosen to span the season's hue range rather
+ * than to be its four "best", so a card shows the season's temperature and
+ * clarity, not just its favourite corner.
+ *
+ * Names, not hexes: each resolves against that season's `best`, so there is
+ * still exactly one copy of every colour, and a name that stops resolving is a
+ * test failure rather than a silently stale swatch. A DRAFT, for review in
+ * design/makeup-review.md — curation is a judgement call no test can make.
+ */
+export const HERO_SIX: Record<string, readonly [string, string, string, string, string, string]> = {
+  "light spring":  ["Ivory",        "Light Peach",  "Coral Pink",    "Butter Yellow", "Light Aqua",      "Camel Beige"],
+  "true spring":   ["Warm Ivory",   "Coral",        "Sunflower",     "Grass Green",   "Turquoise",       "Golden Brown"],
+  "bright spring": ["Clear Ivory",  "Watermelon",   "Lemon Yellow",  "Emerald Green", "Bright Blue",     "Chocolate Brown"],
+  "light summer":  ["Soft White",   "Powder Pink",  "Lavender",      "Powder Blue",   "Misty Aqua",      "Dove Gray"],
+  "true summer":   ["Soft White",   "Rose",         "Raspberry Rose","Periwinkle",    "Soft Teal",       "Soft Navy"],
+  "soft summer":   ["Oyster White", "Dusty Pink",   "Dusty Lavender","Smoky Blue",    "Eucalyptus",      "Charcoal Navy"],
+  "soft autumn":   ["Cream",        "Soft Peach",   "Soft Terracotta","Moss Green",   "Muted Turquoise", "Soft Chocolate"],
+  "true autumn":   ["Warm Cream",   "Mustard",      "Rust",          "Olive Green",   "Petrol Teal",     "Chocolate Brown"],
+  "deep autumn":   ["Deep Cream",   "Bronze",       "Burnt Brick",   "Pine Green",    "Aubergine",       "Espresso"],
+  "deep winter":   ["Pure White",   "Cranberry",    "Emerald",       "Deep Plum",     "Midnight Blue",   "Black"],
+  "true winter":   ["Pure White",   "Blue-Red",     "Fuchsia",       "Emerald Green", "Royal Blue",      "Black"],
+  "bright winter": ["Pure White",   "Magenta",      "Electric Blue", "Bright Violet", "Emerald",         "Black"],
+};
+
+/** A season's six, resolved to colours. Empty for a season this system does not have. */
+export function heroSix(season: string | undefined): Color[] {
+  const key = (season ?? "").toLowerCase().trim();
+  const palette = PALETTES[key];
+  const names = HERO_SIX[key];
+  if (!palette || !names) return [];
+  return names.map((name) => {
+    const colour = palette.best.find((c) => c.name === name);
+    if (!colour) throw new Error(`heroSix: "${name}" is not in the ${season} palette`);
+    return { name: colour.name, hex: colour.hex };
+  });
+}
+
 export function getCanonicalPalette(season: string | undefined): SeasonPalette | null {
   if (!season) return null;
   const key = season.toLowerCase().trim();

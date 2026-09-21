@@ -172,7 +172,7 @@ describe("RTL", () => {
   it("gives Arabic its own display, body and mono faces", () => {
     // Scoped to [dir="rtl"], not appended to the Latin stacks: font fallback
     // is chosen per glyph, so an Arabic face left in the Latin display stack
-    // would pick up any character Bodoni happens to lack.
+    // would pick up any character Cormorant happens to lack.
     const rtlBlock = css.match(/\[dir="rtl"\]\s*\{[^}]*\}/)?.[0] ?? "";
     expect(rtlBlock).toMatch(/--font-display:\s*Amiri/);
     expect(rtlBlock).toMatch(/--font-body:[^;]*IBM Plex Sans Arabic/);
@@ -186,7 +186,7 @@ describe("RTL", () => {
   });
 
   it("loosens display leading for Arabic", () => {
-    // Bodoni's tight display leading reads as cramped in a script with no
+    // Cormorant's tight display leading reads as cramped in a script with no
     // ascender/descender rhythm to hang on.
     expect(css).toMatch(/\[dir="rtl"\][^{]*\.ed-season[\s\S]{0,160}line-height/);
   });

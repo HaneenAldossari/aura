@@ -13,7 +13,8 @@ import fs from "fs";
 import path from "path";
 import MAKEUP, { type MakeupShade } from "../server/utils/seasonMakeup";
 import STYLE from "../server/utils/seasonStyle";
-import { getCanonicalPalette, RIBBON_ORDER } from "../server/utils/seasonPalettes";
+import { getCanonicalPalette, heroSix, RIBBON_ORDER } from "../server/utils/seasonPalettes";
+import { LOOK_NAME_EXTRA_WORDS, LOOK_VOCABULARY, LOOKS_PER_SEASON } from "../server/utils/lookVocabulary";
 
 const OUT = path.join(__dirname, "../design/makeup-review.md");
 
@@ -155,6 +156,39 @@ const doc = [
   "---",
   "",
   RIBBON_ORDER.map(seasonSection).join("\n---\n\n"),
+  "",
+  "---",
+  "",
+  "# Hero six — the Home marquee",
+  "",
+  "**Draft, for review.** Six colours per season for the Home marquee cards:",
+  "a light neutral, four colours, a dark neutral. Every one is a member of that",
+  "season's twelve, so this is a choice of *which*, never a new colour. Edit",
+  "`HERO_SIX` in `server/utils/seasonPalettes.ts` by name; a name that is not in",
+  "the season's palette fails `tests/homeLanding.test.ts`.",
+  "",
+  "What to check: does the row read as that season at a glance, and would it be",
+  "mistaken for its neighbour (Light Spring / Light Summer, Deep Autumn / Deep",
+  "Winter, Bright Spring / Bright Winter)?",
+  "",
+  table(
+    RIBBON_ORDER.map((season) => [season, ...heroSix(season).map((c) => `${c.name} ${swatch(c.hex)}`)]),
+    ["season", "light neutral", "colour", "colour", "colour", "colour", "dark neutral"]
+  ),
+  "",
+  "---",
+  "",
+  "# Look vocabulary",
+  "",
+  "**Draft, for review.** A makeup look's name must *start* with one of these",
+  `terms and may add up to ${LOOK_NAME_EXTRA_WORDS} words after it ("Soft Glam, Plum"). The model is`,
+  `given the list and asked for exactly ${LOOKS_PER_SEASON} looks; \`validateLooks()\` drops any look`,
+  "whose name does not comply. Edit `LOOK_VOCABULARY` in",
+  "`server/utils/lookVocabulary.ts`, then regenerate the demo analyses",
+  "(`npm run precompute:demos -- --force --hair=dyed`, about $0.09).",
+  "",
+  LOOK_VOCABULARY.map((term) => `- ${term}`).join("\n"),
+  "",
 ].join("\n");
 
 fs.writeFileSync(OUT, doc);

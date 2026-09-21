@@ -4,9 +4,16 @@ import { useT } from "../../i18n";
 import { readableOn } from "../../lib/contrast";
 import { checkLinkImage } from "../../lib/api";
 import { getLastCheck, rememberCheck } from "../../lib/checkCache";
+import { displayed, shopHeadline, SHOP_HEADLINE_KEY } from "../../lib/bands";
 import type { AnalysisResult, LinkCheckResultData, Verdict } from "../../lib/types";
 
-/** The bands the design prints under the score. */
+/** One sentence: the card says one thing, and the rest is behind "Show details". */
+function firstSentence(text: string | undefined): string {
+  if (!text) return "";
+  return text.trim().split(/(?<=[.!?])\s+/)[0] ?? "";
+}
+
+/** The model's four bands, printed in the details. The headline uses lib/bands. */
 const BANDS: { verdict: Verdict; from: number; to: number }[] = [
   { verdict: "avoid", from: 0, to: 39 },
   { verdict: "maybe", from: 40, to: 64 },
@@ -46,12 +53,14 @@ export default function BeforeYouBuyPanel({
   const [preview, setPreview] = useState<string | null>(remembered?.preview ?? null);
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   const check = useCallback(
     async (file: File) => {
       setChecking(true);
       setError(null);
       setResult(null);
+      setDetailsOpen(false);
       const objectUrl = URL.createObjectURL(file);
       setPreview(objectUrl);
       try {
@@ -119,32 +128,65 @@ export default function BeforeYouBuyPanel({
     );
   }
 
+  const headline = shopHeadline(result.matchScore);
+  const reason = firstSentence(result.reason);
+  const tip = firstSentence(result.tip);
+
   return (
-    <div className="ed-split">
-      <div>
-        {preview && <img src={preview} alt={t("results.shop.uploadedAlt")} className="ed-product" />}
-        <p className="ed-def__value" style={{ marginBlockStart: "var(--space-3)" }}>
-          {result.productName}
-        </p>
-        <p className="ed-masthead__meta">
-          {result.productColor} · <span className="ltr-run">{result.hex}</span>
-        </p>
-      </div>
+    <div className="ed-verdictcard" data-headline={headline}>
+      {preview && <img src={preview} alt={t("results.shop.uploadedAlt")} className="ed-product" />}
 
-      <div>
-        <p className="ed-score">
-          <span className="ed-score__value ltr-run">{result.matchScore}</span>
-          <span className="ed-score__of ltr-run">/100</span>
+      <div className="ed-verdictcard__body">
+        {/* The answer first, in words. The number is the evidence for it, so
+            it sits underneath and small: someone holding a jumper in a shop
+            wants "suits you", not a 72 they then have to interpret. */}
+        <p className="ed-verdict">{t(SHOP_HEADLINE_KEY[headline])}</p>
+        <p className="ed-score" aria-label={t("results.shop.scoreLabel", { score: displayed(result.matchScore), verdict: t(SHOP_HEADLINE_KEY[headline]) })}>
+          <span className="ed-score__value ltr-run">{displayed(result.matchScore)}</span>
+          <span className="ed-score__of ltr-run"> / 100</span>
         </p>
-        <p className="ed-verdict">{t(VERDICT_KEY[result.verdict])}</p>
 
-        {result.reason && <p className="ed-tagline">{result.reason}</p>}
-        {result.tip && (
-          <p className="ed-note__text">
-            <span style={{ color: "var(--accent)" }}>{t("results.shop.tipLabel")}</span>{" "}
-            {result.tip}
+        {reason && <p className="ed-verdictcard__reason">{reason}</p>}
+        {tip && (
+          <p className="ed-verdictcard__tip">
+            <span style={{ color: "var(--accent)" }}>{t("results.shop.tipLabel")}</span> {tip}
           </p>
         )}
+
+        <div className="ed-actions">
+          <button
+            type="button"
+            className="ed-link"
+            onClick={() => {
+              setResult(null);
+              setPreview(null);
+              setDetailsOpen(false);
+              rememberCheck(resultId, null, null);
+            }}
+          >
+            {t("results.shop.checkAnother")}
+          </button>
+          <button
+            type="button"
+            className="ed-link ed-link--quiet"
+            aria-expanded={detailsOpen}
+            aria-controls="shop-details"
+            onClick={() => setDetailsOpen((open) => !open)}
+          >
+            {t(detailsOpen ? "results.shop.hideDetails" : "results.shop.showDetails")}
+          </button>
+        </div>
+      </div>
+
+      {/* The working-out. Closed by default: it is for the reader who wants
+          to check the answer, not a toll everyone pays to reach it. */}
+      <div className="ed-verdictcard__details" id="shop-details" hidden={!detailsOpen}>
+        <p className="ed-def__value" style={{ margin: 0 }}>{result.productName}</p>
+        <p className="ed-masthead__meta" style={{ display: "block", whiteSpace: "normal" }}>
+          {result.productColor} · <span className="ltr-run">{result.hex}</span>
+        </p>
+
+        {result.reason && result.reason !== reason && <p className="ed-tagline">{result.reason}</p>}
 
         <ol className="ed-bands" aria-label={t("results.shop.bandsLabel")}>
           {BANDS.map((band) => (
@@ -180,7 +222,7 @@ export default function BeforeYouBuyPanel({
           )}
         </div>
         {nearest && (
-          <p className="ed-masthead__meta" style={{ display: "block", marginBlockStart: "var(--space-2)" }}>
+          <p className="ed-masthead__meta" style={{ display: "block", marginBlockStart: "var(--space-2)", whiteSpace: "normal" }}>
             {nearest.name} · <span className="ltr-run">{nearest.hex.replace("#", "")}</span>{" "}
             {t("results.shop.nearest")}
           </p>
@@ -204,20 +246,6 @@ export default function BeforeYouBuyPanel({
         )}
 
         <p className="ed-skip">{t("results.shop.approximate")}</p>
-
-        <div className="ed-actions">
-          <button
-            type="button"
-            className="ed-link"
-            onClick={() => {
-              setResult(null);
-              setPreview(null);
-              rememberCheck(resultId, null, null);
-            }}
-          >
-            {t("results.shop.checkAnother")}
-          </button>
-        </div>
       </div>
     </div>
   );

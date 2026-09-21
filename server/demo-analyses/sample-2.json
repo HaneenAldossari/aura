@@ -1,6 +1,6 @@
 {
   "season": "Soft Autumn",
-  "seasonTagline": "Earthy elegance wrapped in soft, sun-warmed neutrals",
+  "seasonTagline": "Gentle warmth meets earthy, understated elegance.",
   "confidence": 50,
   "undertone": "warm",
   "depth": "Medium",
@@ -10,17 +10,17 @@
   "chromaLevel": "muted",
   "colorDNA": {
     "warmth": 68,
-    "depth": 52,
+    "depth": 46,
     "clarity": 38,
-    "contrast": 50
+    "contrast": 54
   },
-  "reasoning": "Light-medium golden olive skin with delicate warm undertones and a soft, muted finish. Dyed dark hair pulled neatly back, showing a deep neutral frame around your face. Warm, velvety dark brown eyes with soft depth and minimal surface glare.",
-  "seasonStory": "Soft Autumn sits at the tranquil intersection of summer's gentle haze and autumn's golden glow. Your colouring flourishes in tones that are subtly warmed and brushed with grey or taupe, rather than stark, highly saturated pigments. When you wear muted olive, dusty terracotta, and toasted taupe, your golden-olive complexion glows with understated elegance.",
+  "reasoning": "Your skin has a gentle golden-olive undertone with warm radiance and a smooth, light-to-medium depth. Your hair is currently dyed dark, whilst your natural eyebrows show a soft, deep neutral-warm brown baseline. Your eyes are an expressive deep brown with velvety warmth that anchors your overall colouring.",
+  "seasonStory": "As a Soft Autumn, your natural beauty shines brightest in colours softened with subtle warmth and earthy undertones. Instead of high-contrast or stark shades, your features harmonise effortlessly with muted terracotta, warm taupe, sage, and dusty rosewood, which enhance your radiant olive complexion.",
   "lightingQuality": "Natural daylight",
   "keyFeatures": {
-    "skinTone": "Light-medium golden olive skin with delicate warm undertones and a soft, muted finish.",
-    "eyeColor": "Warm, velvety dark brown eyes with soft depth and minimal surface glare.",
-    "hairColor": "Dyed dark hair pulled neatly back, showing a deep neutral frame around your face.",
+    "skinTone": "Your skin has a gentle golden-olive undertone with warm radiance and a smooth, light-to-medium depth.",
+    "eyeColor": "Your eyes are an expressive deep brown with velvety warmth that anchors your overall colouring.",
+    "hairColor": "Your hair is currently dyed dark, whilst your natural eyebrows show a soft, deep neutral-warm brown baseline.",
     "veinColor": "",
     "contrast": "medium contrast"
   },
@@ -161,12 +161,12 @@
     "foundation": {
       "recommended": [],
       "avoid": [],
-      "tip": "Select a light-to-medium coverage foundation with neutral-warm or golden-olive undertones to preserve your natural warmth."
+      "tip": "Opt for a radiant, light-to-medium coverage foundation with neutral-warm or olive undertones to avoid an ashy cast."
     },
-    "blush": "Soft terracotta or dusty apricot swept across the cheekbones.",
-    "bronzer": "Muted amber or soft taupe bronze for gentle warmth.",
-    "lips": "Muted brick, rosewood, or a soft cocoa gloss.",
-    "eyes": "Warm taupe and soft bronze washed over the lids with an espresso or olive-brown liner.",
+    "blush": "Dusty apricot or soft terracotta swept gently across the cheekbones.",
+    "bronzer": "Soft taupe bronze applied lightly along temples and jawline for subtle warmth.",
+    "lips": "Rosewood, soft cocoa, or a warm nude gloss for an effortless everyday tint.",
+    "eyes": "Warm taupe and soft bronze washes paired with a smudged soft brown pencil.",
     "nails": {
       "bestColors": [],
       "avoidColors": []
@@ -182,25 +182,25 @@
     "metals": "Yellow Gold, Rose Gold, Antique Gold, Brushed Bronze",
     "stones": "",
     "avoid": "Silver, Platinum, White Gold",
-    "style": "Brushed yellow gold, satin bronze, and muted antique metals bring out your natural golden-olive glow far better than high-shine silver."
+    "style": "Brushed gold, antique bronze, and warm hammered metals harmonise wonderfully with your soft olive complexion, whereas bright silver appears stark."
   },
   "hairColor": {
-    "bestHighlights": "Soft caramel or subtle warm hazelnut babylights to add gentle dimension.",
-    "bestOverall": "Rich dark mocha brown or warm chestnut to complement your natural depth.",
-    "avoid": "Icy platinum blonde, blue-black, or cool ash tones that clash with your warm olive undertone."
+    "bestHighlights": "Fine warm caramel or golden babylights seamlessly blended through the mid-lengths.",
+    "bestOverall": "Rich dark hazelnut or soft mocha brown with gentle warm undertones.",
+    "avoid": "Harsh blue-black dyes or cool platinum blonde, which overwhelm your soft, muted colouring."
   },
   "celebrities": [
     {
       "name": "Jessica Alba",
-      "why": "Shares your soft golden-olive undertone, deep warm eyes, and effortless affinity for muted, warm neutrals."
+      "why": "Shares your warm golden-olive undertone and balanced, softly contrasted features."
     },
     {
-      "name": "Chrissy Teigen",
-      "why": "Features comparable warmth, medium depth, and a radiant complexion flattered by soft autumn earth tones."
+      "name": "Olivia Palermo",
+      "why": "Exemplifies the understated warmth and muted elegance characteristic of the Soft Autumn palette."
     },
     {
-      "name": "Freida Pinto",
-      "why": "Possesses similar warm golden undertones and expressive brown eyes that look sublime in softened, toasted hues."
+      "name": "Kaia Gerber",
+      "why": "Has a similar warm olive complexion and deep brown eyes that flourish in earthy, softened tones."
     }
   ],
   "koreanAnalysis": {
@@ -245,7 +245,14 @@
         "finish": "satin"
       }
     ],
-    "undertoneGuide": "Neutral-warm and low contrast — keep the base soft, and let nothing on the face read as bright.",
+    "guidance": {
+      "base": "Keep the base soft and neutral-warm. Your contrast is low, so a heavy or high-coverage finish reads as a mask.",
+      "blush": "Dusty apricot and muted rose. The rule for you is quiet — if a blush is visible from across a room it is too bright.",
+      "lip": "Rosewood, muted brick and soft cocoa. Your lip should look like a slightly better version of your own colour.",
+      "eye": "Soft bronze, warm taupe and sage. Everything stays within a few steps of each other; sharp contrast ages your eye.",
+      "liner": "Soft brown or olive-grey, smudged rather than drawn. A crisp black line is the fastest way to make you look tired.",
+      "nails": "Rosewood, sage olive and warm taupe. Bright coral and true red overpower the softness that defines you."
+    },
     "blush": [
       {
         "name": "Dusty Apricot",
@@ -431,6 +438,106 @@
     "skip": "Skip anything vivid or icy — bright coral, true red and stark white all overpower your softness."
   },
   "styleShades": {
+    "guidance": {
+      "jewellery": "Antique and brushed finishes. Anything highly polished is brighter than your face and takes attention from it.",
+      "hair": "Keep your hair soft and warm. Mocha, muted chestnut and dusty caramel suit you; avoid jet black and platinum, which are both too strong for your contrast.",
+      "pairings": "Keep every piece close in depth. Your outfits work through blending, not contrast."
+    },
+    "story": "Yours is the gentlest of the autumns — warm, but so muted that brightness reads as noise on you. Dusty, blended colours let your face be the most interesting thing in the outfit, which is exactly the effect you want. The moment an outfit has a sharp edge in it, the edge is all anyone sees.",
+    "metals": [
+      {
+        "name": "Yellow gold",
+        "verdict": "best",
+        "reason": "Warm, best in brushed finishes"
+      },
+      {
+        "name": "Rose gold",
+        "verdict": "best",
+        "reason": "Soft warmth, made for you"
+      },
+      {
+        "name": "Silver",
+        "verdict": "skip",
+        "reason": "Too cool and too bright"
+      }
+    ],
+    "extraMetals": "antique gold, bronze",
+    "pairings": [
+      {
+        "colours": [
+          {
+            "name": "Camel",
+            "hex": "#C19A6B"
+          },
+          {
+            "name": "Dusty Coral",
+            "hex": "#C97868",
+            "note": "Sun-warmed soft coral."
+          },
+          {
+            "name": "Warm Beige",
+            "hex": "#D7B98E"
+          }
+        ],
+        "when": "Everyday, the easiest outfit you own"
+      },
+      {
+        "colours": [
+          {
+            "name": "Olive",
+            "hex": "#7F8A4A",
+            "note": "Muted earthy green."
+          },
+          {
+            "name": "Cream",
+            "hex": "#F3E4C8"
+          },
+          {
+            "name": "Soft Terracotta",
+            "hex": "#B7664B",
+            "note": "Earthy warm clay."
+          }
+        ],
+        "when": "Daytime, anything that needs to look calm"
+      },
+      {
+        "colours": [
+          {
+            "name": "Warm Teal",
+            "hex": "#4F8A83",
+            "note": "Muted blue-green accent."
+          },
+          {
+            "name": "Warm Beige",
+            "hex": "#D7B98E"
+          },
+          {
+            "name": "Camel",
+            "hex": "#C19A6B"
+          }
+        ],
+        "when": "Evening, kept quiet"
+      },
+      {
+        "colours": [
+          {
+            "name": "Muted Salmon",
+            "hex": "#D98B75",
+            "note": "Gentle warm pink."
+          },
+          {
+            "name": "Cream",
+            "hex": "#F3E4C8"
+          },
+          {
+            "name": "Olive",
+            "hex": "#7F8A4A",
+            "note": "Muted earthy green."
+          }
+        ],
+        "when": "Weekends and layers"
+      }
+    ],
     "gemstones": [
       {
         "name": "Smoky Quartz",
@@ -490,20 +597,19 @@
         "hex": "#D8D4CC",
         "accent": "#F2F0EC"
       }
-    ],
-    "metalNote": "Antique and brushed finishes. Anything highly polished is too bright here."
+    ]
   },
   "looks": [
     {
-      "name": "Golden Hour Glow",
-      "vibe": "Effortless daytime radiance with gentle earthy warmth",
+      "name": "No-Makeup Makeup",
+      "vibe": "A gentle wash of warm neutrals enhancing your natural olive glow.",
       "timeOfDay": "day",
       "shades": [
         {
-          "name": "Soft Bronze",
-          "hex": "#9A7448",
+          "name": "Warm Taupe",
+          "hex": "#8A7561",
           "category": "eye",
-          "finish": "shimmer",
+          "finish": "matte",
           "slot": "eye"
         },
         {
@@ -521,6 +627,83 @@
           "slot": "cheek"
         },
         {
+          "name": "Warm Nude Gloss",
+          "hex": "#C2907C",
+          "category": "lip",
+          "finish": "gloss",
+          "slot": "lip"
+        }
+      ]
+    },
+    {
+      "name": "Latte Makeup",
+      "vibe": "Polished warmth with earthy bronze tones and defined features.",
+      "timeOfDay": "day",
+      "shades": [
+        {
+          "name": "Soft Bronze",
+          "hex": "#9A7448",
+          "category": "eye",
+          "finish": "shimmer",
+          "slot": "eye"
+        },
+        {
+          "name": "Muted Bronze",
+          "hex": "#7E6242",
+          "category": "liner",
+          "finish": "shimmer",
+          "slot": "liner"
+        },
+        {
+          "name": "Soft Terracotta",
+          "hex": "#C08466",
+          "category": "blush",
+          "finish": "matte",
+          "slot": "cheek"
+        },
+        {
+          "name": "Soft Cocoa",
+          "hex": "#8E6253",
+          "category": "lip",
+          "finish": "cream",
+          "slot": "lip"
+        },
+        {
+          "name": "Soft Taupe Bronze",
+          "hex": "#9C7A56",
+          "category": "bronzer",
+          "finish": "matte",
+          "slot": "bronzer"
+        }
+      ]
+    },
+    {
+      "name": "Smoky Eye in Plum",
+      "vibe": "Velvety, diffused evening glamour with sophisticated depth.",
+      "timeOfDay": "evening",
+      "shades": [
+        {
+          "name": "Muted Plum",
+          "hex": "#6E4F53",
+          "category": "eye",
+          "finish": "matte",
+          "slot": "eye"
+        },
+        {
+          "name": "Olive Grey",
+          "hex": "#565A46",
+          "category": "liner",
+          "finish": "matte",
+          "slot": "liner"
+        },
+        {
+          "name": "Muted Rose",
+          "hex": "#BE8074",
+          "category": "blush",
+          "finish": "satin",
+          "slot": "cheek"
+        },
+        {
           "name": "Rosewood",
           "hex": "#9C5F58",
           "category": "lip",
@@ -535,64 +718,22 @@
           "slot": "highlight"
         }
       ]
-    },
-    {
-      "name": "Earthy Elegance",
-      "vibe": "Polished and refined definition for evening occasions",
-      "timeOfDay": "evening",
-      "shades": [
-        {
-          "name": "Sage Olive",
-          "hex": "#77804F",
-          "category": "eye",
-          "finish": "matte",
-          "slot": "eye"
-        },
-        {
-          "name": "Olive Grey",
-          "hex": "#565A46",
-          "category": "liner",
-          "finish": "matte",
-          "slot": "liner"
-        },
-        {
-          "name": "Soft Terracotta",
-          "hex": "#C08466",
-          "category": "blush",
-          "finish": "matte",
-          "slot": "cheek"
-        },
-        {
-          "name": "Muted Brick",
-          "hex": "#A0604A",
-          "category": "lip",
-          "finish": "matte",
-          "slot": "lip"
-        },
-        {
-          "name": "Muted Amber",
-          "hex": "#A8804F",
-          "category": "bronzer",
-          "finish": "satin",
-          "slot": "bronzer"
-        }
-      ]
     }
   ],
-  "secondarySeason": "True Autumn",
+  "secondarySeason": "Soft Summer",
   "axes": {
-    "hue": "neutral-warm",
-    "value": "medium",
-    "chroma": "soft"
+    "hue": "warm",
+    "value": "light",
+    "chroma": "medium"
   },
   "assessment": {
     "undertone": "warm",
-    "depth": "medium",
+    "depth": "light",
     "chroma": "muted",
     "contrast": "medium",
-    "evidence": "Your skin displays a distinct golden-olive warmth with gentle, diffused pigmentation. With your dark brown eyes and warm olive skin, your natural contrast sits at a balanced medium level once dyed hair is discounted, whilst your overall chroma is softly muted and earthy."
+    "evidence": "Your skin exhibits a delicate golden-olive warmth with light-to-medium depth, complemented by deep brown eyes that create a balanced, medium-contrast harmony."
   },
-  "rationale": "Your golden-olive undertone and softly diffused colouring place you comfortably within the Autumn family. Because your chroma is gentle and muted rather than vibrant, the softened, earthy tones of Soft Autumn harmonise best with your features. True Autumn serves as your close secondary season, offering slightly richer warmth when you desire more depth.",
+  "rationale": "Your colouring is characterised by a warm olive undertone paired with a soft, diffused chroma rather than stark clarity. While you share the muted, understated quality of Soft Summer, your golden base tone requires warm, earthy pigments rather than cool greys. You are also softer and more delicate than True Autumn, making the blended, muted palette of Soft Autumn your most flattering match.",
   "measured": {
     "skin": {
       "L": 68.33681902418097,

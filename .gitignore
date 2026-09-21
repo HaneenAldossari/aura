@@ -32,8 +32,10 @@ remotion-bg/out/
 .next/
 .turbo/
 
-# Dev-tool output (overlays, probe reports)
-dev/
+# Dev-tool output (overlays, probe reports, screenshots).
+# Anchored: a bare `dev/` also matched scripts/dev/, so none of the dev tooling
+# the README, CLAUDE.md and package.json point at was ever committed.
+/dev/
 
 
 # Sprint scratch tools — screenshots and one-off probes, not part of the repo.

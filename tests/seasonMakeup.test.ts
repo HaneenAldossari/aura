@@ -100,8 +100,8 @@ describe("resolveShade", () => {
 });
 
 describe("validateLooks", () => {
-  const look = (shades: [string, string][]) => ({
-    name: "Ember Wash",
+  const look = (shades: [string, string][], name = "Soft Glam, Ember") => ({
+    name,
     vibe: "Warm and lived-in.",
     timeOfDay: "day",
     shades: shades.map(([slot, shade]) => ({ slot, shade })),
@@ -143,7 +143,9 @@ describe("validateLooks", () => {
     const many: [string, string][] = [
       ...good, ["bronzer", "Warm Chestnut"], ["highlight", "Soft Gold"],
     ];
-    const { looks } = validateLooks("Deep Autumn", [look(many), look(many), look(many), look(many)]);
+    const { looks } = validateLooks("Deep Autumn", [
+      look(many, "Everyday"), look(many, "Soft Glam"), look(many, "Smoky Eye"), look(many, "Full Glam"),
+    ]);
     expect(looks).toHaveLength(3);
     expect(looks[0].shades).toHaveLength(5);
   });
@@ -157,6 +159,79 @@ describe("validateLooks", () => {
 
   it("returns nothing for an unknown season", () => {
     expect(validateLooks("Warm Spring", [look(good)]).looks).toEqual([]);
+  });
+
+  describe("names are held to the fixed vocabulary", () => {
+    it.each([
+      "Soft Glam",
+      "soft glam, plum",
+      "Smoky Eye in Bronze",
+      "No-Makeup Makeup",
+      "No\u2011Makeup Makeup",
+      "Bold Lip: Brick",
+      "Latte Makeup — Warm Edit",
+    ])("keeps %j", (name) => {
+      const { looks, dropped } = validateLooks("Deep Autumn", [look(good, name)]);
+      expect(dropped).toEqual([]);
+      expect(looks.map((l) => l.name)).toEqual([name]);
+    });
+
+    it.each([
+      ["Effortless Obsidian", /does not start with a vocabulary term/],
+      ["Golden Hour Glow", /does not start with a vocabulary term/],
+      ["The Soft Glam", /does not start with a vocabulary term/],
+      ["Soft Glamour", /does not start with a vocabulary term/],
+      ["Everydayish", /does not start with a vocabulary term/],
+      ["Soft Glam with a whisper of smoked autumn plum", /adds \d+ words/],
+    ])("drops %j and says why", (name, reason) => {
+      const { looks, dropped } = validateLooks("Deep Autumn", [look(good, name)]);
+      expect(looks).toEqual([]);
+      expect(dropped).toHaveLength(1);
+      expect(dropped[0]).toMatch(reason);
+    });
+
+    it("drops rather than renames, so a bad name costs a look and never invents one", () => {
+      const { looks } = validateLooks("Deep Autumn", [
+        look(good, "Midnight Glamour"), look(good, "Everyday"), look(good, "Date Night"),
+      ]);
+      expect(looks.map((l) => l.name)).toEqual(["Everyday", "Date Night"]);
+    });
+
+    it("keeps three good looks even when a bad one comes first", () => {
+      const { looks } = validateLooks("Deep Autumn", [
+        look(good, "Spiced Amber Evening"), look(good, "Everyday"), look(good, "Soft Glam"), look(good, "Bold Lip"),
+      ]);
+      expect(looks).toHaveLength(3);
+    });
+
+    it("drops a repeated name", () => {
+      const { looks, dropped } = validateLooks("Deep Autumn", [look(good, "Everyday"), look(good, "everyday")]);
+      expect(looks).toHaveLength(1);
+      expect(dropped[0]).toMatch(/duplicate/);
+    });
+
+    it("is what the prompt and the schema tell the model", async () => {
+      const { COLOR_ANALYSIS_SYSTEM_PROMPT, COLOR_ANALYSIS_SCHEMA } = await import("../server/prompts/colorAnalysis");
+      const { LOOK_VOCABULARY, LOOKS_PER_SEASON } = await import("../server/utils/lookVocabulary");
+      for (const term of LOOK_VOCABULARY) expect(COLOR_ANALYSIS_SYSTEM_PROMPT).toContain(`"${term}"`);
+      expect(COLOR_ANALYSIS_SYSTEM_PROMPT).toContain(`exactly ${LOOKS_PER_SEASON} looks`);
+      const schema = JSON.stringify(COLOR_ANALYSIS_SCHEMA);
+      expect(schema).toContain(`"minItems":${LOOKS_PER_SEASON}`);
+      expect(schema).toContain(`"maxItems":${LOOKS_PER_SEASON}`);
+    });
+
+    it("holds for every precomputed demo analysis: three looks, all in vocabulary", async () => {
+      const fs = await import("fs");
+      const path = await import("path");
+      const { lookNameProblem, LOOKS_PER_SEASON } = await import("../server/utils/lookVocabulary");
+      const dir = path.join(__dirname, "../server/demo-analyses");
+      for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".json"))) {
+        const data = JSON.parse(fs.readFileSync(path.join(dir, file), "utf8"));
+        const looks = (data.result ?? data).looks as { name: string }[];
+        expect(looks, file).toHaveLength(LOOKS_PER_SEASON);
+        for (const l of looks) expect(lookNameProblem(l.name), `${file}: ${l.name}`).toBeNull();
+      }
+    });
   });
 
   it("survives a model that omits looks entirely", () => {

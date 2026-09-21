@@ -1,5 +1,6 @@
 import { useT } from "../../i18n";
 import type { AnalysisResult } from "../../lib/types";
+import { readDna } from "../../lib/bands";
 import { describeHair, describeEyes, shortenPhrase } from "../../lib/descriptors";
 
 /**
@@ -10,18 +11,24 @@ import { describeHair, describeEyes, shortenPhrase } from "../../lib/descriptors
  * want to — but everyone can check "warm, golden" against the mirror, which is
  * the only external test this app has.
  *
- * Drawn from the measured axes where measurement ran, and from the model's own
- * assessment otherwise. Never a threshold re-applied here, which would be a
- * third opinion on a question already answered twice.
+ * Undertone and contrast are the same two facts the Colour DNA prints as
+ * numbers further down, so they take the same word from the same banding
+ * (lib/bands.ts). Two readouts of one value that disagree — "Contrast: Medium"
+ * above, "Contrast 78" below — cost more trust than either is worth. Only when
+ * there is no number to agree with does the model's own phrase stand in.
  */
 export default function TraitLine({ data }: { data: AnalysisResult }) {
   const t = useT();
   const m = data.measured;
+  const dna = new Map(readDna(data.colorDNA).map((row) => [row.axis, row]));
+  const capitalise = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
+  const warmth = dna.get("warmth");
+  const contrast = dna.get("contrast");
 
   const traits = [
     {
       label: t("results.traits.undertone"),
-      value: shortenPhrase(m?.axes?.hue?.label ?? data.undertone, 3),
+      value: warmth ? capitalise(t(warmth.word)) : shortenPhrase(data.undertone, 3),
     },
     // Measured only. The model's prose describes texture as much as colour
     // ("naturally dense, deep black texture with..."), and a trait line that
@@ -31,7 +38,7 @@ export default function TraitLine({ data }: { data: AnalysisResult }) {
     { label: t("results.traits.eyes"), value: describeEyes(m?.eyes) },
     {
       label: t("results.traits.contrast"),
-      value: shortenPhrase(m?.contrast?.label ?? data.contrastLevel, 2),
+      value: contrast ? capitalise(t(contrast.word)) : shortenPhrase(data.contrastLevel, 2),
     },
   ].filter((x): x is { label: string; value: string } => Boolean(x.value));
 

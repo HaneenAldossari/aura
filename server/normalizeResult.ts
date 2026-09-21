@@ -14,6 +14,7 @@ import {
   type LookSlot,
   type MakeupShade,
 } from "./utils/seasonMakeup";
+import { lookNameProblem, LOOKS_PER_SEASON } from "./utils/lookVocabulary";
 
 /** A look after its shade names have been resolved against the canonical list. */
 export interface ResolvedLook {
@@ -35,6 +36,10 @@ const VALID_SLOTS = new Set<LookSlot>([
  * silent substitution would render a shade the model never chose and nobody
  * would ever find out. A look left with fewer than three shades is dropped
  * whole, since the design's bar row stops reading as a look below that.
+ *
+ * Names are held to the fixed vocabulary (utils/lookVocabulary.ts): a look
+ * whose name does not start with one of its terms is dropped, by the same
+ * reasoning — renaming it here would publish a name nobody wrote.
  */
 export function validateLooks(
   season: string,
@@ -44,12 +49,23 @@ export function validateLooks(
   if (!Array.isArray(raw) || !getSeasonMakeup(season)) return { looks: [], dropped };
 
   const looks: ResolvedLook[] = [];
-  for (const entry of raw.slice(0, 3)) {
+  for (const entry of raw) {
+    if (looks.length === LOOKS_PER_SEASON) break;
     const l = entry as Record<string, unknown>;
     const name = typeof l.name === "string" ? l.name.trim() : "";
     const vibe = typeof l.vibe === "string" ? l.vibe.trim() : "";
     const timeOfDay = l.timeOfDay === "evening" ? "evening" : "day";
     if (!name || !Array.isArray(l.shades)) continue;
+
+    const problem = lookNameProblem(name);
+    if (problem) {
+      dropped.push(`${name}: name ${problem}`);
+      continue;
+    }
+    if (looks.some((kept) => kept.name.toLowerCase() === name.toLowerCase())) {
+      dropped.push(`${name}: duplicate name`);
+      continue;
+    }
 
     const shades: (MakeupShade & { slot: LookSlot })[] = [];
     const seen = new Set<LookSlot>();

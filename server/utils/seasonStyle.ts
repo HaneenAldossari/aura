@@ -598,4 +598,21 @@ export function getSeasonStyle(season: string | undefined): SeasonStyle | null {
   return STYLE[key(season)] ?? null;
 }
 
+/**
+ * One line on a season, for anywhere a whole story will not fit.
+ *
+ * Every story opens the same way — a claim, an em dash, then the traits:
+ * "You are cool right through — blue-based, clear and high in contrast." The
+ * traits are the descriptor. Derived rather than written a second time, so the
+ * card on Home and the story on Results cannot drift apart; a test holds every
+ * story to the shape this depends on.
+ */
+export function seasonDescriptor(season: string | undefined): string {
+  const story = getSeasonStyle(season)?.story;
+  if (!story) return "";
+  const first = story.split(/(?<=[.!?])\s+/)[0];
+  const traits = first.split(" — ")[1] ?? first;
+  return traits.charAt(0).toUpperCase() + traits.slice(1);
+}
+
 export default STYLE;
