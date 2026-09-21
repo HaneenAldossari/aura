@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { MessageCircle, Send, Sparkles, X } from "lucide-react";
+import { MessageCircle, Send, X } from "lucide-react";
 import { streamChatMessage } from "../../lib/api";
 import type { AnalysisResult } from "../../lib/types";
 import type { ChatMessage } from "../../lib/types";
-import IconButton from "../../components/ui/IconButton";
 import { useT, type Key } from "../../i18n";
 
 /* Starter prompts, as keys — the question is sent to the model in whatever
@@ -33,15 +32,24 @@ export default function ChatWidget({
   sessionId,
   analysis,
   seasonName,
+  open,
+  onOpenChange,
 }: {
   /** Local key for chat history only — the API is stateless. */
   sessionId: string | undefined;
   /** Sent with every turn, since there is no session for the server to look up. */
   analysis: AnalysisResult;
   seasonName: string;
+  /** Controlled mode: Results drives this from its own entry row. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
   const t = useT();
-  const [chatOpen, setChatOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const controlled = open !== undefined;
+  const chatOpen = controlled ? open : uncontrolledOpen;
+  const setChatOpen = (next: boolean) =>
+    controlled ? onOpenChange?.(next) : setUncontrolledOpen(next);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(() =>
     loadHistory(sessionId)
   );
@@ -138,7 +146,7 @@ export default function ChatWidget({
 
   return (
     <>
-      {!chatOpen && (
+      {!chatOpen && !controlled && (
         <button
           onClick={() => setChatOpen(true)}
           aria-label={t("results.chat.openLabel")}
@@ -151,48 +159,50 @@ export default function ChatWidget({
 
       {chatOpen && (
         <div
-          className={
-            isNarrow
-              ? "fixed inset-x-0 bottom-0 h-[70dvh] rounded-t-2xl shadow-2xl flex flex-col z-50 animate-bounce-in overflow-hidden"
-              : "fixed bottom-6 right-6 w-[380px] max-w-[calc(100vw-2rem)] h-[520px] rounded-2xl shadow-2xl flex flex-col z-50 animate-bounce-in overflow-hidden"
-          }
+          className={`ed-chat${isNarrow ? " ed-chat--sheet" : ""}`}
           role="dialog"
           aria-label={t("results.chat.panelLabel")}
-          style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}
         >
-          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border-color)' }}>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(212,175,122,0.12)' }}><Sparkles className="w-4 h-4" style={{ color: 'var(--accent-gold)' }} /></div>
-              <div>
-                <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{t("results.chat.titleWithSeason", { season: seasonName })}</p>
-                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t("results.chat.subtitle")}</p>
-              </div>
+          <header className="ed-chat__head">
+            <div>
+              <p className="ed-chat__title">
+                {t("results.chat.titleWithSeason", { season: seasonName })}
+              </p>
+              <p className="ed-chat__sub">{t("results.chat.subtitle")}</p>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="ed-chat__actions">
               {chatMessages.length > 0 && (
-                <button
-                  onClick={() => setChatMessages([])}
-                  className="text-xs px-2 py-1 rounded-lg transition cursor-pointer"
-                  style={{ color: 'var(--text-muted)' }}
-                >
+                <button type="button" className="ed-link" onClick={() => setChatMessages([])}>
                   {t("results.chat.clear")}
                 </button>
               )}
-              <IconButton aria-label={t("results.chat.closeLabel")} onClick={() => setChatOpen(false)} style={{ color: 'var(--text-muted)' }}><X className="w-5 h-5" /></IconButton>
+              <button
+                type="button"
+                className="ed-chat__close"
+                aria-label={t("results.chat.closeLabel")}
+                onClick={() => setChatOpen(false)}
+              >
+                <X size={18} aria-hidden />
+              </button>
             </div>
-          </div>
+          </header>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar" aria-live="polite">
+          <div className="ed-chat__log" aria-live="polite">
             {chatMessages.length === 0 && (
               <div className="space-y-3">
-                <div className="rounded-xl rounded-tl-sm p-3" style={{ background: 'rgba(212,175,122,0.12)' }}>
-                  <p className="text-sm" style={{ color: 'var(--text-primary)' }}>
+                <div className="ed-msg ed-msg--assistant">
+                  <p style={{ margin: 0 }}>
                     {t("results.chat.greeting", { season: seasonName })}
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="ed-chat__suggestions">
                   {quickQuestions.map((key) => (
-                    <button key={key} onClick={() => sendMessage(t(key))} className="px-3 py-1.5 rounded-full text-xs transition cursor-pointer" style={{ background: 'var(--bg-primary)', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
+                    <button
+                      key={key}
+                      type="button"
+                      className="ed-chat__suggestion"
+                      onClick={() => sendMessage(t(key))}
+                    >
                       {t(key)}
                     </button>
                   ))}
@@ -201,41 +211,26 @@ export default function ChatWidget({
             )}
 
             {chatMessages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[85%] rounded-xl p-3 text-sm whitespace-pre-wrap ${
-                  msg.role === "user" ? "rounded-br-sm" : "rounded-bl-sm"
-                }`} style={msg.role === "user" ? { background: 'var(--accent-gold)', color: 'var(--text-on-accent)' } : { background: 'rgba(212,175,122,0.12)', color: 'var(--text-primary)' }}>
-                  {msg.role === "assistant" ? renderChatContent(msg.content) : msg.content}
-                </div>
+              <div key={i} className={`ed-msg ed-msg--${msg.role}`}>
+                {msg.role === "assistant" ? renderChatContent(msg.content) : msg.content}
               </div>
             ))}
 
             {chatLoading && (
-              <div className="flex justify-start">
-                <div className="rounded-xl rounded-bl-sm px-4 py-3 flex items-center gap-2" style={{ background: 'rgba(212,175,122,0.12)' }}>
-                  {chatSearchPhase ? (
-                    <>
-                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{t("results.chat.searching")}</span>
-                      {[0, 1, 2].map((i) => (
-                        <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-gold)', animation: "typing-dot 1.2s ease-in-out infinite", animationDelay: `${i * 0.2}s` }} />
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{t("results.chat.thinking")}</span>
-                      {[0, 1, 2].map((i) => (
-                        <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent-gold)', animation: "typing-dot 1.2s ease-in-out infinite", animationDelay: `${i * 0.2}s` }} />
-                      ))}
-                    </>
-                  )}
-                </div>
-              </div>
+              <p className="ed-chat__status">
+                {chatSearchPhase ? t("results.chat.searching") : t("results.chat.thinking")}
+                <span className="ed-chat__dots" aria-hidden>
+                  {[0, 1, 2].map((i) => (
+                    <span key={i} style={{ animationDelay: `${i * 0.2}s` }} />
+                  ))}
+                </span>
+              </p>
             )}
             <div ref={chatEndRef} />
           </div>
 
-          <div className="p-3" style={{ borderTop: '1px solid var(--border-color)' }}>
-            <div className="flex gap-2">
+          <div className="ed-chat__compose">
+            <div className="ed-chat__row">
               <input
                 type="text"
                 value={chatInput}
@@ -243,18 +238,17 @@ export default function ChatWidget({
                 onKeyDown={(e) => { if (e.key === "Enter") handleSendChat(); }}
                 placeholder={t("results.chat.placeholder")}
                 aria-label={t("results.chat.inputLabel")}
-                className="flex-1 rounded-xl px-4 py-2.5 text-sm outline-none"
-                style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
+                className="ed-chat__input"
               />
-              <IconButton
+              <button
+                type="button"
+                className="ed-chat__send"
                 aria-label={t("results.chat.sendLabel")}
                 onClick={handleSendChat}
                 disabled={!chatInput.trim() || chatLoading}
-                className="w-10 h-10 disabled:opacity-30"
-                style={{ background: 'var(--accent-gold)', color: 'var(--text-on-accent)', borderRadius: 12 }}
               >
-                <Send className="w-4 h-4" />
-              </IconButton>
+                <Send size={16} aria-hidden />
+              </button>
             </div>
           </div>
         </div>

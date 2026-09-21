@@ -15,6 +15,7 @@ import {
 import type { QualityIssue } from "../../../measure/quality";
 import type { HairStatus } from "./types";
 
+export { averageFeatures } from "../../../measure/features";
 export type { StageEvent, QualityIssue };
 export type MeasureOutcome = PipelineResult;
 
@@ -43,5 +44,24 @@ export async function measureFile(
   onStage: (event: StageEvent) => void
 ): Promise<MeasureOutcome> {
   const bytes = new Uint8Array(await file.arrayBuffer());
-  return runMeasurement(bytes, { hairStatus, onStage, wasmBase: WASM_BASE });
+  return measureBytes(bytes, hairStatus, onStage);
+}
+
+/**
+ * Run the pipeline over bytes already in hand.
+ *
+ * Used by "change hair answer", which re-reads the same pixels under a
+ * different assumption rather than asking for the photo again. MediaPipe is
+ * deterministic on identical input, so only the hair-dependent parts move.
+ */
+export async function measureBytes(
+  bytes: Uint8Array,
+  hairStatus: HairStatus,
+  onStage?: (event: StageEvent) => void
+): Promise<MeasureOutcome> {
+  return runMeasurement(bytes, {
+    hairStatus,
+    onStage: onStage ?? (() => {}),
+    wasmBase: WASM_BASE,
+  });
 }

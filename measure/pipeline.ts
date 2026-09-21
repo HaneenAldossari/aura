@@ -215,11 +215,19 @@ export async function runMeasurement(
       image.height,
     );
 
-    // ── Hair. Skipped entirely when the user says it is dyed or covered. ──
+    // ── Segmentation ──
+    //
+    // The mask does two jobs, and only one of them is about hair: it isolates
+    // the hair region, and it bounds the face-skin region that skin colour is
+    // measured from. Those were tied together, so answering "dyed" or
+    // "covered" silently switched skin measurement to a three-disc fallback —
+    // a different method for the same question, chosen by an unrelated answer.
+    // It is always loaded now; the hair *answer* still decides whether hair is
+    // scored.
     let segmentation: Uint8Array | null = null;
     let hairNote: string | undefined;
 
-    if (hairStatus === "natural") {
+    {
       stage({ stage: "loading-detail-model" });
       const segmenter = await withTimeout(
         loadSegmenter((p) =>
@@ -238,7 +246,7 @@ export async function runMeasurement(
           segmenterTimeout,
         );
       }
-      if (!segmentation) hairNote = HAIR_UNAVAILABLE_NOTE;
+      if (!segmentation && hairStatus === "natural") hairNote = HAIR_UNAVAILABLE_NOTE;
     }
 
     // ── Measure ──

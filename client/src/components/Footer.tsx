@@ -11,7 +11,7 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
     return (
       <p
         style={{
-          fontSize: 10,
+          fontSize: "var(--type-micro)",
           color: "rgba(184,176,164,0.4)",
           marginTop: 16,
           textTransform: "uppercase",
@@ -45,7 +45,7 @@ export default function Footer({ compact = false }: { compact?: boolean }) {
       </p>
       <p
         style={{
-          fontSize: "11px",
+          fontSize: "var(--type-micro)",
           letterSpacing: "0.2em",
           color: "var(--text-muted)",
           textTransform: "uppercase",

@@ -122,9 +122,18 @@ export function analysisMode(): AnalysisMode {
  * max_tokens, not merely the tokens actually used, so this is worth being able
  * to lower without a code change.
  */
+/**
+ * Output budget for one classification.
+ *
+ * Raised from 8192 when `looks` joined the schema. Reasoning tokens count
+ * against this on the default model, so a long response now truncates mid-JSON
+ * and surfaces as "Expected ',' or '}'" — a parse error that reads like a bad
+ * model rather than a budget that ran out. Seen on the deepest demo face,
+ * which produces the longest prose.
+ */
 export function maxTokensClassify(): number {
   const raw = Number(process.env.MAX_TOKENS_CLASSIFY);
-  return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 8192;
+  return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : 12288;
 }
 
 /**

@@ -1,0 +1,900 @@
+/**
+ * Results-specific pieces. The shared frame lives in styles/editorial.css.
+ */
+
+/* ── Identity ─────────────────────────────────────────────────────────── */
+
+.ed-season {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(52px, 11vw, 96px);
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 var(--space-3);
+}
+
+.ed-season__word { display: block; }
+
+.ed-confidence {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block-end: var(--space-3);
+}
+
+.ed-confidence__tick {
+  inline-size: 34px;
+  block-size: 1px;
+  background: var(--accent);
+  flex: none;
+}
+
+.ed-confidence__value {
+  font-size: var(--type-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.ed-confidence__next {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+}
+
+.ed-tagline {
+  font-size: var(--type-lede);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  max-inline-size: 46ch;
+  margin: 0 0 var(--space-5);
+}
+
+/* ── Nudge (needsSecondPhoto) ─────────────────────────────────────────── */
+
+.ed-nudge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-inline-start: 2px solid var(--accent);
+  padding: var(--space-2) 0 var(--space-2) var(--space-3);
+  padding-inline-start: var(--space-3);
+  margin-block-end: var(--space-5);
+}
+
+.ed-nudge__text {
+  margin: 0;
+  font-size: var(--type-body);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  max-inline-size: 62ch;
+}
+
+/* ── Colour DNA ───────────────────────────────────────────────────────── */
+
+.ed-dna { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.ed-dna__row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.ed-dna__name { font-size: var(--type-body); color: var(--ink); }
+
+.ed-dna__track {
+  position: relative;
+  block-size: 2px;
+  background: var(--rule-strong);
+}
+
+.ed-dna__fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  background: var(--ink);
+  transition: inline-size var(--dur-slow) var(--ease-ui);
+}
+
+.ed-dna__value {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-trust);
+  white-space: nowrap;
+}
+
+/* ── Measured table ───────────────────────────────────────────────────── */
+
+.ed-measured {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  margin-block-start: var(--space-4);
+}
+
+.ed-measured th,
+.ed-measured td {
+  text-align: start;
+  padding: 3px 0;
+  font-weight: 400;
+}
+
+.ed-measured thead th { color: var(--ink-muted); }
+.ed-measured tbody th { color: var(--ink-muted); }
+.ed-measured tbody td { color: var(--ink-trust); }
+
+/* ── Palette grid ─────────────────────────────────────────────────────── */
+
+.ed-palette {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+
+@media (min-width: 768px) { .ed-palette { grid-template-columns: repeat(4, 1fr); } }
+
+.ed-swatch {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-2);
+  border: 0;
+  cursor: pointer;
+  text-align: start;
+  font: inherit;
+  transition: outline-color var(--dur-fast) var(--ease-ui);
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+}
+
+.ed-swatch:hover,
+.ed-swatch:focus-visible { outline-color: var(--ink); }
+
+.ed-swatch__name {
+  display: block;
+  font-size: var(--type-label);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.ed-swatch__hex {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  opacity: 0.75;
+}
+
+/* ── Section head: title left, meta right ────────────────────────────── */
+
+.ed-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-block-end: var(--space-2);
+}
+
+.ed-head__title {
+  font-family: var(--font-display);
+  font-size: var(--type-title);
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.05;
+}
+
+.ed-head__meta {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* The sentence that opens a section. Sits between the rule and the colour,
+   because it is what makes the colour usable. */
+.ed-guide {
+  font-size: var(--type-guide);
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  max-inline-size: 68ch;
+  margin: 0 0 var(--space-4);
+}
+
+/* A category's shades: three per row on a phone, six across on desktop. */
+.ed-shaderow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .ed-shaderow { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* ── The flat rectangle, used for every colour that is not a product ──── */
+
+.ed-tile { display: flex; flex-direction: column; gap: 6px; min-inline-size: 0; }
+
+.ed-tile__chip {
+  block-size: 58px;
+  inline-size: 100%;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ed-tile__chip--on { outline: 1px solid var(--accent); outline-offset: 2px; }
+
+/* A single hairline across the swatch: this colour is not for you. Drawn in
+   the foreground rather than as opacity, because a dimmed swatch reads as a
+   paler version of the colour instead of a rejection of it. */
+.ed-tile__chip--struck::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    transparent calc(50% - 0.5px),
+    rgba(243, 237, 228, 0.85) calc(50% - 0.5px),
+    rgba(243, 237, 228, 0.85) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+}
+
+.ed-tile__name { font-size: var(--type-label); color: var(--ink); line-height: 1.25; }
+.ed-tile__sub { font-family: var(--font-mono); font-size: var(--type-micro); color: var(--ink-muted); }
+
+/* ── Base ladder ──────────────────────────────────────────────────────── */
+
+.ed-base { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
+
+@media (min-width: 1024px) {
+  .ed-base { grid-template-columns: 1.35fr 1fr; gap: var(--space-6); align-items: start; }
+}
+
+.ed-ladder {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-2);
+}
+
+.ed-ladder .ed-tile__chip { block-size: 64px; }
+
+/* The caret that points at the matched depth. */
+.ed-ladder__caret {
+  position: absolute;
+  inset-block-start: -13px;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+  font-size: var(--type-micro);
+  line-height: 1;
+}
+
+.ed-base__title {
+  font-family: var(--font-display);
+  font-size: var(--type-stat);
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0 0 var(--space-2);
+  line-height: 1.2;
+}
+
+.ed-base__body {
+  font-size: var(--type-body);
+  line-height: 1.55;
+  color: var(--ink-secondary);
+  margin: 0;
+}
+
+/* ── Looks ────────────────────────────────────────────────────────────── */
+
+.ed-looks { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
+
+@media (min-width: 768px) { .ed-looks { grid-template-columns: repeat(3, 1fr); gap: var(--space-4); } }
+
+.ed-look { border-block-start: 1px solid var(--rule); padding-block-start: var(--space-3); }
+
+.ed-look__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.ed-look__name {
+  font-family: var(--font-display);
+  font-size: var(--type-stat);
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0;
+  color: var(--ink);
+}
+
+.ed-look__tag {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.ed-look__vibe {
+  margin: 4px 0 var(--space-3);
+  font-size: var(--type-label);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+/* Five slots across, so a look reads as one row of colour. */
+.ed-look__shades { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.ed-look__shades .ed-tile__chip { block-size: 46px; }
+
+.ed-slot {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-block-end: 4px;
+}
+
+/* ── Shade index ──────────────────────────────────────────────────────── */
+
+.ed-index { display: grid; grid-template-columns: 1fr; gap: var(--space-5) var(--space-6); }
+
+@media (min-width: 768px) { .ed-index { grid-template-columns: 1fr 1fr; } }
+
+.ed-index__cat {
+  font-size: var(--type-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-2);
+  padding-block-end: var(--space-2);
+  border-block-end: 1px solid var(--rule);
+}
+
+/* Three per row, wrapping — the frame's grid. */
+.ed-index__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+
+.ed-index__nails {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) { .ed-index__nails { grid-template-columns: repeat(6, 1fr); } }
+
+/* Nails are the one shade rendered rather than stated: a polish has a finish
+   you can see, and a flat rectangle cannot show it. */
+.ed-nailshot {
+  inline-size: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
+  display: block;
+}
+
+.ed-skip {
+  margin: var(--space-4) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+/* ── Jewellery: the one block of realistic renders ────────────────────── */
+
+.ed-jewellery { display: flex; flex-direction: column; gap: var(--space-5); }
+
+.ed-gems { display: flex; flex-wrap: wrap; gap: var(--space-5); }
+.ed-gem { inline-size: 88px; text-align: center; }
+
+.ed-gem__shot {
+  inline-size: 72px;
+  block-size: 72px;
+  object-fit: contain;
+  display: block;
+  margin-inline: auto;
+}
+
+.ed-gem__name { display: block; font-size: var(--type-label); color: var(--ink); margin-block-start: var(--space-2); }
+
+/* ── Hair and Avoid, side by side on desktop ──────────────────────────── */
+
+.ed-twoup { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
+
+@media (min-width: 1024px) { .ed-twoup { grid-template-columns: 1fr 1fr; } }
+
+.ed-swatchgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+
+@media (min-width: 768px) { .ed-swatchgrid { grid-template-columns: repeat(4, 1fr); } }
+
+.ed-swatchgrid .ed-tile__chip { block-size: 74px; }
+
+/* ── Chat entry ───────────────────────────────────────────────────────── */
+
+.ed-chatentry {
+  inline-size: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  text-align: start;
+  transition: border-color var(--dur-fast) var(--ease-ui);
+}
+
+.ed-chatentry:hover { border-color: var(--rule-strong); }
+.ed-chatentry__text { display: flex; flex-direction: column; gap: 2px; min-inline-size: 0; }
+.ed-chatentry__title { font-size: var(--type-body); font-weight: 600; }
+.ed-chatentry__hint { font-size: var(--type-label); color: var(--ink-muted); }
+
+
+/* ── Before you buy ───────────────────────────────────────────────────── */
+
+.ed-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-7) var(--space-4);
+  border: 1px dashed var(--rule-strong);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color var(--dur-fast) var(--ease-ui);
+}
+
+.ed-dropzone:hover,
+.ed-dropzone:focus-visible { border-color: var(--accent); }
+
+.ed-product {
+  inline-size: 100%;
+  max-inline-size: 340px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  display: block;
+}
+
+.ed-score { display: flex; align-items: baseline; gap: var(--space-1); margin: 0; }
+
+.ed-score__value {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 12vw, 96px);
+  line-height: 1;
+  color: var(--ink);
+}
+
+.ed-score__of { font-family: var(--font-mono); font-size: var(--type-body); color: var(--ink-muted); }
+
+.ed-verdict {
+  font-size: var(--type-stat);
+  font-family: var(--font-display);
+  color: var(--accent);
+  margin: var(--space-1) 0 var(--space-3);
+}
+
+.ed-bands {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  padding: 0;
+  margin: var(--space-4) 0 0;
+}
+
+.ed-band {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  border: 1px solid var(--rule);
+  padding: 4px 8px;
+}
+
+.ed-band--on { color: var(--ink); border-color: var(--ink-muted); }
+
+.ed-compare { display: flex; gap: 2px; }
+
+.ed-compare__half {
+  flex: 1;
+  block-size: 64px;
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Stated plainly rather than as a badge: it is a fact about the reading, and
+   the reader asked for it. */
+.ed-twophoto {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-trust);
+  border-inline-start: 1px solid var(--accent);
+  padding-inline-start: var(--space-3);
+  margin: var(--space-4) 0 0;
+}
+
+/* ── Stylist chat ─────────────────────────────────────────────────────── */
+
+.ed-chat {
+  position: fixed;
+  inset-block-end: calc(var(--space-4) + var(--safe-bottom));
+  inset-inline-end: calc(var(--space-4) + var(--safe-right));
+  inline-size: 400px;
+  max-inline-size: calc(100vw - var(--space-5));
+  block-size: 560px;
+  max-block-size: calc(100dvh - var(--space-6));
+  display: flex;
+  flex-direction: column;
+  z-index: 70;
+  background: var(--surface);
+  border: 1px solid var(--rule-strong);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
+}
+
+/* On a phone it is a sheet: a floating card with the keyboard up leaves the
+   conversation in a letterbox too short to read. */
+.ed-chat--sheet {
+  inset-inline: 0;
+  inset-block-end: 0;
+  inline-size: 100%;
+  max-inline-size: none;
+  block-size: 78dvh;
+  border-inline: 0;
+  border-block-end: 0;
+  padding-block-end: var(--safe-bottom);
+}
+
+.ed-chat__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-block-end: 1px solid var(--rule);
+}
+
+.ed-chat__title { margin: 0; font-size: var(--type-body); font-weight: 600; color: var(--ink); }
+.ed-chat__sub { margin: 2px 0 0; font-size: var(--type-label); color: var(--ink-muted); }
+.ed-chat__actions { display: flex; align-items: center; gap: var(--space-3); flex: none; }
+
+.ed-chat__close {
+  background: none;
+  border: 0;
+  color: var(--ink-muted);
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+}
+
+.ed-chat__close:hover { color: var(--ink); }
+
+.ed-chat__log {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  scrollbar-width: none;
+}
+
+.ed-chat__log::-webkit-scrollbar { display: none; }
+
+/* Messages are blocks with a rule, not bubbles: a bubble is a chat app's
+   vocabulary, and this is a stylist answering a question about a document the
+   reader is already looking at. */
+.ed-msg {
+  font-size: var(--type-body);
+  line-height: 1.55;
+  white-space: pre-wrap;
+  max-inline-size: 92%;
+}
+
+.ed-msg--assistant {
+  color: var(--ink);
+  border-inline-start: 2px solid var(--rule-strong);
+  padding-inline-start: var(--space-3);
+}
+
+.ed-msg--user {
+  align-self: flex-end;
+  color: var(--on-accent);
+  background: var(--accent);
+  padding: var(--space-2) var(--space-3);
+}
+
+.ed-chat__suggestions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+.ed-chat__suggestion {
+  font: inherit;
+  font-size: var(--type-label);
+  color: var(--ink-secondary);
+  background: none;
+  border: 1px solid var(--rule-strong);
+  padding: 7px var(--space-3);
+  cursor: pointer;
+  text-align: start;
+  transition: border-color var(--dur-fast) var(--ease-ui);
+}
+
+.ed-chat__suggestion:hover { border-color: var(--accent); color: var(--ink); }
+
+.ed-chat__status {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.ed-chat__dots { display: inline-flex; gap: 3px; }
+
+.ed-chat__dots span {
+  inline-size: 4px;
+  block-size: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: typing-dot 1.2s ease-in-out infinite;
+}
+
+.ed-chat__compose { padding: var(--space-3); border-block-start: 1px solid var(--rule); }
+.ed-chat__row { display: flex; gap: var(--space-2); }
+
+.ed-chat__input {
+  flex: 1;
+  min-inline-size: 0;
+  font: inherit;
+  font-size: var(--type-body);
+  color: var(--ink);
+  background: var(--ground);
+  border: 1px solid var(--rule-strong);
+  padding: 11px var(--space-3);
+  outline: none;
+}
+
+.ed-chat__input:focus { border-color: var(--accent); }
+.ed-chat__input::placeholder { color: var(--ink-muted); }
+
+.ed-chat__send {
+  flex: none;
+  inline-size: 44px;
+  background: var(--accent);
+  color: var(--on-accent);
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ed-chat__send:disabled { opacity: 0.35; cursor: default; }
+
+/* ── Jewellery: three verdict rows, not a grid of discs ───────────────── */
+
+/* Block, not flex: each row is its own grid, and a flex parent only adds a
+   sizing negotiation that had the rows collapsing to their content width. */
+.ed-metals {
+  list-style: none;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+}
+
+.ed-metalrow {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  border-block-start: 1px solid var(--rule);
+}
+
+@media (min-width: 768px) {
+  /* The reason gets its own column on desktop rather than wrapping under. */
+  .ed-metalrow { grid-template-columns: 28px 8rem 4.5rem 1fr; }
+}
+
+.ed-metalrow__swatch {
+  inline-size: 28px;
+  block-size: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ed-metalrow__name { font-size: var(--type-body); color: var(--ink); }
+
+.ed-metalrow__verdict {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  justify-self: start;
+}
+
+.ed-metalrow--best .ed-metalrow__verdict { color: var(--accent); }
+.ed-metalrow--skip .ed-metalrow__name { color: var(--ink-muted); }
+.ed-metalrow--skip .ed-metalrow__swatch { opacity: 0.45; }
+
+.ed-metalrow__reason {
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+  grid-column: 2 / -1;
+}
+
+@media (min-width: 768px) {
+  .ed-metalrow__reason { grid-column: auto; }
+}
+
+.ed-metals__also {
+  font-size: var(--type-micro);
+  font-family: var(--font-mono);
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-5);
+}
+
+/* ── Pairings ─────────────────────────────────────────────────────────── */
+
+.ed-pairings {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+@media (min-width: 900px) { .ed-pairings { grid-template-columns: repeat(4, 1fr); } }
+
+.ed-pairing { display: flex; flex-direction: column; gap: var(--space-2); }
+
+/* Stacked, because that is how the outfit is worn — one colour above another,
+   not three swatches in a row you have to imagine assembling. */
+.ed-pairing__stack { display: flex; flex-direction: column; gap: 2px; }
+
+.ed-pairing__band { position: relative; display: block; }
+
+.ed-pairing__swatch { display: block; block-size: 46px; inline-size: 100%; }
+
+.ed-pairing__name {
+  display: block;
+  font-size: var(--type-label);
+  color: var(--ink-secondary);
+  padding-block-start: 4px;
+}
+
+.ed-pairing__when {
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+  line-height: 1.45;
+  margin: var(--space-1) 0 0;
+}
+
+/* ── Traits, in words ─────────────────────────────────────────────────── */
+
+.ed-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin: 0 0 var(--space-4);
+}
+
+.ed-trait { display: flex; flex-direction: column; gap: 2px; }
+
+.ed-trait__label {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.ed-trait__value { font-size: var(--type-body); color: var(--ink); margin: 0; }
+
+/* ── Season story ─────────────────────────────────────────────────────── */
+
+.ed-story {
+  font-size: var(--type-guide);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+  max-inline-size: 60ch;
+  margin: 0 0 var(--space-5);
+}
+
+/* ── Clothing avoids: a compact row, not a section ────────────────────── */
+
+.ed-avoidrow { margin-block-start: var(--space-4); }
+
+.ed-avoidrow__swatches { display: flex; gap: 2px; margin-block-end: var(--space-2); }
+
+.ed-avoidrow__swatch {
+  flex: 1;
+  block-size: 26px;
+  position: relative;
+}
+
+/* The same diagonal mark used everywhere else for "not this". */
+.ed-avoidrow__swatch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    transparent calc(50% - 0.5px),
+    rgba(243, 237, 228, 0.85) calc(50% - 0.5px),
+    rgba(243, 237, 228, 0.85) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+}
+
+.ed-avoidrow__note {
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* ── Preview cards ────────────────────────────────────────────────────── */
+
+.ed-previews {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+  margin-block-start: var(--space-4);
+}
+
+@media (min-width: 560px) { .ed-previews { grid-template-columns: repeat(3, 1fr); } }
+
+.ed-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  font: inherit;
+  text-align: start;
+  transition: border-color var(--dur-fast) var(--ease-ui);
+}
+
+.ed-preview:hover { border-color: var(--accent); }
+
+.ed-preview__title {
+  font-size: var(--type-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.ed-preview__text {
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+.ed-preview__cta { color: var(--accent); font-size: var(--type-micro); }

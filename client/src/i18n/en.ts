@@ -47,6 +47,124 @@ export const en = {
     shareWhatsApp: "Share on WhatsApp",
     shareText: "I'm a {season}! Discover your colour season on Your Aura: {url}",
 
+    /* ── Editorial Results (the single scrolling page) ─────────────────── */
+    analysisMeta: "Your analysis — {date}",
+    twoPhotos: "Measured from two photos, averaged.",
+    traits: {
+      undertone: "Skin undertone",
+      hair: "Hair",
+      eyes: "Eyes",
+      contrast: "Contrast",
+    },
+    previews: {
+      shop: "Score anything before you buy",
+    },
+    avoidRow: "Worth avoiding near your face — these dull your skin and take the light off it.",
+    confidence: "{percent}% confidence",
+    nextClosest: "next closest · {season}",
+
+    dna: {
+      title: "Measured colour DNA",
+      warmth: "Warmth",
+      depthAxis: "Depth",
+      clarity: "Clarity",
+      contrastAxis: "Contrast",
+      measured: "measured",
+      skin: "skin",
+      hair: "hair",
+      eyes: "eyes",
+      tableCaption: "Measured CIE LCh values per region",
+      notMeasured: "not measured",
+    },
+
+    nudge: {
+      body:
+        "Your skin and hair measured close together, so a second photo in " +
+        "different light would firm this up. Nothing changes until you add one.",
+      action: "Add a second photo",
+      dismiss: "Dismiss",
+    },
+
+    hairNote: {
+      natural:
+        "You told us your hair is its natural colour, so it counted toward this " +
+        "reading. Change that answer and the season may shift one step.",
+      coloured:
+        "You told us your hair is coloured, so it was left out and your skin and " +
+        "eyes carried the reading instead.",
+      covered:
+        "You told us your hair is not visible, so it was left out and your skin " +
+        "and eyes carried the reading instead.",
+      unavailable:
+        "We couldn't read your hair, so this uses your skin and eyes only.",
+      change: "Change hair answer",
+      rerunning: "Re-analysing…",
+    },
+
+    palette: {
+      title: "Your twelve",
+      hint: "tap a colour for pairings",
+      copied: "Copied",
+      swatch: "{name}, {hex} — tap to copy",
+      save: "Save palette",
+      saving: "Saving…",
+    },
+
+    makeupSection: {
+      title: "Makeup",
+      baseLabel: "Base",
+      ladderLabel: "Foundation depth, light to deep. Your depth is marked at {depth} of 100.",
+      yourDepthMeta: "your depth · {shade}",
+      baseHeading: "{shade}, matched to your depth",
+      looksMeta: "{count}, adapted to {season}",
+      indexMeta: "every shade in your season",
+      looksLabel: "Looks",
+      indexLabel: "Shade index",
+      day: "Day",
+      evening: "Evening",
+      slotEye: "Eye",
+      slotLiner: "Liner",
+      slotCheek: "Cheek",
+      slotLip: "Lip",
+      slotBronzer: "Bronzer",
+      slotHighlight: "Highlight",
+      catBlush: "Blush",
+      catLip: "Lip",
+      catEye: "Eye",
+      catLiner: "Liner",
+      catNails: "Nails",
+    },
+
+    styleSection: {
+      title: "Style",
+      jewellery: "Jewellery",
+      verdictBest: "best",
+      verdictWorks: "works",
+      verdictSkip: "skip",
+      alsoMetals: "Also: {metals}.",
+      pairings: "Pairings",
+      pairingsMeta: "four outfits from your twelve",
+      jewelleryMeta: "metals and stones that agree with your skin",
+      exactMatch: "exact match",
+      familyMatch: "{family} family",
+      avoidMeta: "in clothing",
+      metals: "Metals",
+      neutrals: "Neutrals",
+      avoidMetals: "Avoid metals",
+      avoid: "Avoid",
+      gemstones: "Gemstones",
+      hair: "Hair",
+    },
+
+    beforeYouBuy: "Before you buy",
+    buyCard: {
+      body:
+        "Photograph anything you are about to buy and get a score against your " +
+        "twelve colours, with the nearest shade you already own.",
+      cta: "Check an item",
+    },
+    backToResults: "Back to your results",
+
     hero: {
       eyebrow: "Your revelation is complete.",
       paletteCaption: "Your 12 signature tones",
@@ -72,28 +190,6 @@ export const en = {
       hint: "Hover a shade to see why it works against you",
     },
 
-    dna: {
-      title: "Your Colour Analysis",
-      intro:
-        "Our AI analysis has mapped your physical traits to the frequency of {season}. " +
-        "Your features possess a {quality}.",
-      qualityDeep: "grounded, majestic depth",
-      qualityLight: "soft, luminous quality",
-      axesTitle: "Colour DNA Analysis",
-      axisRangeLabel: "{low} to {high}",
-      rowUndertone: "Skin Undertone",
-      rowHair: "Hair",
-      rowEyes: "Eyes",
-      rowContrast: "Contrast",
-      cool: "Cool",
-      warm: "Warm",
-      light: "Light",
-      deep: "Deep",
-      muted: "Muted",
-      clear: "Clear",
-      blends: "Blends",
-      contrasts: "Contrasts",
-    },
 
     story: {
       title: "Your Season Story",
@@ -184,8 +280,17 @@ export const en = {
     },
 
     shop: {
-      title: "Before You Buy",
+      title: "Before you buy",
+      meta: "Before you buy — {season}",
       lede: "Upload a photo of any item — we'll tell you if it matches your {season} palette.",
+      tipLabel: "Tip —",
+      bandsLabel: "How the score reads",
+      against: "Product colour against your palette",
+      product: "product",
+      yours: "yours",
+      nearest: "· nearest in palette",
+      closerInPalette: "Closer in your palette",
+      approximate: "Screen colour is approximate. Fabric and lighting shift the result.",
       yourPalette: "Your palette",
       dropzoneLabel: "Upload a product photo to check against your palette",
       dropHeading: "Upload a photo of the item",
@@ -204,6 +309,8 @@ export const en = {
     },
 
     chat: {
+      entryTitle: "Ask about your palette",
+      entryHint: "Any product, shade or outfit — answered against your {season} reading.",
       openLabel: "Ask the colour advisor",
       panelLabel: "Colour advisor chat",
       closeLabel: "Close chat",
@@ -239,6 +346,64 @@ export const en = {
       "ring lights, and artificial lighting.",
     submit: "Analyse Photo",
     submitDisabled: "Upload a photo to begin",
+
+    /* ── Editorial Upload ─────────────────────────────────────────────── */
+    stepPhoto: "Step 1 of 3 — your photo",
+    stepAnalysis: "Step 2 of 3 — analysis",
+    photoTitle: "Your photo",
+    secondTitle: "A second photo",
+    secondLede:
+      "Take this one in different light from the first — near a window if the " +
+      "first was indoors. The two readings are averaged; your season only " +
+      "changes if the measurement does.",
+    photoLede:
+      "One clear photo in daylight is all the analysis needs. It is checked on " +
+      "your device first, and nothing leaves the phone until it passes.",
+    choosePhoto: "Choose a photo",
+    dropHint: "or drag one here · JPG, PNG · min 800px",
+    browse: "Browse",
+    privacy: "Your photo is checked on your device; nothing uploads until it passes.",
+    chooseToContinue: "Choose a photo to continue",
+    analyse: "Analyse my colour",
+    hairLegend: "Is your hair its natural colour?",
+    hairNote:
+      "Coloured or covered hair is excluded from the reading, and skin and eyes " +
+      "carry more weight instead.",
+
+    accurateRead: "For an accurate read",
+    tip1: "Daylight near a window, no lamps or ring light",
+    tip2: "Bare face, hair off the forehead and cheeks",
+    tip3: "No filters, beauty mode or heavy edits",
+    tip4: "Plain background, face squarely to the light",
+
+    /* ── Editorial Loading ────────────────────────────────────────────── */
+    loadingTitle: "Reading your colour",
+    loadingLede:
+      "Five steps, all of them in your browser. The two model downloads happen once.",
+    stageCount: "stage {n} of {total}",
+    loadingPrivacy:
+      "Everything so far has run in your browser. Your photo has not been uploaded.",
+    cancel: "Cancel",
+
+    stage5: {
+      readyTitle: "Getting ready",
+      readyBody: "Downloading the face model — this happens once.",
+      checkingTitle: "Checking your photo",
+      checkingBody: "Focus, lighting and framing, right here on your device.",
+      detailTitle: "Loading detail model",
+      detailBody: "One more download so we can read your hair.",
+      measuringTitle: "Measuring your colouring",
+      measuringBody: "Reading skin, hair and eye colour in CIE Lab.",
+      seasonTitle: "Determining your season",
+      seasonBody: "Matching your measurements against the 12 seasons.",
+    },
+
+    statusWaiting: "Waiting",
+    statusDone: "done",
+    statusPending: "—",
+    statusChecksPassed: "Passed all {n} checks",
+    statusDownloaded: "{mb} MB",
+    statusDownloading: "{percent}% · {done}/{total} MB",
 
     upload: {
       dropzoneLabel: "Upload a photo of your face",
@@ -349,6 +514,42 @@ export const en = {
       "to reveal your seasonal colour palette — your colours, your rules.",
     ctaPrimary: "Discover Your Palette",
     ctaSecondary: "How It Works",
+
+    /* ── Editorial Home ───────────────────────────────────────────────── */
+    kicker: "Personal colour analysis",
+    eyebrow2: "Measured, not guessed",
+    heroLine1: "Discover the",
+    heroLine2: "Colours",
+    heroLine3: "That Were",
+    heroAccent: "Made for You",
+    lede2:
+      "Upload one photo. Skin, hair and eyes are measured in your browser and " +
+      "matched against the twelve seasons. You get your palette, your makeup " +
+      "shades, and a score for anything you're about to buy.",
+    ctaPrimary2: "Discover your palette",
+    ctaSample: "Try a sample face",
+    privacy: "Your photo is checked on your device; nothing uploads until it passes.",
+
+    howItWorks: {
+      title: "How it works",
+      step1Title: "Add one photo",
+      step1Body:
+        "Daylight, bare face, no filters. The quality check runs in your browser " +
+        "— nothing uploads until the photo passes.",
+      step2Title: "Your colouring is measured",
+      step2Body:
+        "Skin, hair and eyes are read in CIE Lab and matched against the twelve seasons.",
+      step3Title: "Dress from your palette",
+      step3Body:
+        "Twelve colours, makeup and metals, and a score for anything you are about to buy.",
+    },
+
+    field: {
+      title: "All twelve seasons",
+      source: "canonical palettes",
+      open: "See the {season} palette",
+      cta: "Find your season",
+    },
 
     drape: {
       prompt: "Which one wakes up your face?",

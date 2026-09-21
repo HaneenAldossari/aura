@@ -30,22 +30,53 @@ export function dirFor(locale: Locale): "ltr" | "rtl" {
 
 const STORAGE_KEY = "aura:locale";
 
+/**
+ * Whether the app may render in anything but English.
+ *
+ * Off until the Arabic copy is written and a visible toggle ships. The whole
+ * scaffold stays — the catalogue, the logical CSS, the [dir="rtl"] rules — but
+ * nothing at runtime may select a locale, because a half-translated Arabic UI
+ * laid out right-to-left is worse than an English one: the English strings that
+ * fall back get rendered RTL, so their punctuation lands at the start of the
+ * line and the page reads as broken rather than as untranslated.
+ *
+ * Flip this to true in the same change that adds the toggle.
+ */
+export const LOCALE_SWITCHING_ENABLED = false;
+
 function isLocale(value: unknown): value is Locale {
   return value === "en" || value === "ar";
 }
 
 /**
- * ?lang= first, then the stored choice, then the browser, then English.
+ * Discard a stored locale from before the toggle was hidden.
  *
- * The query parameter exists because there is no locale switcher in the UI yet
- * — the screens it would live on are still being built — and a scaffold nobody
- * can exercise is a scaffold nobody finds the bugs in. It also sticks, so
- * ?lang=ar once is enough to browse the whole app in Arabic on a phone.
+ * Someone who selected Arabic while it was reachable — or who was auto-detected
+ * into it — would otherwise keep getting it forever, and clearing it here is
+ * the only place that can reach them.
+ */
+function forgetStoredLocale(): void {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // Nothing stored, or storage blocked. Either way there is nothing to undo.
+  }
+}
+
+/**
+ * The locale to render in.
  *
- * Only the language subtag is matched: ar-EG, ar-SA and ar all mean the same
- * catalogue here, and there is no regional variant to choose between.
+ * While switching is off this is English, unconditionally: not the stored
+ * choice, not the browser's Accept-Language, not ?lang=. Tests reach other
+ * locales through LocaleProvider's `initial` prop, which is the one path that
+ * does not depend on anything a visitor controls.
  */
 export function detectLocale(): Locale {
+  if (!LOCALE_SWITCHING_ENABLED) {
+    forgetStoredLocale();
+    return "en";
+  }
+
   try {
     const requested = new URLSearchParams(window.location.search).get("lang");
     if (isLocale(requested)) {
@@ -53,7 +84,6 @@ export function detectLocale(): Locale {
       return requested;
     }
   } catch {
-    // No window, or storage refused the write — the choice still applies now.
     const requested = new URLSearchParams(window.location.search).get("lang");
     if (isLocale(requested)) return requested;
   }
@@ -135,6 +165,7 @@ export function LocaleProvider({
   }, [locale]);
 
   const setLocale = useCallback((next: Locale) => {
+    if (!LOCALE_SWITCHING_ENABLED) return;
     setLocaleState(next);
     try {
       localStorage.setItem(STORAGE_KEY, next);

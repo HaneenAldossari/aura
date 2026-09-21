@@ -1,110 +1,193 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import StarField from "../components/StarField";
-import HeroSection from "./home/HeroSection";
-import PoetrySection from "./home/PoetrySection";
-import JourneySection from "./home/JourneySection";
-import WhatYouGetSection from "./home/WhatYouGetSection";
-import SeasonCarousel from "./home/SeasonCarousel";
-import CTASection from "./home/CTASection";
 import { useT } from "../i18n";
+import ColourField from "./home/ColourField";
+import { SHOW_COLOUR_FIELD } from "../lib/flags";
+import "./home/home-editorial.css";
 
-/* ─── Section Divider ───────────────────────────── */
-// NOTE: intentionally NOT the shared ui/GoldDivider — that one renders a
-// centered diamond hairline; Home uses a plain full-width rule.
-function GoldDivider() {
-  return (
-    <div style={{
-      width: "100%",
-      height: "1px",
-      background: "rgba(200,150,60,0.2)",
-      position: "relative",
-      zIndex: 10,
-    }} />
-  );
-}
+/**
+ * One screen, one interaction.
+ *
+ * The claim and its evidence sit in the same viewport: "measured, not guessed"
+ * above a hundred and forty-four real palette colours, read from the module an
+ * analysis injects from. Everything else is below the fold.
+ */
 
-/* ─── Main Component ────────────────────────────── */
+/** Entrance order. Delays are the choreography; the classes are the motion. */
+const ENTER = {
+  mark: 0.06,
+  label: 0.14,
+  eyebrow: 0.18,
+  line1: 0.3,
+  line2: 0.42,
+  line3: 0.54,
+  line4: 0.68,
+  ink: 0.8,
+  lede: 0.92,
+  primary: 1.06,
+  secondary: 1.18,
+} as const;
+
 export default function Home() {
-  const navigate = useNavigate();
   const t = useT();
+  const fieldWrap = useRef<HTMLDivElement>(null);
+
+  /**
+   * Mark each entrance element done on its own animationend.
+   *
+   * Two reasons rather than one timer: an element that finishes early stops
+   * holding a transform, and if animations never ran at all the rAF fallback
+   * below reveals everything. The page is never blank because `.appear` rests
+   * at opacity 1 — the animation only ever takes it away and gives it back.
+   */
+  useEffect(() => {
+    const nodes = Array.from(document.querySelectorAll<HTMLElement>(".appear"));
+    const done = (e: Event) => (e.currentTarget as HTMLElement).classList.add("is-in");
+    nodes.forEach((n) => n.addEventListener("animationend", done, { once: true }));
+
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        for (const node of nodes) {
+          const running = node.getAnimations?.() ?? [];
+          if (running.length === 0) node.classList.add("is-in");
+        }
+      });
+    });
+
+    return () => {
+      nodes.forEach((n) => n.removeEventListener("animationend", done));
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, []);
+
+  /**
+   * The field fades across the first 40vh of scroll.
+   *
+   * Written straight to the element — one opacity write per frame, and no React
+   * render inside a scroll handler.
+   */
+  useEffect(() => {
+    const el = fieldWrap.current;
+    if (!SHOW_COLOUR_FIELD || !el) return;
+    let frame = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const limit = window.innerHeight * 0.4;
+        const progress = Math.min(1, window.scrollY / limit);
+        el.style.opacity = String(1 - progress);
+        el.style.pointerEvents = progress > 0.9 ? "none" : "";
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  const steps = [
+    { n: "01", title: t("home.howItWorks.step1Title"), body: t("home.howItWorks.step1Body") },
+    { n: "02", title: t("home.howItWorks.step2Title"), body: t("home.howItWorks.step2Body") },
+    { n: "03", title: t("home.howItWorks.step3Title"), body: t("home.howItWorks.step3Body") },
+  ];
 
   return (
-    <div className="animate-fade-in" style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)", fontFamily: "'Inter', system-ui, sans-serif" }}>
-      <StarField />
+    <main id="home" className={`ed-page${SHOW_COLOUR_FIELD ? " has-field" : ""}`}>
+      <StarField maxOpacity={0.28} minDuration={4} durationRange={5} />
 
-      {/* ─── Navbar ─────────────────────── */}
-      <nav style={{ position: "relative", zIndex: 50, padding: "32px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ display: "flex", flexDirection: "row", alignItems: "baseline", gap: "10px" }}>
-          <span style={{ fontFamily: "Cormorant Garamond, serif", fontWeight: 300, fontSize: "16px", letterSpacing: "0.22em", textTransform: "uppercase", color: "var(--accent-gold)", lineHeight: 1 }}>
-            {t("common.brandPrefix")}
-          </span>
-          <span style={{ fontFamily: "Cormorant Garamond, serif", fontWeight: 500, fontSize: "38px", letterSpacing: "0.08em", color: "var(--text-primary)", lineHeight: 1 }}>
-            {t("common.brandName")}
-          </span>
+      <header className="site-header">
+        <span className="site-header__mark appear a-soft" style={{ ["--d" as string]: `${ENTER.mark}s` }}>
+          {t("common.brandName")}
+        </span>
+        <span />
+        <span className="site-header__label appear a-soft" style={{ ["--d" as string]: `${ENTER.label}s` }}>
+          {t("home.kicker")}
+        </span>
+      </header>
+
+      <section className="hero">
+        <div className="hero-copy">
+          <p className="hero__eyebrow appear a-soft" style={{ ["--d" as string]: `${ENTER.eyebrow}s` }}>
+            {t("home.eyebrow2")}
+          </p>
+
+          <h1 className="hero__title">
+            <span className="hero__line appear a-mask" style={{ ["--d" as string]: `${ENTER.line1}s` }}>
+              {t("home.heroLine1")}
+            </span>
+            <span className="hero__line appear a-mask" style={{ ["--d" as string]: `${ENTER.line2}s` }}>
+              {t("home.heroLine2")}
+            </span>
+            <span className="hero__line appear a-mask" style={{ ["--d" as string]: `${ENTER.line3}s` }}>
+              {t("home.heroLine3")}
+            </span>
+            <span
+              className="hero__line hero__line--italic appear a-mask"
+              style={{ ["--d" as string]: `${ENTER.line4}s` }}
+            >
+              {/* The ink settles on the inner span, so the mask and the focus
+                  are two separate motions on two separate elements. */}
+              <span
+                className="appear a-ink"
+                style={{ ["--d" as string]: `${ENTER.ink}s`, animationDuration: "1.2s" }}
+              >
+                {t("home.heroAccent")}
+              </span>
+            </span>
+          </h1>
+
+          <p
+            className="hero__lede appear a-soft"
+            style={{ ["--d" as string]: `${ENTER.lede}s`, animationDuration: "1.25s" }}
+          >
+            {t("home.lede2")}
+          </p>
+
+          <div className="hero__actions">
+            <Link
+              className="cta cta--primary appear a-rise"
+              style={{ ["--d" as string]: `${ENTER.primary}s` }}
+              to="/analyse"
+            >
+              {t("home.ctaPrimary2")}
+            </Link>
+            <Link
+              className="cta cta--secondary appear a-soft"
+              style={{ ["--d" as string]: `${ENTER.secondary}s` }}
+              to="/analyse?samples=1"
+            >
+              {t("home.ctaSample")}
+            </Link>
+          </div>
         </div>
-        <button
-          onClick={() => navigate("/analyze")}
-          style={{ padding: "10px 24px", borderRadius: "9999px", fontSize: "14px", fontWeight: 600, background: "var(--accent-gold)", color: "var(--bg-primary)", border: "none", cursor: "pointer", transition: "transform 0.2s" }}
-        >
-          {t("common.getStarted")}
-        </button>
-      </nav>
 
-      <HeroSection />
+        {SHOW_COLOUR_FIELD && (
+          <div ref={fieldWrap} style={{ transition: "opacity 120ms linear" }}>
+            <ColourField />
+          </div>
+        )}
+      </section>
 
-      <GoldDivider />
-
-      <PoetrySection />
-
-      <GoldDivider />
-
-      <JourneySection />
-
-      <GoldDivider />
-
-      <WhatYouGetSection />
-
-      <GoldDivider />
-
-      <SeasonCarousel />
-
-      <GoldDivider />
-
-      <CTASection />
-
-      {/* ─── Footer ─────────────────────── */}
-      {/* NOTE: intentionally NOT the shared Footer — its default variant uses a
-          different brand line (20px "your Aura" with gold accent), border color
-          and padding than Home's uppercase 14px footer. */}
-      <footer style={{
-        padding: "48px 0",
-        borderTop: "1px solid rgba(200,150,60,0.2)",
-        textAlign: "center",
-        position: "relative",
-        zIndex: 10,
-      }}>
-        <div style={{ marginBottom: "8px" }}>
-          <span style={{
-            fontFamily: "Cormorant Garamond, serif",
-            fontSize: "14px",
-            letterSpacing: "0.15em",
-            color: "var(--text-muted)",
-            textTransform: "uppercase",
-          }}>
-            {t("common.brandFull")}
-          </span>
+      <section className="how-it-works ed-shell">
+        <h2 className="ed-section__label">{t("home.howItWorks.title")}</h2>
+        <div className="home-steps">
+          {steps.map((step) => (
+            <div className="home-step" key={step.n}>
+              <span className="home-step__n ltr-run">{step.n}</span>
+              <div>
+                <p className="home-step__title">{step.title}</p>
+                <p className="home-step__body">{step.body}</p>
+              </div>
+            </div>
+          ))}
         </div>
-        <p style={{
-          fontSize: "11px",
-          letterSpacing: "0.2em",
-          color: "var(--text-muted)",
-          textTransform: "uppercase",
-          margin: 0,
-          opacity: 0.7,
-        }}>
-          {t("common.createdBy")} · {t("common.tagline")} · {new Date().getFullYear()}
-        </p>
-      </footer>
-    </div>
+      </section>
+
+      <p className="privacy-line ed-shell">{t("home.privacy")}</p>
+    </main>
   );
 }

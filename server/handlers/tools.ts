@@ -13,6 +13,9 @@ import { maxFileSizeBytes } from "../utils/config";
 import { normalizeResult } from "../normalizeResult";
 import { validateAnalysisResult } from "./analysisResult";
 import { fail, json, methodNotAllowed, providerErrorResponse, readUpload } from "./http";
+import { getSeasonMakeup } from "../utils/seasonMakeup";
+import { getSeasonStyle, resolvePairings } from "../utils/seasonStyle";
+import { getCanonicalPalette } from "../utils/seasonPalettes";
 
 const DEMO_DIR = path.join(__dirname, "../demo-analyses");
 
@@ -95,11 +98,55 @@ export async function handleDemoList(request: Request): Promise<Response> {
   if (request.method !== "GET") return methodNotAllowed("GET");
   try {
     if (!fs.existsSync(DEMO_DIR)) return json({ samples: [] });
+    // The season travels with the id so the gallery can label each face
+    // without loading nine full analyses to read one field from each.
     const samples = fs
       .readdirSync(DEMO_DIR)
       .filter((f) => f.endsWith(".json"))
       .map((f) => f.replace(/\.json$/, ""))
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+      .map((id) => {
+        try {
+          const raw = JSON.parse(
+            fs.readFileSync(path.join(DEMO_DIR, `${id}.json`), "utf8")
+          ) as {
+            season?: string;
+            rules?: { primary?: string };
+            agreement?: { agrees?: boolean; level?: string };
+            qualityIssues?: string[];
+          };
+
+          // A card carries a season only where the measurement and the model
+          // reached it independently, at PRIMARY level. `agreement.agrees` is
+          // also true when the model lands on the rules' second choice, which
+          // is a near miss rather than agreement, and a caption is a flat
+          // assertion with no room to explain the difference.
+          //
+          // Anything short of that shows the face and a number. A model-only
+          // label is never shown: that is how two deep-skinned faces came to be
+          // captioned "Light Summer" and "Light Spring", which cannot be true
+          // of either, since the light seasons are light by definition.
+          //
+          // Colour cast is deliberately not part of this test. It decides which
+          // faces are fit to ship at all (scripts/vetDemoFaces.ts), not whether
+          // a shipped face may be captioned — applying it here suppressed every
+          // label on every face, which is a way of saying nothing rather than a
+          // way of being careful.
+          const agrees = raw.agreement?.level === "primary";
+          const season = agrees ? (raw.season ?? "") : "";
+
+          return {
+            id,
+            season,
+            agrees,
+            /** Flags the sample for review rather than hiding the disagreement. */
+            needsReview: !agrees,
+          };
+        } catch {
+          // A malformed fixture should cost its own label, not the gallery.
+          return { id, season: "", agrees: false, needsReview: true };
+        }
+      });
     return json({ samples });
   } catch {
     return json({ samples: [] });
@@ -125,8 +172,31 @@ export async function handleDemoLoad(request: Request): Promise<Response> {
   try {
     const file = path.join(DEMO_DIR, `${sampleId}.json`);
     if (!fs.existsSync(file)) return fail(404, "not_found", "Sample not found.");
-    const raw = JSON.parse(fs.readFileSync(file, "utf8"));
-    return json({ result: normalizeResult(raw) });
+    const raw = JSON.parse(fs.readFileSync(file, "utf8")) as Record<string, unknown>;
+
+    // Files written by scripts/precomputeDemoAnalyses.ts are already the client
+    // contract — they came out of normalizeResult on the way in. Running them
+    // through it again silently strips the fields it *produces* rather than
+    // copies: `looks` arrives resolved ({slot, name, hex}) and no longer
+    // matches the raw shape validateLooks reads ({slot, shade}), so every look
+    // is dropped, and `measured` is attached after normalisation so it is lost
+    // outright. Older fixtures predate the pipeline and still need the pass.
+    const alreadyNormalised = "palette" in raw && "colorDNA" in raw;
+    const result = alreadyNormalised ? raw : normalizeResult(raw);
+
+    // Canonical shade data is a pure function of the season, so it is looked
+    // up on the way out rather than trusted from the file. A fixture written
+    // before these fields existed still gets them, and correcting a hex in
+    // seasonMakeup.ts or seasonStyle.ts reaches the demo samples immediately
+    // instead of after a $0.09 regeneration run.
+    const season = (result.season as string) ?? "";
+    result.makeupShades = getSeasonMakeup(season);
+    const style = getSeasonStyle(season);
+    result.styleShades = style
+      ? { ...style, pairings: resolvePairings(season, getCanonicalPalette(season)) }
+      : null;
+
+    return json({ result });
   } catch (err) {
     console.error("Demo load failed:", err instanceof Error ? err.message : err);
     return fail(500, "demo_load_failed", "Could not load that sample.");

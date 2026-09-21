@@ -226,6 +226,181 @@ should be widened — it is what most users see. Both are open.
 Also open and deliberately untouched: `QUALITY.maxScleraCast = 8` fires on both
 demo faces measured so far (8.40, 11.95). Left alone until real photos arrive.
 
+### 2026-09-20 — the demo faces' hair was inverting their season
+
+Regenerating the nine demo analyses through the real hybrid path showed six of
+nine capped at **50% confidence** with the model and the rules disagreeing
+outright. The cause is the hair gap recorded above, now measured end to end.
+
+`sample-2`, the same pixels, analysed twice:
+
+| hair | model | rules | agree | confidence |
+| --- | --- | --- | --- | --- |
+| counted (`natural`) | Deep Autumn | True Autumn | no | **50** |
+| excluded (`dyed`) | Light Spring | Light Spring | yes | **88** |
+
+Not a cosmetic difference — Deep Autumn and Light Spring are opposite corners of
+the system. These faces measure skin in the **light** band while their hair
+reads near-black at C\* under 2.6 (hue undefined at C\* 0 on `sample-4`). Hair
+carries 0.25 of the chroma axis, so that combination drags the ranking toward
+deep, muted seasons and the model — which is looking at the actual picture —
+disagrees. The disagreement was real; the input causing it was an artefact of
+generated imagery.
+
+`scripts/precomputeDemoAnalyses.ts` therefore runs the demo faces with
+`--hair=dyed`, which is also the honest answer: these are AI-generated faces and
+their hair says nothing about anyone's natural colouring. The results page says
+so, in the hair note, exactly as it would for a real user who answered the same
+way.
+
+**This does not retune anything.** No threshold moved. It is one more reason
+`eval/real` needs real photos with natural hair before any threshold is
+calibrated — and a reminder that the demo gallery is not a substitute.
+
+### 2026-09-20 — `looks` pushed classification past its token budget
+
+Adding `looks` to the classification schema made the longest responses truncate
+mid-JSON, surfacing as `Expected ',' or '}' after property value` — a parse
+error that reads like a bad model rather than a budget that ran out. Found on
+`sample-1`, the deepest-skinned demo face, which produces the longest prose.
+
+Reasoning tokens count against `max_tokens` on `google/gemini-3.8-flash`, so the
+8192 default had less headroom than it appeared to. `MAX_TOKENS_CLASSIFY` now
+defaults to **12288**. Worth re-checking whenever the schema grows again.
+
+### 2026-09-20 — specular highlights were inflating skin L* by up to 23
+
+Two deep-skinned demo faces came back labelled **Light Summer** and **Light
+Spring** — impossible, since the light seasons are light in value by
+definition. Hybrid had run correctly and both had measured features, a rules
+ranking and an agreement check. The measurement was wrong.
+
+Three separate faults, each masking the next.
+
+**1. The estimator ignored that specular is one-sided.** `statsFor` took a
+plain median over the patch. Specular reflection is additive — a highlight can
+only raise L\*, never lower it — so a median over a lit patch is biased, and the
+bias grows with gloss. It was worst on the deepest skin, where
+specular-to-diffuse contrast is highest, which is exactly the direction that
+turns a deep face into a light season. Componentwise medians were also taken
+independently per channel, describing a colour no pixel in the patch ever had.
+
+**2. Skin was sampled from three discs on the most specular points of a face.**
+`extractSkin` used both cheekbone centroids and the mid-forehead — where studio
+lighting puts its highlights. On `sample-1`:
+
+| patch | L\* |
+| --- | --- |
+| lit cheekbone | 32.9 |
+| mid-forehead | **68.3** |
+| what we measured | 60.4 |
+| whole face, banded | **37.5** |
+
+A 35-point spread across one face. Three discs are a biased *spatial* sample of
+a non-uniformly lit surface; the face-skin mask covers the lit and shadowed
+sides both.
+
+**3. The mask was only computed when hair was natural.** The segmentation mask
+does two jobs — isolating hair, and bounding the face-skin region — and they
+were tied to one answer. Saying "dyed" or "covered" silently switched skin
+measurement to the three-disc fallback: a different method for the same
+question, chosen by an unrelated answer. This hid fix 2 entirely until the
+demo regeneration ran with `--hair=dyed` and the numbers did not move.
+
+**Before and after on `sample-1`** (the deepest demo face):
+
+| | skin L\* | band | rules | model | agreement |
+| --- | --- | --- | --- | --- | --- |
+| before | 60.4 | medium | True Winter | Light Summer | none |
+| after | **37.5** | **deep** | Deep Winter | Deep Winter | **primary** |
+
+`SPECULAR.diffuseBand` (p25-p60 of L\* within a region) lives in
+`measure/seasons.config.ts`. The band sits below the median because only one
+tail is additive — trimming harder at the top than the bottom is the asymmetry
+the physics asks for.
+
+**White balance was ruled out.** `whiteBalanceGains` exists in `color.ts` but
+the pipeline never calls it, so the bright white backgrounds were not inflating
+anything.
+
+**What is still open.** `sample-5` reads L\* 58.4 — better than 72.8, still
+high for the face. Its skin measures **C\* 41**, where real skin sits near
+12-25, and the quality gate flags `colour_cast` on all nine demo faces. These
+images are graded, not photographed; the residual is the fixture, not the
+estimator. `eval/real` is what settles it.
+
+`scripts/dev/overlayBrowser.ts` had its own copy of the statistic, so the tool
+for checking the measurement silently disagreed with it. It now imports the
+same function.
+
+**Gallery rule.** A sample shows a season plainly only when the rules and the
+model agree at **primary** level and the gate found no colour cast. Otherwise
+it shows the rules' primary with a `measured` tag and is flagged for review. A
+model-only label is never shown.
+
+### 2026-09-20 — `looks` pushed classification past its token budget
+
+Adding `looks` to the classification schema made the longest responses truncate
+mid-JSON, surfacing as `Expected ',' or '}' after property value` — a parse
+error that reads like a bad model rather than a budget that ran out. Found on
+`sample-1`, the deepest-skinned demo face, which produces the longest prose.
+
+Reasoning tokens count against `max_tokens` on `google/gemini-3.8-flash`, so the
+8192 default had less headroom than it appeared to. `MAX_TOKENS_CLASSIFY` now
+defaults to **12288**. Worth re-checking whenever the schema grows again.
+
+### 2026-09-20 — specular highlights were inflating skin L* by up to 15
+
+Two deep-skinned demo faces came back labelled **Light Summer** and **Light
+Spring** — impossible, since the light seasons are light in value by
+definition. Hybrid had run correctly; the measurement was wrong.
+
+Cause: the region estimator took a plain median over each sampled patch, and
+those patches are the three most specular points on a studio-lit face. Measured
+on `sample-1`:
+
+| patch | L\* | C\* |
+| --- | --- | --- |
+| lit cheekbone | 32.9 | 21.2 |
+| mid-forehead | **68.3** | 17.8 |
+| pooled median (what we used) | 60.4 | 27.7 |
+| face-wide median | 45.8 | — |
+
+A 35-point spread across one face. Specular reflection is **additive and
+one-sided** — a highlight can only raise L\*, never lower it — so a median over
+a lit patch is a biased estimator, and the bias grows with gloss. It was worst
+on the deepest skin, where specular-to-diffuse contrast is highest, which is
+exactly the direction that turns a deep face into a light season.
+
+Two fixes, both structural rather than tuned:
+
+1. `diffusePixels()` takes the **p15-p50 band of L\*** within a region before
+   the median (`SPECULAR.diffuseBand` in `measure/seasons.config.ts`). The
+   highlight is in the upper tail, shadow in the lower.
+2. The componentwise medians now come from the **same subset of pixels**.
+   Taking `median(L)`, `median(a)`, `median(b)` independently describes a
+   colour no pixel in the patch ever had — a strange thing to hand a
+   classifier that reasons about hue.
+
+`sample-1` moved 60.4 → 56.7. Better, not solved: the forehead patch still
+dominates. **Deliberately not fixed here.** Reweighting regions is a
+measurement-core change, and these nine faces are not photometrically
+realistic — all nine measure skin C\* 17-41 where real skin sits near 12-25,
+and the quality gate flags `colour_cast` on every one of them. Retuning
+against them would be calibrating to the artefact. It belongs in Phase 4
+against `eval/real`.
+
+`scripts/dev/overlayBrowser.ts` had its own copy of this statistic, so the tool
+for checking the measurement silently disagreed with the measurement. It now
+imports the same function.
+
+**Gallery rule.** A sample shows a season plainly only when the rules and the
+model agree at **primary** level and the quality gate found no colour cast.
+Otherwise it shows the rules' primary with a `measured` tag and is flagged for
+review. A model-only label is never shown. With every demo face flagged for
+colour cast, all nine currently read as provisional — which is the honest
+state of them.
+
 ## Interface strings
 
 Every user-facing string lives in `client/src/i18n/en.ts`, in **British English**
@@ -241,6 +416,35 @@ is no locale switcher yet; `?lang=ar` selects one and sticks.
 
 The classification and chat prompts are told to write British English too, since
 their output is rendered verbatim beside the catalogue's.
+
+## Screens
+
+Results is four tabs — Overview, Beauty, Style, Shop — rendered as text links
+on a rule, with the tab in the URL (`?tab=beauty`) so it survives a reload and
+can be linked to. `/before-you-buy/:id` redirects to `?tab=shop`.
+
+One rule decides every colour element: **a colour is a flat rectangle, a
+product is a render.** Only nails, metal discs and gem facets are photographed;
+everything else is stated flat. A flat rectangle is an honest statement of a
+colour, a rendered dab is a guess at a texture nobody supplied.
+
+Canonical data, all on the same contract — the model may name a shade but never
+assigns a hex:
+
+| data | module |
+| --- | --- |
+| palettes, neutrals, metals | `server/utils/seasonPalettes.ts` |
+| makeup shades, finishes, undertone and skip lines | `server/utils/seasonMakeup.ts` |
+| gemstones, hair colours, hair avoids, metal notes | `server/utils/seasonStyle.ts` |
+
+`npx tsx scripts/exportShadeReview.ts` writes all of it to
+`design/makeup-review.md` as tables for human review, since colour judgement is
+not something a test can make.
+
+`looks` is the one place the model names shades: it writes the look name, vibe
+line and day/evening tag and picks shades **by name** from the season's list.
+`validateLooks()` resolves every name server-side, drops what does not resolve
+rather than substituting, and logs the misses so prompt drift is visible.
 
 ## Testing
 

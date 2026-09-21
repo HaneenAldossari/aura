@@ -1,0 +1,364 @@
+/**
+ * Upload and Loading — editorial direction.
+ *
+ * Both screens make the same promise in different words: the work happens here,
+ * on this device, and nothing is sent until it has passed. That line is the
+ * only thing pinned to the bottom of both.
+ */
+
+.an-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(42px, 7vw, 76px);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.an-title__rule {
+  inline-size: 62px;
+  block-size: 1px;
+  background: var(--accent);
+  border: 0;
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.an-lede {
+  font-size: var(--type-lede);
+  line-height: 1.5;
+  color: var(--ink-secondary);
+  max-inline-size: 52ch;
+  margin: 0 0 var(--space-6);
+}
+
+/* ── Upload ───────────────────────────────────────────────────────────── */
+
+.an-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
+
+@media (min-width: 1024px) {
+  .an-grid { grid-template-columns: 1fr 1fr; gap: var(--space-6); align-items: start; }
+}
+
+.an-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-block-size: 300px;
+  padding: var(--space-5);
+  border: 1px solid var(--rule-strong);
+  background: var(--surface);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color var(--dur-fast) var(--ease-ui),
+              background var(--dur-fast) var(--ease-ui);
+}
+
+.an-drop:hover,
+.an-drop:focus-visible { border-color: var(--accent); }
+.an-drop--over { border-color: var(--accent); background: var(--surface-raised); }
+
+.an-drop__title {
+  font-family: var(--font-display);
+  font-size: var(--type-title);
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+}
+
+.an-drop__hint {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-3);
+}
+
+.an-browse {
+  font-family: inherit;
+  font-size: var(--type-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: none;
+  border: 1px solid var(--rule-strong);
+  padding: 11px var(--space-4);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-ui);
+}
+
+.an-browse:hover { border-color: var(--ink-muted); }
+
+.an-preview { position: relative; border: 1px solid var(--rule-strong); }
+.an-preview__img { display: block; inline-size: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+
+.an-preview__remove {
+  position: absolute;
+  inset-block-start: var(--space-2);
+  inset-inline-end: var(--space-2);
+  background: rgba(12, 10, 9, 0.82);
+  color: var(--ink);
+  border: 1px solid var(--rule-strong);
+  inline-size: 34px;
+  block-size: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* ── Hair choice ──────────────────────────────────────────────────────── */
+
+.an-hair { border: 0; padding: 0; margin: 0 0 var(--space-5); }
+
+.an-hair__legend {
+  font-size: var(--type-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: 0;
+  margin-block-end: var(--space-2);
+}
+
+.an-hair__options { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+.an-hair__option {
+  font-family: inherit;
+  font-size: var(--type-body);
+  color: var(--ink-secondary);
+  background: none;
+  border: 1px solid var(--rule-strong);
+  padding: 12px var(--space-4);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-ui),
+              color var(--dur-fast) var(--ease-ui);
+}
+
+.an-hair__option:hover { border-color: var(--ink-muted); }
+
+.an-hair__option[aria-checked="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.an-hair__note {
+  font-size: var(--type-body);
+  line-height: 1.5;
+  color: var(--ink-muted);
+  margin: var(--space-3) 0 0;
+  max-inline-size: 52ch;
+}
+
+/* ── Tips ─────────────────────────────────────────────────────────────── */
+
+.an-tips { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+
+.an-tip {
+  display: grid;
+  grid-template-columns: 2.2rem 1fr;
+  gap: var(--space-2);
+  padding-block: var(--space-3);
+  border-block-start: 1px solid var(--rule);
+  align-items: baseline;
+}
+
+.an-tip__n { font-family: var(--font-mono); font-size: var(--type-micro); color: var(--ink-muted); }
+.an-tip__text { font-size: var(--type-body); color: var(--ink-secondary); line-height: 1.45; }
+
+/* ── Footer bar, shared by both screens ───────────────────────────────── */
+
+.an-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--rule);
+  margin-block-start: var(--space-6);
+}
+
+.an-foot__privacy {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-trust);
+  margin: 0;
+}
+
+.an-foot__hint {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+  margin: 4px 0 0;
+}
+
+.ed-button[disabled] { opacity: 0.4; cursor: not-allowed; }
+.ed-button[disabled]:hover { background: var(--accent); }
+
+/* ── Loading ──────────────────────────────────────────────────────────── */
+
+.an-stageline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-block-end: var(--space-5);
+}
+
+.an-stageline__count {
+  font-family: var(--font-mono);
+  font-size: var(--type-label);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.an-stages { display: flex; flex-direction: column; }
+
+.an-stage {
+  display: grid;
+  grid-template-columns: 2.2rem 1fr;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+  border-block-start: 1px solid var(--rule);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .an-stage { grid-template-columns: 2.2rem 1fr 14rem 4rem; align-items: center; }
+}
+
+.an-stage__n { font-family: var(--font-mono); font-size: var(--type-micro); color: var(--ink-muted); }
+.an-stage--active .an-stage__n { color: var(--accent); }
+
+.an-stage__title {
+  font-family: var(--font-display);
+  font-size: var(--type-stat);
+  font-weight: 400;
+  line-height: 1.15;
+  margin: 0 0 2px;
+  color: var(--ink-muted);
+}
+
+.an-stage--active .an-stage__title { color: var(--ink); }
+.an-stage--done .an-stage__title { color: var(--ink-secondary); }
+
+.an-stage__body { font-size: var(--type-label); color: var(--ink-muted); margin: 0; line-height: 1.45; }
+.an-stage--active .an-stage__body { color: var(--ink-secondary); }
+
+.an-stage__status {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.an-stage--active .an-stage__status { color: var(--ink-trust); }
+
+.an-stage__mark {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  color: var(--ink-muted);
+  text-align: end;
+}
+
+.an-progress { block-size: 3px; background: var(--rule-strong); inline-size: 100%; }
+
+.an-progress__fill {
+  block-size: 100%;
+  background: var(--accent);
+  transition: inline-size var(--dur-slow) var(--ease-ui);
+}
+
+/* Indeterminate work still moves, so a slow stage does not look stalled.
+   The one exception to "no ambient motion off Home" — it is a progress
+   indicator, not decoration, and it stops when the stage does. */
+.an-progress--indeterminate .an-progress__fill {
+  inline-size: 34%;
+  animation: an-indeterminate 1.4s var(--ease-ui) infinite;
+}
+
+@keyframes an-indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .an-progress--indeterminate .an-progress__fill {
+    animation: none;
+    inline-size: 100%;
+    opacity: 0.4;
+  }
+}
+
+/* ── Sample gallery ───────────────────────────────────────────────────── */
+
+.an-samples {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 480px) { .an-samples { grid-template-columns: repeat(5, 1fr); } }
+
+.an-sample {
+  display: block;
+  inline-size: 100%;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--rule);
+  cursor: pointer;
+  font: inherit;
+  text-align: start;
+  transition: border-color var(--dur-fast) var(--ease-ui);
+}
+
+.an-sample:hover,
+.an-sample:focus-visible { border-color: var(--accent); }
+
+.an-sample__img {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.an-sample__season {
+  display: block;
+  padding: 6px var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.an-sample:hover .an-sample__season { color: var(--ink-secondary); }
+
+/* A provisional label: the rules' answer, which the model did not confirm. */
+.an-sample__season--provisional { color: var(--ink-trust); }
+
+.an-sample__tag {
+  display: block;
+  font-size: var(--type-micro);
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-block-start: 1px;
+}
+
+/* ── Failure states ───────────────────────────────────────────────────── */
+
+/* All three share the shell so a failure looks like part of the app rather
+   than a dialog that escaped from somewhere else. */
+.an-state { max-inline-size: 62ch; }

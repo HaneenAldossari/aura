@@ -1,6 +1,12 @@
-import { AlertCircle } from "lucide-react";
 import { useT } from "../../i18n";
 
+/**
+ * The model could not read the photo, or a demo sample failed to load.
+ *
+ * Distinct again from the other two: this one arrives after the upload, so the
+ * tips matter more — the reader has already spent the effort once and needs to
+ * know what to change before spending it again.
+ */
 export default function ErrorPanel({
   errorKind,
   error,
@@ -15,45 +21,34 @@ export default function ErrorPanel({
   const t = useT();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] animate-fade-in">
-      <div className="w-16 h-16 rounded-full bg-warm-red/10 flex items-center justify-center mb-6">
-        <AlertCircle className="w-8 h-8 text-warm-red" />
-      </div>
-      <h2
-        className="text-2xl font-bold text-cream mb-3"
-        style={{ fontFamily: "Cormorant Garamond, serif" }}
-      >
+    <div className="an-state">
+      <h1 className="an-title">
         {t(errorKind === "sample" ? "errors.sampleTitle" : "errors.photoTitle")}
-      </h2>
-      <p className="text-cream-muted text-center max-w-md mb-6">
-        {error}
-      </p>
+      </h1>
+      <hr className="an-title__rule" />
+
+      {error && <p className="an-lede">{error}</p>}
 
       {photoTips.length > 0 && (
-        <div className="bg-espresso-light rounded-xl p-5 border border-gold/10 mb-6 max-w-md w-full">
-          <p className="text-gold text-sm font-medium mb-3">
-            {t("errors.tipsHeading")}
-          </p>
-          <ul className="space-y-2">
-            {photoTips.map((tip) => (
-              <li
-                key={tip}
-                className="text-cream-muted text-sm flex items-start gap-2"
-              >
-                <span className="text-gold mt-0.5">•</span>
-                {tip}
+        <>
+          <h2 className="ed-section__label">{t("errors.tipsHeading")}</h2>
+          <ol className="an-tips" style={{ marginBlockEnd: "var(--space-5)" }}>
+            {photoTips.map((tip, i) => (
+              <li className="an-tip" key={tip}>
+                <span className="an-tip__n ltr-run">{String(i + 1).padStart(2, "0")}</span>
+                <span className="an-tip__text">{tip}</span>
               </li>
             ))}
-          </ul>
-        </div>
+          </ol>
+        </>
       )}
 
-      <button
-        onClick={onRetry}
-        className="px-8 py-3 rounded-xl bg-gold text-espresso font-semibold hover:bg-gold-light transition cursor-pointer"
-      >
-        {t("common.retry")}
-      </button>
+      <div className="an-foot" style={{ marginBlockStart: 0 }}>
+        <p className="an-foot__privacy">{t("analysis.privacy")}</p>
+        <button type="button" className="ed-button" onClick={onRetry}>
+          {t("common.retry")}
+        </button>
+      </div>
     </div>
   );
 }

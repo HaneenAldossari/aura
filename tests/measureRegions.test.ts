@@ -234,7 +234,9 @@ describe("region extraction", () => {
       Math.hypot(x - cx, y - cy) < 6 ? { r: 255, g: 255, b: 255 } : SKIN
     );
     const region = extractSkin(withGlare, face, allSkin);
-    const brightest = Math.max(...region.pixels.map((p) => p.L));
+    // Folded rather than spread: the skin region is the whole face mask now,
+    // which is tens of thousands of pixels — more than the argument limit.
+    const brightest = region.pixels.reduce((max, p) => (p.L > max ? p.L : max), 0);
     expect(brightest).toBeLessThan(99);
   });
 

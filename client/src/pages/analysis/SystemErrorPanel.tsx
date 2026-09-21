@@ -1,14 +1,13 @@
-import { RefreshCw, ServerCrash } from "lucide-react";
 import { useT } from "../../i18n";
 
 /**
  * Our failure, shown as ours.
  *
- * Deliberately a different component from QualityPanel. A decoder that would not
- * load, a model download that failed, a WASM compile error — none of those say
- * anything about the user's photo, and putting them behind "Better Photos
- * Needed" sends someone off to re-shoot a picture that was fine. That is exactly
- * what happened when the decoder .wasm 404'd to index.html: the user saw
+ * Deliberately a different component from QualityPanel. A decoder that would
+ * not load, a model download that failed, a WASM compile error — none of those
+ * say anything about the photo, and putting them behind "better photos needed"
+ * sends someone off to re-shoot a picture that was fine. That is exactly what
+ * happened when the decoder .wasm 404'd to index.html: the user saw
  * "Aborted(CompileError…)" under a heading blaming their photo.
  *
  * The raw error goes to the console, never on screen.
@@ -23,33 +22,21 @@ export default function SystemErrorPanel({
   const t = useT();
 
   return (
-    <div
-      className="rounded-2xl p-6 max-w-lg mx-auto"
-      style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
-    >
-      <div className="flex items-center gap-3 mb-4">
-        <ServerCrash size={20} style={{ color: "var(--accent-gold)" }} aria-hidden />
-        <h2 className="text-lg" style={{ color: "var(--text-primary)" }}>
-          {t("errors.systemTitle")}
-        </h2>
-      </div>
+    <div className="an-state">
+      <h1 className="an-title">{t("errors.systemTitle")}</h1>
+      <hr className="an-title__rule" />
 
-      <p className="text-sm leading-relaxed mb-2" style={{ color: "var(--text-primary)" }}>
-        {message}
-      </p>
-      <p className="text-sm leading-relaxed mb-6" style={{ color: "var(--text-muted)" }}>
+      <p className="an-lede" style={{ marginBlockEnd: "var(--space-3)" }}>{message}</p>
+      <p className="an-hair__note" style={{ margin: "0 0 var(--space-5)" }}>
         {t("errors.systemReassurance")}
       </p>
 
-      <button
-        type="button"
-        onClick={onRetry}
-        className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2"
-        style={{ background: "var(--accent-gold)", color: "var(--bg-base, #10100e)" }}
-      >
-        <RefreshCw size={16} aria-hidden />
-        {t("common.retry")}
-      </button>
+      <div className="an-foot" style={{ marginBlockStart: 0 }}>
+        <p className="an-foot__privacy">{t("errors.qualityPrivacy")}</p>
+        <button type="button" className="ed-button" onClick={onRetry}>
+          {t("common.retry")}
+        </button>
+      </div>
     </div>
   );
 }

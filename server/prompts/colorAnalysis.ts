@@ -1,3 +1,18 @@
+import MAKEUP, { shadeNamesForPrompt } from "../utils/seasonMakeup";
+
+/**
+ * Every shade the model may name, grouped by season.
+ *
+ * All twelve are listed because the model has not chosen a season yet when it
+ * reads this. ~1,000 tokens, which is cheaper than a second call and far
+ * cheaper than letting it invent hexes: an invented hex is not wrong in any way
+ * the schema can catch, and two runs on one face would produce two different
+ * blushes.
+ */
+const SHADE_CATALOGUE = Object.keys(MAKEUP)
+  .map((season) => `### ${season}\n${shadeNamesForPrompt(season)}`)
+  .join("\n\n");
+
 export const COLOR_ANALYSIS_SYSTEM_PROMPT = `You are an expert in seasonal color analysis with deep knowledge of all 12 seasons.
 
 ## STEP 0 — PHOTO GATE (do this before any analysis)
@@ -199,7 +214,23 @@ Never "she", "he", "they", "her", "his", or "their". The user is reading about t
 ## Hair Color Guidance
 
 Describe hair recommendations in plain language ("deep chestnut with warm caramel
-highlights"). Name real, achievable salon colors — no invented shade names.`;
+highlights"). Name real, achievable salon colors — no invented shade names.
+
+## MAKEUP LOOKS
+
+Write 2-3 looks in \`looks\`. Each gets a name, a one-line \`vibe\`, a \`timeOfDay\`
+of day or evening, and 4-5 shades.
+
+- Give every look an eye, a liner, a cheek and a lip. A bronzer or a highlight
+  is an optional fifth — add one only when it genuinely belongs to the look.
+- Name the looks in modern beauty language people actually use. Do not explain
+  colour theory in the vibe line, and do not restate the season.
+- **\`shade\` must be copied exactly from the list below — from the section for
+  the primarySeason you chose, and from the matching slot.** Do not invent a
+  shade, do not borrow one from another season, and never write a hex. The hex
+  comes from our data; a name that is not on the list is discarded.
+
+${SHADE_CATALOGUE}`;
 
 
 /**
@@ -384,6 +415,7 @@ export const COLOR_ANALYSIS_SCHEMA = {
       "koreanTone",
       "colorDNA",
       "makeup",
+      "looks",
       "jewelryStyle",
       "hairColor",
       "celebrities",
@@ -464,6 +496,41 @@ export const COLOR_ANALYSIS_SCHEMA = {
           eyes: str,
         },
       },
+      // Named makeup looks. The model writes the name and the vibe line and
+      // picks shades BY NAME from the canonical list it is given in the user
+      // message; it never supplies a hex. A name that is not on that list is
+      // dropped by validateLooks() rather than rendered, which is why `shade`
+      // is a plain string here and not an enum — the list is per-season and
+      // the schema is not.
+      looks: {
+        type: "array",
+        items: {
+          type: "object",
+          additionalProperties: false,
+          required: ["name", "vibe", "timeOfDay", "shades"],
+          properties: {
+            name: str,
+            vibe: str,
+            timeOfDay: { type: "string", enum: ["day", "evening"] },
+            shades: {
+              type: "array",
+              items: {
+                type: "object",
+                additionalProperties: false,
+                required: ["slot", "shade"],
+                properties: {
+                  slot: {
+                    type: "string",
+                    enum: ["eye", "liner", "cheek", "lip", "bronzer", "highlight"],
+                  },
+                  shade: str,
+                },
+              },
+            },
+          },
+        },
+      },
+
       jewelryStyle: str,
       hairColor: {
         type: "object",

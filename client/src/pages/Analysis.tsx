@@ -1,24 +1,33 @@
 import { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
-import { analyzeMeasured, analyzePhotos, loadDemoSample, listDemoSamples } from "../lib/api";
-import { measureFile, warmUpModels, type QualityIssue } from "../lib/measure";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { analyzeMeasured, loadDemoSample, listDemoSamples, type DemoSample } from "../lib/api";
+import { measureFile, measureBytes, averageFeatures, warmUpModels, type QualityIssue } from "../lib/measure";
 import type { HairStatus } from "../lib/types";
 import HairStatusToggle from "./analysis/HairStatusToggle";
 import QualityPanel from "./analysis/QualityPanel";
 import SystemErrorPanel from "./analysis/SystemErrorPanel";
 import { createStageQueue } from "../../../measure/stageQueue";
-import { newResultId, saveResult } from "../lib/resultStore";
+import { newResultId, saveResult, loadResult } from "../lib/resultStore";
 import type { LoadingStageKey } from "./analysis/LoadingScreen";
 import UploadZone from "./analysis/UploadZone";
 import SampleGallery from "./analysis/SampleGallery";
 import LoadingScreen from "./analysis/LoadingScreen";
 import ErrorPanel from "./analysis/ErrorPanel";
 import { useT } from "../i18n";
+import { cachePhoto, getCachedPhoto, rekeyCachedPhoto } from "../lib/photoCache";
+import Masthead from "./results/Masthead";
+import "./analysis/analysis-editorial.css";
 
 export default function Analysis() {
   const t = useT();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  // Second-photo mode: the nudge on Results sends people here with the id of
+  // the analysis to firm up. The first photo is still in memory; this one is
+  // measured under different light and the two are averaged.
+  const secondFor = params.get("second") || undefined;
+  const firstPhoto = getCachedPhoto(secondFor);
+  const isSecond = Boolean(secondFor && firstPhoto);
   const [step, setStep] = useState<
     "upload" | "analyzing" | "error" | "quality" | "system"
   >("upload");
@@ -33,8 +42,16 @@ export default function Analysis() {
   // Show the 9 thumbnails instantly — they're static assets in client/public/demo-faces/.
   // Then in the background confirm with the API which actually have analyses ready
   // (fall back to the static list if the API fails — keeps the gallery visible).
-  const STATIC_SAMPLES = Array.from({ length: 9 }, (_, i) => `sample-${i + 1}`);
-  const [availableSamples, setAvailableSamples] = useState<string[]>(STATIC_SAMPLES);
+  // Thumbnails render instantly from the static assets; the API then replaces
+  // this with the real list and its labels. No label until then, because an
+  // unverified one is exactly what this gallery is not allowed to show.
+  const STATIC_SAMPLES: DemoSample[] = Array.from({ length: 9 }, (_, i) => ({
+    id: `sample-${i + 1}`,
+    season: "",
+    agrees: false,
+    needsReview: true,
+  }));
+  const [availableSamples, setAvailableSamples] = useState<DemoSample[]>(STATIC_SAMPLES);
 
   // 20 MB of models, on versioned immutable URLs. Starting now overlaps the
   // download with the user choosing a photo instead of stacking on top of it.
@@ -52,7 +69,6 @@ export default function Analysis() {
     file: null,
     preview: null,
   });
-  const [samplePreview, setSamplePreview] = useState<string | null>(null);
 
   const hasPhoto = !!photo.file;
 
@@ -64,23 +80,11 @@ export default function Analysis() {
     reader.readAsDataURL(file);
   }, []);
 
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith("image/")) {
-        handleFileSelect(file);
-      }
-    },
-    [handleFileSelect]
-  );
-
   const removePhoto = () => {
     setPhoto({ file: null, preview: null });
   };
 
   const handleSampleClick = async (sampleId: string) => {
-    setSamplePreview(`/demo-faces/${sampleId}.webp`);
     setStep("analyzing");
     setError(null);
     try {
@@ -142,10 +146,23 @@ export default function Analysis() {
       stages.push("analyzing");
       setStageProgress(undefined);
 
-      const { result } = await analyzeMeasured(
-        outcome.upload.bytes,
-        outcome.features.forScoring
-      );
+      // A second photo firms up the measurement; it does not re-judge the
+      // face. The two feature sets are averaged in Lab (hue is circular, so
+      // the mean of 350 and 10 degrees is 180 — the opposite colour), and the
+      // image sent is still the first one, which is what the verdict was built
+      // on.
+      let features = outcome.features;
+      let uploadBytes = outcome.upload.bytes;
+
+      if (isSecond && firstPhoto) {
+        const firstOutcome = await measureBytes(firstPhoto.bytes, hairStatus);
+        if (firstOutcome.kind === "measured") {
+          features = averageFeatures(firstOutcome.features, outcome.features);
+          uploadBytes = firstOutcome.upload.bytes;
+        }
+      }
+
+      const { result } = await analyzeMeasured(uploadBytes, features.forScoring);
 
       if (result.error === "low_confidence") {
         setError(result.message as string || t("errors.lowConfidence"));
@@ -155,10 +172,20 @@ export default function Analysis() {
         return;
       }
 
-      stages.push("building");
       // Stateless API: keep the result here and put a local key in the URL.
       const id = newResultId();
-      saveResult(id, result);
+      // Client-side annotation: the API saw one merged feature set and cannot
+      // know how many photos produced it.
+      saveResult(id, { ...result, photoCount: isSecond ? 2 : 1 });
+      if (isSecond && firstPhoto) {
+        // Keep the original photo, so "change hair answer" still works after
+        // a second photo has been added.
+        rekeyCachedPhoto(secondFor, id);
+      } else {
+        // In memory only, so Results can re-run against the same pixels when
+        // the hair answer changes. Never on disk — see lib/photoCache.ts.
+        cachePhoto(id, outcome.upload.bytes, hairStatus);
+      }
       navigate(`/results/${id}`);
     } catch (err) {
       // Reaching here means the upload or the API failed. Still not the user's
@@ -179,121 +206,125 @@ export default function Analysis() {
     setStep("upload");
   };
 
-  return (
-    <div className="min-h-screen animate-fade-in">
-      {/* Nav — kept local instead of NavShell: this page uses py-4 (NavShell is py-3 + gap-4) */}
-      <nav className="fixed top-0 w-full z-50 glass-dark">
-        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-2 text-cream-muted hover:text-cream transition cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">{t("common.back")}</span>
-          </button>
-          <span className="text-gold text-sm font-medium">
-            {t("analysis.stepOf", { step: step === "upload" ? 1 : 2, total: 2 })}
-          </span>
-        </div>
-      </nav>
+  const tips = [
+    t("analysis.tip1"),
+    t("analysis.tip2"),
+    t("analysis.tip3"),
+    t("analysis.tip4"),
+  ];
 
-      <div className="max-w-4xl mx-auto px-6 pt-24 pb-16">
-        {/* ─── Upload Step ─────────────────── */}
+  const stepMeta =
+    step === "analyzing" ? t("analysis.stepAnalysis") : t("analysis.stepPhoto");
+
+  return (
+    <div className="ed-page">
+      <div className="ed-shell">
+        <Masthead meta={stepMeta} />
+
+        {/* ── Upload ─────────────────────────────────────────────────── */}
         {step === "upload" && (
-          <div className="animate-fade-in-up">
-            <h1
-              className="text-3xl md:text-4xl font-bold text-cream mb-2"
-              style={{ fontFamily: "Cormorant Garamond, serif" }}
-            >
-              {t("analysis.title")}
+          <>
+            <h1 className="an-title">
+              {t(isSecond ? "analysis.secondTitle" : "analysis.photoTitle")}
             </h1>
-            <p className="text-cream-muted mb-8">
-              {t("analysis.lede")}
+            <hr className="an-title__rule" />
+            <p className="an-lede">
+              {t(isSecond ? "analysis.secondLede" : "analysis.photoLede")}
             </p>
 
-            {/* Upload + Sample gallery — side-by-side on desktop */}
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-8 items-start">
-              <UploadZone
-                preview={photo.preview}
-                onFileSelect={handleFileSelect}
-                onDrop={handleDrop}
-                onRemove={removePhoto}
-              />
+            <div className="an-grid">
+              <div>
+                <UploadZone
+                  preview={photo.preview}
+                  onFileSelect={handleFileSelect}
+                  onRemove={removePhoto}
+                />
 
-              {/* Sample gallery — privacy-friendly demo */}
-              {availableSamples.length > 0 && (
-                <SampleGallery samples={availableSamples} onSampleClick={handleSampleClick} />
-              )}
-            </div>
-
-            {/* Hair status — asked before analysis because dyed or covered hair
-                carries no information about natural colouring. */}
-            {hasPhoto && (
-              <div className="mb-8">
-                <HairStatusToggle value={hairStatus} onChange={setHairStatus} />
+                {availableSamples.length > 0 && (
+                  <div style={{ marginBlockStart: "var(--space-5)" }}>
+                    <SampleGallery
+                      samples={availableSamples}
+                      onSampleClick={handleSampleClick}
+                    />
+                  </div>
+                )}
               </div>
-            )}
 
-            {/* Tip */}
-            <div className="p-4 rounded-xl bg-gold/5 border border-gold/10 text-sm text-cream-muted mb-8">
-              <strong className="text-gold">{t("analysis.tipLabel")}</strong>{" "}
-              {t("analysis.tipBody")}
+              <div>
+                <HairStatusToggle value={hairStatus} onChange={setHairStatus} />
+
+                <h2 className="ed-section__label">{t("analysis.accurateRead")}</h2>
+                <ol className="an-tips">
+                  {tips.map((tip, i) => (
+                    <li className="an-tip" key={tip}>
+                      <span className="an-tip__n ltr-run">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="an-tip__text">{tip}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
             </div>
 
-            {/* Analyze button */}
-            <button
-              onClick={handleAnalyze}
-              disabled={!hasPhoto}
-              className="w-full py-4 rounded-xl bg-gold text-espresso font-semibold text-lg disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gold-light transition cursor-pointer"
-            >
-              {t(hasPhoto ? "analysis.submit" : "analysis.submitDisabled")}
-            </button>
-          </div>
+            <div className="an-foot">
+              <div>
+                <p className="an-foot__privacy">{t("analysis.privacy")}</p>
+                {!hasPhoto && (
+                  <p className="an-foot__hint">{t("analysis.chooseToContinue")}</p>
+                )}
+              </div>
+              <button
+                type="button"
+                className="ed-button"
+                onClick={handleAnalyze}
+                disabled={!hasPhoto}
+              >
+                {t("analysis.analyse")}
+              </button>
+            </div>
+          </>
         )}
 
-        {/* ─── Analyzing — Full Loading Page ─ */}
+        {/* ── Loading ────────────────────────────────────────────────── */}
         {step === "analyzing" && (
           <LoadingScreen
-            uploadedPhotos={samplePreview ? [samplePreview] : photo.preview ? [photo.preview] : []}
-            totalDuration={samplePreview ? 2500 : undefined}
-            stage={samplePreview ? undefined : stage}
-            stageProgress={samplePreview ? undefined : stageProgress}
+            stage={stage}
+            stageProgress={stageProgress}
+            onCancel={() => navigate("/")}
           />
         )}
 
-        {/* ─── Quality gate — nothing was uploaded ─ */}
+        {/* ── The three failure states ───────────────────────────────── */}
         {step === "quality" && (
-          <div className="animate-fade-in-up">
-            <QualityPanel issues={qualityIssues} onRetake={handleRetake} />
-          </div>
+          <QualityPanel
+            issues={qualityIssues}
+            // Clear the photo as well as the step. "Try another photo" that
+            // returns you to the upload screen with the rejected photo still
+            // in place leaves the dropzone hidden behind its own preview, so
+            // the one thing the button invites you to do is the one thing you
+            // cannot see how to do.
+            onRetake={() => {
+              removePhoto();
+              setStep("upload");
+            }}
+          />
         )}
 
-        {/* ─── Our failure, not the photo's ─ */}
         {step === "system" && (
-          <div className="animate-fade-in-up">
-            <SystemErrorPanel
-              message={systemMessage}
-              onRetry={() => {
-                setSystemMessage("");
-                setStep("upload");
-              }}
-            />
-          </div>
+          <SystemErrorPanel message={systemMessage} onRetry={() => setStep("upload")} />
         )}
 
-        {/* ─── Error / Retry ───────────────── */}
         {step === "error" && (
           <ErrorPanel
             errorKind={errorKind}
             error={error}
             photoTips={photoTips}
             onRetry={() => {
+              // Same reasoning as the quality panel: the photo that failed is
+              // not the one to try again with.
+              removePhoto();
               setStep("upload");
-              setError(null);
-              setPhotoTips([]);
-              setErrorKind("photo");
-              setSamplePreview(null);
-              listDemoSamples().then(setAvailableSamples).catch(() => {});
             }}
           />
         )}

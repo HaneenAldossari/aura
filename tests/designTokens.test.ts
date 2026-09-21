@@ -160,7 +160,7 @@ describe("banned decorative effects stay gone", () => {
     );
     expect(users.map((f) => path.relative(srcDir, f)).sort()).toEqual([
       "index.css",
-      "pages/results/SeasonHero.tsx",
+      "pages/results/SeasonIdentity.tsx",
     ]);
   });
 
@@ -182,10 +182,17 @@ describe("banned decorative effects stay gone", () => {
   });
 
   it("keeps 'shimmer' where it names a makeup finish, not an effect", () => {
-    // ShadeDab renders finish === "shimmer" — that is content from the palette
-    // data, and removing it would delete a real product attribute.
-    const dab = fs.readFileSync(path.join(srcDir, "pages/results/ShadeDab.tsx"), "utf8");
-    expect(dab).toMatch(/finish === "shimmer"/);
+    // The shade bars print `finish`, which is "shimmer" for real shades. That
+    // is content from the canonical list, not decoration, and the ban above
+    // must not take it with it.
+    const makeup = fs.readFileSync(path.join(srcDir, "pages/results/MakeupSection.tsx"), "utf8");
+    expect(makeup).toMatch(/ed-tile__sub/);
+    expect(makeup).toMatch(/shade\.finish/);
+    const data = fs.readFileSync(
+      path.join(__dirname, "../server/utils/seasonMakeup.ts"),
+      "utf8"
+    );
+    expect(data).toMatch(/"shimmer"/);
   });
 
   it("no hover rule moves an element or casts a shadow", () => {
@@ -194,5 +201,69 @@ describe("banned decorative effects stay gone", () => {
     for (const block of hoverBlocks) {
       expect(block).not.toMatch(/transform|box-shadow/);
     }
+  });
+});
+
+/**
+ * Type floors.
+ *
+ * Small type is the first thing that creeps back: a caption gets shrunk to fit
+ * a row, then the next one matches it. These pin the floors rather than the
+ * exact sizes, since the sizes are allowed to move and the floors are not.
+ */
+describe("type floors", () => {
+  const src = path.join(__dirname, "../client/src");
+  const collect = (dir: string): string[] =>
+    fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+      const full = path.join(dir, e.name);
+      if (e.isDirectory()) return collect(full);
+      return /\.(tsx?|css)$/.test(e.name) ? [full] : [];
+    });
+  const css = fs.readFileSync(path.join(src, "index.css"), "utf8");
+  const files = collect(src);
+
+  const tokenValue = (name: string, block = css) =>
+    Number(block.match(new RegExp(`--${name}:\\s*(\\d+)px`))?.[1] ?? 0);
+
+  it("sets body to 16 on desktop and 17 on phone", () => {
+    expect(tokenValue("type-body")).toBe(16);
+    const phone = css.slice(css.indexOf("@media (max-width: 767px)"));
+    expect(tokenValue("type-body", phone)).toBe(17);
+  });
+
+  it("holds guidance at 17 at both sizes", () => {
+    expect(tokenValue("type-guide")).toBe(17);
+    const phone = css.slice(css.indexOf("@media (max-width: 767px)"));
+    expect(tokenValue("type-guide", phone)).toBe(17);
+  });
+
+  it("keeps names at 14 and captions at 13, at both sizes", () => {
+    const phone = css.slice(css.indexOf("@media (max-width: 767px)"));
+    for (const block of [css, phone]) {
+      expect(tokenValue("type-label", block)).toBeGreaterThanOrEqual(14);
+      expect(tokenValue("type-micro", block)).toBeGreaterThanOrEqual(13);
+    }
+  });
+
+  it("has no stylesheet declaring a size below 13px", () => {
+    const offenders: string[] = [];
+    for (const file of files.filter((f) => f.endsWith(".css"))) {
+      const body = fs.readFileSync(file, "utf8");
+      for (const m of body.matchAll(/font-size:\s*(\d+)px/g)) {
+        if (Number(m[1]) < 13) offenders.push(`${path.relative(src, file)}: ${m[0]}`);
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("has no inline style declaring a size below 13px", () => {
+    const offenders: string[] = [];
+    for (const file of files.filter((f) => f.endsWith(".tsx"))) {
+      const body = fs.readFileSync(file, "utf8");
+      for (const m of body.matchAll(/fontSize:\s*(\d+)\b/g)) {
+        if (Number(m[1]) < 13) offenders.push(`${path.relative(src, file)}: ${m[0]}`);
+      }
+    }
+    expect(offenders).toEqual([]);
   });
 });

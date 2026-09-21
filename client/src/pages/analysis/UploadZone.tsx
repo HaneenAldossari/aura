@@ -1,87 +1,88 @@
-import { useRef } from "react";
-import { Upload, Camera, X } from "lucide-react";
-import IconButton from "../../components/ui/IconButton";
+import { useRef, useState } from "react";
+import { X } from "lucide-react";
 import { useT } from "../../i18n";
 
+/**
+ * The dropzone, and the chosen photo in its place.
+ *
+ * Deliberately plain: this is the one screen where nothing should compete with
+ * the decision to pick a file. The preview replaces the zone rather than
+ * appearing beside it, so there is never a question of which photo is in play.
+ */
 export default function UploadZone({
   preview,
   onFileSelect,
-  onDrop,
   onRemove,
 }: {
   preview: string | null;
   onFileSelect: (file: File) => void;
-  onDrop: (e: React.DragEvent) => void;
   onRemove: () => void;
 }) {
   const t = useT();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const input = useRef<HTMLInputElement | null>(null);
+  const [over, setOver] = useState(false);
+
+  if (preview) {
+    return (
+      <div className="an-preview">
+        <img className="an-preview__img" src={preview} alt={t("analysis.upload.previewAlt")} />
+        <button
+          type="button"
+          className="an-preview__remove"
+          onClick={onRemove}
+          aria-label={t("analysis.upload.remove")}
+        >
+          <X size={16} aria-hidden />
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      {preview ? (
-        <div className="relative rounded-2xl overflow-hidden border-2 border-gold/30 aspect-[4/5]">
-          <img
-            src={preview}
-            alt={t("analysis.upload.previewAlt")}
-            className="w-full h-full object-cover"
-          />
-          {/* IconButton forces inline background/color — un-set them so the
-              original bg-espresso/80, hover:bg-red-900 and text-cream classes
-              keep applying; hover:opacity-100 cancels its base hover:opacity-80. */}
-          <IconButton
-            aria-label={t("analysis.upload.remove")}
-            onClick={onRemove}
-            className="absolute top-3 right-3 w-8 h-8 bg-espresso/80 text-cream hover:bg-red-900 hover:opacity-100"
-            style={{ background: undefined, color: undefined }}
-          >
-            <X className="w-4 h-4" />
-          </IconButton>
-          <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-espresso/80 to-transparent">
-            <p className="text-cream text-xs font-medium">{t("analysis.upload.previewCaption")}</p>
-          </div>
-        </div>
-      ) : (
-        <div
-          role="button"
-          tabIndex={0}
-          aria-label={t("analysis.upload.dropzoneLabel")}
-          onClick={() => fileInputRef.current?.click()}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              fileInputRef.current?.click();
-            }
-          }}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={onDrop}
-          className="rounded-2xl border-2 border-dashed border-gold/20 hover:border-gold/40 bg-espresso-light/50 hover:bg-espresso-light aspect-[4/5] flex flex-col items-center justify-center gap-3 cursor-pointer transition group"
-        >
-          <div className="w-14 h-14 rounded-xl bg-gold/10 flex items-center justify-center text-gold group-hover:bg-gold/15 transition">
-            <Camera className="w-6 h-6" />
-          </div>
-          <div className="text-center px-4">
-            <p className="text-cream text-sm font-medium mb-1">{t("analysis.upload.heading")}</p>
-            <p className="text-cream-muted text-xs leading-relaxed">
-              {t("analysis.upload.hint")}
-            </p>
-          </div>
-          <div className="flex items-center gap-1 text-gold/50 text-xs">
-            <Upload className="w-3 h-3" />
-            {t("analysis.upload.action")}
-          </div>
-        </div>
-      )}
+    <>
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label={t("analysis.upload.dropzoneLabel")}
+        className={`an-drop${over ? " an-drop--over" : ""}`}
+        onClick={() => input.current?.click()}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            input.current?.click();
+          }
+        }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setOver(true);
+        }}
+        onDragLeave={() => setOver(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setOver(false);
+          const file = e.dataTransfer.files?.[0];
+          if (file) onFileSelect(file);
+        }}
+      >
+        <p className="an-drop__title">{t("analysis.choosePhoto")}</p>
+        <p className="an-drop__hint">{t("analysis.dropHint")}</p>
+        {/* Nested in the zone's click target, so it is decorative to the
+            keyboard — the zone itself is the control. */}
+        <span className="an-browse" aria-hidden>
+          {t("analysis.browse")}
+        </span>
+      </div>
       <input
-        ref={fileInputRef}
+        ref={input}
         type="file"
         accept="image/*"
-        className="hidden"
+        className="sr-only"
         onChange={(e) => {
-          const f = e.target.files?.[0];
-          if (f) onFileSelect(f);
+          const file = e.target.files?.[0];
+          if (file) onFileSelect(file);
+          e.target.value = "";
         }}
       />
-    </div>
+    </>
   );
 }

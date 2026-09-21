@@ -12,13 +12,33 @@ import { buildFeatures } from "../measure/features";
 import { detectFaces, loadLandmarker, loadSegmenter, segmentImage } from "../measure/landmarks";
 import { extractRegions } from "../measure/regions";
 import { assessQuality } from "../measure/quality";
+import { toCanonicalJpeg } from "../measure/encode";
 import type { HairStatus } from "../measure/seasons.config";
 import type { MeasuredFeatures } from "../measure/score";
+
+/** Base64 without a data: prefix. Chunked so a large image cannot blow the stack. */
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = "";
+  const CHUNK = 0x8000;
+  for (let i = 0; i < bytes.length; i += CHUNK) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK));
+  }
+  return btoa(binary);
+}
 
 export interface BrowserMeasurement {
   ok: boolean;
   error?: string;
   features?: MeasuredFeatures;
+  /**
+   * The canonical sRGB JPEG, base64, exactly as the browser would upload it.
+   *
+   * Callers that go on to classify must send THIS, not the original file —
+   * the model and the measurement layer have to see the same pixels, and a
+   * Display P3 original read as sRGB is a 4-degree hue error, enough to flip
+   * the undertone label.
+   */
+  uploadBase64?: string;
   /** Region pixel counts, so a bad segmentation is visible in the results file. */
   coverage?: Record<string, number>;
   qualityOk?: boolean;
@@ -51,11 +71,11 @@ async function measure(url: string, hairStatus: HairStatus): Promise<BrowserMeas
       return { ok: false, error: `expected one face, found ${faces.length}`, qualityIssues };
     }
 
+    // Always segmented: the mask bounds the face-skin region regardless of
+    // whether hair is scored. See the note in measure/pipeline.ts.
     let segmentation: Uint8Array | null = null;
-    if (hairStatus === "natural") {
-      await loadSegmenter();
-      segmentation = await segmentImage(imageData);
-    }
+    await loadSegmenter();
+    segmentation = await segmentImage(imageData);
 
     const regions = extractRegions(
       { data: image.data, width: image.width, height: image.height },
@@ -69,9 +89,12 @@ async function measure(url: string, hairStatus: HairStatus): Promise<BrowserMeas
       gamut: image.gamut,
     });
 
+    const canonical = await toCanonicalJpeg(image);
+
     return {
       ok: true,
       features: features.forScoring,
+      uploadBase64: bytesToBase64(canonical.bytes),
       coverage: features.coverage,
       qualityOk: quality.ok,
       qualityIssues,

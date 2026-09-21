@@ -106,6 +106,50 @@ describe("call sites", () => {
   });
 });
 
+describe("locale switching is off", () => {
+  /**
+   * The scaffold stays; selecting a locale does not.
+   *
+   * A half-translated Arabic UI laid out right-to-left is worse than an English
+   * one — the English strings that fall back get rendered RTL, so punctuation
+   * lands at the start of the line and the page reads as broken rather than as
+   * untranslated. This pins that nothing at runtime can reach Arabic until the
+   * copy and a visible toggle land together.
+   */
+  const source = fs.readFileSync(path.join(SRC, "i18n/index.tsx"), "utf8");
+
+  it("has the flag off", () => {
+    expect(source).toMatch(/LOCALE_SWITCHING_ENABLED = false/);
+  });
+
+  it("returns English without consulting storage, navigator or the query", () => {
+    const detect = source.slice(source.indexOf("export function detectLocale"));
+    const guard = detect.slice(0, detect.indexOf("\n}"));
+    // The early return must come before any of the three inputs is read.
+    const earlyReturn = guard.indexOf('return "en"');
+    for (const input of ["localStorage.getItem", "navigator", "URLSearchParams"]) {
+      const at = guard.indexOf(input);
+      if (at !== -1) expect(at, input).toBeGreaterThan(earlyReturn);
+    }
+  });
+
+  it("clears a locale stored before the toggle was hidden", () => {
+    expect(source).toMatch(/forgetStoredLocale/);
+    expect(source).toMatch(/localStorage\.removeItem\(STORAGE_KEY\)/);
+  });
+
+  it("makes setLocale inert", () => {
+    expect(source).toMatch(/if \(!LOCALE_SWITCHING_ENABLED\) return;/);
+  });
+
+  it("keeps the Arabic catalogue and the RTL rules in place", () => {
+    // Hidden, not deleted: the work already done must survive to step 8.
+    expect(fs.existsSync(path.join(SRC, "i18n/ar.ts"))).toBe(true);
+    const css = fs.readFileSync(path.join(SRC, "index.css"), "utf8");
+    expect(css).toMatch(/\[dir="rtl"\]/);
+  });
+});
+
 describe("RTL", () => {
   const css = fs.readFileSync(path.join(SRC, "index.css"), "utf8");
 
@@ -125,8 +169,26 @@ describe("RTL", () => {
     expect(css).toMatch(/\[dir="rtl"\][\s\S]*?\.ltr-run[\s\S]*?direction:\s*ltr/);
   });
 
-  it("carries an Arabic face in the body stack", () => {
-    expect(css).toMatch(/--font-body:[^;]*Arabic/);
+  it("gives Arabic its own display, body and mono faces", () => {
+    // Scoped to [dir="rtl"], not appended to the Latin stacks: font fallback
+    // is chosen per glyph, so an Arabic face left in the Latin display stack
+    // would pick up any character Bodoni happens to lack.
+    const rtlBlock = css.match(/\[dir="rtl"\]\s*\{[^}]*\}/)?.[0] ?? "";
+    expect(rtlBlock).toMatch(/--font-display:\s*Amiri/);
+    expect(rtlBlock).toMatch(/--font-body:[^;]*IBM Plex Sans Arabic/);
+    expect(rtlBlock).toMatch(/--font-mono:[^;]*Arabic/);
+  });
+
+  it("loads the Arabic faces", () => {
+    const html = fs.readFileSync(path.join(SRC, "../index.html"), "utf8");
+    expect(html).toMatch(/family=Amiri/);
+    expect(html).toMatch(/family=IBM\+Plex\+Sans\+Arabic/);
+  });
+
+  it("loosens display leading for Arabic", () => {
+    // Bodoni's tight display leading reads as cramped in a script with no
+    // ascender/descender rhythm to hang on.
+    expect(css).toMatch(/\[dir="rtl"\][^{]*\.ed-season[\s\S]{0,160}line-height/);
   });
 
   it("leaves no physical left/right box properties behind", () => {

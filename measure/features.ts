@@ -17,6 +17,7 @@ import {
 } from "./color";
 import type { AllRegions, RegionName, RegionPixels } from "./regions";
 import type { WhiteBalanceMethod } from "./color";
+import { SPECULAR } from "./seasons.config";
 import type { HairStatus } from "./seasons.config";
 import type { MeasuredFeatures, RegionStats } from "./score";
 
@@ -79,19 +80,40 @@ export interface FeatureOptions {
 // Per-region statistics
 // ─────────────────────────────────────────────────────────────────────────────
 
+/**
+ * The diffuse pixels of a region, as a slice of its L* range.
+ *
+ * Sorting by L* and keeping a low band drops the specular highlight at the top
+ * and the shadow at the bottom. The cheekbone and mid-forehead patches this
+ * samples are exactly where studio lighting puts its highlights, so the top of
+ * the range is reliably the light source rather than the person.
+ */
+export function diffusePixels(pixels: Lab[]): Lab[] {
+  if (pixels.length < 8) return pixels;
+  const sorted = pixels.slice().sort((p, q) => p.L - q.L);
+  const from = Math.floor(sorted.length * SPECULAR.diffuseBand.lo);
+  const to = Math.max(Math.floor(sorted.length * SPECULAR.diffuseBand.hi), from + 1);
+  return sorted.slice(from, to);
+}
+
 function statsFor(region: RegionPixels, trim: number): RegionFeature | null {
   // An unusable region is null, never a number. See the file header.
   if (region.unavailable || region.pixels.length === 0) return null;
 
-  const Ls = region.pixels.map((p) => p.L);
-  const as = region.pixels.map((p) => p.a);
-  const bs = region.pixels.map((p) => p.b);
+  // Componentwise medians are taken over the SAME subset of pixels, not over
+  // the region independently per channel. Three independent medians describe a
+  // colour no pixel in the patch actually had, which is a strange thing to feed
+  // a classifier that reasons about hue.
+  const diffuse = diffusePixels(region.pixels);
+  const Ls = diffuse.map((p) => p.L);
+  const as = diffuse.map((p) => p.a);
+  const bs = diffuse.map((p) => p.b);
 
   const lab: Lab = { L: median(Ls), a: median(as), b: median(bs) };
   const trimmedLab: Lab = {
-    L: trimmedMean(Ls, trim),
-    a: trimmedMean(as, trim),
-    b: trimmedMean(bs, trim),
+    L: trimmedMean(region.pixels.map((p) => p.L), trim),
+    a: trimmedMean(region.pixels.map((p) => p.a), trim),
+    b: trimmedMean(region.pixels.map((p) => p.b), trim),
   };
   const lch: LCh = labToLch(lab);
 

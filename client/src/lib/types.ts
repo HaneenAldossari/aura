@@ -48,6 +48,98 @@ export interface Makeup {
   nails: { bestColors: string[]; avoidColors: string[] };
 }
 
+/** A shade from the canonical per-season list. Hexes are never model-written. */
+export type ShadeCategory =
+  | "foundation" | "blush" | "bronzer" | "lip"
+  | "eye" | "liner" | "highlight" | "nails";
+
+export type ShadeFinish =
+  | "matte" | "satin" | "cream" | "shimmer" | "metallic" | "gloss";
+
+export interface MakeupShade {
+  name: string;
+  hex: string;
+  category: ShadeCategory;
+  finish: ShadeFinish;
+  /** Slug of a photographed render; nails only. */
+  asset?: string;
+}
+
+/** The canonical shade list for the classified season. */
+/** One or two sentences opening each Beauty section, above the swatches. */
+export interface MakeupGuidance {
+  base: string;
+  blush: string;
+  lip: string;
+  eye: string;
+  liner: string;
+  nails: string;
+}
+
+export interface SeasonMakeup {
+  foundation: MakeupShade[];
+  guidance: MakeupGuidance;
+  blush: MakeupShade[];
+  bronzer: MakeupShade[];
+  lip: MakeupShade[];
+  eye: MakeupShade[];
+  liner: MakeupShade[];
+  highlight: MakeupShade[];
+  nails: MakeupShade[];
+  skip: string;
+}
+
+/** Canonical gemstone and hair shades, for the visual Style tab. */
+export interface StoneShade {
+  name: string;
+  hex: string;
+  accent: string;
+  /** Slug of a photographed render, where one exists. */
+  asset?: string;
+}
+
+export interface MetalVerdict {
+  name: string;
+  verdict: "best" | "works" | "skip";
+  reason: string;
+}
+
+/** Three palette colours and when to wear them. Resolved server-side. */
+export interface Pairing {
+  colours: NamedHex[];
+  when: string;
+}
+
+export interface StyleGuidance {
+  jewellery: string;
+  hair: string;
+  pairings: string;
+}
+
+export interface SeasonStyle {
+  guidance: StyleGuidance;
+  story: string;
+  metals: MetalVerdict[];
+  extraMetals: string | null;
+  pairings: Pairing[];
+  gemstones: StoneShade[];
+  hair: StoneShade[];
+  hairAvoid: StoneShade[];
+}
+
+export type LookSlot = "eye" | "liner" | "cheek" | "lip" | "bronzer" | "highlight";
+
+/**
+ * A named look. The name and vibe line are the model's; every shade was
+ * resolved against the canonical list server-side, so `hex` is always ours.
+ */
+export interface Look {
+  name: string;
+  vibe: string;
+  timeOfDay: "day" | "evening";
+  shades: (MakeupShade & { slot: LookSlot })[];
+}
+
 export interface KeyFeatures {
   skinTone: string;
   eyeColor: string;
@@ -132,6 +224,12 @@ export interface AnalysisResult {
   celebrities: Celebrity[];
   koreanAnalysis?: { tone: string; description: string; kbeautyTips: string };
   crossValidation?: CrossValidation;
+  /** Canonical shade list for this season — the source of every makeup hex. */
+  makeupShades?: SeasonMakeup | null;
+  /** Canonical gemstones and hair colours for this season. */
+  styleShades?: SeasonStyle | null;
+  /** Named looks, shades already resolved against makeupShades. */
+  looks?: Look[];
   /** Nearest-neighbour season, one of the 12 canonical names. */
   secondarySeason?: string;
   axes?: Axes | null;
@@ -148,6 +246,11 @@ export interface AnalysisResult {
   /** The rule-based verdict. The season above is still the model's. */
   rules?: { primary: string; secondary: string; margin: number; ambiguous: boolean };
   agreement?: { level: "primary" | "secondary" | "none"; agrees: boolean };
+  /**
+   * How many photos fed the measurement. Set by the client, not the server —
+   * the API sees one merged feature set and has no way to know.
+   */
+  photoCount?: number;
   /** A suggestion, never a gate, until Phase 4 calibrates the thresholds. */
   needsSecondPhoto?: boolean;
   alternatives?: { season: string; score: number }[];

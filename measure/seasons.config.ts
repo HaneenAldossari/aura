@@ -214,6 +214,65 @@ export const AXIS_WEIGHTS = {
  * global midpoint that fits mid-tone skin and misreads the ends. The eval must
  * report accuracy per band, otherwise a bias on one band hides inside the mean.
  */
+/**
+ * Which slice of a region's pixels counts as diffuse skin.
+ *
+ * Specular reflection is additive and one-sided: a highlight can only ever
+ * raise L*, never lower it. A median over the whole patch is therefore a
+ * biased estimator of skin colour, and the bias grows with how glossy the
+ * lighting is — measured on the demo faces it ran +8 to +15 L*, worst on the
+ * deepest skin, where the specular-to-diffuse contrast is highest. That is
+ * enough to move a face two whole bands.
+ *
+ * Shadow contaminates the other tail (the unlit side of the face, pores,
+ * occlusion), so the estimate comes from a band rather than a low percentile.
+ * The band sits slightly below the median because only one tail is additive:
+ * trimming harder at the top than the bottom is the asymmetry the physics
+ * asks for.
+ *
+ * estimate — calibrate in Phase 4 against real photos with known colouring.
+ */
+export const SPECULAR = {
+  /** Fraction of the region's L* range, sorted ascending, taken as diffuse. */
+  diffuseBand: { lo: 0.25, hi: 0.6 },
+} as const;
+
+/**
+ * Turning a measured region into a word.
+ *
+ * Presentation, not classification: nothing here feeds score(). The trait line
+ * on Results says "Deep brown" where the table says "18.2 / 9.6 / 41.3", and
+ * both describe the same measurement — one of them can be checked in a mirror.
+ *
+ * In config because it is a set of numeric cut-offs, and those live in config.
+ *
+ * estimate — these are descriptive bands, not calibrated ones.
+ */
+export const DESCRIPTORS = {
+  /** Hair and eye depth by L*, darkest first. */
+  depth: [
+    { below: 18, word: "Black" },
+    { below: 30, word: "Deep brown" },
+    { below: 45, word: "Brown" },
+    { below: 60, word: "Light brown" },
+    { below: 75, word: "Dark blonde" },
+    { below: 101, word: "Blonde" },
+  ],
+  /** Eyes are named on the same depth scale but with their own vocabulary. */
+  eyeDepth: [
+    { below: 18, word: "Very dark" },
+    { below: 30, word: "Dark" },
+    { below: 45, word: "Medium" },
+    { below: 101, word: "Light" },
+  ],
+  /**
+   * Warmth prefix, by hue angle. Only applied above a minimum chroma: hue is
+   * undefined at zero chroma, and calling a neutral-black hair "warm" because
+   * its hue landed at 61 degrees would be reading noise aloud.
+   */
+  warmth: { minChroma: 6, warmBelow: 70, coolAbove: 200 },
+} as const;
+
 export const SKIN_BANDS = {
   /** L* below this is "deep". estimate — calibrate in Phase 4 */
   deepBelow: 45.0,

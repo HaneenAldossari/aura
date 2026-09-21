@@ -18,7 +18,10 @@ const CACHE_CONTROL = "public, max-age=3600, s-maxage=86400, stale-while-revalid
 
 /** Names come from the model, not from user input, but this still builds a URL. */
 const MAX_NAME_LENGTH = 80;
-const SAFE_NAME = /^[\p{L}\p{M}][\p{L}\p{M}.'\-\s]*$/u;
+// Brackets are part of real names as the classifier writes them — "IU
+// (Lee Ji-eun)" was rejected outright. Still a pin rather than a
+// sanitiser: this value goes into an outbound lookup.
+const SAFE_NAME = /^[\p{L}\p{M}][\p{L}\p{M}\d.'()\-\s]*$/u;
 
 export async function handleCelebrityImage(request: Request): Promise<Response> {
   if (request.method !== "GET") return methodNotAllowed("GET");

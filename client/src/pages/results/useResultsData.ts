@@ -1,43 +1,31 @@
 import { useEffect, useState } from "react";
-import { getCelebrityImage } from "../../lib/api";
 import { loadResult } from "../../lib/resultStore";
 import type { AnalysisResult } from "../../lib/types";
 
 /**
- * Reads the analysis the browser is holding and, in the background, resolves
- * celebrity photos.
+ * Reads the analysis the browser is holding.
  *
  * The API is stateless: nothing is fetched back. The id in the URL is a local
  * key into resultStore, which is why a link to a results page only opens on the
  * device that produced it.
+ *
+ * This used to resolve celebrity photos in the background too. The editorial
+ * Results has no celebrity section, so those requests fetched images nothing
+ * rendered — two per page load, and a 400 for any name with brackets in it.
  */
 export function useResultsData(sessionId: string | undefined) {
   const [data, setData] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(true);
-  const [celebPhotos, setCelebPhotos] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!sessionId) return;
-    // Reset to avoid flashing the previous sample's data while the new one loads
+    // Reset first, so the previous sample's result does not flash while the
+    // new one loads.
     setData(null);
     setLoading(true);
     setData(loadResult(sessionId));
     setLoading(false);
   }, [sessionId]);
 
-  useEffect(() => {
-    if (!data) return;
-    const celebrities = data.celebrities;
-    if (!celebrities) return;
-
-    celebrities.forEach(async (celeb) => {
-      const url = await getCelebrityImage(celeb.name);
-      if (url) {
-        setCelebPhotos((prev) => ({ ...prev, [celeb.name]: url }));
-      }
-      // No image → card falls back to initials
-    });
-  }, [data]);
-
-  return { data, loading, celebPhotos };
+  return { data, loading };
 }

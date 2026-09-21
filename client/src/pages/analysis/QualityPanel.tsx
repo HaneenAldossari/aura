@@ -1,13 +1,16 @@
-import { Camera, RefreshCw } from "lucide-react";
 import type { QualityIssue } from "../../lib/measure";
 import { useT } from "../../i18n";
 
 /**
- * Shown when the browser-side quality gate rejects a photo.
+ * The photo did not pass the on-device gate.
  *
- * This is the whole point of measuring before uploading: the photo never leaves
- * the device, nothing is spent on it, and the user hears a specific, actionable
- * sentence instead of a generic failure after a wait.
+ * This is the whole point of measuring before uploading: the photo never left
+ * the device, nothing was spent on it, and the reader gets a specific sentence
+ * per problem instead of a generic failure after a wait.
+ *
+ * Framed as a retake, never as a rejection — the issues are numbered like the
+ * upload screen's tips because they are the same list, now specific to one
+ * photo.
  */
 export default function QualityPanel({
   issues,
@@ -20,42 +23,27 @@ export default function QualityPanel({
   const fatal = issues.some((i) => i.fatal);
 
   return (
-    <div
-      className="rounded-2xl p-6 max-w-lg mx-auto"
-      style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
-    >
-      <div className="flex items-center gap-3 mb-4">
-        <Camera size={20} style={{ color: "var(--accent-gold)" }} aria-hidden />
-        <h2 className="text-lg" style={{ color: "var(--text-primary)" }}>
-          {t(fatal ? "errors.qualityFatalTitle" : "errors.qualitySoftTitle")}
-        </h2>
-      </div>
+    <div className="an-state">
+      <h1 className="an-title">
+        {t(fatal ? "errors.qualityFatalTitle" : "errors.qualitySoftTitle")}
+      </h1>
+      <hr className="an-title__rule" />
 
-      <ul className="space-y-3 mb-6">
-        {issues.map((issue) => (
-          <li
-            key={issue.code}
-            className="text-sm leading-relaxed pl-4 border-l-2"
-            style={{ color: "var(--text-primary)", borderColor: "var(--accent-gold)" }}
-          >
-            {issue.message}
+      <ol className="an-tips" style={{ marginBlockEnd: "var(--space-5)" }}>
+        {issues.map((issue, i) => (
+          <li className="an-tip" key={issue.code}>
+            <span className="an-tip__n ltr-run">{String(i + 1).padStart(2, "0")}</span>
+            <span className="an-tip__text">{issue.message}</span>
           </li>
         ))}
-      </ul>
+      </ol>
 
-      <p className="text-xs mb-5" style={{ color: "var(--text-muted)" }}>
-        {t("errors.qualityPrivacy")}
-      </p>
-
-      <button
-        type="button"
-        onClick={onRetake}
-        className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2"
-        style={{ background: "var(--accent-gold)", color: "var(--bg-base, #10100e)" }}
-      >
-        <RefreshCw size={16} aria-hidden />
-        {t("errors.qualityRetake")}
-      </button>
+      <div className="an-foot" style={{ marginBlockStart: 0 }}>
+        <p className="an-foot__privacy">{t("errors.qualityPrivacy")}</p>
+        <button type="button" className="ed-button" onClick={onRetake}>
+          {t("errors.qualityRetake")}
+        </button>
+      </div>
     </div>
   );
 }
