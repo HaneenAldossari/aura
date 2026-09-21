@@ -32,6 +32,25 @@ const DEMO_FACE = path.join(ROOT, "client/public/demo-faces/sample-4.webp");
 // Reporting
 // ─────────────────────────────────────────────────────────────────────────────
 
+/**
+ * The weekly monitor runs this against production, where the daily limits are
+ * real. With RATE_LIMIT_BYPASS_TOKEN's value in E2E_BYPASS_TOKEN its requests
+ * are not counted, so monitoring never uses up — or gets blocked by — the five
+ * analyses a day a real visitor behind the same address is allowed.
+ *
+ * Added to /api/ requests only. As a context-wide extra header it would also be
+ * sent to the MediaPipe bucket, where an unknown header turns a simple GET into
+ * a preflighted one that the bucket refuses.
+ */
+const BYPASS = process.env.E2E_BYPASS_TOKEN;
+const bypassHeaders: Record<string, string> = BYPASS ? { "x-aura-bypass": BYPASS } : {};
+async function withBypass(page: Page): Promise<void> {
+  if (!BYPASS) return;
+  await page.route("**/api/**", (route) =>
+    route.continue({ headers: { ...route.request().headers(), ...bypassHeaders } })
+  );
+}
+
 let failures = 0;
 const check = (ok: boolean, label: string, detail = "") => {
   if (!ok) failures++;
@@ -101,6 +120,13 @@ async function runBrowserFlow(page: Page, baseUrl: string): Promise<Captured> {
     analyzeFeatureKeys: [],
     result: null,
   };
+
+  // A result is immutable once displayed: one upload, one analyze call, and
+  // nothing the reader does afterwards may cause another.
+  let analyzeCalls = 0;
+  page.on("request", (request: Request) => {
+    if (request.method() === "POST" && new URL(request.url()).pathname.endsWith("/api/analyze")) analyzeCalls++;
+  });
 
   // Did the browser actually send measured features, or silently fall back?
   page.on("request", (request: Request) => {
@@ -242,6 +268,53 @@ async function runBrowserFlow(page: Page, baseUrl: string): Promise<Captured> {
     "hair assumption line shown on the results page"
   );
 
+  section("4b. The result is immutable once displayed");
+  // Watch the season heading from first render: every text it ever holds is
+  // recorded in the page, so a change that happens and reverts is still caught.
+  const resultUrl = page.url().split("?")[0];
+  // A string, not a function: tsx wraps named helpers in __name(), which the
+  // page does not have, and this needs one (it is both called and observed).
+  await page.evaluate(`(() => {
+    const seen = new Set();
+    const read = () => {
+      const el = document.querySelector(".ed-season");
+      if (el && el.textContent) seen.add(el.textContent.replace(/\\s+/g, " ").trim());
+    };
+    read();
+    new MutationObserver(read).observe(document.body, { childList: true, subtree: true, characterData: true });
+    window.__seasonsSeen = seen;
+  })()`);
+
+  // What the bug report did: scroll, switch tabs, lose and regain focus, wait.
+  for (let i = 0; i < 5; i++) { await page.mouse.wheel(0, 1200); await page.waitForTimeout(150); }
+  for (let i = 0; i < 5; i++) { await page.mouse.wheel(0, -1200); await page.waitForTimeout(150); }
+  for (const tab of ["beauty", "style", "shop", "overview"]) {
+    await page.getByRole("tab", { name: new RegExp(`^${tab}$`, "i") }).click();
+    await page.waitForTimeout(300);
+  }
+  await page.evaluate(() => {
+    window.dispatchEvent(new Event("blur"));
+    document.dispatchEvent(new Event("visibilitychange"));
+    window.dispatchEvent(new Event("focus"));
+    window.dispatchEvent(new Event("online"));
+  });
+  const idleMs = Number(process.env.E2E_IDLE_MS ?? 20_000);
+  await page.waitForTimeout(idleMs);
+
+  const seasonsSeen = (await page.evaluate("[...window.__seasonsSeen]")) as string[];
+  check(analyzeCalls === 1, "exactly one /api/analyze call for one upload", `${analyzeCalls} calls`);
+  check(
+    // textContent joins the per-word spans with no space ("SoftAutumn"); compare without it.
+    seasonsSeen.length === 1 && String(seasonsSeen[0]).replace(/\s/g, "") === seasonText.replace(/\s/g, ""),
+    `season text never changed after first render (scroll, tabs, blur/focus, ${idleMs / 1000}s idle)`,
+    seasonsSeen.join(" → ")
+  );
+  check(page.url().split("?")[0] === resultUrl, "still the same result id", page.url().slice(-40));
+  check(
+    (await page.getByRole("button", { name: /re-analys/i }).count()) === 0,
+    "no control on the results page re-runs the analysis in place"
+  );
+
   section("5. No silently-missing API routes");
   const unexpected = [...new Set(notFound)];
   check(
@@ -257,6 +330,16 @@ async function runApiChecks(baseApi: string, captured: Captured) {
   section("6. Statelessness");
   const health = await (await fetch(`${baseApi}/health`)).json();
   check(health.stateless === true, "health reports a stateless API");
+  // Older deployments predate these fields; assert them only where they exist.
+  if ("modelsResolve" in health) {
+    check(health.status === "ok", "health is ok", `${health.status} ${[...(health.problems ?? []), ...(health.warnings ?? [])].join("; ")}`);
+    check(
+      Object.values(health.modelsResolve as Record<string, boolean | null>).every((v) => v !== false),
+      "every configured model ID still resolves on OpenRouter",
+      JSON.stringify(health.modelsResolve)
+    );
+    console.log(`      balance: ${health.balance?.usd === null ? "unknown" : `$${health.balance?.usd}`} · rate limit: ${health.rateLimit}`);
+  }
   const gone = await fetch(`${baseApi}/results/anything`);
   check(gone.status === 404, "GET /api/results is gone", `HTTP ${gone.status}`);
   check(!("sessionId" in (captured.result ?? {})), "response carries no sessionId");
@@ -264,7 +347,7 @@ async function runApiChecks(baseApi: string, captured: Captured) {
   section("7. Chat");
   const chat = await fetch(`${baseApi}/chat`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...bypassHeaders },
     // Stateless: the analysis travels in the body, there is no session to look up.
     body: JSON.stringify({
       analysis: captured.result,
@@ -290,7 +373,7 @@ async function runApiChecks(baseApi: string, captured: Captured) {
   );
   form.append("analysis", JSON.stringify(captured.result));
 
-  const shop = await fetch(`${baseApi}/link-check-image`, { method: "POST", body: form });
+  const shop = await fetch(`${baseApi}/link-check-image`, { method: "POST", body: form, headers: bypassHeaders });
   const shopBody = (await shop.json().catch(() => ({}))) as { matchScore?: number; verdict?: string };
   check(shop.ok, "shop check responded", `HTTP ${shop.status}`);
   check(
@@ -315,6 +398,7 @@ async function runLayoutChecks(browser: Browser, baseUrl: string) {
   for (const width of [390, 1440]) {
     const context = await browser.newContext({ viewport: { width, height: 900 } });
     const page = await context.newPage();
+    await withBypass(page);
     try {
       await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
       const { dir, htmlLang, scrollWidth, clientWidth } = await page.evaluate(() => ({
@@ -346,6 +430,7 @@ async function runLayoutChecks(browser: Browser, baseUrl: string) {
     locale: "ar-SA",
   });
   const page = await context.newPage();
+  await withBypass(page);
   try {
     await page.goto(`${baseUrl}/?lang=ar`, { waitUntil: "networkidle" });
     const state = await page.evaluate(() => ({
@@ -398,6 +483,7 @@ async function runScreenshotTour(browser: Browser, baseUrl: string) {
   for (const width of [390, 1440]) {
     const context = await browser.newContext({ viewport: { width, height: 900 } });
     const page = await context.newPage();
+    await withBypass(page);
     const tag = `${width}`;
     const shot = async (name: string) => {
       await page.screenshot({ path: path.join(dir, `${name}-${tag}.png`), fullPage: true });
@@ -532,6 +618,7 @@ async function main() {
 
     browser = await chromium.launch();
     const page = await browser.newPage();
+    await withBypass(page);
     page.on("console", (m) => {
       if (m.type() === "error") console.log(`      [browser] ${m.text().slice(0, 160)}`);
     });

@@ -1,0 +1,102 @@
+# Weekly end-to-end run against the live site.
+#
+# The unit tests cannot see the things that break this app in production: a
+# model slug OpenRouter has withdrawn, an empty balance, a route lost in a
+# deploy, a model download that started failing its checksum. `npm run e2e`
+# drives the real upload flow in a real browser against the real deployment,
+# so once a week something does what a visitor does and says if it stopped
+# working. Costs about $0.04 a run.
+#
+# EMAIL ON FAILURE, two ways:
+#   1. GitHub's own. A failed scheduled run emails whoever last edited this
+#      file, provided Settings → Notifications → Actions has "Send notifications
+#      for failed workflows only" ticked (it is by default). Nothing to set up.
+#   2. Explicit, to any address: add the MAIL_* secrets below and the last step
+#      sends it. Without them that step is skipped, not failed.
+#
+# Repository → Settings → Secrets and variables → Actions:
+#   variable  LIVE_URL                 optional; defaults to the production alias
+#   secret    RATE_LIMIT_BYPASS_TOKEN  same value as the Vercel env var, so the
+#                                      run is not counted against the daily limits
+#   secret    MAIL_SERVER, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_TO
+#                                      optional; e.g. smtp.gmail.com / 465 / an app password
+name: e2e (weekly, live)
+
+on:
+  schedule:
+    # Mondays 06:00 UTC. Scheduled workflows are paused by GitHub after 60 days
+    # without a commit to the repository — any push re-arms it.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "URL to test (defaults to LIVE_URL)"
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-live
+  cancel-in-progress: false
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TARGET: ${{ inputs.url || vars.LIVE_URL || 'https://aura-azure-six.vercel.app' }}
+      E2E_BYPASS_TOKEN: ${{ secrets.RATE_LIMIT_BYPASS_TOKEN }}
+      MAIL_SERVER: ${{ secrets.MAIL_SERVER }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Health first — a clear message beats a browser timeout
+        run: |
+          body=$(curl -sS --max-time 30 "$TARGET/api/health")
+          echo "$body"
+          echo "$body" | grep -q '"status":"ok"' || { echo "::error::/api/health is not ok"; exit 1; }
+
+      - name: End-to-end against ${{ env.TARGET }}
+        run: npm run e2e -- "$TARGET"
+
+      - name: Keep the screenshots when it fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-screenshots
+          path: dev/shots/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Email on failure
+        if: failure() && env.MAIL_SERVER != ''
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          to: ${{ secrets.MAIL_TO }}
+          from: Aura e2e <${{ secrets.MAIL_USERNAME }}>
+          subject: "Aura: the weekly e2e failed against ${{ env.TARGET }}"
+          body: |
+            The weekly end-to-end run failed.
+
+            Target: ${{ env.TARGET }}
+            Run:    ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            First things to check: $TARGET/api/health (a retired model or an empty
+            balance shows there), then the run's log and its screenshots artifact.
+            CLAUDE.md, "Operations", has the model-retirement procedure.

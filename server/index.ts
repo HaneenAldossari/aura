@@ -26,6 +26,7 @@ import { handleAnalyze } from "./handlers/analyze";
 import { handleCelebrityImage } from "./handlers/celebrityImage";
 import { handleChat } from "./handlers/chat";
 import { handleHealth } from "./handlers/health";
+import { withDailyLimit } from "./utils/rateLimit";
 import {
   handleDemoList,
   handleDemoLoad,
@@ -37,12 +38,12 @@ type Handler = (request: Request) => Promise<Response>;
 
 const ROUTES: Record<string, Handler> = {
   "/api/health": handleHealth,
-  "/api/analyze": handleAnalyze,
-  "/api/chat": handleChat,
+  "/api/analyze": withDailyLimit("analyze", handleAnalyze),
+  "/api/chat": withDailyLimit("chat", handleChat),
   "/api/demo-list": handleDemoList,
   "/api/demo-load": handleDemoLoad,
-  "/api/link-check-image": handleLinkCheckImage,
-  "/api/link-check-manual": handleLinkCheckManual,
+  "/api/link-check-image": withDailyLimit("shop", handleLinkCheckImage),
+  "/api/link-check-manual": withDailyLimit("shop", handleLinkCheckManual),
 };
 
 const PORT = Number(process.env.PORT) || 3001;
@@ -104,7 +105,9 @@ const server = createServer(async (req, res) => {
   if (origin) {
     res.setHeader("access-control-allow-origin", origin);
     res.setHeader("vary", "origin");
-    res.setHeader("access-control-allow-headers", "content-type, accept");
+    res.setHeader("access-control-allow-headers", "content-type, accept, x-aura-bypass");
+    // Cross-origin in dev only, so the browser counter can read what is left.
+    res.setHeader("access-control-expose-headers", "x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset");
     res.setHeader("access-control-allow-methods", "GET, POST, OPTIONS");
   }
   if (req.method === "OPTIONS") {
