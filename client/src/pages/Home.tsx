@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import StarField from "../components/StarField";
 import { useT } from "../i18n";
 import ColourField from "./home/ColourField";
+import { SHOW_COLOUR_FIELD } from "../lib/flags";
 import "./home/home-editorial.css";
 
 /**
@@ -70,7 +71,7 @@ export default function Home() {
    */
   useEffect(() => {
     const el = fieldWrap.current;
-    if (!el) return;
+    if (!SHOW_COLOUR_FIELD || !el) return;
     let frame = 0;
     const onScroll = () => {
       cancelAnimationFrame(frame);
@@ -95,7 +96,7 @@ export default function Home() {
   ];
 
   return (
-    <main id="home" className="ed-page">
+    <main id="home" className={`ed-page${SHOW_COLOUR_FIELD ? " has-field" : ""}`}>
       <StarField maxOpacity={0.28} minDuration={4} durationRange={5} />
 
       <header className="site-header">
@@ -164,9 +165,11 @@ export default function Home() {
           </div>
         </div>
 
-        <div ref={fieldWrap} style={{ transition: "opacity 120ms linear" }}>
-          <ColourField />
-        </div>
+        {SHOW_COLOUR_FIELD && (
+          <div ref={fieldWrap} style={{ transition: "opacity 120ms linear" }}>
+            <ColourField />
+          </div>
+        )}
       </section>
 
       <section className="how-it-works ed-shell">

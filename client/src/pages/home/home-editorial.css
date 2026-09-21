@@ -317,6 +317,10 @@
 
 .how-it-works { padding-block-start: 96px; }
 
+/* Clear of the columns' top rules. At 8px the label's descenders sat on the
+   rule and it read as a caption belonging to the first column. */
+.how-it-works .ed-section__label { margin-block-end: var(--space-4); }
+
 .home-steps { display: grid; grid-template-columns: 1fr; gap: var(--space-5); }
 
 @media (min-width: 1024px) { .home-steps { grid-template-columns: repeat(3, 1fr); } }
@@ -363,11 +367,15 @@
    Ordered largest max-height first, so the tighter rule wins. Extends the
    850/720 steps in the spec upward — at 88px the copy does not fit a 900px
    screen, which is an ordinary laptop. */
-@media (min-width: 1024px) and (max-height: 1120px) { #home { --h1: 96px; } }
-@media (min-width: 1024px) and (max-height: 1000px) { #home { --h1: 80px; } }
-@media (min-width: 1024px) and (max-height: 900px)  { #home { --h1: 72px; } }
+/* With the field present it takes roughly a third of the screen, so the
+   headline has to give way earlier than the spec's 850/720 steps allow. */
+@media (min-width: 1024px) and (max-height: 1120px) { #home.has-field { --h1: 96px; } }
+@media (min-width: 1024px) and (max-height: 1000px) { #home.has-field { --h1: 80px; } }
+@media (min-width: 1024px) and (max-height: 900px)  { #home.has-field { --h1: 72px; } }
+@media (min-width: 1024px) and (max-height: 780px)  { #home.has-field { --h1: 64px; } }
+
+/* Without it, the spec's own ladder is enough. */
 @media (min-width: 1024px) and (max-height: 850px)  { #home { --h1: 72px; } }
-@media (min-width: 1024px) and (max-height: 780px)  { #home { --h1: 64px; } }
 @media (min-width: 1024px) and (max-height: 720px)  { #home { --h1: 60px; } }
 
 @media (max-width: 1023px) {

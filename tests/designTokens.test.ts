@@ -250,7 +250,7 @@ describe("type floors", () => {
     for (const file of files.filter((f) => f.endsWith(".css"))) {
       const body = fs.readFileSync(file, "utf8");
       for (const m of body.matchAll(/font-size:\s*(\d+)px/g)) {
-        if (Number(m[1]) < 13) offenders.push(`${path.relative(srcDir, file)}: ${m[0]}`);
+        if (Number(m[1]) < 13) offenders.push(`${path.relative(src, file)}: ${m[0]}`);
       }
     }
     expect(offenders).toEqual([]);
@@ -261,7 +261,7 @@ describe("type floors", () => {
     for (const file of files.filter((f) => f.endsWith(".tsx"))) {
       const body = fs.readFileSync(file, "utf8");
       for (const m of body.matchAll(/fontSize:\s*(\d+)\b/g)) {
-        if (Number(m[1]) < 13) offenders.push(`${path.relative(srcDir, file)}: ${m[0]}`);
+        if (Number(m[1]) < 13) offenders.push(`${path.relative(src, file)}: ${m[0]}`);
       }
     }
     expect(offenders).toEqual([]);
