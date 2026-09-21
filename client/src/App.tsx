@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from "react-router-dom";
 
 // Route-level code splitting — each page (and its heavy deps like gsap)
 // loads only when visited.
@@ -25,6 +25,12 @@ function PageFallback() {
 }
 
 /** The standalone page became the Shop tab; shared links still land right. */
+/** The route was /analyze before British spelling reached the router. */
+function AnalyseRedirect() {
+  const { search } = useLocation();
+  return <Navigate to={`/analyse${search}`} replace />;
+}
+
 function BeforeYouBuyRedirect() {
   const { sessionId } = useParams<{ sessionId: string }>();
   return <Navigate to={`/results/${sessionId}?tab=shop`} replace />;
@@ -36,7 +42,10 @@ function App() {
       <Suspense fallback={<PageFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/analyze" element={<Analysis />} />
+          {/* British spelling is the rule everywhere else, so it is the rule
+              here too. The old path redirects: links to it already exist. */}
+          <Route path="/analyse" element={<Analysis />} />
+          <Route path="/analyze" element={<AnalyseRedirect />} />
           <Route path="/results/:sessionId" element={<Results />} />
           {/* Kept as a redirect: the standalone page became the Shop tab, and
               any link already shared should still land on the right thing. */}

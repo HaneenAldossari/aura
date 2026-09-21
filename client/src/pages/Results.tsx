@@ -107,7 +107,7 @@ export default function Results() {
           <Masthead />
           <p className="ed-tagline">{loading ? t("common.loading") : t("results.notFound")}</p>
           {!loading && (
-            <Link className="ed-button" to="/analyze">
+            <Link className="ed-button" to="/analyse">
               {t("results.startOver")}
             </Link>
           )}
@@ -137,7 +137,7 @@ export default function Results() {
                 for something that has already been done. */}
             {data.needsSecondPhoto && (data.photoCount ?? 1) < 2 && (
               <SecondPhotoNudge
-                onAdd={() => navigate(`/analyze?second=${sessionId}`)}
+                onAdd={() => navigate(`/analyse?second=${sessionId}`)}
               />
             )}
 

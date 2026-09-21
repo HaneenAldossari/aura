@@ -422,6 +422,26 @@ PALETTES["clear winter"]  = PALETTES["bright winter"];
  * module directly — the file is pure data and pure functions, so bundling it
  * costs nothing and keeps a second copy of the palettes from existing.
  */
+/**
+ * Flow-circle order, for the Home colour field.
+ *
+ * Neighbours on the seasonal flow circle sit next to each other, so hue moves
+ * smoothly from band to band instead of jumping between families. Different
+ * from RIBBON_ORDER, which groups by family.
+ */
+export const FIELD_ORDER = [
+  "Bright Winter", "Bright Spring", "True Spring", "Light Spring",
+  "Light Summer", "True Summer", "Soft Summer", "Soft Autumn",
+  "True Autumn", "Deep Autumn", "Deep Winter", "True Winter",
+] as const;
+
+export function fieldPalettes(): { season: string; palette: SeasonPalette }[] {
+  return FIELD_ORDER.map((season) => ({
+    season,
+    palette: PALETTES[season.toLowerCase()],
+  })).filter((entry) => Boolean(entry.palette));
+}
+
 export const RIBBON_ORDER = [
   "True Autumn", "Deep Autumn", "Soft Autumn",
   "Deep Winter", "True Winter", "Bright Winter",
