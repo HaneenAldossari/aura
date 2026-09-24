@@ -110,7 +110,7 @@ describe("normalizeResult — new schema shape", () => {
 
 describe("normalizeResult — legacy fixtures still work", () => {
   const demoDir = path.join(__dirname, "../server/demo-analyses");
-  const files = fs.readdirSync(demoDir).filter((f) => f.endsWith(".json"));
+  const files = fs.readdirSync(demoDir).filter((f) => /^sample-\d+\.json$/.test(f));
 
   it("finds the demo fixtures", () => {
     expect(files.length).toBeGreaterThan(0);

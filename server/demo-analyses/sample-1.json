@@ -1,26 +1,26 @@
 {
   "season": "Deep Winter",
-  "seasonTagline": "Midnight richness, icy clarity, and striking contrast",
-  "confidence": 94,
+  "seasonTagline": "Dramatic, regal, and richly saturated cool tones",
+  "confidence": 93,
   "undertone": "cool",
   "depth": "Deep / high contrast",
   "chroma": "Medium",
-  "koreanTone": "딥톤",
+  "koreanTone": "딥톤 (Deep Tone)",
   "contrastLevel": "high",
   "chromaLevel": "medium",
   "colorDNA": {
-    "warmth": 16,
-    "depth": 88,
-    "clarity": 68,
-    "contrast": 84
+    "warmth": 14,
+    "depth": 92,
+    "clarity": 78,
+    "contrast": 86
   },
-  "reasoning": "Your complexion is rich, deep espresso with clear, cool undertones and a healthy natural sheen. Your hair is dyed jet black, framing your face with deep, saturated cool depth. Your eyes are an intense, velvety near-black with bright, clear sclera that provide high striking contrast.",
-  "seasonStory": "Deep Winter sits at the majestic transition between autumn's deepest shadows and winter's crisp frost. Your colouring commands deep, saturated pigments, from blackened berry to royal sapphire, illuminated by sharp icy accents. Rich and regal, you thrive in colours that mirror the drama and depth of the night sky.",
+  "reasoning": "Deep rich espresso with cool, neutral-to-blue undertones and smooth clarity. Deepest black with a cool, natural finish framing your face. Striking deep espresso iris with bright, crisp white sclera.",
+  "seasonStory": "Deep Winter sits right on the cusp of Autumn and Winter, but your skin thrives in the crystalline coolness of the Winter palette. Your presence is grounded, striking, and luminous. You carry intense, jewel-toned colours like black sapphire, emerald, and blackened plum with absolute poise, where lighter or softer palettes would pale in comparison.",
   "lightingQuality": "Natural daylight",
   "keyFeatures": {
-    "skinTone": "Your complexion is rich, deep espresso with clear, cool undertones and a healthy natural sheen.",
-    "eyeColor": "Your eyes are an intense, velvety near-black with bright, clear sclera that provide high striking contrast.",
-    "hairColor": "Your hair is dyed jet black, framing your face with deep, saturated cool depth.",
+    "skinTone": "Deep rich espresso with cool, neutral-to-blue undertones and smooth clarity.",
+    "eyeColor": "Striking deep espresso iris with bright, crisp white sclera.",
+    "hairColor": "Deepest black with a cool, natural finish framing your face.",
     "veinColor": "",
     "contrast": "high contrast"
   },
@@ -161,12 +161,12 @@
     "foundation": {
       "recommended": [],
       "avoid": [],
-      "tip": "Select rich cool espresso foundations with blue or neutral-red undertones, avoiding any golden or yellow casts."
+      "tip": "Select neutral-cool deep foundation shades with blue or red undertones, avoiding warm golden or yellow bases."
     },
-    "blush": "Rich cool plum or blackened berry swept lightly across the cheekbones.",
-    "bronzer": "Deep neutral bronze or cool espresso contour to sculpt without adding orange warmth.",
-    "lips": "Deep blackened cherry, cool blackberry, or a crisp blue-red.",
-    "eyes": "Smoky charcoal, icy silver wash, or deep blackened emerald liner.",
+    "blush": "Rich blackened rose or deep berry to sculpt cheeks with natural radiance.",
+    "bronzer": "Deep neutral bronze with cool undertones rather than warm terracotta.",
+    "lips": "Black cherry or cool berry tones that accentuate your mouth's natural depth.",
+    "eyes": "Charcoal and blackened plum to intensify your gaze without adding muddiness.",
     "nails": {
       "bestColors": [],
       "avoidColors": []
@@ -182,35 +182,35 @@
     "metals": "Silver, Platinum, White Gold, Pewter",
     "stones": "",
     "avoid": "Yellow Gold, Bronze, Copper",
-    "style": "Polished platinum, white gold, and high-shine silver enhance your cool undertone, especially when set with brilliant diamonds or deep sapphires."
+    "style": "Platinum, silver, and cool blackened metals give your skin an exquisite glow, while icy white diamonds and deep sapphires complete your striking look."
   },
   "hairColor": {
-    "bestHighlights": "Subtle cool black-plum or dark violet glosses that preserve overall depth.",
-    "bestOverall": "Natural blue-black or darkest cool espresso brown.",
-    "avoid": "Golden blonde, honey brown, copper, or warm caramel tones that clash with your cool skin."
+    "bestHighlights": "Subtle cool dark chocolate or midnight plum ribbons",
+    "bestOverall": "Jet black, blue-black, or deep espresso brown",
+    "avoid": "Warm honey blonde, copper, golden caramel, and brassy tones"
   },
   "celebrities": [
     {
       "name": "Lupita Nyong'o",
-      "why": "Shares your radiant, deep cool complexion and looks breathtaking in high-contrast jewel tones and icy accents."
+      "why": "Shares your deep, cool-toned richness and looks sensational in clear jewel tones."
     },
     {
       "name": "Danai Gurira",
-      "why": "Exhibits the same rich depth and cool-neutral undertone that flourishes in sharp, saturated winter shades."
+      "why": "Possesses similar depth and high clarity that commands cool, saturated shades."
     },
     {
       "name": "Alek Wek",
-      "why": "Demonstrates the striking beauty of deep, cool-toned skin set against intense winter colours."
+      "why": "Features deep cool skin that radiates beside stark, crisp, high-contrast palettes."
     }
   ],
   "koreanAnalysis": {
-    "tone": "딥톤",
-    "description": "Your coloring falls into the 딥톤 category in the Korean system.",
+    "tone": "딥톤 (Deep Tone)",
+    "description": "Your coloring falls into the 딥톤 (Deep Tone) category in the Korean system.",
     "kbeautyTips": ""
   },
   "crossValidation": {
     "agrees": true,
-    "confidence": 94
+    "confidence": 93
   },
   "makeupShades": {
     "foundation": [
@@ -397,42 +397,32 @@
         "hex": "#B01B1E",
         "category": "nails",
         "finish": "gloss",
-        "asset": "big-apple-red"
+        "asset": "big-apple-red",
+        "brand": "OPI"
       },
       {
         "name": "Berry Naughty",
         "hex": "#74303E",
         "category": "nails",
         "finish": "gloss",
-        "asset": "berry-naughty"
+        "asset": "berry-naughty",
+        "brand": "OPI"
       },
       {
         "name": "Midnight Cami",
         "hex": "#344360",
         "category": "nails",
         "finish": "gloss",
-        "asset": "midnight-cami"
+        "asset": "midnight-cami",
+        "brand": "OPI"
       },
       {
         "name": "Malaga Wine",
         "hex": "#6A3A43",
         "category": "nails",
         "finish": "gloss",
-        "asset": "malaga-wine"
-      },
-      {
-        "name": "Watermelon",
-        "hex": "#DF4747",
-        "category": "nails",
-        "finish": "gloss",
-        "asset": "watermelon"
-      },
-      {
-        "name": "Perennial Chic",
-        "hex": "#B77A7A",
-        "category": "nails",
-        "finish": "satin",
-        "asset": "perennial-chic"
+        "asset": "malaga-wine",
+        "brand": "OPI"
       }
     ],
     "skip": "Skip warm orange, camel and muted earth tones — they dull the clarity your colouring depends on."
@@ -599,8 +589,8 @@
   },
   "looks": [
     {
-      "name": "Clean Girl",
-      "vibe": "Effortless, luminous skin complemented by cool berry definition.",
+      "name": "Clean Girl, Polished",
+      "vibe": "Fresh, radiant skin paired with defined eyes and a stained berry pout.",
       "timeOfDay": "day",
       "shades": [
         {
@@ -611,17 +601,17 @@
           "slot": "eye"
         },
         {
-          "name": "Blackened Navy",
-          "hex": "#151E35",
+          "name": "True Black",
+          "hex": "#101013",
           "category": "liner",
           "finish": "matte",
           "slot": "liner"
         },
         {
-          "name": "Blackened Rose",
-          "hex": "#7E3A47",
+          "name": "Deep Berry",
+          "hex": "#94374F",
           "category": "blush",
-          "finish": "matte",
+          "finish": "satin",
           "slot": "cheek"
         },
         {
@@ -641,20 +631,20 @@
       ]
     },
     {
-      "name": "Office Polish",
-      "vibe": "Tailored and commanding elegance with blackened jewel tones.",
-      "timeOfDay": "day",
+      "name": "Bold Lip in Crimson",
+      "vibe": "An authoritative high-contrast lip that commands attention.",
+      "timeOfDay": "evening",
       "shades": [
         {
-          "name": "Deep Emerald",
-          "hex": "#0E4F3C",
+          "name": "Blackened Plum",
+          "hex": "#3B2138",
           "category": "eye",
-          "finish": "satin",
+          "finish": "matte",
           "slot": "eye"
         },
         {
-          "name": "True Black",
-          "hex": "#101013",
+          "name": "Blackened Navy",
+          "hex": "#151E35",
           "category": "liner",
           "finish": "matte",
           "slot": "liner"
@@ -674,24 +664,24 @@
           "slot": "lip"
         },
         {
-          "name": "Deep Neutral Bronze",
-          "hex": "#6F4B3A",
-          "category": "bronzer",
-          "finish": "satin",
-          "slot": "bronzer"
+          "name": "Cool Platinum",
+          "hex": "#D6D9DE",
+          "category": "highlight",
+          "finish": "metallic",
+          "slot": "highlight"
         }
       ]
     },
     {
-      "name": "Bold Lip Statement",
-      "vibe": "High-impact evening drama anchored by an iconic cool red.",
+      "name": "Smoky Eye in Sapphire",
+      "vibe": "Intense jewel-toned drama for sophisticated evenings.",
       "timeOfDay": "evening",
       "shades": [
         {
-          "name": "Icy Silver",
-          "hex": "#C6CBD2",
+          "name": "Sapphire",
+          "hex": "#1B3A6B",
           "category": "eye",
-          "finish": "metallic",
+          "finish": "shimmer",
           "slot": "eye"
         },
         {
@@ -709,23 +699,23 @@
           "slot": "cheek"
         },
         {
-          "name": "True Red",
-          "hex": "#C0142E",
+          "name": "Deep Plum",
+          "hex": "#4E1D38",
           "category": "lip",
           "finish": "matte",
           "slot": "lip"
         },
         {
-          "name": "Cool Platinum",
-          "hex": "#D6D9DE",
-          "category": "highlight",
-          "finish": "metallic",
-          "slot": "highlight"
+          "name": "Deep Neutral Bronze",
+          "hex": "#6F4B3A",
+          "category": "bronzer",
+          "finish": "satin",
+          "slot": "bronzer"
         }
       ]
     }
   ],
-  "secondarySeason": "Deep Autumn",
+  "secondarySeason": "True Winter",
   "axes": {
     "hue": "cool",
     "value": "dark",
@@ -736,9 +726,9 @@
     "depth": "deep",
     "chroma": "medium",
     "contrast": "high",
-    "evidence": "Your deep espresso skin carries a distinct blue-cool undertone without golden or amber cast. Your deep dark eyes create intense contrast against the clear whites of your sclera."
+    "evidence": "Your skin exhibits a rich, cool-neutral espresso depth with subtle blue-violet undertones rather than golden warmth, accompanied by deep black-brown eyes and high intrinsic clarity."
   },
-  "rationale": "Your primary dimension is intense depth combined with an unmistakably cool undertone. While Deep Autumn shares your commanding depth, its golden and earthy warmth would appear muddy against your blue-cool base. Deep Winter provides the icy sharpness and rich, blackened jewel tones needed to harmonise with your high-contrast colouring.",
+  "rationale": "Your dominant characteristic is remarkable depth combined with an unmistakably cool undertone, which places you firmly in Deep Winter. True Summer lacks the necessary depth and intensity to support your rich coloring, leaving you looking washed out in dusty hues. True Winter shares your cool clarity, but Deep Winter provides the deep, blackened base tones that seamlessly harmonise with your complexion.",
   "measured": {
     "skin": {
       "L": 37.53705874675106,
@@ -783,6 +773,7 @@
     "level": "primary",
     "agrees": true
   },
+  "seasonSource": "model",
   "needsSecondPhoto": false,
   "alternatives": [
     {
