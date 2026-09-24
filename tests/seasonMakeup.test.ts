@@ -228,7 +228,7 @@ describe("validateLooks", () => {
       const path = await import("path");
       const { lookNameProblem, LOOKS_PER_SEASON } = await import("../server/utils/lookVocabulary");
       const dir = path.join(__dirname, "../server/demo-analyses");
-      for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".json"))) {
+      for (const file of fs.readdirSync(dir).filter((f) => /^sample-\d+\.json$/.test(f))) {
         const data = JSON.parse(fs.readFileSync(path.join(dir, file), "utf8"));
         const looks = (data.result ?? data).looks as { name: string }[];
         expect(looks, file).toHaveLength(LOOKS_PER_SEASON);

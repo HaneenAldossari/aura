@@ -1,7 +1,7 @@
 {
   "season": "Light Summer",
-  "seasonTagline": "Ethereal, delicate, and luminous cool pastels",
-  "confidence": 92,
+  "seasonTagline": "Ethereal, pastel serenity with cool delicacy",
+  "confidence": 89,
   "undertone": "cool",
   "depth": "Light",
   "chroma": "Medium",
@@ -9,18 +9,18 @@
   "contrastLevel": "low",
   "chromaLevel": "muted",
   "colorDNA": {
-    "warmth": 28,
+    "warmth": 22,
     "depth": 18,
-    "clarity": 42,
+    "clarity": 44,
     "contrast": 25
   },
-  "reasoning": "Porcelain to fair complexion with soft pink, neutral-cool undertones that flush naturally. Naturally light ash blonde with delicate cool undertones framing your face softly. Soft slate-blue with greyish depths and low contrast against your sclera.",
-  "seasonStory": "As a Light Summer, your natural colouring mirrors the gentle, sun-bleached hues of early morning by the sea. Think powdered blues, soft lilac, delicate cool roses, and frosted pearl. Deep, saturated colours overpower your subtle radiance, whereas airy, cool pastels allow your features to glow effortlessly.",
+  "reasoning": "Fair porcelain skin with translucent, cool-rosy undertones and soft pink naturally present in the lips and cheeks. Naturally light ash blonde or soft cool light brown, currently styled in an upward pull that highlights your delicate facial clarity. Soft slate blue-grey with a gentle, diffused iris pattern that provides quiet, ethereal contrast against your sclera.",
+  "seasonStory": "Light Summer sits at the intersection of summer coolness and spring lightness. Your palette is filled with soft, frosted pastels, watery blues, and gentle dusty roses. When you wear cool, delicate shades, your complexion lights up with effortless clarity and natural radiance.",
   "lightingQuality": "Natural daylight",
   "keyFeatures": {
-    "skinTone": "Porcelain to fair complexion with soft pink, neutral-cool undertones that flush naturally.",
-    "eyeColor": "Soft slate-blue with greyish depths and low contrast against your sclera.",
-    "hairColor": "Naturally light ash blonde with delicate cool undertones framing your face softly.",
+    "skinTone": "Fair porcelain skin with translucent, cool-rosy undertones and soft pink naturally present in the lips and cheeks.",
+    "eyeColor": "Soft slate blue-grey with a gentle, diffused iris pattern that provides quiet, ethereal contrast against your sclera.",
+    "hairColor": "Naturally light ash blonde or soft cool light brown, currently styled in an upward pull that highlights your delicate facial clarity.",
     "veinColor": "",
     "contrast": "low contrast"
   },
@@ -161,12 +161,12 @@
     "foundation": {
       "recommended": [],
       "avoid": [],
-      "tip": "Choose a sheer, luminous foundation with neutral-cool or porcelain pink undertones."
+      "tip": "A lightweight, sheer luminous fluid in a porcelain neutral-cool shade that lets your natural rosy glow shine through."
     },
-    "blush": "Soft petal pink or sheer cool rose swept lightly over the apples of your cheeks.",
-    "bronzer": "Cool-toned light taupe used sparingly as a gentle sculpt rather than warm bronzing.",
-    "lips": "Delicate rosy nude, cool pink gloss, or soft raspberry balm.",
-    "eyes": "Washes of cool lilac, rose taupe, or soft pearl grey.",
+    "blush": "A dusting of petal pink or soft baby rose cream on the apples of your cheeks.",
+    "bronzer": "A whisper of cool light taupe for subtle definition rather than heavy golden tanning.",
+    "lips": "A sheer wash of soft rose pink or light raspberry tint.",
+    "eyes": "A gentle sweep of soft pearl grey or cool lilac with softly smudged cool slate pencil.",
     "nails": {
       "bestColors": [],
       "avoidColors": []
@@ -182,25 +182,25 @@
     "metals": "Silver, White Gold, Rose Gold, Platinum",
     "stones": "",
     "avoid": "Yellow Gold, Bronze, Copper",
-    "style": "Delicate silver, white gold, or soft platinum with mother-of-pearl or pale aquamarine accents."
+    "style": "Delicate, fine-spun jewellery in polished silver, white gold, or pale platinum. Softly glowing freshwater pearls and translucent rose quartz harmonise beautifully with your cool delicacy."
   },
   "hairColor": {
-    "bestHighlights": "Frosted platinum and baby-fine cool beige ribbons.",
-    "bestOverall": "Light ash blonde, cool Swedish blonde, or pearl baby blonde.",
-    "avoid": "Heavy warm copper, golden honey blonde, or jet black, which instantly drain your complexion."
+    "bestHighlights": "Very fine, whisper-thin cool platinum or pale champagne baby-lights woven through the crown.",
+    "bestOverall": "Soft baby ash blonde or light neutral mushroom blonde that maintains a delicate, cool brightness.",
+    "avoid": "Heavy warm copper, golden honey tones, or harsh jet black, which overpower your delicate features."
   },
   "celebrities": [
     {
+      "name": "Elle Fanning",
+      "why": "Shares your luminous porcelain skin, soft cool undertones, and ethereal low-contrast delicacy."
+    },
+    {
       "name": "Naomi Watts",
-      "why": "Shares your delicate, ethereal fair skin, soft blue eyes, and stunning harmony with powdery pastels."
+      "why": "Exemplifies classic Light Summer harmony with soft slate-blue eyes and gentle ash-toned features."
     },
     {
-      "name": "Cate Blanchett",
-      "why": "Illustrates the luminous, light, and cool balance characteristic of the Light Summer palette."
-    },
-    {
-      "name": "Dakota Fanning",
-      "why": "Exhibits similar low-contrast features, porcelain-cool undertones, and gentle colouring."
+      "name": "Reese Witherspoon",
+      "why": "Demonstrates how delicate, cool-leaning pastel shades elevate soft, fair features without overwhelming them."
     }
   ],
   "koreanAnalysis": {
@@ -210,7 +210,7 @@
   },
   "crossValidation": {
     "agrees": true,
-    "confidence": 92
+    "confidence": 89
   },
   "makeupShades": {
     "foundation": [
@@ -393,46 +393,36 @@
     ],
     "nails": [
       {
-        "name": "Sugar Daddy",
-        "hex": "#DC9EAA",
-        "category": "nails",
-        "finish": "satin",
-        "asset": "sugar-daddy"
-      },
-      {
         "name": "Angel Food",
         "hex": "#E3C9CB",
         "category": "nails",
         "finish": "satin",
-        "asset": "angel-food"
+        "asset": "angel-food",
+        "brand": "Essie"
       },
       {
         "name": "Tiara",
         "hex": "#DAA9C5",
         "category": "nails",
         "finish": "satin",
-        "asset": "tiara"
+        "asset": "tiara",
+        "brand": "Essie"
       },
       {
         "name": "Mod About You",
         "hex": "#E2A7B0",
         "category": "nails",
         "finish": "satin",
-        "asset": "mod-about-you"
+        "asset": "mod-about-you",
+        "brand": "Essie"
       },
       {
         "name": "Princesses Rule",
         "hex": "#C37E8B",
         "category": "nails",
         "finish": "satin",
-        "asset": "princesses-rule"
-      },
-      {
-        "name": "Lovie Dovie",
-        "hex": "#EAAEBE",
-        "category": "nails",
-        "finish": "satin",
-        "asset": "lovie-dovie"
+        "asset": "princesses-rule",
+        "brand": "OPI"
       }
     ],
     "skip": "Skip black, orange and deep browns — the weight and the warmth both work against a light cool face."
@@ -602,8 +592,8 @@
   },
   "looks": [
     {
-      "name": "No-Makeup Makeup",
-      "vibe": "Fresh, breathable skin with a whisper of cool pink flush",
+      "name": "Clean Girl Simplicity",
+      "vibe": "Fresh, breathable radiance tailored for effortless everyday luminosity.",
       "timeOfDay": "day",
       "shades": [
         {
@@ -644,8 +634,8 @@
       ]
     },
     {
-      "name": "Everyday Polish",
-      "vibe": "Softly defined eyes and balanced rose tones for effortless poise",
+      "name": "Office Polish in Rose",
+      "vibe": "Sophisticated, tailored elegance with softly structured cool neutrals.",
       "timeOfDay": "day",
       "shades": [
         {
@@ -670,24 +660,24 @@
           "slot": "cheek"
         },
         {
-          "name": "Soft Rose Pink",
-          "hex": "#E58CA0",
+          "name": "Rosy Nude",
+          "hex": "#D3969B",
           "category": "lip",
           "finish": "cream",
           "slot": "lip"
         },
         {
-          "name": "Soft Rosy Sculpt",
-          "hex": "#B8907F",
+          "name": "Cool Light Taupe",
+          "hex": "#B08E7C",
           "category": "bronzer",
-          "finish": "satin",
+          "finish": "matte",
           "slot": "bronzer"
         }
       ]
     },
     {
-      "name": "Date Night in Lilac",
-      "vibe": "A luminous, romantic evening look with subtle berry definition",
+      "name": "Soft Glam, Lilac",
+      "vibe": "Romantic and luminous evening elegance accented by dreamy pastels.",
       "timeOfDay": "evening",
       "shades": [
         {
@@ -705,15 +695,15 @@
           "slot": "liner"
         },
         {
-          "name": "Light Berry",
-          "hex": "#D77F9C",
+          "name": "Dusty Pink",
+          "hex": "#DB94A3",
           "category": "blush",
-          "finish": "shimmer",
+          "finish": "matte",
           "slot": "cheek"
         },
         {
-          "name": "Light Raspberry",
-          "hex": "#D96E8E",
+          "name": "Soft Rose Pink",
+          "hex": "#E58CA0",
           "category": "lip",
           "finish": "cream",
           "slot": "lip"
@@ -739,9 +729,9 @@
     "depth": "light",
     "chroma": "muted",
     "contrast": "low",
-    "evidence": "Your skin possesses a delicate, neutral-cool pink-beige undertone paired with soft grey-blue eyes and very low natural contrast across your facial features."
+    "evidence": "Your skin displays a soft porcelain quality with delicate cool-neutral undertones and rose-pink flush. Paired with soft slate-blue eyes, your natural colouring is characterised by low contrast and an airy, light value."
   },
-  "rationale": "Your primary dominant characteristic is lightness, accompanied by a subtle, cool undertone. You fall squarely into Light Summer because heavy, dark, or overly warm shades easily overwhelm your delicate colouring. While you share the light value of Light Spring, warm golden tones clash with your cool pink undertones, making Light Summer your most harmonious palette.",
+  "rationale": "Your dominant characteristic is overall lightness, accompanied by a predominantly cool undertone. While you share the delicate, pale value of Light Spring, golden or peachy shades can easily overpower your delicate pink-beige undertone. Soft Summer is too deep and heavily muted for your fresh, luminous complexion, making Light Summer the ideal harmonising palette.",
   "measured": {
     "skin": {
       "L": 72.808742431681,
@@ -786,6 +776,7 @@
     "level": "primary",
     "agrees": true
   },
+  "seasonSource": "model",
   "needsSecondPhoto": false,
   "alternatives": [
     {

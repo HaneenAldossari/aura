@@ -15,6 +15,7 @@ import LoadingScreen from "./analysis/LoadingScreen";
 import ErrorPanel from "./analysis/ErrorPanel";
 import { useT } from "../i18n";
 import { DailyLimitError } from "../lib/dailyCounter";
+import gallery from "../../../server/demo-analyses/gallery.json";
 import { cachePhoto, getCachedPhoto, rekeyCachedPhoto } from "../lib/photoCache";
 import Masthead from "./results/Masthead";
 import "./analysis/analysis-editorial.css";
@@ -41,14 +42,13 @@ export default function Analysis() {
   const [error, setError] = useState<string | null>(null);
   const [errorKind, setErrorKind] = useState<"photo" | "sample">("photo");
   const [photoTips, setPhotoTips] = useState<string[]>([]);
-  // Show the 9 thumbnails instantly — they're static assets in client/public/demo-faces/.
-  // Then in the background confirm with the API which actually have analyses ready
-  // (fall back to the static list if the API fails — keeps the gallery visible).
   // Thumbnails render instantly from the static assets; the API then replaces
-  // this with the real list and its labels. No label until then, because an
-  // unverified one is exactly what this gallery is not allowed to show.
-  const STATIC_SAMPLES: DemoSample[] = Array.from({ length: 9 }, (_, i) => ({
-    id: `sample-${i + 1}`,
+  // this with the live list. The ids come from the manifest the demo
+  // precompute writes — the faces whose analysis cleared the gallery's
+  // confidence floor — so the instant list and the API list are the same
+  // faces, and nothing appears for a moment and then vanishes.
+  const STATIC_SAMPLES: DemoSample[] = gallery.shown.map((id) => ({
+    id,
     season: "",
     agrees: false,
     needsReview: true,

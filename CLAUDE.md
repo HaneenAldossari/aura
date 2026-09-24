@@ -513,6 +513,36 @@ Near-black hair at L\* 4 drags the value axis from light to medium, which moves 
 ranking from the springs to the autumns. That is the hair-weight question already open for
 Phase 4, now with a user-visible consequence attached.
 
+### 2026-09-24 — why a demo face reads 50%, and the gallery floor
+
+Four of nine demo faces showed **50% confidence**. That number is never the model's: it
+is `DISAGREEMENT_CONFIDENCE_CAP` (`server/services/hybrid.ts`), applied when the model's
+season is neither the rules' primary nor its flow-circle secondary. Regenerated on the
+bounded pipeline (model chooses among the rules' top three):
+
+| face | before | after | why |
+| --- | --- | --- | --- |
+| 2, 3, 9 | Soft Autumn 50% | True Spring 88-92% | now inside the candidates; rules' secondary → cap lifted |
+| 5, 6 | True Autumn 50% / Light Spring 88% | **Bright Spring 50%** | model picked the *third* candidate, which is neither primary (Light Spring) nor secondary (True Spring) → capped |
+| 1, 4, 7, 8 | 88-94% | 88-93% | unchanged |
+
+So with the candidate constraint, "agreement: none" now has exactly one meaning: the model
+chose the one candidate that is not the rules' first or second. Whether that deserves the
+same 50% cap as an opposite-corner disagreement did is a Phase 4 question — it is a
+neighbour, not a contradiction — and it is left as it is here.
+
+Underneath it is the demo fixture problem already logged: all nine faces are generated and
+colour-graded (skin C\* 17-41, every one flagged for colour cast), with skin in the light
+band and near-black hair, so the rules and the model read them differently. Real photos
+were never the problem.
+
+**Gallery floor.** The sample gallery shows only faces whose precomputed analysis is at or
+above **`DEMO_MIN_CONFIDENCE = 85`** (`server/utils/demoGallery.ts`). The API filters live,
+`/api/demo-load` refuses a hidden id, and `scripts/precomputeDemoAnalyses.ts` writes the
+same ids to `server/demo-analyses/gallery.json` for the client's instant list, so nothing
+appears and then vanishes. `tests/demoGallery.test.ts` holds the three together. Today:
+seven shown, samples 5 and 6 hidden. Regenerating the demos rewrites the manifest.
+
 ## Operations
 
 **Environment variables** (Vercel → Project → Settings → Environment Variables; mirrored in
