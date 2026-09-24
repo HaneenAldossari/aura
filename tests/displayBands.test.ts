@@ -94,7 +94,7 @@ describe("one banding: ≤35 low, 36-64 medium, ≥65 high", () => {
 
 describe("on the real precomputed analyses", () => {
   const dir = path.join(__dirname, "../server/demo-analyses");
-  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".json"));
+  const files = fs.readdirSync(dir).filter((f) => /^sample-\d+\.json$/.test(f));
 
   it("there are some", () => expect(files.length).toBeGreaterThan(0));
 

@@ -28,6 +28,7 @@ dotenv.config({ path: path.join(__dirname, "../.env") });
 
 import { MeasurementSession } from "../eval/measure";
 import { handleAnalyze } from "../server/handlers/analyze";
+import { writeGalleryManifest } from "../server/utils/demoGallery";
 
 const FACES_DIR = path.join(__dirname, "../client/public/demo-faces");
 const OUT_DIR = path.join(__dirname, "../server/demo-analyses");
@@ -132,6 +133,15 @@ async function main() {
   } finally {
     await session.stop();
   }
+
+  // Which of them the gallery shows. Written from every file on disk, not
+  // just this run's, so a partial run still leaves the manifest whole.
+  const manifest = writeGalleryManifest(OUT_DIR);
+  console.log(
+    `gallery: ${manifest.shown.length} of ${manifest.shown.length + manifest.hidden.length} shown` +
+      ` (confidence >= ${manifest.minConfidence})` +
+      (manifest.hidden.length ? `; hidden: ${manifest.hidden.map((h) => `${h.id} ${h.confidence ?? "?"}%`).join(", ")}` : "")
+  );
 
   console.log(failures === 0 ? "Done." : `Done, with ${failures} failure(s).`);
   if (failures > 0) process.exit(1);

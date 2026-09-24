@@ -1,0 +1,23 @@
+{
+  "minConfidence": 85,
+  "shown": [
+    "sample-1",
+    "sample-2",
+    "sample-3",
+    "sample-4",
+    "sample-7",
+    "sample-8",
+    "sample-9"
+  ],
+  "hidden": [
+    {
+      "id": "sample-5",
+      "confidence": 50
+    },
+    {
+      "id": "sample-6",
+      "confidence": 50
+    }
+  ],
+  "writtenOn": "2026-09-24"
+}

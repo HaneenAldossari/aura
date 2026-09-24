@@ -17,6 +17,7 @@ import { getSeasonMakeup } from "../utils/seasonMakeup";
 import { getSeasonStyle, resolvePairings } from "../utils/seasonStyle";
 import { getCanonicalPalette } from "../utils/seasonPalettes";
 
+import { galleryIds, readDemoConfidence, shownInGallery } from "../utils/demoGallery";
 const DEMO_DIR = path.join(__dirname, "../demo-analyses");
 
 export async function handleLinkCheckImage(request: Request): Promise<Response> {
@@ -100,11 +101,9 @@ export async function handleDemoList(request: Request): Promise<Response> {
     if (!fs.existsSync(DEMO_DIR)) return json({ samples: [] });
     // The season travels with the id so the gallery can label each face
     // without loading nine full analyses to read one field from each.
-    const samples = fs
-      .readdirSync(DEMO_DIR)
-      .filter((f) => f.endsWith(".json"))
-      .map((f) => f.replace(/\.json$/, ""))
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+    // Only the faces whose analysis cleared DEMO_MIN_CONFIDENCE: a 50% demo
+    // is the product demonstrating a disagreement (server/utils/demoGallery.ts).
+    const samples = galleryIds(DEMO_DIR)
       .map((id) => {
         try {
           const raw = JSON.parse(
@@ -172,6 +171,11 @@ export async function handleDemoLoad(request: Request): Promise<Response> {
   try {
     const file = path.join(DEMO_DIR, `${sampleId}.json`);
     if (!fs.existsSync(file)) return fail(404, "not_found", "Sample not found.");
+    // Hidden from the gallery means not offered here either: the id is still
+    // guessable, and a result the gallery would not show is not one to serve.
+    if (!shownInGallery(readDemoConfidence(sampleId, DEMO_DIR))) {
+      return fail(404, "not_found", "Sample not found.");
+    }
     const raw = JSON.parse(fs.readFileSync(file, "utf8")) as Record<string, unknown>;
 
     // Files written by scripts/precomputeDemoAnalyses.ts are already the client
